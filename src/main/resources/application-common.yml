@@ -1,0 +1,41 @@
+#port
+server:
+  port: 8080
+  
+#Jwe secret
+tim:
+  jwtExpirationMs: 86400000
+  jwtSecret: mySecretKey
+  
+# Logging
+logging:
+  file:
+    name: app.log
+  level:
+    com:
+      mkyong: DEBUG
+    org:
+      springframework: ERROR
+  pattern:
+    console: '%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n'
+    file: '%d %p %c{1.} [%t] %m%n'
+
+#Spring Jpa
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+#config swagger
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+#fileSize
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
