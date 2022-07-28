@@ -16,7 +16,7 @@ import javax.persistence.Table;
 public class Teacher extends User {
 
 	/**
-	 * minhtuanitk43
+	 * thinhnguyen
 	 */
 	private static final long serialVersionUID = 2186238218422351720L;
 	
@@ -29,9 +29,9 @@ public class Teacher extends User {
 	@ManyToMany
 	@JoinTable(name = "role_teacher", joinColumns = @JoinColumn(name = "teacher_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = new HashSet<>();
-	
-	@OneToMany(mappedBy = "adviser")
+
 	private Set<Student> students = new HashSet<>();
+
 
 	public Set<Student> getStudents() {
 		return students;
