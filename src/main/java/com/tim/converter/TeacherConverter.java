@@ -4,7 +4,9 @@ import com.tim.entity.Teacher;
 import com.tim.model.TeacherModel;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class TeacherConverter extends AbstractConverter<TeacherModel, Teacher> {
 
     /**
