@@ -1,8 +1,8 @@
-package com.tim.dto;
+package com.tim.dto.marks;
 
-import java.io.Serializable;
+import com.tim.dto.BaseDto;
 
-public class ScoresDto extends BaseDto {
+public class MarksDto extends BaseDto{
 
 	/**
 	 * 

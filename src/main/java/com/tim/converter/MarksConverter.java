@@ -1,25 +1,25 @@
 package com.tim.converter;
 
+import com.tim.dto.marks.MarksDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.tim.dto.ScoresDto;
 import com.tim.entity.Marks;
 
 @Component
-public class MarksConverter extends AbstractConverter<ScoresDto, Marks>{
+public class MarksConverter extends AbstractConverter<MarksDto, Marks>{
 
 	@Autowired
     private ModelMapper modelMapper;
 	
-	ScoresDto toDto(Marks scores) {
-		ScoresDto scoresDto = modelMapper.map(scores, ScoresDto.class);
+	MarksDto toDto(Marks scores) {
+		MarksDto scoresDto = modelMapper.map(scores, MarksDto.class);
         return scoresDto;
     }
 
 
-	Marks toEntity(ScoresDto subjectDto) {
+	Marks toEntity(MarksDto subjectDto) {
         return modelMapper.map(subjectDto, Marks.class);
     }
 

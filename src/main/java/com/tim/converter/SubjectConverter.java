@@ -4,7 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.tim.dto.SubjectDto;
+import com.tim.dto.subject.SubjectDto;
 import com.tim.entity.Subject;
 
 @Component

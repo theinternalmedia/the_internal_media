@@ -1,8 +1,10 @@
-package com.tim.dto;
+package com.tim.dto.subject;
+
+import com.tim.dto.BaseDto;
 
 import java.io.Serializable;
 
-public class SubjectDto extends BaseDto{
+public class SubjectDto extends BaseDto {
 
 	/**
 	 * 
