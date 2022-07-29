@@ -7,5 +7,4 @@ import com.tim.entity.Subject;
 
 public interface SubjectRepository extends JpaRepository<Subject, Long>, JpaSpecificationExecutor<Subject>{
 
-
 }

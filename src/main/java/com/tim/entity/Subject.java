@@ -10,13 +10,12 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "subject")
-public class Subject {
+public class Subject extends BaseEntity{
 
-	@Id
-	private long id;
-	
-	@NotEmpty
-	@Column(unique = true)
+	private static final long serialVersionUID = -2808568424623733508L;
+
+
+	@Column(unique = true, nullable = false)
 	private String code;
 	
 	@NotEmpty
@@ -24,7 +23,8 @@ public class Subject {
 	
 	@Min(value = 1)
 	private int numberOfCredits;
-	
+
+	@Column(nullable = false, columnDefinition = "boolean default true")
 	private boolean mandatory = true;
 	
 	@Size(min = 0, max = 10)

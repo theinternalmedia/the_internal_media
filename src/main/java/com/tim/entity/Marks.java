@@ -1,28 +1,25 @@
 package com.tim.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "scores")
-public class Scores {
+public class Marks extends BaseEntity{
 
-	@Id
-	@GeneratedValue
-	private long id;
+	private static final long serialVersionUID = -2808568424623733508L;
 	
 	@Size(min = 0, max = 10)
 	private float finalScores;
 	
 	@Min(value = 0)
 	private int times;
-	
-	private boolean pass = true;
+
+	@Column(nullable = false, columnDefinition = "boolean default false")
+	private boolean pass = false;
 	
 	private String note;
 }

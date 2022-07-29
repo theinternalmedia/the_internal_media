@@ -7,5 +7,4 @@ import com.tim.security.services.SubjectService;
 @Service
 public class SubjectServiceImpl implements SubjectService{
 
-
 }

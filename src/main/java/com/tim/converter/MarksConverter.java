@@ -5,24 +5,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.tim.dto.ScoresDto;
-import com.tim.dto.SubjectDto;
-import com.tim.entity.Scores;
-import com.tim.entity.Subject;
+import com.tim.entity.Marks;
 
 @Component
-public class ScoresConverter extends AbstractConverter<ScoresDto, Scores>{
+public class MarksConverter extends AbstractConverter<ScoresDto, Marks>{
 
 	@Autowired
     private ModelMapper modelMapper;
 	
-	ScoresDto toDto(Scores scores) {
+	ScoresDto toDto(Marks scores) {
 		ScoresDto scoresDto = modelMapper.map(scores, ScoresDto.class);
         return scoresDto;
     }
 
 
-	Scores toEntity(ScoresDto subjectDto) {
-        return modelMapper.map(subjectDto, Scores.class);
+	Marks toEntity(ScoresDto subjectDto) {
+        return modelMapper.map(subjectDto, Marks.class);
     }
 
 }
