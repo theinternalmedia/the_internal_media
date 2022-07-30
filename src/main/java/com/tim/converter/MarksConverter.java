@@ -1,26 +1,27 @@
 package com.tim.converter;
 
-import com.tim.dto.marks.MarksDto;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.tim.dto.marks.MarksDto;
 import com.tim.entity.Marks;
 
+/**
+ * 
+ * @appName the_internal_media
+ *
+ */
 @Component
 public class MarksConverter extends AbstractConverter<MarksDto, Marks>{
 
-	@Autowired
-    private ModelMapper modelMapper;
-	
-	MarksDto toDto(Marks scores) {
-		MarksDto scoresDto = modelMapper.map(scores, MarksDto.class);
+	@Override
+	public MarksDto toDto(Marks scores) {
+		MarksDto scoresDto = this.modelMapper.map(scores, MarksDto.class);
         return scoresDto;
     }
 
-
-	Marks toEntity(MarksDto subjectDto) {
-        return modelMapper.map(subjectDto, Marks.class);
+	@Override
+	public Marks toEntity(MarksDto subjectDto) {
+        return this.modelMapper.map(subjectDto, Marks.class);
     }
 
 }

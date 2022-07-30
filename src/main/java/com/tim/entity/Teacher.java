@@ -21,26 +21,37 @@ import javax.persistence.Table;
 public class Teacher extends User {
 
 	private static final long serialVersionUID = 2186238218422351720L;
-	
+
 	@Column(columnDefinition = "boolean default false")
 	private boolean isHeadOfFaculty = false;
-	
+
 	@Column(columnDefinition = "boolean default false")
 	private boolean isManager = false;
-	
+
 	@ManyToMany
 	@JoinTable(name = "role_teacher", joinColumns = @JoinColumn(name = "teacher_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = new HashSet<>();
-	
-	@OneToMany(mappedBy = "adviser")
-	private Set<Student> students = new HashSet<>();
 
-	public Set<Student> getStudents() {
-		return students;
+	@OneToMany(mappedBy = "adviser")
+	private Set<Class> classes = new HashSet<Class>();;
+	
+//	@OneToMany(mappedBy = "teacher")
+//	private Set<NotificationTeacher> notificationTeachers = new HashSet<NotificationTeacher>();
+//	
+//	public Set<NotificationTeacher> getNotificationTeachers() {
+//		return notificationTeachers;
+//	}
+//
+//	public void setNotificationTeachers(Set<NotificationTeacher> notificationTeachers) {
+//		this.notificationTeachers = notificationTeachers;
+//	}
+
+	public Set<Class> getClasses() {
+		return classes;
 	}
 
-	public void setStudents(Set<Student> students) {
-		this.students = students;
+	public void setClasses(Set<Class> classes) {
+		this.classes = classes;
 	}
 
 	public boolean isHeadOfFaculty() {

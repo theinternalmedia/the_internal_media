@@ -30,13 +30,13 @@ public abstract class BaseEntity implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@Column(nullable = false, columnDefinition = "boolean default true")
-	private Boolean status  = true;
+	private Boolean status = true;
 
 	@Column(name = "created_date", nullable = false, updatable = false)
 	@CreationTimestamp
-	private Date createdDate;
+	private Date createdDate = new Date();
 
 	@CreatedBy
 	private String createdBy;
@@ -51,7 +51,7 @@ public abstract class BaseEntity implements Serializable {
 	public Boolean getStatus() {
 		return status;
 	}
-	
+
 	public void setStatus(Boolean status) {
 		this.status = status;
 	}
@@ -87,7 +87,7 @@ public abstract class BaseEntity implements Serializable {
 	public void setModifiedDate(Date modifiedDate) {
 		this.modifiedDate = modifiedDate;
 	}
-	
+
 	public String getModifiedBy() {
 		return modifiedBy;
 	}

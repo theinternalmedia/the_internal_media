@@ -53,12 +53,12 @@ public class GlobalExceptionHandler {
 	}
 
 //	Custom exception handler
-	@ExceptionHandler({CustomException.class, AuthException.class})
+	@ExceptionHandler({ CustomException.class, AuthException.class })
 	public ResponseEntity<ErrorResponse> handleCustomException(CustomException e) {
 		logger.error("CustomException error: {}", e.getMessage());
-		
+
 		String res = e.getMessage() + (StringUtils.isBlank(e.getValue()) ? "" : ": '" + e.getValue() + "'");
-		
+
 		ErrorResponse response = new ErrorResponse(e.getCode(), res);
 
 		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);

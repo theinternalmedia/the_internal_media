@@ -72,5 +72,4 @@ public class BaseDto implements Serializable {
 				+ modifiedDate + ", modifiedBy=" + modifiedBy + ", status=" + status + "]";
 	}
 
-
 }

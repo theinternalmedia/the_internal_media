@@ -24,16 +24,16 @@ public class Role extends BaseEntity {
 	private static final long serialVersionUID = 7850391100035043803L;
 
 	@Column(unique = true, nullable = false, length = 50)
-	@Size(max=50)
+	@Size(max = 50)
 	private String code;
-	
+
 	@Column(unique = true, nullable = false, length = 50)
-	@Size(max=50)
+	@Size(max = 50)
 	private String name;
 
 	@ManyToMany(mappedBy = "roles")
 	private Set<Teacher> teachers = new HashSet<>();
-	
+
 	@ManyToMany(mappedBy = "roles")
 	private Set<Student> students = new HashSet<>();
 
@@ -88,7 +88,7 @@ public class Role extends BaseEntity {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	@PreRemove
 	public void preRemove() {
 		for (Student s : students) {

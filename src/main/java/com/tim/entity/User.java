@@ -40,8 +40,8 @@ public abstract class User extends BaseEntity {
 	private String password;
 
 	@Column(columnDefinition = "boolean default false")
-	private Boolean gender = true;
-	
+	private boolean gender = true;
+
 	@Column
 	@Size(max = 100)
 	private String address;
@@ -49,7 +49,7 @@ public abstract class User extends BaseEntity {
 	@Column
 	@Size(max = 10)
 	private String phone;
-	
+
 	@Column
 	private Date dob;
 

@@ -3,7 +3,7 @@ package com.tim.data;
 import java.util.Arrays;
 import java.util.List;
 
-public final class TimSystemConstants {
+public final class TimConstants {
 	public static final String APP_NAME = "THE_INTERNAL_MEDIA";
 	
 	public static final String ADMIN_ROOT = "admin";
@@ -16,5 +16,10 @@ public final class TimSystemConstants {
 	public static final String REGEX_PHONE_VN = "(0[3|5|7|8|9])+([0-9]{8})";
 	public static final String REGEX_EMAIL = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
 
+	public static class NotificationType{
+		public static final int TO_ALL = 1;
+		public static final int TO_TEACHER = 2;
+		public static final int TO_STUDENT= 3;
+	}
 
 }

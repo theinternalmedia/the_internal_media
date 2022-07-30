@@ -3,15 +3,12 @@ package com.tim.entity;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.Size;
 
 /**
  * 
@@ -20,27 +17,23 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "student")
-public class Student extends User{
+public class Student extends User {
 
 	private static final long serialVersionUID = 3541331733217756229L;
-	
-	@Column(unique = true)
-	@Size(max = 20)
-	private String classCode;
-	
+
 	@ManyToMany
 	@JoinTable(name = "role_student", joinColumns = @JoinColumn(name = "student_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = new HashSet<>();
 	
-	@ManyToOne(cascade = CascadeType.ALL)
-	private Teacher adviser;
+	@OneToMany(mappedBy = "student")
+	private Set<NotificationStudent> notificationStudents = new HashSet<NotificationStudent>();
 
-	public String getClassCode() {
-		return classCode;
+	public Set<NotificationStudent> getNotificationStudents() {
+		return notificationStudents;
 	}
 
-	public void setClassCode(String classCode) {
-		this.classCode = classCode;
+	public void setNotificationStudents(Set<NotificationStudent> notificationStudents) {
+		this.notificationStudents = notificationStudents;
 	}
 
 	public Set<Role> getRoles() {
@@ -51,12 +44,4 @@ public class Student extends User{
 		this.roles = roles;
 	}
 
-	public Teacher getAdviser() {
-		return adviser;
-	}
-
-	public void setAdviser(Teacher adviser) {
-		this.adviser = adviser;
-	}
-	
 }

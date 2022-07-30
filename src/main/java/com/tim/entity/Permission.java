@@ -20,19 +20,19 @@ import com.tim.data.ETimPermissions;
  */
 @Entity
 @Table(name = "permissions")
-public class Permission extends BaseEntity{
+public class Permission extends BaseEntity {
 
 	private static final long serialVersionUID = -7368618288132054132L;
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(unique = true, nullable = false, length = 50)
-	@Size(max=50)
+	@Size(max = 50)
 	private ETimPermissions code;
-	
+
 	@Column(unique = true, nullable = false, length = 50)
-	@Size(max=50)
+	@Size(max = 50)
 	private String name;
-	
+
 	@ManyToMany(mappedBy = "permissions")
 	private Set<Role> roles = new HashSet<>();
 

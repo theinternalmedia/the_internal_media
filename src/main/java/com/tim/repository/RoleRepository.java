@@ -13,7 +13,7 @@ import com.tim.entity.Role;
  * @appName the_internal_media
  *
  */
-public interface RoleRepository extends JpaRepository<Role, Long>{
+public interface RoleRepository extends JpaRepository<Role, Long> {
 	Optional<Role> findByNameAndStatusTrue(String string);
 
 	Role findByName(String name);

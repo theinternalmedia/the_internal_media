@@ -1,26 +1,26 @@
 package com.tim.converter;
 
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.tim.dto.subject.SubjectDto;
 import com.tim.entity.Subject;
 
+/**
+ * 
+ * @appName the_internal_media
+ *
+ */
 @Component
-public class SubjectConverter extends AbstractConverter<SubjectDto, Subject>{
+public class SubjectConverter extends AbstractConverter<SubjectDto, Subject> {
 
-	@Autowired
-    private ModelMapper modelMapper;
-
-	    SubjectDto toDto(Class Subject) {
-	        SubjectDto subject = modelMapper.map(Subject, SubjectDto.class);
-	        return subject;
-	    }
-
-	    Subject toEntity(SubjectDto subjectDto) {
-	        return modelMapper.map(subjectDto, Subject.class);
-	    }
-
-
+	@Override
+	public SubjectDto toDto(Subject subjectEntity) {
+		SubjectDto subject = this.modelMapper.map(subjectEntity, SubjectDto.class);
+		return subject;
+	}
+	
+	@Override
+	public Subject toEntity(SubjectDto dto) {
+		return this.modelMapper.map(dto, Subject.class);
+	}
 }

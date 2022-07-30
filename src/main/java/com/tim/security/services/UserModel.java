@@ -12,7 +12,7 @@ import com.tim.entity.Role;
  * @appName the_internal_media
  *
  */
-public class UserModel extends BaseDto{
+public class  UserModel extends BaseDto{
 
 	private static final long serialVersionUID = 6600808339524713688L;
 

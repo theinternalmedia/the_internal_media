@@ -74,11 +74,11 @@ public class AuthResource extends AbstractResource {
 		String jwt = jwtUtils.generaJwtToken(authentication);
 
 		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-		
+
 		List<String> roles = userDetails.getRoles();
 		Set<Role> setRole = new HashSet<Role>();
 		List<String> permissions = new ArrayList<>();
-		
+
 		Student student = studentRepository.findByUserId(userDetails.getUsername()).orElse(null);
 		if (student != null) {
 			setRole = student.getRoles();

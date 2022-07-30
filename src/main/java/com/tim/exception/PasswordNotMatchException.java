@@ -7,7 +7,7 @@ import com.tim.data.ETimMessages;
  * @appName the_internal_media
  *
  */
-public class PasswordNotMatchException extends CustomException{
+public class PasswordNotMatchException extends CustomException {
 
 	private static final long serialVersionUID = 4535334857331524410L;
 
