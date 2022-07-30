@@ -1,6 +1,6 @@
 package com.tim.data;
 
-public final class ApiPath {
+public final class TimApiPath {
 	public static final String TIM_API_PREFIX = "/api/v1";
 	
 	public static class Auth{

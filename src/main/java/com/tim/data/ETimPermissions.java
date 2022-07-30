@@ -1,6 +1,6 @@
 package com.tim.data;
 
-public enum ETimPermission {
+public enum ETimPermissions {
 	
 	READ_USER,
 	UPDATE_USER,

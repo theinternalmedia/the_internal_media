@@ -1,17 +1,17 @@
 package com.tim.payload.response;
 
 public class ErrorResponse {
-	private int code;
+	private String code;
 	private String message;
-	public ErrorResponse(int code, String message) {
+	public ErrorResponse(String code, String message) {
 		super();
 		this.code = code;
 		this.message = message;
 	}
-	public int getCode() {
+	public String getCode() {
 		return code;
 	}
-	public void setCode(int code) {
+	public void setCode(String code) {
 		this.code = code;
 	}
 	public String getMessage() {

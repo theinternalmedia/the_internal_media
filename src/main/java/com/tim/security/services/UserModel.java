@@ -1,4 +1,4 @@
-package com.tim.model;
+package com.tim.security.services;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -7,11 +7,13 @@ import java.util.Set;
 import com.tim.dto.BaseDto;
 import com.tim.entity.Role;
 
+/**
+ * 
+ * @appName the_internal_media
+ *
+ */
 public class UserModel extends BaseDto{
 
-	/**
-	 * minhtuanitk43
-	 */
 	private static final long serialVersionUID = 6600808339524713688L;
 
 	private String userId;

@@ -8,6 +8,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.tim.entity.Role;
 
+/**
+ * 
+ * @appName the_internal_media
+ *
+ */
 public interface RoleRepository extends JpaRepository<Role, Long>{
 	Optional<Role> findByNameAndStatusTrue(String string);
 

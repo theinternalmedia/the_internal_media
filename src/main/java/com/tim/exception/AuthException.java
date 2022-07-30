@@ -1,24 +1,23 @@
 package com.tim.exception;
 
-import com.tim.data.EExceptionMessage;
+import com.tim.data.ETimMessages;
 
+/**
+ * 
+ * @appName the_internal_media
+ *
+ */
 public class AuthException extends CustomException {
-	/**
-	 * Triệu Minh Tuấn
-	 */
+
 	private static final long serialVersionUID = -5215860878746742907L;
 
-	public AuthException(EExceptionMessage eExceptionMessage, String value) {
-		super(eExceptionMessage, value);
+	public AuthException(ETimMessages eTimMessages) {
+		super(eTimMessages);
 		// TODO Auto-generated constructor stub
 	}
-	public AuthException(int code, String message, String value) {
-		super(code, message, value);
-		// TODO Auto-generated constructor stub
-	}
-
-	public AuthException(int code, String message) {
-		super(code, message);
+	
+	public AuthException(ETimMessages eTimMessages, String value) {
+		super(eTimMessages, value);
 		// TODO Auto-generated constructor stub
 	}
 	

@@ -11,33 +11,36 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
-import com.tim.data.ETimPermission;
+import com.tim.data.ETimPermissions;
 
+/**
+ * 
+ * @appName the_internal_media
+ *
+ */
 @Entity
 @Table(name = "permissions")
 public class Permission extends BaseEntity{
-	/**
-	 * minhtuanitk43
-	 */
+
 	private static final long serialVersionUID = -7368618288132054132L;
 	
 	@Enumerated(EnumType.STRING)
-	@Column(unique = true)
+	@Column(unique = true, nullable = false, length = 50)
 	@Size(max=50)
-	private ETimPermission code;
+	private ETimPermissions code;
 	
-	@Column(unique = true)
+	@Column(unique = true, nullable = false, length = 50)
 	@Size(max=50)
 	private String name;
 	
 	@ManyToMany(mappedBy = "permissions")
 	private Set<Role> roles = new HashSet<>();
 
-	public ETimPermission getCode() {
+	public ETimPermissions getCode() {
 		return code;
 	}
 
-	public void setCode(ETimPermission code) {
+	public void setCode(ETimPermissions code) {
 		this.code = code;
 	}
 

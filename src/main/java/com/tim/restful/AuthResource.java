@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tim.data.ApiPath;
+import com.tim.data.TimApiPath;
 import com.tim.entity.Permission;
 import com.tim.entity.Role;
 import com.tim.entity.Student;
@@ -35,9 +35,14 @@ import com.tim.repository.TeacherRepository;
 import com.tim.security.jwt.JwtUtils;
 import com.tim.security.services.UserDetailsImpl;
 
+/**
+ * 
+ * @appName the_internal_media
+ *
+ */
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping(ApiPath.Auth.PREFIX)
+@RequestMapping(TimApiPath.Auth.PREFIX)
 public class AuthResource extends AbstractResource {
 	@Autowired
 	AuthenticationManager authenticationManager;
@@ -56,7 +61,12 @@ public class AuthResource extends AbstractResource {
 	@Autowired
 	PermissionRepository permissionRepository;
 
-	@PostMapping(ApiPath.Auth.LOGIN)
+	/**
+	 * @author minhtuanitk43
+	 * @param loginRequest
+	 * @return
+	 */
+	@PostMapping(TimApiPath.Auth.LOGIN)
 	public ResponseEntity<JwtResponse> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));

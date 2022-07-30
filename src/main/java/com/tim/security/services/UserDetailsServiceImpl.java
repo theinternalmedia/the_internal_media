@@ -11,10 +11,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.tim.entity.Role;
 import com.tim.entity.Student;
 import com.tim.entity.Teacher;
-import com.tim.model.UserModel;
 import com.tim.repository.StudentRepository;
 import com.tim.repository.TeacherRepository;
 
+/**
+ * 
+ * @appName the_internal_media
+ *
+ */
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService{
 

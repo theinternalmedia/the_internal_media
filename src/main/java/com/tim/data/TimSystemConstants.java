@@ -3,7 +3,7 @@ package com.tim.data;
 import java.util.Arrays;
 import java.util.List;
 
-public final class TimSystemConstant {
+public final class TimSystemConstants {
 	public static final String APP_NAME = "THE_INTERNAL_MEDIA";
 	
 	public static final String ADMIN_ROOT = "admin";

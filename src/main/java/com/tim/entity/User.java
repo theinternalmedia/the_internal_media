@@ -8,11 +8,14 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+/**
+ * 
+ * @appName the_internal_media
+ *
+ */
 @MappedSuperclass
 public abstract class User extends BaseEntity {
-	/**
-	 * minhtuanitk43
-	 */
+
 	private static final long serialVersionUID = -4780316215584757765L;
 
 	@NotBlank

@@ -3,11 +3,13 @@ package com.tim.dto;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * 
+ * @appName the_internal_media
+ *
+ */
 public class BaseDto implements Serializable {
 
-	/**
-	 * minhtuanitk43
-	 */
 	private static final long serialVersionUID = 7702340293141714083L;
 	private Long id;
 	private Date createdDate;

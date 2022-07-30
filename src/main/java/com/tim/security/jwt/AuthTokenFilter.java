@@ -19,6 +19,11 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.tim.security.services.UserDetailsServiceImpl;
 
+/**
+ * 
+ * @appName the_internal_media
+ *
+ */
 public class AuthTokenFilter extends OncePerRequestFilter {
 
 	private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);

@@ -16,12 +16,15 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+/**
+ * 
+ * @appName the_internal_media
+ *
+ */
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity implements Serializable {
-	/**
-	 * minhtuanitk43
-	 */
+
 	private static final long serialVersionUID = -2808568424623733508L;
 
 	@Id

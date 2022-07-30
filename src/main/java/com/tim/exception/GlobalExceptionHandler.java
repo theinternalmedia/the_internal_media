@@ -14,22 +14,28 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.tim.data.EExceptionMessage;
+import com.tim.data.ETimMessages;
 import com.tim.payload.response.ErrorResponse;
+import com.tim.utils.GetMessages;
 
+/**
+ * 
+ * @appName the_internal_media
+ *
+ */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 	Logger logger = org.slf4j.LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
 	@ExceptionHandler(AccessDeniedException.class)
 	public ResponseEntity<String> accessDeniedException(AccessDeniedException e) {
-		return new ResponseEntity<>(EExceptionMessage.ACCESS_DENIED.message, HttpStatus.FORBIDDEN);
+		return new ResponseEntity<>(GetMessages.getMessage(ETimMessages.ACCESS_DENIED), HttpStatus.FORBIDDEN);
 	}
 
 //	Not found exception
 	@ExceptionHandler(value = { UsernameNotFoundException.class })
 	public ResponseEntity<String> userNotFoundException(Exception e) {
-		return new ResponseEntity<>(EExceptionMessage.USER_NOT_FOUND.message, HttpStatus.UNAUTHORIZED);
+		return new ResponseEntity<>(GetMessages.getMessage(ETimMessages.USER_NOT_FOUND), HttpStatus.UNAUTHORIZED);
 	}
 
 //	Validate input exception handler

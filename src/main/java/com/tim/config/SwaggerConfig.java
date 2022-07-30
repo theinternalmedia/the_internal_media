@@ -13,7 +13,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-
+/**
+ * 
+ * @appName the_internal_media
+ *
+ */
 @Configuration
 public class SwaggerConfig {
 	

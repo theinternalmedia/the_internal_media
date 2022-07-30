@@ -13,13 +13,15 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
+/**
+ * 
+ * @appName the_internal_media
+ *
+ */
 @Entity
 @Table(name = "student")
 public class Student extends User{
 
-	/**
-	 * minhtuanitk43
-	 */
 	private static final long serialVersionUID = 3541331733217756229L;
 	
 	@Column(unique = true)

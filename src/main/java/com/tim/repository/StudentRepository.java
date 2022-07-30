@@ -7,6 +7,11 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import com.tim.entity.Student;
 
+/**
+ * 
+ * @appName the_internal_media
+ *
+ */
 public interface StudentRepository extends JpaRepository<Student, Long>, JpaSpecificationExecutor<Student> {
 	Optional<Student> findByUserId(String userId);
 

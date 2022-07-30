@@ -1,34 +1,24 @@
 package com.tim.exception;
 
-import com.tim.data.EExceptionMessage;
+import com.tim.data.ETimMessages;
 
+/**
+ * 
+ * @appName the_internal_media
+ *
+ */
 public class PasswordNotMatchException extends CustomException{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 4535334857331524410L;
 
-	public PasswordNotMatchException(EExceptionMessage eExceptionMessage, String value) {
-		super(eExceptionMessage, value);
+	public PasswordNotMatchException(ETimMessages eTimMessages, String value) {
+		super(eTimMessages, value);
 		// TODO Auto-generated constructor stub
 	}
 
-	public PasswordNotMatchException(EExceptionMessage eExceptionMessage) {
-		super(eExceptionMessage);
+	public PasswordNotMatchException(ETimMessages eTimMessages) {
+		super(eTimMessages);
 		// TODO Auto-generated constructor stub
 	}
-
-	public PasswordNotMatchException(int code, String message, String value) {
-		super(code, message, value);
-		// TODO Auto-generated constructor stub
-	}
-
-	public PasswordNotMatchException(int code, String message) {
-		super(code, message);
-		// TODO Auto-generated constructor stub
-	}
-
-
 
 }

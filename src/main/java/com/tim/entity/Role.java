@@ -14,22 +14,24 @@ import javax.persistence.PreRemove;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
-import com.tim.data.ETimRole;
+import com.tim.data.ETimRoles;
 
+/**
+ * 
+ * @appName the_internal_media
+ *
+ */
 @Entity
 @Table(name = "roles")
 public class Role extends BaseEntity {
-	/**
-	 * minhtuanitk43
-	 */
+
 	private static final long serialVersionUID = 7850391100035043803L;
 
-	@Enumerated(EnumType.STRING)
-	@Column(unique = true)
+	@Column(unique = true, nullable = false, length = 50)
 	@Size(max=50)
-	private ETimRole code;
+	private String code;
 	
-	@Column(unique = true)
+	@Column(unique = true, nullable = false, length = 50)
 	@Size(max=50)
 	private String name;
 
@@ -43,11 +45,11 @@ public class Role extends BaseEntity {
 	@JoinTable(name = "role_permission", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "permission_id"))
 	private Set<Permission> permissions = new HashSet<>();
 
-	public ETimRole getCode() {
+	public String getCode() {
 		return code;
 	}
 
-	public void setCode(ETimRole code) {
+	public void setCode(String code) {
 		this.code = code;
 	}
 

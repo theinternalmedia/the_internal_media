@@ -5,6 +5,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.tim.security.services.UserDetailsImpl;
 
+/**
+ * 
+ * @appName the_internal_media
+ *
+ */
 public abstract class AbstractResource {
 
 	protected Long getAuthenticatedUserId() {

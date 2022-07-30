@@ -11,13 +11,15 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+/**
+ * 
+ * @appName the_internal_media
+ *
+ */
 @Entity
 @Table(name = "teacher")
 public class Teacher extends User {
 
-	/**
-	 * minhtuanitk43
-	 */
 	private static final long serialVersionUID = 2186238218422351720L;
 	
 	@Column(columnDefinition = "boolean default false")

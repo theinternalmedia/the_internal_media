@@ -7,6 +7,11 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import com.tim.entity.Teacher;
 
+/**
+ * 
+ * @appName the_internal_media
+ *
+ */
 public interface TeacherRepository extends JpaRepository<Teacher, Long>, JpaSpecificationExecutor<Teacher> {
 	Optional<Teacher> findByUserId(String userId);
 
