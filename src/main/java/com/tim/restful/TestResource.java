@@ -13,12 +13,7 @@ import com.tim.utils.GetMessages;
 @RequestMapping("/test")
 public class TestResource extends AbstractResource {
 	
-	@GetMapping("/message1")
-	public String testGetValidateMessage() {
-		return GetMessages.getMessage(ETimMessages.VTEACHER_002);
-	}
-	
-	@GetMapping("/message2")
+	@GetMapping("/message")
 	public String testGetExceptionMessage() {
 		return GetMessages.getMessage(ETimMessages.CAN_NOT_CHANGE_ADMIN_ROOT);
 	}

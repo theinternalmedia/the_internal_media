@@ -35,16 +35,16 @@ public class Teacher extends User {
 	@OneToMany(mappedBy = "adviser")
 	private Set<Class> classes = new HashSet<Class>();;
 	
-//	@OneToMany(mappedBy = "teacher")
-//	private Set<NotificationTeacher> notificationTeachers = new HashSet<NotificationTeacher>();
-//	
-//	public Set<NotificationTeacher> getNotificationTeachers() {
-//		return notificationTeachers;
-//	}
-//
-//	public void setNotificationTeachers(Set<NotificationTeacher> notificationTeachers) {
-//		this.notificationTeachers = notificationTeachers;
-//	}
+	@OneToMany(mappedBy = "teacher")
+	private Set<NotificationTeacher> notificationTeachers = new HashSet<NotificationTeacher>();
+	
+	public Set<NotificationTeacher> getNotificationTeachers() {
+		return notificationTeachers;
+	}
+
+	public void setNotificationTeachers(Set<NotificationTeacher> notificationTeachers) {
+		this.notificationTeachers = notificationTeachers;
+	}
 
 	public Set<Class> getClasses() {
 		return classes;

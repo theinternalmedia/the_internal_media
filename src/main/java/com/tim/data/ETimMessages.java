@@ -1,43 +1,32 @@
 package com.tim.data;
 
 public enum ETimMessages {
-	/* =============== EXCEPTION MESSAGE =============== */
 	/*User exception message*/
-	USER_NOT_FOUND("111", "Tài khoản không tồn tại"),
-	USER_NAME_ALREADY_EXISTS("111", "Tài khoản đã tồn tại"),
-	EMAIL_ALREADY_EXISTS("111", "Email đã tồn tại"),
-	PASSWORD_NOT_MATCH("111", "Mật khẩu không đúng"),
-	PASSWORD_NOT_INVALID("111", "Mật khẩu không hợp lệ"),
-	CAN_NOT_CHANGE_ADMIN_ROOT("111", "Can not change ADMIN ROOT"),
+	USER_NOT_FOUND("msg.001", "Tài khoản không tồn tại"),
+	USER_NAME_ALREADY_EXISTS("msg.002", "Tài khoản đã tồn tại"),
+	EMAIL_ALREADY_EXISTS("msg.003", "Email đã tồn tại"),
+	PASSWORD_NOT_MATCH("msg.004", "Mật khẩu không đúng"),
+	PASSWORD_NOT_INVALID("msg.005", "Mật khẩu không hợp lệ"),
+	CAN_NOT_CHANGE_ADMIN_ROOT("msg.006", "Can not change ADMIN ROOT"),
 	
 	/*Role exception message*/
-	CAN_NOT_CHANGE_SYSTEM_ROLE("333", "Can not change SYSTEM ROLE"),
-	CAN_NOT_DELETE_SYSTEM_ROLE("333", "Can not delete SYSTEM ROLE"),
-	ROLE_NAME_ALREADY_EXIST("333", "Tên ROLE đã tồn tại !"),
+	CAN_NOT_CHANGE_SYSTEM_ROLE("msg.007", "Can not change SYSTEM ROLE"),
+	CAN_NOT_DELETE_SYSTEM_ROLE("msg.008", "Can not delete SYSTEM ROLE"),
+	ROLE_NAME_ALREADY_EXIST("msg.009", "Tên ROLE đã tồn tại !"),
 	
 	
 	/*File Exception*/
 	
-	TYPE_FILE_INVALID("444", "Type file only are: image/video"),
-	FILE_IS_NULL("444", "File must be not null"),
-	IS_NOT_AUTHOR_OR_ADMIN("444", "Chỉ có tác giả/admin mới có thể xóa"),
+	TYPE_FILE_INVALID("msg.010", "Type file only are: image/video"),
+	FILE_IS_NULL("msg.011", "File must be not null"),
+	IS_NOT_AUTHOR_OR_ADMIN("msg.012", "Chỉ có tác giả/admin mới có thể xóa"),
 	
-	REIGSTER_COURSE_EXISTS("555", "Khóa học đã tồn tại trong hồ sơ"),
-	
-	SEND_MAIL_ERROR("666", "Send Mail error"),
-	
-	EMAIL_USERNAME_NOT_FOUND("777", " not found"),
+	EMAIL_USERNAME_NOT_FOUND("msg.013", " not found"),
 	
 	
-	ACCESS_DENIED("403", "Không có quyền truy cập"),
+	ACCESS_DENIED("msg.403", "Không có quyền truy cập"),
 	
-	INTERNAL_SYSTEM_ERROR("999", "Lỗi hệ thống, vui lòng kiểm tra và thử lại"),
-	
-	/* =============== VALIDATION MESSAGE =============== */
-	
-	/* Teacher message */
-	VTEACHER_001("Vteacher.001", "ID not blank"),
-	VTEACHER_002("Vteacher.002", "ID out of length");;
+	INTERNAL_SYSTEM_ERROR("msg.999", "Lỗi hệ thống, vui lòng kiểm tra và thử lại");
 	
 	/**
 	 * code of message properties

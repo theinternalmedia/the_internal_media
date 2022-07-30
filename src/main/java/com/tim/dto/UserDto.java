@@ -8,7 +8,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-import com.tim.entity.Role;
+import com.tim.data.ValidationInput;
+import com.tim.dto.role.RoleDto;
 
 public class UserDto extends BaseDto {
 
@@ -17,8 +18,8 @@ public class UserDto extends BaseDto {
 	 */
 	private static final long serialVersionUID = -551690367785937349L;
 
-	@NotBlank
-	@Size(max = 20)
+	@NotBlank(message = ValidationInput.Teacher.ID_NOTBLANK)
+	@Size(max = 20, message = ValidationInput.Teacher.ID_MAX_SIZE)
 	private String userId;
 
 	@NotBlank
@@ -47,7 +48,7 @@ public class UserDto extends BaseDto {
 	@Size(max = 100)
 	private String avatar;
 
-	private Set<Role> roles = new HashSet<Role>();
+	private Set<RoleDto> roles = new HashSet<RoleDto>();
 
 	public String getUserId() {
 		return userId;
@@ -121,11 +122,16 @@ public class UserDto extends BaseDto {
 		this.avatar = avatar;
 	}
 
-	public Set<Role> getRoles() {
+	public Set<RoleDto> getRoles() {
 		return roles;
 	}
 
-	public void setRoles(Set<Role> roles) {
+	public void setRoles(Set<RoleDto> roles) {
 		this.roles = roles;
 	}
+
+	public void setGender(boolean gender) {
+		this.gender = gender;
+	}
+
 }

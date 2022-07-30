@@ -7,4 +7,9 @@ public final class TimApiPath {
 		public static final String PREFIX = TIM_API_PREFIX + "/auth";
 		public static final String LOGIN = "/login";
 	}
+	
+	public static class Teacher{
+		public static final String PREFIX = TIM_API_PREFIX + "/teacher";
+		public static final String SAVE = "/save";
+	}
 }
