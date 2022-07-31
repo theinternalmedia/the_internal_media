@@ -13,17 +13,10 @@ public class CustomException extends RuntimeException {
 	private static final long serialVersionUID = 6795403562971795071L;
 	private String code;
 	private String message;
-	private String value;
-
+	
 	public CustomException(ETimMessages eTimMessages) {
 		this.code = eTimMessages.code;
-		this.message = GetMessages.getMessage(eTimMessages);
-	}
-
-	public CustomException(ETimMessages eTimMessages, String value) {
-		this.code = eTimMessages.code;
-		this.message = GetMessages.getMessage(eTimMessages);
-		this.value = value;
+		this.message = GetMessages.getMessage(eTimMessages.code);
 	}
 
 	public String getCode() {
@@ -40,14 +33,6 @@ public class CustomException extends RuntimeException {
 
 	public void setMessage(String message) {
 		this.message = message;
-	}
-
-	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
 	}
 
 }

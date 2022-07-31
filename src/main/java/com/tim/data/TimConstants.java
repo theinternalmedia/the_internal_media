@@ -7,6 +7,9 @@ public final class TimConstants {
 	public static final String APP_NAME = "THE_INTERNAL_MEDIA";
 	
 	public static final String ADMIN_ROOT = "admin";
+	
+	public static final String OK_STATUS = "ok";
+	public static final String OK_FAIL = "fail";
 
 	public static final List<String> IMAGE_MIME_TYPE = Arrays.asList("png", "jpeg", "jpg", "gif");
 	public static final List<String> VIDEO_MIME_TYPE = Arrays.asList("mpeg-4", "mpeg-2", "mp4", "flv", "avi");

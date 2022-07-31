@@ -16,9 +16,4 @@ public class AuthException extends CustomException {
 		// TODO Auto-generated constructor stub
 	}
 
-	public AuthException(ETimMessages eTimMessages, String value) {
-		super(eTimMessages, value);
-		// TODO Auto-generated constructor stub
-	}
-
 }

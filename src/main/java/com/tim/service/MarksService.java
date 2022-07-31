@@ -1,4 +1,4 @@
-package com.tim.security.services;
+package com.tim.service;
 
 public interface MarksService {
 

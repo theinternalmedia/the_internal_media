@@ -19,7 +19,7 @@ public class UserDto extends BaseDto {
 	private static final long serialVersionUID = -551690367785937349L;
 
 	@NotBlank(message = ValidationInput.Teacher.ID_NOTBLANK)
-	@Size(max = 20, message = ValidationInput.Teacher.ID_MAX_SIZE)
+	@Size(max = 20, message = ValidationInput.Teacher.ID_MAXSIZE)
 	private String userId;
 
 	@NotBlank
@@ -82,11 +82,11 @@ public class UserDto extends BaseDto {
 		this.password = password;
 	}
 
-	public Boolean getGender() {
+	public boolean isGender() {
 		return gender;
 	}
 
-	public void setGender(Boolean gender) {
+	public void setGender(boolean gender) {
 		this.gender = gender;
 	}
 
@@ -128,10 +128,6 @@ public class UserDto extends BaseDto {
 
 	public void setRoles(Set<RoleDto> roles) {
 		this.roles = roles;
-	}
-
-	public void setGender(boolean gender) {
-		this.gender = gender;
 	}
 
 }

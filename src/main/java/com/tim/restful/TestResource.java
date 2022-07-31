@@ -15,6 +15,6 @@ public class TestResource extends AbstractResource {
 	
 	@GetMapping("/message")
 	public String testGetExceptionMessage() {
-		return GetMessages.getMessage(ETimMessages.CAN_NOT_CHANGE_ADMIN_ROOT);
+		return GetMessages.getMessage(ETimMessages.USER_NOT_FOUND);
 	}
 }

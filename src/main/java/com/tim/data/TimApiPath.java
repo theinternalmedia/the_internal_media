@@ -11,5 +11,6 @@ public final class TimApiPath {
 	public static class Teacher{
 		public static final String PREFIX = TIM_API_PREFIX + "/teacher";
 		public static final String SAVE = "/save";
+		public static final String GET = "/get";
 	}
 }

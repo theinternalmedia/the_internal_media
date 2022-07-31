@@ -1,8 +1,8 @@
-package com.tim.security.services.impl;
+package com.tim.service.impl;
 
 import org.springframework.stereotype.Service;
 
-import com.tim.security.services.MarksService;
+import com.tim.service.MarksService;
 
 @Service
 public class MarksServiceImpl implements MarksService {

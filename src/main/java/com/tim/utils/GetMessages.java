@@ -13,6 +13,7 @@ import com.tim.data.ETimMessages;
  */
 @Component
 public class GetMessages {
+
 	private static MessageSource messageSource;
 
 	private static final String DEFAUL_EXCEPTION_MESSAGE = "Có gì đó sai sai, vui lòng thử lại";
@@ -27,7 +28,17 @@ public class GetMessages {
 	 * @param eMessage
 	 * @return message properties by code of eMessage
 	 */
-	public static String getMessage(ETimMessages eMessage) {
-		return messageSource.getMessage(eMessage.code, null, DEFAUL_EXCEPTION_MESSAGE, null);
+	public static String getMessage(ETimMessages eMessage, String... values) {
+		return getMessage(eMessage.code, values);
+	}
+
+	/**
+	 * @author minhtuanitk43
+	 * @param code
+	 * @return message properties by code
+	 */
+	public static String getMessage(String code, String... values) {
+		String message = messageSource.getMessage(code, values, DEFAUL_EXCEPTION_MESSAGE, null);
+		return message;
 	}
 }
