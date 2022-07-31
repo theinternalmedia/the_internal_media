@@ -9,6 +9,7 @@ public final class TimConstants {
 	public static final String ADMIN_ROOT = "admin";
 	
 	public static final String OK_STATUS = "ok";
+	public static final String OK_MESSAGE = "success";
 	public static final String OK_FAIL = "fail";
 
 	public static final List<String> IMAGE_MIME_TYPE = Arrays.asList("png", "jpeg", "jpg", "gif");
