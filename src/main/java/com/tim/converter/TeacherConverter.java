@@ -19,17 +19,15 @@ public class TeacherConverter extends AbstractConverter<TeacherDto, Teacher> {
      * thinhnguyen
      */
 
-    @Autowired
-    private ModelMapper modelMapper;
 
     @Override
 	public TeacherDto toDto(Teacher entity) {
-        TeacherDto model = modelMapper.map(entity, TeacherDto.class);
+        TeacherDto model = this.modelMapper.map(entity, TeacherDto.class);
         return model;
     }
 
     @Override
 	public Teacher toEntity(TeacherDto dto) {
-        return modelMapper.map(dto, Teacher.class);
+        return this.modelMapper.map(dto, Teacher.class);
     }
 }
