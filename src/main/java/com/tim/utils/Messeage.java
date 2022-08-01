@@ -8,9 +8,11 @@ import java.lang.reflect.Field;
 public class Messeage {
     public static String getMessage(Class tClass) {
 
+        //tạo message cho dto
         String message = createMessage(tClass);
-        Class<?> parentClass = tClass.getSuperclass();
 
+        // nếu dto là student, teacher thì gọi đến lớp cha vì nó extends userDto
+        Class<?> parentClass = tClass.getSuperclass();
         if (parentClass != null) {
             message = createMessage(parentClass);
         }
