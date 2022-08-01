@@ -1,6 +1,7 @@
 package com.tim.utils;
 
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.lang.reflect.Field;
@@ -28,8 +29,8 @@ public class Messeage {
             for (Field field : fields) {
                 field.setAccessible(true);
                 String fieldName = field.getName();
-                if (field.isAnnotationPresent(Size.class)) {
 
+                if (field.isAnnotationPresent(Size.class)) {
                     Size size = field.getAnnotation(Size.class);
                     int max = size.max();
                     int mix = size.min();
@@ -40,14 +41,18 @@ public class Messeage {
                     if (mix < (int) field.get(tClass)) {
                         message = fieldName + " không nhỏ hơn 0";
                     }
+
                 } else if (field.isAnnotationPresent(NotBlank.class)) {
                     message = fieldName + " không được để trống";
+
+                } else if(field.isAnnotationPresent(Email.class)){
+                    message = fieldName + " không đúng định dạng.";
                 }
             }
             return message;
         } catch (IllegalAccessException e) {
             e.printStackTrace();
+            return null;
         }
-        return null;
     }
 }
