@@ -24,11 +24,12 @@ public class ExcelService implements ExcelFileService {
 
 	final static DateTimeFormatter dtf = DateTimeFormatter.ofPattern(TimConstants.USER_DOB_FORMAT);
 
+	
 	@Override
 	public <T extends Object> List<T> getListObjectFromExcelFile(final MultipartFile excelFile, Class<T> clazz) {
 		List<T> list = new ArrayList<>();
 		List<ExcelField[]> excelFields = excelHelper.getListExcelFieldArray(excelFile, clazz.getSimpleName());
-		for (ExcelField[] evc : excelFields) {
+		for (ExcelField[] exf : excelFields) {
 			T t = null;
 			try {
 				t = clazz.getConstructor().newInstance();
@@ -39,24 +40,24 @@ public class ExcelService implements ExcelFileService {
 			}
 			Class<? extends Object> classz = t.getClass();
 
-			for (int i = 0; i < evc.length; i++) {
+			for (int i = 0; i < exf.length; i++) {
 
 				for (Field field : classz.getDeclaredFields()) {
 					field.setAccessible(true);
 
-					if (evc[i].getPojoAttribute().equalsIgnoreCase(field.getName())) {
+					if (exf[i].getPojoAttribute().equalsIgnoreCase(field.getName())) {
 
 						try {
-							if (FieldType.STRING.getValue().equalsIgnoreCase(evc[i].getExcelColType())) {
-								field.set(t, evc[i].getExcelValue());
-							} else if (FieldType.DOUBLE.getValue().equalsIgnoreCase(evc[i].getExcelColType())) {
-								field.set(t, Double.valueOf(evc[i].getExcelValue()));
-							} else if (FieldType.INTEGER.getValue().equalsIgnoreCase(evc[i].getExcelColType())) {
-								field.set(t, Double.valueOf(evc[i].getExcelValue()).intValue());
-							} else if (FieldType.BOOLEAN.getValue().equalsIgnoreCase(evc[i].getExcelColType())) {
-								field.set(t, Boolean.valueOf(evc[i].getExcelValue()));
-							} else if (FieldType.LOCALDATE.getValue().equalsIgnoreCase(evc[i].getExcelColType())) {
-								field.set(t, LocalDate.parse(evc[i].getExcelValue(), dtf));
+							if (FieldType.STRING.getValue().equalsIgnoreCase(exf[i].getExcelColType())) {
+								field.set(t, exf[i].getExcelValue());
+							} else if (FieldType.DOUBLE.getValue().equalsIgnoreCase(exf[i].getExcelColType())) {
+								field.set(t, Double.valueOf(exf[i].getExcelValue()));
+							} else if (FieldType.INTEGER.getValue().equalsIgnoreCase(exf[i].getExcelColType())) {
+								field.set(t, Double.valueOf(exf[i].getExcelValue()).intValue());
+							} else if (FieldType.BOOLEAN.getValue().equalsIgnoreCase(exf[i].getExcelColType())) {
+								field.set(t, Boolean.valueOf(exf[i].getExcelValue()));
+							} else if (FieldType.LOCALDATE.getValue().equalsIgnoreCase(exf[i].getExcelColType())) {
+								field.set(t, LocalDate.parse(exf[i].getExcelValue(), dtf));
 							}
 						} catch (IllegalArgumentException | IllegalAccessException e) {
 							e.printStackTrace();
