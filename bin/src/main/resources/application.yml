@@ -1,0 +1,8 @@
+spring:
+  profiles:
+    include: common, local
+    active:
+    - common
+    - local
+  messages:
+    basename: messages
