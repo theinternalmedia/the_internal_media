@@ -13,10 +13,6 @@ import com.tim.entity.Class;
 @Component
 public class ClassConverter extends AbstractConverter<ClassDto, Class> {
 
-    /**
-     * thinhnguyen
-     */
-
     @Override
 	public ClassDto toDto(Class entity) {
     	ClassDto model = this.modelMapper.map(entity, ClassDto.class);
