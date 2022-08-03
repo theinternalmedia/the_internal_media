@@ -2,6 +2,7 @@ package com.tim.dto.educationprogram;
 
 import javax.validation.constraints.Size;
 
+import com.tim.data.ValidationInput;
 import com.tim.dto.BaseDto;
 
 /**
@@ -13,10 +14,10 @@ public class EducationProgramDto extends BaseDto {
 
 	private static final long serialVersionUID = -2167333247842473644L;
 
-	@Size(max = 50)
+	@Size(max = 50, message = ValidationInput.General.CODE_MAX_SIZE)
 	private String code;
 
-	@Size(max = 50)
+	@Size(max = 50, message = ValidationInput.General.NAME_MAX_SIZE)
 	private String name;
 
 	public String getCode() {

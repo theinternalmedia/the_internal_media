@@ -32,8 +32,8 @@ public class TeacherServiceImpl implements TeacherService {
 
 	@Override
 	public long save(@Valid TeacherDto dto) {
-		// TODO Auto-generated method stub
-		return 0;
+		Teacher entity = teacherConverter.toEntity(teacherDto);
+        return teacherRepository.save(entity).getId();
 	}
 
 	@Override

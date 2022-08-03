@@ -1,8 +1,9 @@
 package com.tim.dto.schoolyear;
 
-import javax.validation.constraints.Size;
-
+import com.tim.data.ValidationInput;
 import com.tim.dto.BaseDto;
+
+import javax.validation.constraints.Size;
 
 /**
  * 
@@ -13,10 +14,10 @@ public class SchoolYearDto extends BaseDto {
 
 	private static final long serialVersionUID = 2582106395890821136L;
 
-	@Size(max = 50)
+	@Size(max = 50, message = ValidationInput.General.CODE_MAX_SIZE)
 	private String code;
 
-	@Size(max = 50)
+	@Size(max = 50, message = ValidationInput.General.NAME_MAX_SIZE)
 	private String name;
 
 	public String getCode() {
