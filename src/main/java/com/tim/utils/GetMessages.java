@@ -16,7 +16,7 @@ public class GetMessages {
 
 	private static MessageSource messageSource;
 
-	private static final String DEFAUL_EXCEPTION_MESSAGE = "Có gì đó sai sai, vui lòng thử lại";
+	private static final String EXCEPTION_MESSAGE_DEFAULT = "Có gì đó sai sai, vui lòng thử lại";
 
 	@Autowired
 	public GetMessages(MessageSource messageSource) {
@@ -38,7 +38,7 @@ public class GetMessages {
 	 * @return message properties by code
 	 */
 	public static String getMessage(String code, String... values) {
-		String message = messageSource.getMessage(code, values, DEFAUL_EXCEPTION_MESSAGE, null);
+		String message = messageSource.getMessage(code, values, EXCEPTION_MESSAGE_DEFAULT, null);
 		return message;
 	}
 }

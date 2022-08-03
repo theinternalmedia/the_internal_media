@@ -4,6 +4,8 @@ public enum ETimMessages {
 	/*User exception message*/
 	USER_NOT_FOUND("msg.001", "User not found"),
 	NOT_FOUND_ENTITY_BY_FIELD("msg.002", "Not found entity by field"),
+	INVALID_EXCEL_FILE("msg.003", "invalid excel file"),
+	INVALID_SHEET_NAME("msg.004", "invalid sheet name"),
 //	USER_NAME_ALREADY_EXISTS("msg.002", "Tài khoản đã tồn tại"),
 //	EMAIL_ALREADY_EXISTS("msg.003", "Email đã tồn tại"),
 //	PASSWORD_NOT_MATCH("msg.004", "Mật khẩu không đúng"),

@@ -19,6 +19,8 @@ public final class TimConstants {
 
 	public static final String REGEX_PHONE_VN = "(0[3|5|7|8|9])+([0-9]{8})";
 	public static final String REGEX_EMAIL = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
+	
+	public static final String USER_DOB_FORMAT = "dd-MM-yyyy";
 
 	public static class NotificationType{
 		public static final int TO_ALL = 1;

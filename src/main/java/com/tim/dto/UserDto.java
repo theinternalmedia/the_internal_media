@@ -1,6 +1,6 @@
 package com.tim.dto;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,7 +26,7 @@ public class UserDto extends BaseDto {
 	@Size(max = 50)
 	private String name;
 
-	@NotBlank
+	@NotBlank(message = "{email.notblank}")
 	@Size(max = 50)
 	@Email
 	private String email;
@@ -43,7 +43,7 @@ public class UserDto extends BaseDto {
 	@Size(max = 10)
 	private String phone;
 
-	private Date dob;
+	private LocalDate dob;
 
 	@Size(max = 100)
 	private String avatar;
@@ -106,11 +106,11 @@ public class UserDto extends BaseDto {
 		this.phone = phone;
 	}
 
-	public Date getDob() {
+	public LocalDate getDob() {
 		return dob;
 	}
 
-	public void setDob(Date dob) {
+	public void setDob(LocalDate dob) {
 		this.dob = dob;
 	}
 

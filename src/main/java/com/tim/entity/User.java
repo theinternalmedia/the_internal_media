@@ -1,6 +1,6 @@
 package com.tim.entity;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
@@ -51,7 +51,7 @@ public abstract class User extends BaseEntity {
 	private String phone;
 
 	@Column
-	private Date dob;
+	private LocalDate dob;
 
 	@Column
 	@Size(max = 100)
@@ -113,12 +113,16 @@ public abstract class User extends BaseEntity {
 		this.phone = phone;
 	}
 
-	public Date getDob() {
+	public LocalDate getDob() {
 		return dob;
 	}
 
-	public void setDob(Date dob) {
+	public void setDob(LocalDate dob) {
 		this.dob = dob;
+	}
+
+	public void setGender(boolean gender) {
+		this.gender = gender;
 	}
 
 	public String getAvatar() {

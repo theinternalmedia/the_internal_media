@@ -1,6 +1,6 @@
 package com.tim.security.services;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,7 +30,7 @@ public class  UserModel extends BaseDto{
 	
 	private String phone;
 	
-	private Date dob;
+	private LocalDate dob;
 	
 	private String avatar;
 	
@@ -100,11 +100,11 @@ public class  UserModel extends BaseDto{
 		this.phone = phone;
 	}
 
-	public Date getDob() {
+	public LocalDate getDob() {
 		return dob;
 	}
 
-	public void setDob(Date dob) {
+	public void setDob(LocalDate dob) {
 		this.dob = dob;
 	}
 

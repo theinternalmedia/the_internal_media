@@ -1,0 +1,51 @@
+[
+	{
+		"excelHeader": "Mã GV",
+		"excelIndex": 1,
+		"excelColType": "String",
+		"excelValue": null,
+		"pojoAttribute": "userId"
+	},
+	{
+		"excelHeader": "Họ và tên",
+		"excelIndex": 2,
+		"excelColType": "String",
+		"excelValue": null,
+		"pojoAttribute": "name"
+	},
+	{
+		"excelHeader": "Giới tính",
+		"excelIndex": 3,
+		"excelColType": "Boolean",
+		"excelValue": null,
+		"pojoAttribute": "gender"
+	},
+	{
+		"excelHeader": "Email",
+		"excelIndex": 4,
+		"excelColType": "String",
+		"excelValue": null,
+		"pojoAttribute": "email"
+	},
+	{
+		"excelHeader": "Địa chỉ",
+		"excelIndex": 5,
+		"excelColType": "String",
+		"excelValue": null,
+		"pojoAttribute": "address"
+	},
+	{
+		"excelHeader": "Điện thoại",
+		"excelIndex": 6,
+		"excelColType": "String",
+		"excelValue": null,
+		"pojoAttribute": "phone"
+	},
+	{
+		"excelHeader": "Ngày sinh",
+		"excelIndex": 7,
+		"excelColType": "LocalDate",
+		"excelValue": null,
+		"pojoAttribute": "dob"
+	}
+]
