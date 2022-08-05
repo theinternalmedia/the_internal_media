@@ -88,7 +88,7 @@ public class TeacherDto extends BaseDto {
 		this.password = password;
 	}
 
-	public boolean isGender() {
+	public boolean getGender() {
 		return gender;
 	}
 

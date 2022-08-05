@@ -13,4 +13,5 @@ public interface TeacherService {
 	long save(@Valid TeacherDto dto);
 	TeacherDto findByUserId(@NotBlank String userId);
 	List<TeacherDto> importExcelFile(MultipartFile file);
+	void exportExcelFile(String fileName, List<TeacherDto> teacherDtos);
 }

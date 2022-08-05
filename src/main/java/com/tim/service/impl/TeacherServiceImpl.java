@@ -49,4 +49,9 @@ public class TeacherServiceImpl implements TeacherService {
 		return teachers;
 	}
 
+	@Override
+	public void exportExcelFile(String fileName, List<TeacherDto> teacherDtos) {
+		excelService.writeToExcel(fileName, teacherDtos);
+	}
+
 }

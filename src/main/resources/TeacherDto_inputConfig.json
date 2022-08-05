@@ -1,5 +1,12 @@
 [
 	{
+		"excelHeader": "STT",
+		"excelIndex": 0,
+		"excelColType": "Integer",
+		"excelValue": null,
+		"pojoAttribute": null
+	},
+	{
 		"excelHeader": "Mã GV",
 		"excelIndex": 1,
 		"excelColType": "String",

@@ -34,7 +34,9 @@ public class TeacherResource extends AbstractResource {
 	
 	@PostMapping(TimApiPath.Teacher.UPLOAD_EXCEL)
 	public List<?> uplaodExcelFile(@RequestPart("file") MultipartFile file) {
-		return teacherService.importExcelFile(file);
+		List<TeacherDto> dtos = teacherService.importExcelFile(file);
+		teacherService.exportExcelFile("C:\\Users\\PC\\OneDrive\\Desktop\\test.xlsx", dtos);
+		return dtos;
 	}
 	
 	@GetMapping(TimApiPath.Teacher.GET)
