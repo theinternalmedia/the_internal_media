@@ -78,7 +78,6 @@ public class ExcelService implements ExcelFileService {
 		}
 		return list;
 	}
-
 	@Override
 	public <T> void writeToExcel(String fileName, List<T> data) {
 		excelHelper.writeToExcel(fileName, data);
