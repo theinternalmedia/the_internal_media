@@ -30,9 +30,9 @@ public class StudentDto extends BaseDto {
 	 * 
 	 */
 	private static final long serialVersionUID = 6750034714277068245L;
-	
-	@NotBlank(message = ValidationInput.Teacher.ID_NOTBLANK)
-	@Size(max = 20, message = ValidationInput.Teacher.ID_MAXSIZE)
+
+	@NotBlank(message = ValidationInput.User.ID_NOTBLANK)
+	@Size(max = 20, message = ValidationInput.User.ID_MAX_SIZE)
 	private String userId;
 
 	@NotBlank

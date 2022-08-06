@@ -7,6 +7,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,9 +16,13 @@ import com.tim.data.ETimMessages;
 import com.tim.data.TimConstants;
 import com.tim.dto.excel.ExcelField;
 import com.tim.exception.ExcelException;
+import com.tim.exception.GlobalExceptionHandler;
 
 @Service
 public class ExcelService implements ExcelFileService {
+	
+	private final Logger logger = org.slf4j.LoggerFactory.getLogger(GlobalExceptionHandler.class);
+	
 	@Autowired
 	private ExcelHelper excelHelper;
 
@@ -66,8 +71,10 @@ public class ExcelService implements ExcelFileService {
 								break;
 							}
 						} catch (IllegalArgumentException | IllegalAccessException e) {
+							logger.error(e.getMessage(), e);
 							e.printStackTrace();
 						} catch (Exception e) {
+							logger.error(e.getMessage(), e);
 							e.printStackTrace();
 						}
 						break;

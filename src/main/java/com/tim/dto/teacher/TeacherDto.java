@@ -31,8 +31,8 @@ public class TeacherDto extends BaseDto {
 
 	private boolean isManager = false;
 	
-	@NotBlank(message = ValidationInput.Teacher.ID_NOTBLANK)
-	@Size(max = 20, message = ValidationInput.Teacher.ID_MAXSIZE)
+	@NotBlank(message = ValidationInput.User.ID_NOTBLANK)
+	@Size(max = 20, message = ValidationInput.User.ID_MAX_SIZE)
 	private String userId;
 
 	@NotBlank

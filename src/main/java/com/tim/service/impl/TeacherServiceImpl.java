@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.tim.converter.TeacherConverter;
 import com.tim.dto.teacher.TeacherDto;
+import com.tim.entity.Teacher;
 import com.tim.repository.TeacherRepository;
 import com.tim.service.TeacherService;
 import com.tim.service.excel.ExcelService;
@@ -32,8 +33,8 @@ public class TeacherServiceImpl implements TeacherService {
 
 	@Override
 	public long save(@Valid TeacherDto dto) {
-		// TODO Auto-generated method stub
-		return 0;
+		Teacher entity = teacherConverter.toEntity(dto);
+        return teacherRepository.save(entity).getId();
 	}
 
 	@Override
