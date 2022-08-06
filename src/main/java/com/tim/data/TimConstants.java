@@ -46,9 +46,13 @@ public final class TimConstants {
 	 * @appName the_internal_media
 	 *
 	 */
-	public static class HeaderFieldsConfig {
-		public static final String LINE_NUMBER = "STT";
+	public static class ObjectFields {
 		public static final String[] TEACHER = { "userId", "name", "gender", "dob", "address", "phone" };
+	}
+	
+	public static class HeaderFields{
+		public static final String LINE_NUMBER = "STT";
+		public static final String[] TEACHER = { "Mã GV", "Họ tên", "Giới tính", "Ngày sinh", "Địa chỉ", "Điện thoại" };
 	}
 
 	/**

@@ -63,6 +63,8 @@ public class ExcelHelper {
 
 	private final static String SEPARATOR = "/";
 
+	private final static String GET = "get";
+
 	/**
 	 * @author minhtuanitk43
 	 * @param Multipart file in Excel Type
@@ -129,7 +131,7 @@ public class ExcelHelper {
 						break;
 					}
 				} catch (IllegalStateException e) {
-					logger.error(e.getMessage());
+					logger.error(e.getMessage(), e);
 					e.printStackTrace();
 				}
 				excelFieldArr[index++] = excelField;
@@ -179,24 +181,25 @@ public class ExcelHelper {
 			int columnCount = 1;
 			Row row = sheet.createRow(rowCount++);
 
-			// Get HeaderFields Configuration
-			String[] headerFields = TimConstants.HeaderFieldsConfig.TEACHER;
+			// Get HeaderFields and ObjectFields
+			String[] headerFields = TimConstants.HeaderFields.TEACHER;
+			String[] objectFields = TimConstants.ObjectFields.TEACHER;
 
 			// Write LineNumberHeader to Excel
 			cell = row.createCell(0);
-			cell.setCellValue(TimConstants.HeaderFieldsConfig.LINE_NUMBER);
+			cell.setCellValue(TimConstants.HeaderFields.LINE_NUMBER);
 
 			// Write HeaderFields to Excel
-			for (String excelField : headerFields) {
+			for (String headerField : headerFields) {
 				cell = row.createCell(columnCount++);
-				cell.setCellValue(excelField);
+				cell.setCellValue(headerField);
 			}
 			int num = 1;
 			for (T t : data) {
 				// Create Row
 				row = sheet.createRow(rowCount++);
 				columnCount = 1;
-				for (String headerField : headerFields) {
+				for (String objectField : objectFields) {
 					// Set line number
 					Cell cellFirst = row.createCell(0);
 					cellFirst.setCellValue(num);
@@ -207,9 +210,9 @@ public class ExcelHelper {
 					// Get Value of T
 					Method method = null;
 					try {
-						method = clazz.getMethod("get" + capitalize(headerField));
+						method = clazz.getMethod(GET + capitalize(objectField));
 					} catch (NoSuchMethodException nme) {
-						method = clazz.getMethod("get" + headerField);
+						method = clazz.getMethod(GET + objectField);
 					}
 					Object value = method.invoke(t, (Object[]) null);
 
@@ -258,6 +261,7 @@ public class ExcelHelper {
 			workbook.write(fos);
 			fos.flush();
 		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		} finally {
 			try {
@@ -348,6 +352,7 @@ public class ExcelHelper {
 		try {
 			return file.getInputStream();
 		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
 			e.printStackTrace();
 			throw new ExcelException(ETimMessages.INVALID_EXCEL_FILE);
 		}
