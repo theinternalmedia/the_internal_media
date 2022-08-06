@@ -11,8 +11,8 @@ public class ExcelException extends CustomException{
 
 	private static final long serialVersionUID = 8885482666209402062L;
 
-	public ExcelException(ETimMessages eTimMessages) {
-		super(eTimMessages);
+	public ExcelException(ETimMessages eTimMessages, String... values) {
+		super(eTimMessages, values);
 		// TODO Auto-generated constructor stub
 	}
 

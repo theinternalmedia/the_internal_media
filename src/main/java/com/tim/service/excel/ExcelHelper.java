@@ -18,12 +18,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.ss.formula.functions.Address;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.util.CellAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
@@ -74,6 +76,8 @@ public class ExcelHelper {
 	public List<ExcelField[]> readFromExcel(final MultipartFile file, String className) {
 
 		List<ExcelField[]> excelFieldArrayList = new ArrayList<ExcelField[]>();
+		
+		List<String> cellErrs = new ArrayList<String>();
 
 		// 1.Get workBook from file Excel
 		Workbook workBook = readExcel(file);
@@ -89,19 +93,27 @@ public class ExcelHelper {
 
 		// 5.Loop list Row in sheet(2) to get ExcelField Arr
 		for (int i = 1; i < totalRows; i++) {
+			// 5.1 Get Row
 			Row row = sheet.getRow(i);
 			ExcelField[] excelFieldArr = new ExcelField[excelFieldTemplateList.size()];
 			int index = 0;
+			int errNum = 0;
+			// 5.2 Loop excelFieldTemplateList(3)
 			for (ExcelField excelFieldTemp : excelFieldTemplateList) {
 				int cellIndex = excelFieldTemp.getExcelIndex();
 				String cellType = excelFieldTemp.getExcelColType();
+				
+				// 5.3 Get Cell
 				Cell cell = row.getCell(cellIndex);
 
+				// 5.4 Create excelField
 				ExcelField excelField = new ExcelField();
 				excelField.setExcelColType(excelFieldTemp.getExcelColType());
 				excelField.setExcelHeader(excelFieldTemp.getExcelHeader());
 				excelField.setExcelIndex(excelFieldTemp.getExcelIndex());
 				excelField.setPojoAttribute(excelFieldTemp.getPojoAttribute());
+				
+				// 5.5 get value from Cell(5.3) and set to excelField(5.4)
 				try {
 					switch (cellType) {
 					case TimConstants.FieldType.STRING:
@@ -132,11 +144,16 @@ public class ExcelHelper {
 					}
 				} catch (IllegalStateException e) {
 					logger.error(e.getMessage(), e);
+					cellErrs.add(cell.getAddress().toString());
 					e.printStackTrace();
+					continue;
 				}
 				excelFieldArr[index++] = excelField;
 			}
 			excelFieldArrayList.add(excelFieldArr);
+		}
+		if(cellErrs.size() > 0) {
+			throw new ExcelException(ETimMessages.INVALID_EXCEL_VALUE, cellErrs.toString());
 		}
 		return excelFieldArrayList;
 	}
@@ -150,45 +167,47 @@ public class ExcelHelper {
 	 * @param data     List Object
 	 */
 	public <T> void writeToExcel(String fileName, List<T> data) {
-		// Get Class of T
+		// 1.Get Class of T
 		Class<? extends Object> clazz = data.get(0).getClass();
 		OutputStream fos = null;
 		XSSFWorkbook workbook = null;
 		Cell cell;
 		try {
-			// Create RootFolder if not exists
+			// 2. CREATE FILE
+			// 2.1 Create RootFolder if not exists
 			File rootFolder = new File(ROOT_FOLDER);
 			if (!rootFolder.exists()) {
 				rootFolder.mkdir();
 			}
 
-			// Create Folder Excel file
+			// 2.3 Create Folder Excel file
 			String directoryName = ROOT_FOLDER + SEPARATOR + LocalDate.now().toString();
 			File directory = new File(directoryName);
 			if (!directory.exists()) {
 				directory.mkdir();
 			}
 
-			// Create File
+			// 2.4 Create File
 			File file = new File(
 					directoryName + SEPARATOR + LocalTime.now().toString().substring(0, 8).replace(":", "-") + "_"
 							+ SHEET_NAME + fileName + EXTENSION);
 
-			// CREATE EXCEL FILE
+			// 3.CREATE EXCEL FILE
+			// 3.1 Create Workbook, Sheet
 			workbook = new XSSFWorkbook();
 			Sheet sheet = workbook.createSheet(SHEET_NAME);
 			int rowCount = 0;
 			int columnCount = 1;
-			Row row = sheet.createRow(rowCount++);
 
-			// Get HeaderFields and ObjectFields
+			// 3.2 Get HeaderFields and ObjectFields
 			String[] headerFields = TimConstants.HeaderFields.TEACHER;
 			String[] objectFields = TimConstants.ObjectFields.TEACHER;
-
+			
+			// 3.3 Create Header Row
+			Row row = sheet.createRow(rowCount++);
 			// Write LineNumberHeader to Excel
 			cell = row.createCell(0);
 			cell.setCellValue(TimConstants.HeaderFields.LINE_NUMBER);
-
 			// Write HeaderFields to Excel
 			for (String headerField : headerFields) {
 				cell = row.createCell(columnCount++);
@@ -196,18 +215,19 @@ public class ExcelHelper {
 			}
 			int num = 1;
 			for (T t : data) {
-				// Create Row
+				// 3.4 Write list data to Excel
+				// Create row
 				row = sheet.createRow(rowCount++);
 				columnCount = 1;
 				for (String objectField : objectFields) {
-					// Set line number
+					// Write line number
 					Cell cellFirst = row.createCell(0);
 					cellFirst.setCellValue(num);
 
 					// Create Cell
 					cell = row.createCell(columnCount);
 
-					// Get Value of T
+					// Get value of T
 					Method method = null;
 					try {
 						method = clazz.getMethod(GET + capitalize(objectField));
@@ -216,41 +236,43 @@ public class ExcelHelper {
 					}
 					Object value = method.invoke(t, (Object[]) null);
 
-					// Set Value to Cell
+					// Write value to Cell
 					if (value != null) {
 						switch (value.getClass().getSimpleName()) {
-						case TimConstants.FieldType.STRING:
-							cell.setCellValue((String) value);
-							break;
-						case TimConstants.FieldType.LONG:
-							cell.setCellValue((Long) value);
-							break;
-						case TimConstants.FieldType.INTEGER:
-							cell.setCellValue((Integer) value);
-							break;
-						case TimConstants.FieldType.DOUBLE:
-							cell.setCellValue((Double) value);
-							break;
-						case TimConstants.FieldType.LOCAL_DATE:
-							DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern(TimConstants.USER_DOB_FORMAT);
-							cell.setCellValue(((LocalDate) value).format(formatter1).toString());
-							break;
-						case TimConstants.FieldType.LOCAL_DATE_TIME:
-							DateTimeFormatter formatter2 = DateTimeFormatter
-									.ofPattern(TimConstants.LOCAL_DATE_TIME_FORMAT);
-							cell.setCellValue(((LocalDateTime) value).format(formatter2).toString());
-							break;
-						case TimConstants.FieldType.BOOLEAN:
-							if (t instanceof TeacherDto || t instanceof StudentDto) {
-								Boolean valueBl = (Boolean) value;
-								cell.setCellValue(
-										valueBl ? TimConstants.Gender.MALE_STR : TimConstants.Gender.FEMALE_STR);
-							} else {
-								cell.setCellValue(value.toString());
-							}
-							break;
-						default:
-							break;
+							case TimConstants.FieldType.STRING:
+								cell.setCellValue((String) value);
+								break;
+							case TimConstants.FieldType.LONG:
+								cell.setCellValue((Long) value);
+								break;
+							case TimConstants.FieldType.INTEGER:
+								cell.setCellValue((Integer) value);
+								break;
+							case TimConstants.FieldType.DOUBLE:
+								cell.setCellValue((Double) value);
+								break;
+							case TimConstants.FieldType.LOCAL_DATE:
+								DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern(
+										TimConstants.USER_DOB_FORMAT);
+								cell.setCellValue(((LocalDate) value).format(formatter1).toString());
+								break;
+							case TimConstants.FieldType.LOCAL_DATE_TIME:
+								DateTimeFormatter formatter2 = DateTimeFormatter
+										.ofPattern(TimConstants.LOCAL_DATE_TIME_FORMAT);
+								cell.setCellValue(((LocalDateTime) value).format(formatter2).toString());
+								break;
+							case TimConstants.FieldType.BOOLEAN:
+								if (t instanceof TeacherDto || t instanceof StudentDto) {
+									Boolean valueBl = (Boolean) value;
+									cell.setCellValue(
+											valueBl ? TimConstants.Gender.MALE_STR : 
+												TimConstants.Gender.FEMALE_STR);
+								} else {
+									cell.setCellValue(value.toString());
+								}
+								break;
+							default:
+								break;
 						}
 					}
 					columnCount++;

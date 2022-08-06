@@ -15,6 +15,6 @@ public class TestResource extends AbstractResource {
 	
 	@GetMapping("/message")
 	public String testGetExceptionMessage() {
-		return GetMessages.getMessage(ETimMessages.USER_NOT_FOUND);
+		return GetMessages.getMessage(ETimMessages.ACCESS_DENIED);
 	}
 }

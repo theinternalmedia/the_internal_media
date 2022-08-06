@@ -42,6 +42,12 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
 	}
 	
+	// Excel Exception
+	@ExceptionHandler(ExcelException.class)
+	public ResponseEntity<String> excelException(ExcelException e) {
+		return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+	}
+	
 	// User not found exception
 	@ExceptionHandler(value = { BadCredentialsException.class })
 	public ResponseEntity<String> userNotFoundException(BadCredentialsException e) {
@@ -60,18 +66,6 @@ public class GlobalExceptionHandler {
 		});
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
 	}
-
-	// Custom exception handler
-//	@ExceptionHandler({ CustomException.class, AuthException.class })
-//	public ResponseEntity<ErrorResponse> handleCustomException(CustomException e) {
-//		logger.error("CustomException error: {}", e.getMessage());
-//
-//		String res = e.getMessage() + (StringUtils.isBlank(e.getValue()) ? "" : ": '" + e.getValue() + "'");
-//
-//		ErrorResponse response = new ErrorResponse(e.getCode(), res);
-//
-//		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-//	}
 	
 	// ConstraintViolationException
 	@ExceptionHandler(Exception.class)
