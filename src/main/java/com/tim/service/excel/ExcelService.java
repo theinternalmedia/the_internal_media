@@ -70,22 +70,17 @@ public class ExcelService implements ExcelFileService {
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
-
 						break;
 					}
 				}
 			}
-
 			list.add(t);
 		}
-
 		return list;
 	}
-
 	@Override
 	public <T> void writeToExcel(String fileName, List<T> data) {
 		excelHelper.writeToExcel(fileName, data);
-//		excelHelper.writeToExcel1(fileName, data);
 	}
 
 }
