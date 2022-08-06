@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tim.data.ETimMessages;
-import com.tim.data.FieldType;
 import com.tim.data.TimConstants;
 import com.tim.dto.excel.ExcelField;
 import com.tim.exception.ExcelException;
@@ -27,7 +26,7 @@ public class ExcelService implements ExcelFileService {
 	@Override
 	public <T extends Object> List<T> getListObjectFromExcelFile(final MultipartFile excelFile, Class<T> clazz) {
 		List<T> list = new ArrayList<>();
-		List<ExcelField[]> excelFields = excelHelper.getListExcelFieldArrFromExcelFile(excelFile, clazz.getSimpleName());
+		List<ExcelField[]> excelFields = excelHelper.readFromExcel(excelFile, clazz.getSimpleName());
 		for (ExcelField[] exf : excelFields) {
 			T t = null;
 			try {
@@ -39,7 +38,7 @@ public class ExcelService implements ExcelFileService {
 			}
 			Class<? extends Object> classz = t.getClass();
 
-			for (int i = 1; i < exf.length; i++) {
+			for (int i = 0; i < exf.length; i++) {
 
 				for (Field field : classz.getDeclaredFields()) {
 					field.setAccessible(true);
@@ -47,18 +46,28 @@ public class ExcelService implements ExcelFileService {
 					if (exf[i].getPojoAttribute().equalsIgnoreCase(field.getName())) {
 
 						try {
-							if (FieldType.STRING.getValue().equalsIgnoreCase(exf[i].getExcelColType())) {
+							switch (exf[i].getExcelColType()) {
+							case TimConstants.FieldType.STRING:
 								field.set(t, exf[i].getExcelValue());
-							} else if (FieldType.DOUBLE.getValue().equalsIgnoreCase(exf[i].getExcelColType())) {
+								break;
+							case TimConstants.FieldType.DOUBLE:
 								field.set(t, Double.valueOf(exf[i].getExcelValue()));
-							} else if (FieldType.INTEGER.getValue().equalsIgnoreCase(exf[i].getExcelColType())) {
+								break;
+							case TimConstants.FieldType.INTEGER:
 								field.set(t, Integer.valueOf(exf[i].getExcelValue()).intValue());
-							} else if (FieldType.BOOLEAN.getValue().equalsIgnoreCase(exf[i].getExcelColType())) {
+								break;
+							case TimConstants.FieldType.BOOLEAN:
 								field.set(t, Boolean.valueOf(exf[i].getExcelValue()));
-							} else if (FieldType.LOCALDATE.getValue().equalsIgnoreCase(exf[i].getExcelColType())) {
+								break;
+							case TimConstants.FieldType.LOCAL_DATE:
 								field.set(t, LocalDate.parse(exf[i].getExcelValue(), dtf));
+								break;
+							default:
+								break;
 							}
 						} catch (IllegalArgumentException | IllegalAccessException e) {
+							e.printStackTrace();
+						} catch (Exception e) {
 							e.printStackTrace();
 						}
 
@@ -76,7 +85,7 @@ public class ExcelService implements ExcelFileService {
 	@Override
 	public <T> void writeToExcel(String fileName, List<T> data) {
 		excelHelper.writeToExcel(fileName, data);
-		excelHelper.writeToExcel1(fileName, data);
+//		excelHelper.writeToExcel1(fileName, data);
 	}
-	
+
 }

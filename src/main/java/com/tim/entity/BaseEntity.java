@@ -1,7 +1,7 @@
 package com.tim.entity;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;
@@ -36,14 +36,14 @@ public abstract class BaseEntity implements Serializable {
 
 	@Column(name = "created_date", nullable = false, updatable = false)
 	@CreationTimestamp
-	private Date createdDate = new Date();
+	private LocalDateTime createdDate = LocalDateTime.now();
 
 	@CreatedBy
 	private String createdBy;
 
 	@Column(nullable = false, updatable = true)
 	@LastModifiedDate
-	private Date modifiedDate = new Date();
+	private LocalDateTime modifiedDate = LocalDateTime.now();
 
 	@LastModifiedBy
 	private String modifiedBy;
@@ -64,13 +64,6 @@ public abstract class BaseEntity implements Serializable {
 		this.id = id;
 	}
 
-	public Date getCreatedDate() {
-		return createdDate;
-	}
-
-	public void setCreatedDate(Date createdDate) {
-		this.createdDate = createdDate;
-	}
 
 	public String getCreatedBy() {
 		return createdBy;
@@ -80,19 +73,27 @@ public abstract class BaseEntity implements Serializable {
 		this.createdBy = createdBy;
 	}
 
-	public Date getModifiedDate() {
-		return modifiedDate;
-	}
-
-	public void setModifiedDate(Date modifiedDate) {
-		this.modifiedDate = modifiedDate;
-	}
-
 	public String getModifiedBy() {
 		return modifiedBy;
 	}
 
 	public void setModifiedBy(String modifiedBy) {
 		this.modifiedBy = modifiedBy;
+	}
+
+	public LocalDateTime getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(LocalDateTime createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public LocalDateTime getModifiedDate() {
+		return modifiedDate;
+	}
+
+	public void setModifiedDate(LocalDateTime modifiedDate) {
+		this.modifiedDate = modifiedDate;
 	}
 }

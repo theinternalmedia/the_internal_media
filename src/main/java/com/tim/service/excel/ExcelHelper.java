@@ -5,18 +5,17 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.ss.usermodel.Cell;
@@ -33,26 +32,36 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tim.data.ETimMessages;
-import com.tim.data.FieldType;
 import com.tim.data.TimConstants;
 import com.tim.dto.excel.ExcelField;
+import com.tim.dto.student.StudentDto;
+import com.tim.dto.teacher.TeacherDto;
 import com.tim.exception.ExcelException;
 import com.tim.exception.GlobalExceptionHandler;
 
+/**
+ * ExcelHelper
+ * 
+ * @appName the_internal_media
+ *
+ */
 @Component
 public class ExcelHelper {
 	private final Logger logger = org.slf4j.LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
 	private static final String TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
-	private static final String SUFFIX_INPUT_CONFIG_FILE = "_inputConfig.json";
-
-	private static final String SUFFIX_OUTPUT_CONFIG_FILE = "_outputConfig.json";
+	private static final String SUFFIX_INPUT_CONFIG_FILE = "_ImportConfig.json";
 
 	private final static SimpleDateFormat dtf = new SimpleDateFormat(TimConstants.USER_DOB_FORMAT);
-	private final static SimpleDateFormat dtf_from_object = new SimpleDateFormat("yyyy-MM-dd");
 
-	private final static String EXCEL_EXPORT_NAME = "DanhSach";
+	private final static String SHEET_NAME = "DanhSach";
+
+	private final static String EXTENSION = ".xlsx";
+
+	private final static String ROOT_FOLDER = "excel";
+
+	private final static String SEPARATOR = "/";
 
 	/**
 	 * @author minhtuanitk43
@@ -60,7 +69,7 @@ public class ExcelHelper {
 	 * @param className is name of Object
 	 * @return List<ExcelField[]> is list Object In ExcelField
 	 */
-	public List<ExcelField[]> getListExcelFieldArrFromExcelFile(final MultipartFile file, String className) {
+	public List<ExcelField[]> readFromExcel(final MultipartFile file, String className) {
 
 		List<ExcelField[]> excelFieldArrayList = new ArrayList<ExcelField[]>();
 
@@ -71,8 +80,7 @@ public class ExcelHelper {
 		Sheet sheet = workBook.getSheetAt(0);
 
 		// 3.Get List ExcelField Template from Json Config File
-		List<ExcelField> excelFieldTemplateList = getExcelFieldsTemplateFromConfigFile(className,
-				SUFFIX_INPUT_CONFIG_FILE);
+		List<ExcelField> excelFieldTemplateList = getExcelFieldsFromConfigFile(className);
 
 		// 4.Total Row of sheet(2)
 		int totalRows = sheet.getLastRowNum();
@@ -80,164 +88,171 @@ public class ExcelHelper {
 		// 5.Loop list Row in sheet(2) to get ExcelField Arr
 		for (int i = 1; i < totalRows; i++) {
 			Row row = sheet.getRow(i);
-			ExcelField[] excelFieldArr = new ExcelField[excelFieldTemplateList.size() - 1];
-			for (int j = 1; j < excelFieldTemplateList.size(); j++) {
-				int cellIndex = excelFieldTemplateList.get(j).getExcelIndex();
-				String cellType = excelFieldTemplateList.get(j).getExcelColType();
+			ExcelField[] excelFieldArr = new ExcelField[excelFieldTemplateList.size()];
+			int index = 0;
+			for (ExcelField excelFieldTemp : excelFieldTemplateList) {
+				int cellIndex = excelFieldTemp.getExcelIndex();
+				String cellType = excelFieldTemp.getExcelColType();
 				Cell cell = row.getCell(cellIndex);
 
 				ExcelField excelField = new ExcelField();
-				excelField.setExcelColType(excelFieldTemplateList.get(j).getExcelColType());
-				excelField.setExcelHeader(excelFieldTemplateList.get(j).getExcelHeader());
-				excelField.setExcelIndex(excelFieldTemplateList.get(j).getExcelIndex());
-				excelField.setPojoAttribute(excelFieldTemplateList.get(j).getPojoAttribute());
+				excelField.setExcelColType(excelFieldTemp.getExcelColType());
+				excelField.setExcelHeader(excelFieldTemp.getExcelHeader());
+				excelField.setExcelIndex(excelFieldTemp.getExcelIndex());
+				excelField.setPojoAttribute(excelFieldTemp.getPojoAttribute());
 				try {
-					if (FieldType.STRING.getValue().equalsIgnoreCase(cellType)) {
+					switch (cellType) {
+					case TimConstants.FieldType.STRING:
 						try {
 							excelField.setExcelValue(cell.getStringCellValue());
 						} catch (IllegalStateException e) {
 							excelField.setExcelValue(String.valueOf(cell.getNumericCellValue()));
 						}
-					} else if (FieldType.DOUBLE.getValue().equalsIgnoreCase(cellType)
-							|| FieldType.INTEGER.getValue().equalsIgnoreCase(cellType)) {
+						break;
+					case TimConstants.FieldType.DOUBLE:
+					case TimConstants.FieldType.INTEGER:
 						excelField.setExcelValue(String.valueOf(cell.getNumericCellValue()));
-					} else if (FieldType.BOOLEAN.getValue().equalsIgnoreCase(cellType)) {
-						excelField.setExcelValue(String.valueOf(cell.getBooleanCellValue()));
-					} else if (DateUtil.isCellDateFormatted(cell)) {
-						excelField.setExcelValue(String.valueOf(dtf.format(cell.getDateCellValue())));
+						break;
+					case TimConstants.FieldType.BOOLEAN:
+						if (cell.getStringCellValue().equalsIgnoreCase(TimConstants.Gender.MALE_STR)) {
+							excelField.setExcelValue(TimConstants.TRUE_STR);
+						} else {
+							excelField.setExcelValue(TimConstants.FALSE_STR);
+						}
+						break;
+					case TimConstants.FieldType.LOCAL_DATE:
+						if (DateUtil.isCellDateFormatted(cell)) {
+							excelField.setExcelValue(String.valueOf(dtf.format(cell.getDateCellValue())));
+						}
+						break;
+					default:
+						break;
 					}
 				} catch (IllegalStateException e) {
 					logger.error(e.getMessage());
 					e.printStackTrace();
 				}
-				excelFieldArr[j - 1] = excelField;
+				excelFieldArr[index++] = excelField;
 			}
 			excelFieldArrayList.add(excelFieldArr);
 		}
 		return excelFieldArrayList;
 	}
 
-	public List<ExcelField[]> getListExcelFieldArrFromListObject(List<Object> list) {
-		return null;
-	}
-	public <T> void writeToExcel1(String fileName, List<T> data) {
-		OutputStream fos = null;
-		XSSFWorkbook workbook = null;
-		try {
-			File file = new File(fileName);
-			workbook = new XSSFWorkbook();
-			Sheet sheet = workbook.createSheet();
-			List<String> fieldNames = getFieldNamesForClass(data.get(0).getClass());
-			int rowCount = 0;
-			int columnCount = 0;
-			Row row = sheet.createRow(rowCount++);
-			for (String fieldName : fieldNames) {
-				Cell cell = row.createCell(columnCount++);
-				cell.setCellValue(fieldName);
-			}
-			Class<? extends Object> classz = data.get(0).getClass();
-			for (T t : data) {
-				row = sheet.createRow(rowCount++);
-				columnCount = 0;
-				for (String fieldName : fieldNames) {
-					Cell cell = row.createCell(columnCount);
-					Method method = null;
-					try {
-						method = classz.getMethod("get" + capitalize(fieldName));
-					} catch (NoSuchMethodException nme) {
-						method = classz.getMethod("get" + fieldName);
-					}
-					Object value = method.invoke(t, (Object[]) null);
-					if (value != null) {
-						if (value instanceof String) {
-							cell.setCellValue((String) value);
-						} else if (value instanceof Long) {
-							cell.setCellValue((Long) value);
-						} else if (value instanceof Integer) {
-							cell.setCellValue((Integer) value);
-						} else if (value instanceof Double) {
-							cell.setCellValue((Double) value);
-						}
-					}
-					columnCount++;
-				}
-			}
-			fos = new FileOutputStream(file);
-			workbook.write(fos);
-			fos.flush();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (fos != null) {
-					fos.close();
-				}
-			} catch (IOException e) {
-			}
-			try {
-				if (workbook != null) {
-					workbook.close();
-				}
-			} catch (IOException e) {
-			}
-		}
-	}
-
+	/**
+	 * Write list Object to Excel file
+	 * 
+	 * @author minhtuanitk43
+	 * @param <T>      Object
+	 * @param fileName fileName of excel file
+	 * @param data     List Object
+	 */
 	public <T> void writeToExcel(String fileName, List<T> data) {
+		// Get Class of T
 		Class<? extends Object> clazz = data.get(0).getClass();
 		OutputStream fos = null;
 		XSSFWorkbook workbook = null;
+		Cell cell;
 		try {
-			List<ExcelField> excelFieldTemplateList = getExcelFieldsTemplateFromConfigFile(clazz.getSimpleName(),
-					SUFFIX_OUTPUT_CONFIG_FILE);
-			File file = new File(fileName);
+			// Create RootFolder if not exists
+			File rootFolder = new File(ROOT_FOLDER);
+			if (!rootFolder.exists()) {
+				rootFolder.mkdir();
+			}
+
+			// Create Folder Excel file
+			String directoryName = ROOT_FOLDER + SEPARATOR + LocalDate.now().toString();
+			File directory = new File(directoryName);
+			if (!directory.exists()) {
+				directory.mkdir();
+			}
+
+			// Create File
+			File file = new File(
+					directoryName + SEPARATOR + LocalTime.now().toString().substring(0, 8).replace(":", "-") + "_"
+							+ SHEET_NAME + fileName + EXTENSION);
+
+			// CREATE EXCEL FILE
 			workbook = new XSSFWorkbook();
-			Sheet sheet = workbook.createSheet(EXCEL_EXPORT_NAME);
+			Sheet sheet = workbook.createSheet(SHEET_NAME);
 			int rowCount = 0;
-			int columnCount = 0;
+			int columnCount = 1;
 			Row row = sheet.createRow(rowCount++);
 
-			excelFieldTemplateList = excelFieldTemplateList.stream()
-					.sorted(Comparator.comparing(ExcelField::getExcelIndex)).collect(Collectors.toList());
+			// Get HeaderFields Configuration
+			String[] headerFields = TimConstants.HeaderFieldsConfig.TEACHER;
 
-			for (ExcelField excelField : excelFieldTemplateList) {
-				Cell cell = row.createCell(columnCount++);
-				cell.setCellValue(excelField.getExcelHeader());
+			// Write LineNumberHeader to Excel
+			cell = row.createCell(0);
+			cell.setCellValue(TimConstants.HeaderFieldsConfig.LINE_NUMBER);
+
+			// Write HeaderFields to Excel
+			for (String excelField : headerFields) {
+				cell = row.createCell(columnCount++);
+				cell.setCellValue(excelField);
 			}
-			excelFieldTemplateList.remove(0);
-			int stt = 1;
+			int num = 1;
 			for (T t : data) {
+				// Create Row
 				row = sheet.createRow(rowCount++);
 				columnCount = 1;
-				for (ExcelField excelField : excelFieldTemplateList) {
-					
+				for (String headerField : headerFields) {
+					// Set line number
 					Cell cellFirst = row.createCell(0);
-					cellFirst.setCellValue(stt);
-					
-					Cell cell = row.createCell(columnCount);
+					cellFirst.setCellValue(num);
+
+					// Create Cell
+					cell = row.createCell(columnCount);
+
+					// Get Value of T
 					Method method = null;
 					try {
-						method = clazz.getMethod("get" + capitalize(excelField.getPojoAttribute()));
+						method = clazz.getMethod("get" + capitalize(headerField));
 					} catch (NoSuchMethodException nme) {
-						method = clazz.getMethod("get" + excelField.getPojoAttribute());
+						method = clazz.getMethod("get" + headerField);
 					}
 					Object value = method.invoke(t, (Object[]) null);
+
+					// Set Value to Cell
 					if (value != null) {
-						if (value instanceof String) {
+						switch (value.getClass().getSimpleName()) {
+						case TimConstants.FieldType.STRING:
 							cell.setCellValue((String) value);
-						} else if (value instanceof Long) {
+							break;
+						case TimConstants.FieldType.LONG:
 							cell.setCellValue((Long) value);
-						} else if (value instanceof Integer) {
+							break;
+						case TimConstants.FieldType.INTEGER:
 							cell.setCellValue((Integer) value);
-						} else if (value instanceof Double) {
+							break;
+						case TimConstants.FieldType.DOUBLE:
 							cell.setCellValue((Double) value);
-						} else if (value instanceof LocalDate) {
-							cell.setCellValue(dtf_from_object.parse(value.toString()).toString());
+							break;
+						case TimConstants.FieldType.LOCAL_DATE:
+							DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern(TimConstants.USER_DOB_FORMAT);
+							cell.setCellValue(((LocalDate) value).format(formatter1).toString());
+							break;
+						case TimConstants.FieldType.LOCAL_DATE_TIME:
+							DateTimeFormatter formatter2 = DateTimeFormatter
+									.ofPattern(TimConstants.LOCAL_DATE_TIME_FORMAT);
+							cell.setCellValue(((LocalDateTime) value).format(formatter2).toString());
+							break;
+						case TimConstants.FieldType.BOOLEAN:
+							if (t instanceof TeacherDto || t instanceof StudentDto) {
+								Boolean valueBl = (Boolean) value;
+								cell.setCellValue(
+										valueBl ? TimConstants.Gender.MALE_STR : TimConstants.Gender.FEMALE_STR);
+							} else {
+								cell.setCellValue(value.toString());
+							}
+							break;
+						default:
+							break;
 						}
 					}
 					columnCount++;
 				}
-				stt++;
+				num++;
 			}
 			fos = new FileOutputStream(file);
 			workbook.write(fos);
@@ -260,32 +275,32 @@ public class ExcelHelper {
 		}
 	}
 
-	// retrieve field names from a POJO class
-	private List<String> getFieldNamesForClass(Class<?> clazz) throws Exception {
-		List<String> fieldNames = new ArrayList<String>();
-		Field[] fields = clazz.getDeclaredFields();
-		for (int i = 0; i < fields.length; i++) {
-			fieldNames.add(fields[i].getName());
-		}
-		return fieldNames;
-	}
-
-	// capitalize the first letter of the field name for retriving value of the
-	// field later
+	/**
+	 * Get Capitalize First Character FieldName
+	 * 
+	 * @author minhtuanitk43
+	 * @param s
+	 * @return
+	 */
 	private static String capitalize(String s) {
 		if (s.length() == 0)
 			return s;
 		return s.substring(0, 1).toUpperCase() + s.substring(1);
 	}
 
-	//
-
-	private List<ExcelField> getExcelFieldsTemplateFromConfigFile(String className, String suffixConfigFile) {
+	/**
+	 * Get list ExcelField from config file
+	 * 
+	 * @author minhtuanitk43
+	 * @param className
+	 * @return
+	 */
+	private List<ExcelField> getExcelFieldsFromConfigFile(String className) {
 		List<ExcelField> jsonMap = null;
 		ObjectMapper objectMapper = new ObjectMapper();
 		try {
-			String jsonConfig = new String(
-					Files.readAllBytes(Paths.get(ClassLoader.getSystemResource(className + suffixConfigFile).toURI())));
+			String jsonConfig = new String(Files.readAllBytes(
+					Paths.get(ClassLoader.getSystemResource(className + SUFFIX_INPUT_CONFIG_FILE).toURI())));
 
 			jsonMap = objectMapper.readValue(jsonConfig, new TypeReference<List<ExcelField>>() {
 			});
@@ -296,6 +311,13 @@ public class ExcelHelper {
 		return jsonMap;
 	}
 
+	/**
+	 * Get Workbook From Excel file
+	 * 
+	 * @author minhtuanitk43
+	 * @param file
+	 * @return
+	 */
 	private Workbook readExcel(final MultipartFile file) {
 		InputStream excelFile = isExcelFormat(file);
 		Workbook wb = null;
@@ -312,6 +334,13 @@ public class ExcelHelper {
 
 	}
 
+	/**
+	 * Check is Excel file
+	 * 
+	 * @author minhtuanitk43
+	 * @param file
+	 * @return
+	 */
 	private InputStream isExcelFormat(MultipartFile file) {
 		if (!TYPE.equals(file.getContentType())) {
 			throw new ExcelException(ETimMessages.INVALID_EXCEL_FILE);

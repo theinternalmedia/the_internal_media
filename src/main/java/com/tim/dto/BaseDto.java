@@ -1,7 +1,7 @@
 package com.tim.dto;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * 
@@ -12,9 +12,9 @@ public class BaseDto implements Serializable {
 
 	private static final long serialVersionUID = 7702340293141714083L;
 	private Long id;
-	private Date createdDate;
+	private LocalDateTime createdDate;
 	private String createdBy;
-	private Date modifiedDate;
+	private LocalDateTime modifiedDate;
 	private String modifiedBy;
 	private Boolean status = true;
 
@@ -34,14 +34,6 @@ public class BaseDto implements Serializable {
 		this.id = id;
 	}
 
-	public Date getCreatedDate() {
-		return createdDate;
-	}
-
-	public void setCreatedDate(Date createdDate) {
-		this.createdDate = createdDate;
-	}
-
 	public String getCreatedBy() {
 		return createdBy;
 	}
@@ -50,20 +42,28 @@ public class BaseDto implements Serializable {
 		this.createdBy = createdBy;
 	}
 
-	public Date getModifiedDate() {
-		return modifiedDate;
-	}
-
-	public void setModifiedDate(Date modifiedDate) {
-		this.modifiedDate = modifiedDate;
-	}
-
 	public String getModifiedBy() {
 		return modifiedBy;
 	}
 
 	public void setModifiedBy(String modifiedBy) {
 		this.modifiedBy = modifiedBy;
+	}
+
+	public LocalDateTime getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(LocalDateTime createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public LocalDateTime getModifiedDate() {
+		return modifiedDate;
+	}
+
+	public void setModifiedDate(LocalDateTime modifiedDate) {
+		this.modifiedDate = modifiedDate;
 	}
 
 	@Override
