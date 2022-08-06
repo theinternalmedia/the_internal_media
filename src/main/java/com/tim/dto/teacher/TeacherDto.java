@@ -12,6 +12,13 @@ import com.tim.data.ValidationInput;
 import com.tim.dto.BaseDto;
 import com.tim.dto.role.RoleDto;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+@Setter
+@ToString
 public class TeacherDto extends BaseDto {
 
 	/**
@@ -56,99 +63,11 @@ public class TeacherDto extends BaseDto {
 
 	private Set<RoleDto> roles = new HashSet<RoleDto>();
 
-	public String getUserId() {
-		return userId;
-	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public boolean isGender() {
+	public boolean getGender() {
 		return gender;
 	}
 
 	public void setGender(boolean gender) {
 		this.gender = gender;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public String getPhone() {
-		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-
-	public LocalDate getDob() {
-		return dob;
-	}
-
-	public void setDob(LocalDate dob) {
-		this.dob = dob;
-	}
-
-	public String getAvatar() {
-		return avatar;
-	}
-
-	public void setAvatar(String avatar) {
-		this.avatar = avatar;
-	}
-
-	public Set<RoleDto> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(Set<RoleDto> roles) {
-		this.roles = roles;
-	}
-
-	public boolean isHeadOfFaculty() {
-		return isHeadOfFaculty;
-	}
-
-	public void setHeadOfFaculty(boolean headOfFaculty) {
-		isHeadOfFaculty = headOfFaculty;
-	}
-
-	public boolean isManager() {
-		return isManager;
-	}
-
-	public void setManager(boolean manager) {
-		isManager = manager;
 	}
 }

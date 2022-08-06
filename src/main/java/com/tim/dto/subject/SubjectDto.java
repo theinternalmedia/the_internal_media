@@ -7,11 +7,18 @@ import javax.validation.constraints.Size;
 import com.tim.data.ValidationInput;
 import com.tim.dto.BaseDto;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 /**
  * 
  * @appName the_internal_media
  *
  */
+@Getter
+@Setter
+@ToString
 public class SubjectDto extends BaseDto {
 
 	/**
@@ -34,44 +41,4 @@ public class SubjectDto extends BaseDto {
 
 	@Size(min = 0, max = 10, message = ValidationInput.Mark.MARKS_MAX_SIZE)
 	private float passMarks;
-
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public int getNumberOfCredits() {
-		return numberOfCredits;
-	}
-
-	public void setNumberOfCredits(int numberOfCredits) {
-		this.numberOfCredits = numberOfCredits;
-	}
-
-	public boolean isMandatory() {
-		return mandatory;
-	}
-
-	public void setMandatory(boolean mandatory) {
-		this.mandatory = mandatory;
-	}
-
-	public float getPassMarks() {
-		return passMarks;
-	}
-
-	public void setPassMarks(float passMarks) {
-		this.passMarks = passMarks;
-	}
 }

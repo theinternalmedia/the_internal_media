@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tim.data.TimApiPath;
+import com.tim.data.TimConstants;
 import com.tim.dto.teacher.TeacherDto;
 import com.tim.service.TeacherService;
 
@@ -34,7 +35,9 @@ public class TeacherResource extends AbstractResource {
 	
 	@PostMapping(TimApiPath.Teacher.UPLOAD_EXCEL)
 	public List<?> uplaodExcelFile(@RequestPart("file") MultipartFile file) {
-		return teacherService.importExcelFile(file);
+		List<TeacherDto> dtos = teacherService.importExcelFile(file);
+		teacherService.exportExcelFile(TimConstants.ExcelFileName.TEACHER, dtos);
+		return dtos;
 	}
 	
 	@GetMapping(TimApiPath.Teacher.GET)
