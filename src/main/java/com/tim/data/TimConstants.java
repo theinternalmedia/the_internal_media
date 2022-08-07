@@ -1,9 +1,7 @@
 package com.tim.data;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public final class TimConstants {
 	// App name
@@ -56,6 +54,12 @@ public final class TimConstants {
 		public static final String[] TEACHER = { "userId", "name", "gender", "dob", "address", "phone" };
 	}
 	
+	/**
+	 * Header Field Name of Excel file be imported
+	 * 
+	 * @appName the_internal_media
+	 *
+	 */
 	public static class HeaderFields{
 		public static final String LINE_NUMBER = "STT";
 		public static final String[] TEACHER = { "Mã GV", "Họ tên", "Giới tính", "Ngày sinh", "Địa chỉ", "Điện thoại" };
@@ -74,11 +78,23 @@ public final class TimConstants {
 		public static final boolean FEMALE_BOOL = false;
 	}
 
+	/**
+	 * Excel file name be exported
+	 * 
+	 * @appName the_internal_media
+	 *
+	 */
 	public static class ExcelFileName {
 		public static final String TEACHER = "GiaoVien";
 		public static final String STUDENT = "SinhVien";
 	}
 
+	/**
+	 * Type Value to get value from Excel Cell
+	 * 
+	 * @appName the_internal_media
+	 *
+	 */
 	public static class FieldType {
 		public static final String DOUBLE = "Double";
 		public static final String INTEGER = "Integer";
@@ -87,15 +103,5 @@ public final class TimConstants {
 		public static final String LOCAL_DATE = "LocalDate";
 		public static final String LOCAL_DATE_TIME = "LocalDateTime";
 		public static final String LONG = "Long";
-	}
-	
-	public static final Map<String, String> FIELD_NAME_CLIENT = new HashMap<String, String>();
-	static {
-		FIELD_NAME_CLIENT.put("userId", "Mã số SV/GV");
-		FIELD_NAME_CLIENT.put("address", "Địa chỉ");
-		FIELD_NAME_CLIENT.put("phone", "Số điện thoại");
-		FIELD_NAME_CLIENT.put("gender", "Giới tính");
-		FIELD_NAME_CLIENT.put("email", "Email");
-		FIELD_NAME_CLIENT.put("dob", "Ngày sinh");
 	}
 }
