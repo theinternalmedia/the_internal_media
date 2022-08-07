@@ -57,6 +57,16 @@ public abstract class User extends BaseEntity {
 	@Size(max = 100)
 	private String avatar;
 
+	private String remark;
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
 	public String getUserId() {
 		return userId;
 	}

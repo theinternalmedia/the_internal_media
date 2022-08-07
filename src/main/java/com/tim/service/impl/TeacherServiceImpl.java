@@ -52,7 +52,7 @@ public class TeacherServiceImpl implements TeacherService {
 
 	@Override
 	public void exportExcelFile(String fileName, List<TeacherDto> teacherDtos) {
-		excelService.writeToExcel(fileName, teacherDtos);
+		excelService.writeListObjectToExcel(fileName, teacherDtos);
 	}
 
 }

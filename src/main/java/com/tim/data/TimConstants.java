@@ -1,7 +1,9 @@
 package com.tim.data;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public final class TimConstants {
 	// App name
@@ -81,5 +83,15 @@ public final class TimConstants {
 		public static final String LOCAL_DATE = "LocalDate";
 		public static final String LOCAL_DATE_TIME = "LocalDateTime";
 		public static final String LONG = "Long";
+	}
+	
+	public static final Map<String, String> FIELD_NAME_CLIENT = new HashMap<String, String>();
+	static {
+		FIELD_NAME_CLIENT.put("userId", "Mã số SV/GV");
+		FIELD_NAME_CLIENT.put("address", "Địa chỉ");
+		FIELD_NAME_CLIENT.put("phone", "Số điện thoại");
+		FIELD_NAME_CLIENT.put("gender", "Giới tính");
+		FIELD_NAME_CLIENT.put("email", "Email");
+		FIELD_NAME_CLIENT.put("dob", "Ngày sinh");
 	}
 }

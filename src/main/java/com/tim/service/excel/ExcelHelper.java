@@ -18,14 +18,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.poi.EncryptedDocumentException;
-import org.apache.poi.ss.formula.functions.Address;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.apache.poi.ss.util.CellAddress;
+import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
@@ -38,8 +37,9 @@ import com.tim.data.TimConstants;
 import com.tim.dto.excel.ExcelField;
 import com.tim.dto.student.StudentDto;
 import com.tim.dto.teacher.TeacherDto;
-import com.tim.exception.ExcelException;
 import com.tim.exception.GlobalExceptionHandler;
+import com.tim.exception.ValidateException;
+import com.tim.utils.GetMessages;
 
 /**
  * ExcelHelper
@@ -66,7 +66,7 @@ public class ExcelHelper {
 	private final static String SEPARATOR = "/";
 
 	private final static String GET = "get";
-
+	
 	/**
 	 * @author minhtuanitk43
 	 * @param Multipart file in Excel Type
@@ -76,7 +76,7 @@ public class ExcelHelper {
 	public List<ExcelField[]> readFromExcel(final MultipartFile file, String className) {
 
 		List<ExcelField[]> excelFieldArrayList = new ArrayList<ExcelField[]>();
-		
+
 		List<String> cellErrs = new ArrayList<String>();
 
 		// 1.Get workBook from file Excel
@@ -92,19 +92,25 @@ public class ExcelHelper {
 		int totalRows = sheet.getLastRowNum();
 
 		// 5.Loop list Row in sheet(2) to get ExcelField Arr
-		for (int i = 1; i < totalRows; i++) {
+		for (int i = 1; i <= totalRows; i++) {
 			// 5.1 Get Row
 			Row row = sheet.getRow(i);
 			ExcelField[] excelFieldArr = new ExcelField[excelFieldTemplateList.size()];
 			int index = 0;
-			int errNum = 0;
 			// 5.2 Loop excelFieldTemplateList(3)
 			for (ExcelField excelFieldTemp : excelFieldTemplateList) {
 				int cellIndex = excelFieldTemp.getExcelIndex();
 				String cellType = excelFieldTemp.getExcelColType();
-				
+
 				// 5.3 Get Cell
 				Cell cell = row.getCell(cellIndex);
+				
+				// If Cell's Value is null
+				if(cell == null) {
+					String colString = CellReference.convertNumToColString(cellIndex);
+					cellErrs.add(GetMessages.getMessage(ETimMessages.NULL_CELL_VALUE, colString + (i + 1)) );
+					continue;
+				}
 
 				// 5.4 Create excelField
 				ExcelField excelField = new ExcelField();
@@ -112,7 +118,8 @@ public class ExcelHelper {
 				excelField.setExcelHeader(excelFieldTemp.getExcelHeader());
 				excelField.setExcelIndex(excelFieldTemp.getExcelIndex());
 				excelField.setPojoAttribute(excelFieldTemp.getPojoAttribute());
-				
+				excelField.setCellAddress(cell.getAddress().toString());
+
 				// 5.5 get value from Cell(5.3) and set to excelField(5.4)
 				try {
 					switch (cellType) {
@@ -130,8 +137,11 @@ public class ExcelHelper {
 					case TimConstants.FieldType.BOOLEAN:
 						if (cell.getStringCellValue().equalsIgnoreCase(TimConstants.Gender.MALE_STR)) {
 							excelField.setExcelValue(TimConstants.TRUE_STR);
-						} else {
+						} else if (cell.getStringCellValue().equalsIgnoreCase(TimConstants.Gender.FEMALE_STR)) {
 							excelField.setExcelValue(TimConstants.FALSE_STR);
+						} else {
+							// Throw Validation Exception
+							cellErrs.add(cell.getAddress().toString());
 						}
 						break;
 					case TimConstants.FieldType.LOCAL_DATE:
@@ -144,7 +154,7 @@ public class ExcelHelper {
 					}
 				} catch (IllegalStateException e) {
 					logger.error(e.getMessage(), e);
-					cellErrs.add(cell.getAddress().toString());
+					cellErrs.add(GetMessages.getMessage(ETimMessages.INVALID_EXCEL_VALUE, cell.getAddress().toString()));
 					e.printStackTrace();
 					continue;
 				}
@@ -152,8 +162,8 @@ public class ExcelHelper {
 			}
 			excelFieldArrayList.add(excelFieldArr);
 		}
-		if(cellErrs.size() > 0) {
-			throw new ExcelException(ETimMessages.INVALID_EXCEL_VALUE, cellErrs.toString());
+		if (cellErrs.size() > 0) {
+			throw new ValidateException(ETimMessages.INVALID_EXCEL_VALUE, cellErrs);
 		}
 		return excelFieldArrayList;
 	}
@@ -202,7 +212,7 @@ public class ExcelHelper {
 			// 3.2 Get HeaderFields and ObjectFields
 			String[] headerFields = TimConstants.HeaderFields.TEACHER;
 			String[] objectFields = TimConstants.ObjectFields.TEACHER;
-			
+
 			// 3.3 Create Header Row
 			Row row = sheet.createRow(rowCount++);
 			// Write LineNumberHeader to Excel
@@ -239,40 +249,38 @@ public class ExcelHelper {
 					// Write value to Cell
 					if (value != null) {
 						switch (value.getClass().getSimpleName()) {
-							case TimConstants.FieldType.STRING:
-								cell.setCellValue((String) value);
-								break;
-							case TimConstants.FieldType.LONG:
-								cell.setCellValue((Long) value);
-								break;
-							case TimConstants.FieldType.INTEGER:
-								cell.setCellValue((Integer) value);
-								break;
-							case TimConstants.FieldType.DOUBLE:
-								cell.setCellValue((Double) value);
-								break;
-							case TimConstants.FieldType.LOCAL_DATE:
-								DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern(
-										TimConstants.USER_DOB_FORMAT);
-								cell.setCellValue(((LocalDate) value).format(formatter1).toString());
-								break;
-							case TimConstants.FieldType.LOCAL_DATE_TIME:
-								DateTimeFormatter formatter2 = DateTimeFormatter
-										.ofPattern(TimConstants.LOCAL_DATE_TIME_FORMAT);
-								cell.setCellValue(((LocalDateTime) value).format(formatter2).toString());
-								break;
-							case TimConstants.FieldType.BOOLEAN:
-								if (t instanceof TeacherDto || t instanceof StudentDto) {
-									Boolean valueBl = (Boolean) value;
-									cell.setCellValue(
-											valueBl ? TimConstants.Gender.MALE_STR : 
-												TimConstants.Gender.FEMALE_STR);
-								} else {
-									cell.setCellValue(value.toString());
-								}
-								break;
-							default:
-								break;
+						case TimConstants.FieldType.STRING:
+							cell.setCellValue((String) value);
+							break;
+						case TimConstants.FieldType.LONG:
+							cell.setCellValue((Long) value);
+							break;
+						case TimConstants.FieldType.INTEGER:
+							cell.setCellValue((Integer) value);
+							break;
+						case TimConstants.FieldType.DOUBLE:
+							cell.setCellValue((Double) value);
+							break;
+						case TimConstants.FieldType.LOCAL_DATE:
+							DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern(TimConstants.USER_DOB_FORMAT);
+							cell.setCellValue(((LocalDate) value).format(formatter1).toString());
+							break;
+						case TimConstants.FieldType.LOCAL_DATE_TIME:
+							DateTimeFormatter formatter2 = DateTimeFormatter
+									.ofPattern(TimConstants.LOCAL_DATE_TIME_FORMAT);
+							cell.setCellValue(((LocalDateTime) value).format(formatter2).toString());
+							break;
+						case TimConstants.FieldType.BOOLEAN:
+							if (t instanceof TeacherDto || t instanceof StudentDto) {
+								Boolean valueBl = (Boolean) value;
+								cell.setCellValue(
+										valueBl ? TimConstants.Gender.MALE_STR : TimConstants.Gender.FEMALE_STR);
+							} else {
+								cell.setCellValue(value.toString());
+							}
+							break;
+						default:
+							break;
 						}
 					}
 					columnCount++;
@@ -332,7 +340,7 @@ public class ExcelHelper {
 			});
 		} catch (IOException | URISyntaxException e) {
 			e.printStackTrace();
-			throw new ExcelException(ETimMessages.INTERNAL_SYSTEM_ERROR);
+			throw new ValidateException(ETimMessages.INTERNAL_SYSTEM_ERROR, null);
 		}
 		return jsonMap;
 	}
@@ -352,10 +360,10 @@ public class ExcelHelper {
 			return wb;
 		} catch (EncryptedDocumentException e1) {
 			e1.printStackTrace();
-			throw new ExcelException(ETimMessages.INVALID_EXCEL_FILE);
+			throw new ValidateException(ETimMessages.INVALID_EXCEL_FILE, null);
 		} catch (IOException e1) {
 			e1.printStackTrace();
-			throw new ExcelException(ETimMessages.INTERNAL_SYSTEM_ERROR);
+			throw new ValidateException(ETimMessages.INTERNAL_SYSTEM_ERROR, null);
 		}
 
 	}
@@ -369,14 +377,14 @@ public class ExcelHelper {
 	 */
 	private InputStream isExcelFormat(MultipartFile file) {
 		if (!TYPE.equals(file.getContentType())) {
-			throw new ExcelException(ETimMessages.INVALID_EXCEL_FILE);
+			throw new ValidateException(ETimMessages.INVALID_EXCEL_FILE, null);
 		}
 		try {
 			return file.getInputStream();
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 			e.printStackTrace();
-			throw new ExcelException(ETimMessages.INVALID_EXCEL_FILE);
+			throw new ValidateException(ETimMessages.INVALID_EXCEL_FILE, null);
 		}
 	}
 }

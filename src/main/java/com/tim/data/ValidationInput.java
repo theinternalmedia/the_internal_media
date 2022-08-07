@@ -17,7 +17,7 @@ public class ValidationInput {
         public static final String PASSWORD_MAX_SIZE = "Password người dùng dài tối đa 100 ký tự";
 
         public static final String ADDRESS_MAX_SIZE = "Address người dùng dài tối đa 100 ký tự";
-        public static final String PHONE_MAX_SIZE = "Phone number người dùng dài tối đa 10 ký tự";
+        public static final String PHONE_MAX_SIZE = "Số điện thoại không hợp lệ";
         public static final String AVATAR_MAX_SIZE = "Avatar người dùng kích thước lớn";
     }
 

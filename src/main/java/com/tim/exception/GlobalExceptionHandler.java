@@ -2,9 +2,8 @@ package com.tim.exception;
 
 import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.ConstraintViolation;
@@ -21,6 +20,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.tim.data.ETimMessages;
+import com.tim.dto.errorresponse.ErrorResponse;
 import com.tim.utils.GetMessages;
 
 /**
@@ -36,18 +36,19 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<String> accessDeniedException(AccessDeniedException e) {
 		return new ResponseEntity<>(GetMessages.getMessage(ETimMessages.ACCESS_DENIED), HttpStatus.FORBIDDEN);
 	}
-	
+
 	@ExceptionHandler(EntityNotFoundException.class)
 	public ResponseEntity<String> entityNotFoundException(EntityNotFoundException e) {
 		return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
 	}
-	
-	// Excel Exception
-	@ExceptionHandler(ExcelException.class)
-	public ResponseEntity<String> excelException(ExcelException e) {
-		return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+	// Validation Exception
+	@ExceptionHandler(ValidateException.class)
+	public ResponseEntity<ErrorResponse> validateException(ValidateException e) {
+		ErrorResponse errorResponse = new ErrorResponse(e.getMessage(), e.getErrMsgs());
+		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
-	
+
 	// User not found exception
 	@ExceptionHandler(value = { BadCredentialsException.class })
 	public ResponseEntity<String> userNotFoundException(BadCredentialsException e) {
@@ -56,37 +57,42 @@ public class GlobalExceptionHandler {
 
 	// Validate input exception handler
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<Map<String, String>> handleInValidInputException(MethodArgumentNotValidException e) {
+	public ResponseEntity<ErrorResponse> handleInValidInputException(MethodArgumentNotValidException e) {
 		logger.error("Data input invalid: {}", e.getMessage());
-		Map<String, String> errors = new HashMap<>();
+		List<String> errors = new ArrayList<>();
 		e.getBindingResult().getAllErrors().forEach((error) -> {
 			String fieldName = ((FieldError) error).getField();
 			String errorMessage = error.getDefaultMessage();
-			errors.put(fieldName, errorMessage);
+			errors.add(fieldName + ": " + errorMessage);
 		});
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+		ETimMessages eTimMessages = ETimMessages.VALIDATION_ERR_MESSAGE;
+		ErrorResponse errorResponse = new ErrorResponse(
+				GetMessages.getMessage(eTimMessages, e.getObjectName()), errors);
+		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
-	
+
 	// ConstraintViolationException
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<List<String>> validateionException(Exception ex) {
-		logger.info(ex.getClass().getName());
-	    //
-	    try {
-	    	ConstraintViolationException ex1 = (ConstraintViolationException) ex;
-	        final List<String> errors = new ArrayList<String>();
-	        for (final ConstraintViolation<?> violation : ex1.getConstraintViolations()) {
-	            errors.add(violation.getPropertyPath() + ": " + violation.getMessage());
-	        }
-	        return new ResponseEntity<List<String>>(errors, new HttpHeaders(), HttpStatus.BAD_REQUEST);
-		} catch (Exception e) {
+//	@ExceptionHandler(Exception.class)
+//	public ResponseEntity<List<String>> validateionException(Exception ex) {
+//		logger.info(ex.getClass().getName());
+//		//
+//		try {
+//			ConstraintViolationException ex1 = (ConstraintViolationException) ex;
+//			final List<String> errors = new ArrayList<String>();
+//			for (final ConstraintViolation<?> violation : ex1.getConstraintViolations()) {
+//				errors.add(violation.getPropertyPath() + ": " + violation.getMessage());
+//			}
+//			return new ResponseEntity<List<String>>(errors, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+//		} catch (Exception e) {
 //			try {
 //				BadCredentialsException ex2 = (BadCredentialsException) ex;
+//				return new ResponseEntity<List<String>>(Arrays.asList(ex2.getMessage()), new HttpHeaders(),
+//						HttpStatus.BAD_REQUEST);
 //			} catch (Exception e2) {
-//				// TODO: handle exception
+//
 //			}
-			 return new ResponseEntity<List<String>>(new ArrayList<>(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
-		}
-	}
+//			return new ResponseEntity<List<String>>(new ArrayList<>(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+//		}
+//	}
 
 }

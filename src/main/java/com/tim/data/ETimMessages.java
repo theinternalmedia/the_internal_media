@@ -3,7 +3,7 @@ package com.tim.data;
 public enum ETimMessages {
 	
 	USER_NOT_FOUND("msg.001", "User not found"),
-	ACCESS_DENIED("msg.403", "Không có quyền truy cập"),
+	ACCESS_DENIED("msg.002", "Không có quyền truy cập"),
 	
 //	INVALID_SHEET_NAME("msg.004", "invalid sheet name"),
 //	USER_NAME_ALREADY_EXISTS("msg.002", "Tài khoản đã tồn tại"),
@@ -27,8 +27,12 @@ public enum ETimMessages {
 //	EMAIL_USERNAME_NOT_FOUND("msg.013", " not found"),
 	
 	/* ========== VALIDATION MESSAGE =================*/
-	INVALID_EXCEL_FILE("msg.001", "invalid excel file"),
-	INVALID_EXCEL_VALUE("msg.002", "invalid excel value"),
+	VALIDATION_ERR_MESSAGE("msg.400", "vaidation error message"),
+	INVALID_EXCEL_FILE("msg.401", "invalid excel file"),
+	INVALID_EXCEL_VALUE("msg.402", "invalid excel value"),
+	INVALID_OBJECT_VALUE("msg.403", "invalid object value"),
+	INVALID_CELL_VALUE("msg.404", "invalid cell value"),
+	NULL_CELL_VALUE("msg.405", "null cell value"),
 	
 	
 	/* INTERNAL_SYSTEM_ERROR */
