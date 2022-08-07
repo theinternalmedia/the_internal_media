@@ -1,7 +1,7 @@
 package com.tim.exception;
 
 import com.tim.data.ETimMessages;
-import com.tim.utils.GetMessages;
+import com.tim.utils.Utility;
 
 public class NotFoundException extends CustomException{
 
@@ -15,7 +15,7 @@ public class NotFoundException extends CustomException{
 	public NotFoundException(ETimMessages eTimMessages, String field) {
 		super(eTimMessages);
 		this.field = field;
-		this.setMessage(GetMessages.getMessage(eTimMessages.code, field));
+		this.setMessage(Utility.getMessage(eTimMessages.code, field));
 	}
 	public String getField() {
 		return field;

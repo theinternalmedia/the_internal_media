@@ -12,9 +12,6 @@ import com.tim.entity.Student;
  */
 @Component
 public class StudentConverter extends AbstractConverter<StudentDto, Student> {
-    /**
-     * thinhnguyen
-     */
 
     @Override
 	public

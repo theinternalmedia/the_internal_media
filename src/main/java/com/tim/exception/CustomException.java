@@ -1,7 +1,7 @@
 package com.tim.exception;
 
 import com.tim.data.ETimMessages;
-import com.tim.utils.GetMessages;
+import com.tim.utils.Utility;
 
 /**
  * 
@@ -16,7 +16,7 @@ public class CustomException extends RuntimeException {
 	
 	public CustomException(ETimMessages eTimMessages, String...values) {
 		this.code = eTimMessages.code;
-		this.message = GetMessages.getMessage(eTimMessages.code, values);
+		this.message = Utility.getMessage(eTimMessages.code, values);
 	}
 
 	public String getCode() {

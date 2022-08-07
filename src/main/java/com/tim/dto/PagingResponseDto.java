@@ -1,5 +1,21 @@
 package com.tim.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+/**
+ * PagingResponseDto
+ * 
+ * @appName the_internal_media
+ *
+ * @param <T>
+ */
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class PagingResponseDto<T extends BaseDto> extends ResponseDto<T> {
 
 	private static final long serialVersionUID = -534561158613722144L;
@@ -8,36 +24,4 @@ public class PagingResponseDto<T extends BaseDto> extends ResponseDto<T> {
 	private long totalPage;
 	private long page;
 	private long limit;
-
-	public long getTotalItem() {
-		return totalItem;
-	}
-
-	public void setTotalItem(long totalItem) {
-		this.totalItem = totalItem;
-	}
-
-	public long getTotalPage() {
-		return totalPage;
-	}
-
-	public void setTotalPage(long totalPage) {
-		this.totalPage = totalPage;
-	}
-
-	public long getPage() {
-		return page;
-	}
-
-	public void setPage(long page) {
-		this.page = page;
-	}
-
-	public long getLimit() {
-		return limit;
-	}
-
-	public void setLimit(long limit) {
-		this.limit = limit;
-	}
 }

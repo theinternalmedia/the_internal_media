@@ -2,15 +2,11 @@ package com.tim.exception;
 
 import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 
 import org.slf4j.Logger;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -21,7 +17,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.tim.data.ETimMessages;
 import com.tim.dto.errorresponse.ErrorResponse;
-import com.tim.utils.GetMessages;
+import com.tim.utils.Utility;
 
 /**
  * 
@@ -34,7 +30,7 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(AccessDeniedException.class)
 	public ResponseEntity<String> accessDeniedException(AccessDeniedException e) {
-		return new ResponseEntity<>(GetMessages.getMessage(ETimMessages.ACCESS_DENIED), HttpStatus.FORBIDDEN);
+		return new ResponseEntity<>(Utility.getMessage(ETimMessages.ACCESS_DENIED), HttpStatus.FORBIDDEN);
 	}
 
 	@ExceptionHandler(EntityNotFoundException.class)
@@ -52,7 +48,7 @@ public class GlobalExceptionHandler {
 	// User not found exception
 	@ExceptionHandler(value = { BadCredentialsException.class })
 	public ResponseEntity<String> userNotFoundException(BadCredentialsException e) {
-		return new ResponseEntity<>(GetMessages.getMessage(ETimMessages.USER_NOT_FOUND), HttpStatus.UNAUTHORIZED);
+		return new ResponseEntity<>(Utility.getMessage(ETimMessages.USER_NOT_FOUND), HttpStatus.UNAUTHORIZED);
 	}
 
 	// Validate input exception handler
@@ -67,7 +63,7 @@ public class GlobalExceptionHandler {
 		});
 		ETimMessages eTimMessages = ETimMessages.VALIDATION_ERR_MESSAGE;
 		ErrorResponse errorResponse = new ErrorResponse(
-				GetMessages.getMessage(eTimMessages, e.getObjectName()), errors);
+				Utility.getMessage(eTimMessages, e.getObjectName()), errors);
 		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
 

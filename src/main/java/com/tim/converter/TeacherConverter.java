@@ -1,7 +1,5 @@
 package com.tim.converter;
 
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.tim.dto.teacher.TeacherDto;
@@ -14,11 +12,6 @@ import com.tim.entity.Teacher;
  */
 @Component
 public class TeacherConverter extends AbstractConverter<TeacherDto, Teacher> {
-
-    /**
-     * thinhnguyen
-     */
-
 
     @Override
 	public TeacherDto toDto(Teacher entity) {

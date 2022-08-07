@@ -12,9 +12,9 @@ public class BaseDto implements Serializable {
 
 	private static final long serialVersionUID = 7702340293141714083L;
 	private Long id;
-	private LocalDateTime createdDate;
+	private LocalDateTime createdDate = LocalDateTime.now();
 	private String createdBy;
-	private LocalDateTime modifiedDate;
+	private LocalDateTime modifiedDate = LocalDateTime.now();
 	private String modifiedBy;
 	private Boolean status = true;
 

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tim.data.ETimMessages;
-import com.tim.utils.GetMessages;
+import com.tim.utils.Utility;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -15,6 +15,6 @@ public class TestResource extends AbstractResource {
 	
 	@GetMapping("/message")
 	public String testGetExceptionMessage() {
-		return GetMessages.getMessage(ETimMessages.ACCESS_DENIED);
+		return Utility.getMessage(ETimMessages.ACCESS_DENIED);
 	}
 }

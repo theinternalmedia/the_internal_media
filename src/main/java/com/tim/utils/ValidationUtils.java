@@ -3,6 +3,7 @@ package com.tim.utils;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Max;
@@ -15,16 +16,31 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.tim.annotation.Phone;
 import com.tim.data.ETimMessages;
 import com.tim.data.TimConstants;
 import com.tim.exception.GlobalExceptionHandler;
 import com.tim.exception.ValidateException;
 
+/**
+ * 
+ * @appName the_internal_media
+ *
+ */
 public class ValidationUtils {
 	private static Logger logger = org.slf4j.LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-	public static String validateField(Field field, String fieldName, Object value) {
+	/**
+	 * Get Message Validate Field
+	 * 
+	 * @author minhtuanitk43
+	 * @param field     Field need to validate
+	 * @param fieldName Actual fieldName response to Client
+	 * @param value     value of 'field'
+	 * @return Error Message if have any validated error, otherwise return NULL
+	 */
+	public static String getMessageValidateField(final Field field, final String fieldName, final Object value) {
 		field.setAccessible(true);
 		if (field.isAnnotationPresent(Size.class)) {
 			Size size = field.getAnnotation(Size.class);
@@ -71,31 +87,59 @@ public class ValidationUtils {
 		return null;
 	}
 
-	public static void validateObject(Object object) {
+	/**
+	 * Validate Object
+	 * 
+	 * @author minhtuanitk43
+	 * @param object need to validate
+	 */
+	public static void validateObject(final Object object) {
+		// Declare list Error Message
 		List<String> errMessages = new ArrayList<>();
+
+		// Get class of object
 		Class<?> objectClass = object.getClass();
+
+		// Get actual name of object
+		String simpleName = objectClass.getSimpleName();
+
+		// Get List actual field name response to Client from file json config
+		final Map<String, String> actualFieldNames = Utility
+				.getObjectFromJsonFile(TimConstants.ACTUAL_FIELDNAME_DTO_NAME_FILE, 
+						new TypeReference<Map<String, Map<String, String>>>() {
+				}).get(simpleName);
+		// Get actual object name response to Client from file json config
+		final String actualOjectName = Utility
+				.getObjectFromJsonFile(TimConstants.ACTUAL_OBJECT_NAME_FILE, 
+						new TypeReference<Map<String, String>>() {
+				}).get(simpleName);
+		// Get fields from parent class
 		Class<?> parent = objectClass.getSuperclass();
+
 		Field[] fields = ArrayUtils.addAll(parent.getDeclaredFields(), objectClass.getDeclaredFields());
+
+		// Loop to validate fields
 		for (Field field : fields) {
 			field.setAccessible(true);
 			try {
-				String mes = validateField(field, 
-						TimConstants.FIELD_NAME_CLIENT.get(field.getName()), field.get(object));
+				String mes = getMessageValidateField(field, actualFieldNames.get(field.getName()), field.get(object));
 				if (mes != null) {
 					errMessages.add(mes);
 				}
 			} catch (IllegalArgumentException e) {
 				logger.error(e.getMessage());
 				e.printStackTrace();
-				throw new ValidateException(ETimMessages.INVALID_EXCEL_VALUE, null, objectClass.getSimpleName());
+				throw new ValidateException(ETimMessages.INVALID_OBJECT_VALUE, null, actualOjectName);
 			} catch (IllegalAccessException e) {
 				logger.error(e.getMessage());
 				e.printStackTrace();
-				throw new ValidateException(ETimMessages.INVALID_EXCEL_VALUE, null, objectClass.getSimpleName());
+				throw new ValidateException(ETimMessages.INVALID_OBJECT_VALUE, null, actualOjectName);
 			}
 		}
+		// If Error Message not empty, throw ValidateException
 		if (errMessages.size() > 0) {
-			throw new ValidateException(ETimMessages.INVALID_EXCEL_VALUE, errMessages, objectClass.getSimpleName());
+			throw new ValidateException(ETimMessages.INVALID_OBJECT_VALUE, errMessages,
+					actualOjectName);
 		}
 	}
 

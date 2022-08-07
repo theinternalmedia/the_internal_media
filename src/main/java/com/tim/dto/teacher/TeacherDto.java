@@ -13,7 +13,5 @@ public class TeacherDto extends UserDto {
 
 	private static final long serialVersionUID = 3200306173932990958L;
 
-	private boolean isHeadOfFaculty = false;
-
 	private boolean isManager = false;
 }

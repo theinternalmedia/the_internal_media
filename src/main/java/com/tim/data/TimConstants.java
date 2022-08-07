@@ -29,6 +29,10 @@ public final class TimConstants {
 	
 	public static final String TRUE_STR = "true";
 	public static final String FALSE_STR = "false";
+	
+	public static final String ACTUAL_FIELDNAME_DTO_NAME_FILE = "ActualFieldNames.json";
+	public static final String ACTUAL_OBJECT_NAME_FILE = "ActualObjectNames.json";
+	
 
 	/**
 	 * Notification Type

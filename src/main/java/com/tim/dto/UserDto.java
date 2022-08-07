@@ -20,7 +20,6 @@ import lombok.ToString;
 @Setter
 @ToString
 public class UserDto extends BaseDto {
-
 	private static final long serialVersionUID = -551690367785937349L;
 
 	@NotBlank(message = ValidationInput.User.ID_NOTBLANK)
@@ -31,12 +30,11 @@ public class UserDto extends BaseDto {
 	@Size(max = 50, message = ValidationInput.User.NAME_NOTBLANK)
 	private String name;
 
-	//@NotBlank(message = "{email.notblank}")
+	// @NotBlank(message = "{email.notblank}")
 	@NotBlank(message = ValidationInput.User.EMAIL_NOTBLANK)
 	@Size(max = 50, message = ValidationInput.User.EMAIL_MAX_SIZE)
 	@Email(message = ValidationInput.User.EMAIL_SYNTAX)
 	private String email;
-
 
 	@NotBlank(message = ValidationInput.User.PASSWORD_MAX_SIZE)
 	@Size(max = 100, message = ValidationInput.User.PASSWORD_MAX_SIZE)

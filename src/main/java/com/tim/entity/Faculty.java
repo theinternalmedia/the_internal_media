@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
@@ -27,13 +28,24 @@ public class Faculty extends BaseEntity {
 	@Column(unique = true, nullable = false, length = 50)
 	@Size(max = 50)
 	private String name;
-	
+
 	@OneToMany(mappedBy = "schoolYear")
 	private Set<EducationProgram> educationPrograms = new HashSet<>();
 
 	@OneToMany(mappedBy = "faculty")
 	private Set<Class> classes = new HashSet<Class>();
-	
+
+	@OneToOne
+	private Teacher headOfFaculty;
+
+	public Teacher getHeadOfFaculty() {
+		return headOfFaculty;
+	}
+
+	public void setHeadOfFaculty(Teacher headOfFaculty) {
+		this.headOfFaculty = headOfFaculty;
+	}
+
 	public Set<Class> getClasses() {
 		return classes;
 	}

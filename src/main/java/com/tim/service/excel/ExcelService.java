@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -14,12 +15,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.tim.data.ETimMessages;
 import com.tim.data.TimConstants;
 import com.tim.dto.excel.ExcelField;
 import com.tim.exception.CustomException;
 import com.tim.exception.GlobalExceptionHandler;
 import com.tim.exception.ValidateException;
+import com.tim.utils.Utility;
 import com.tim.utils.ValidationUtils;
 
 @Service
@@ -36,8 +39,14 @@ public class ExcelService implements ExcelFileService {
 	public <T extends Object> List<T> getListObjectFromExcelFile(final MultipartFile excelFile, Class<T> clazz)
 			throws ValidateException {
 		List<String> errs = new ArrayList<String>();
+		String simpleName = clazz.getSimpleName();
+		// Get actual object name response to Client from file json config
+		final String actualOjectName = Utility
+				.getObjectFromJsonFile(TimConstants.ACTUAL_OBJECT_NAME_FILE, 
+						new TypeReference<Map<String, String>>() {
+				}).get(simpleName);
 		List<T> list = new ArrayList<>();
-		List<ExcelField[]> excelFields = excelHelper.readFromExcel(excelFile, clazz.getSimpleName());
+		List<ExcelField[]> excelFields = excelHelper.readFromExcel(excelFile, simpleName);
 		String validateMsg = null;
 		for (ExcelField[] exf : excelFields) {
 			T t = null;
@@ -56,7 +65,7 @@ public class ExcelService implements ExcelFileService {
 				for (Field field : fields) {
 					field.setAccessible(true);
 					if (exf[i].getPojoAttribute().equalsIgnoreCase(field.getName())) {
-						validateMsg = ValidationUtils.validateField(field, exf[i].getExcelHeader(),
+						validateMsg = ValidationUtils.getMessageValidateField(field, exf[i].getExcelHeader(),
 								exf[i].getExcelValue());
 						if (StringUtils.isNotBlank(validateMsg)) {
 							errs.add(exf[i].getCellAddress() + ": " + validateMsg);
@@ -95,7 +104,7 @@ public class ExcelService implements ExcelFileService {
 			list.add(t);
 		}
 		if (errs.size() > 0) {
-			throw new ValidateException(ETimMessages.INVALID_EXCEL_VALUE, errs);
+			throw new ValidateException(ETimMessages.INVALID_EXCEL_VALUE, errs, actualOjectName);
 		}
 		return list;
 	}

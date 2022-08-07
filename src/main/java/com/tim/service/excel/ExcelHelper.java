@@ -6,9 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -31,7 +28,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tim.data.ETimMessages;
 import com.tim.data.TimConstants;
 import com.tim.dto.excel.ExcelField;
@@ -39,7 +35,7 @@ import com.tim.dto.student.StudentDto;
 import com.tim.dto.teacher.TeacherDto;
 import com.tim.exception.GlobalExceptionHandler;
 import com.tim.exception.ValidateException;
-import com.tim.utils.GetMessages;
+import com.tim.utils.Utility;
 
 /**
  * ExcelHelper
@@ -86,7 +82,10 @@ public class ExcelHelper {
 		Sheet sheet = workBook.getSheetAt(0);
 
 		// 3.Get List ExcelField Template from Json Config File
-		List<ExcelField> excelFieldTemplateList = getExcelFieldsFromConfigFile(className);
+		List<ExcelField> excelFieldTemplateList = Utility.getObjectFromJsonFile(
+				className + SUFFIX_INPUT_CONFIG_FILE, 
+				new TypeReference<List<ExcelField>>() {
+				});
 
 		// 4.Total Row of sheet(2)
 		int totalRows = sheet.getLastRowNum();
@@ -108,7 +107,7 @@ public class ExcelHelper {
 				// If Cell's Value is null
 				if(cell == null) {
 					String colString = CellReference.convertNumToColString(cellIndex);
-					cellErrs.add(GetMessages.getMessage(ETimMessages.NULL_CELL_VALUE, colString + (i + 1)) );
+					cellErrs.add(Utility.getMessage(ETimMessages.NULL_CELL_VALUE, colString + (i + 1)) );
 					continue;
 				}
 
@@ -154,7 +153,7 @@ public class ExcelHelper {
 					}
 				} catch (IllegalStateException e) {
 					logger.error(e.getMessage(), e);
-					cellErrs.add(GetMessages.getMessage(ETimMessages.INVALID_EXCEL_VALUE, cell.getAddress().toString()));
+					cellErrs.add(Utility.getMessage(ETimMessages.INVALID_EXCEL_VALUE, cell.getAddress().toString()));
 					e.printStackTrace();
 					continue;
 				}
@@ -191,7 +190,9 @@ public class ExcelHelper {
 			}
 
 			// 2.3 Create Folder Excel file
-			String directoryName = ROOT_FOLDER + SEPARATOR + LocalDate.now().toString();
+			String directoryName = ROOT_FOLDER 
+					+ SEPARATOR 
+					+ LocalDate.now().toString();
 			File directory = new File(directoryName);
 			if (!directory.exists()) {
 				directory.mkdir();
@@ -199,8 +200,11 @@ public class ExcelHelper {
 
 			// 2.4 Create File
 			File file = new File(
-					directoryName + SEPARATOR + LocalTime.now().toString().substring(0, 8).replace(":", "-") + "_"
-							+ SHEET_NAME + fileName + EXTENSION);
+					directoryName 
+					+ SEPARATOR + LocalTime.now().toString().substring(0, 8).replace(":", "-") + "_"
+					+ SHEET_NAME 
+					+ fileName 
+					+ EXTENSION);
 
 			// 3.CREATE EXCEL FILE
 			// 3.1 Create Workbook, Sheet
@@ -320,29 +324,6 @@ public class ExcelHelper {
 		if (s.length() == 0)
 			return s;
 		return s.substring(0, 1).toUpperCase() + s.substring(1);
-	}
-
-	/**
-	 * Get list ExcelField from config file
-	 * 
-	 * @author minhtuanitk43
-	 * @param className
-	 * @return
-	 */
-	private List<ExcelField> getExcelFieldsFromConfigFile(String className) {
-		List<ExcelField> jsonMap = null;
-		ObjectMapper objectMapper = new ObjectMapper();
-		try {
-			String jsonConfig = new String(Files.readAllBytes(
-					Paths.get(ClassLoader.getSystemResource(className + SUFFIX_INPUT_CONFIG_FILE).toURI())));
-
-			jsonMap = objectMapper.readValue(jsonConfig, new TypeReference<List<ExcelField>>() {
-			});
-		} catch (IOException | URISyntaxException e) {
-			e.printStackTrace();
-			throw new ValidateException(ETimMessages.INTERNAL_SYSTEM_ERROR, null);
-		}
-		return jsonMap;
 	}
 
 	/**

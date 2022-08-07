@@ -10,8 +10,8 @@ import com.tim.entity.BaseEntity;
  * convert between Entity and Dto
  * @appName the_internal_media
  *
- * @param <T1>
- * @param <T2>
+ * @param <T1> must be extend from BaseDto
+ * @param <T2> must be extend from BaseEntity
  */
 public abstract class AbstractConverter<T1 extends BaseDto, T2 extends BaseEntity> {
 	
