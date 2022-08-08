@@ -2,8 +2,8 @@ package com.tim.data;
 
 public enum ETimMessages {
 	
-	USER_NOT_FOUND("msg.001", "User not found"),
-	ACCESS_DENIED("msg.002", "Không có quyền truy cập"),
+	USER_NOT_FOUND("msg.000", "User not found"),
+	ENTITY_NOT_FOUND("msg.001", "ENTITY_NOT_FOUND"),
 	
 //	INVALID_SHEET_NAME("msg.004", "invalid sheet name"),
 //	USER_NAME_ALREADY_EXISTS("msg.002", "Tài khoản đã tồn tại"),

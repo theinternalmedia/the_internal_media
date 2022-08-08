@@ -1,12 +1,11 @@
 package com.tim.dto;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.tim.data.TimConstants;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,19 +16,33 @@ import lombok.ToString;
  * 
  * @appName the_internal_media
  *
- * @param <T> Dto is must extends BaseDto
  */
-@Getter
-@Setter
 @ToString
+@Getter
 @NoArgsConstructor
-@AllArgsConstructor
-public class ResponseDto<T extends BaseDto> implements Serializable{
-	
-	private static final long serialVersionUID = -7573806538377205333L;
-	
-	private String status = TimConstants.OK_STATUS;
-	private String message = TimConstants.OK_MESSAGE;
-	private List<T> listData = new ArrayList<T>();
+public class ResponseDto implements Serializable {
 
+	private static final long serialVersionUID = -7573806538377205333L;
+
+	@Getter
+	private String status = TimConstants.OK_STATUS;
+	@Getter
+	private String message = TimConstants.OK_MESSAGE;
+	@Getter
+	@Setter
+	private Object data = null;
+
+	public ResponseDto(String message, Object data) {
+		super();
+		this.message = message;
+		this.data = data;
+		if (!StringUtils.equalsIgnoreCase(message, message)) {
+			this.status = TimConstants.UNEXPECTED_STATUS;
+		}
+	}
+
+	public ResponseDto(Object data) {
+		super();
+		this.data = data;
+	}
 }

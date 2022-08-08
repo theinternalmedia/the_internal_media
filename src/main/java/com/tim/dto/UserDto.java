@@ -9,7 +9,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import com.tim.annotation.Phone;
-import com.tim.data.ValidationInput;
 import com.tim.dto.role.RoleDto;
 
 import lombok.Getter;
@@ -22,35 +21,32 @@ import lombok.ToString;
 public class UserDto extends BaseDto {
 	private static final long serialVersionUID = -551690367785937349L;
 
-	@NotBlank(message = ValidationInput.User.ID_NOTBLANK)
-	@Size(max = 20, message = ValidationInput.User.ID_MAX_SIZE)
+	@NotBlank
+	@Size(max = 20, min = 5)
 	private String userId;
 
-	@NotBlank(message = ValidationInput.User.NAME_NOTBLANK)
-	@Size(max = 50, message = ValidationInput.User.NAME_NOTBLANK)
+	@NotBlank
+	@Size(max = 50, min = 4)
 	private String name;
 
-	// @NotBlank(message = "{email.notblank}")
-	@NotBlank(message = ValidationInput.User.EMAIL_NOTBLANK)
-	@Size(max = 50, message = ValidationInput.User.EMAIL_MAX_SIZE)
-	@Email(message = ValidationInput.User.EMAIL_SYNTAX)
+	@NotBlank
+	@Email
 	private String email;
 
-	@NotBlank(message = ValidationInput.User.PASSWORD_MAX_SIZE)
-	@Size(max = 100, message = ValidationInput.User.PASSWORD_MAX_SIZE)
+	@NotBlank
+	@Size(max = 100, min = 6)
 	private String password;
 
 	private boolean gender = true;
 
-	@Size(max = 100, message = ValidationInput.User.ADDRESS_MAX_SIZE)
+	@Size(max = 100)
 	private String address;
 
-	@Phone(message = ValidationInput.User.PHONE_MAX_SIZE)
+	@Phone
 	private String phone;
 
 	private LocalDate dob;
 
-	@Size(max = 100, message = ValidationInput.User.AVATAR_MAX_SIZE)
 	private String avatar;
 
 	private Set<RoleDto> roles = new HashSet<RoleDto>();

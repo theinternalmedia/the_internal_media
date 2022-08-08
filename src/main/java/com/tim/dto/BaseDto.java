@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 public class BaseDto implements Serializable {
 
 	private static final long serialVersionUID = 7702340293141714083L;
+
 	private Long id;
 	private LocalDateTime createdDate = LocalDateTime.now();
 	private String createdBy;
@@ -65,11 +66,4 @@ public class BaseDto implements Serializable {
 	public void setModifiedDate(LocalDateTime modifiedDate) {
 		this.modifiedDate = modifiedDate;
 	}
-
-	@Override
-	public String toString() {
-		return "BaseDto [id=" + id + ", createdDate=" + createdDate + ", createdBy=" + createdBy + ", modifiedDate="
-				+ modifiedDate + ", modifiedBy=" + modifiedBy + ", status=" + status + "]";
-	}
-
 }

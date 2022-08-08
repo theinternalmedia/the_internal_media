@@ -1,6 +1,5 @@
 package com.tim.exception;
 
-import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,10 +27,6 @@ import com.tim.utils.Utility;
 public class GlobalExceptionHandler {
 	private final Logger logger = org.slf4j.LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-	@ExceptionHandler(AccessDeniedException.class)
-	public ResponseEntity<String> accessDeniedException(AccessDeniedException e) {
-		return new ResponseEntity<>(Utility.getMessage(ETimMessages.ACCESS_DENIED), HttpStatus.FORBIDDEN);
-	}
 
 	@ExceptionHandler(EntityNotFoundException.class)
 	public ResponseEntity<String> entityNotFoundException(EntityNotFoundException e) {
@@ -45,10 +40,12 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
 
-	// User not found exception
+	// User not found exception: BadCredentialsException
 	@ExceptionHandler(value = { BadCredentialsException.class })
-	public ResponseEntity<String> userNotFoundException(BadCredentialsException e) {
-		return new ResponseEntity<>(Utility.getMessage(ETimMessages.USER_NOT_FOUND), HttpStatus.UNAUTHORIZED);
+	public ResponseEntity<ErrorResponse> userNotFoundException(BadCredentialsException e) {
+		ErrorResponse errorResponse = ErrorResponse.builder()
+				.message(Utility.getMessage(ETimMessages.USER_NOT_FOUND)).build();
+		return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
 	}
 
 	// Validate input exception handler
@@ -62,33 +59,16 @@ public class GlobalExceptionHandler {
 			errors.add(fieldName + ": " + errorMessage);
 		});
 		ETimMessages eTimMessages = ETimMessages.VALIDATION_ERR_MESSAGE;
-		ErrorResponse errorResponse = new ErrorResponse(
-				Utility.getMessage(eTimMessages, e.getObjectName()), errors);
+		ErrorResponse errorResponse = new ErrorResponse(Utility.getMessage(eTimMessages, e.getObjectName()), errors);
 		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
 
-	// ConstraintViolationException
-//	@ExceptionHandler(Exception.class)
-//	public ResponseEntity<List<String>> validateionException(Exception ex) {
-//		logger.info(ex.getClass().getName());
-//		//
-//		try {
-//			ConstraintViolationException ex1 = (ConstraintViolationException) ex;
-//			final List<String> errors = new ArrayList<String>();
-//			for (final ConstraintViolation<?> violation : ex1.getConstraintViolations()) {
-//				errors.add(violation.getPropertyPath() + ": " + violation.getMessage());
-//			}
-//			return new ResponseEntity<List<String>>(errors, new HttpHeaders(), HttpStatus.BAD_REQUEST);
-//		} catch (Exception e) {
-//			try {
-//				BadCredentialsException ex2 = (BadCredentialsException) ex;
-//				return new ResponseEntity<List<String>>(Arrays.asList(ex2.getMessage()), new HttpHeaders(),
-//						HttpStatus.BAD_REQUEST);
-//			} catch (Exception e2) {
-//
-//			}
-//			return new ResponseEntity<List<String>>(new ArrayList<>(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
-//		}
-//	}
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<ErrorResponse> validateionException(Exception ex) {
+		logger.info(ex.getClass().getName());
+		ErrorResponse errorResponse = new ErrorResponse(
+				Utility.getMessage(ETimMessages.INTERNAL_SYSTEM_ERROR), null);
+		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+	}
 
 }

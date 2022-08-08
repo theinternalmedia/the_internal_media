@@ -1,38 +1,33 @@
 package com.tim.dto.faculty;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-import com.tim.data.ValidationInput;
 import com.tim.dto.BaseDto;
+
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * 
  * @appName the_internal_media
  *
  */
+@Getter
+@Setter
+@ToString
 public class FacultyDto extends BaseDto {
 
+	@Getter(value = AccessLevel.NONE)
 	private static final long serialVersionUID = -6110396477920437947L;
 
-	@Size(max = 50, message = ValidationInput.General.CODE_MAX_SIZE)
+	@Size(max = 20, min = 5)
+	@NotBlank
 	private String code;
 
-	@Size(max = 50, message = ValidationInput.General.NAME_MAX_SIZE)
+	@Size(max = 50)
+	@NotBlank
 	private String name;
-
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
 }

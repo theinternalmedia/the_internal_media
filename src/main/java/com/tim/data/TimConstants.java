@@ -11,8 +11,8 @@ public final class TimConstants {
 	public static final String ADMIN_ROOT = "admin";
 
 	public static final String OK_STATUS = "ok";
+	public static final String UNEXPECTED_STATUS = "unexpected";
 	public static final String OK_MESSAGE = "success";
-	public static final String FAIL_MESSAGE = "fail";
 
 	public static final List<String> IMAGE_MIME_TYPE = Arrays.asList("png", "jpeg", "jpg", "gif");
 	public static final List<String> VIDEO_MIME_TYPE = Arrays.asList("mpeg-4", "mpeg-2", "mp4", "flv", "avi");
@@ -84,7 +84,7 @@ public final class TimConstants {
 	 * @appName the_internal_media
 	 *
 	 */
-	public static class ExcelFileName {
+	public static class ExcelFiledName {
 		public static final String TEACHER = "GiaoVien";
 		public static final String STUDENT = "SinhVien";
 	}
@@ -103,5 +103,10 @@ public final class TimConstants {
 		public static final String LOCAL_DATE = "LocalDate";
 		public static final String LOCAL_DATE_TIME = "LocalDateTime";
 		public static final String LONG = "Long";
+	}
+	
+	public static class ActualEntityName {
+		public static final String TEACHER = "GiaoVien";
+		public static final String STUDENT = "SinhVien";
 	}
 }

@@ -78,7 +78,7 @@ public class Utility {
 	 * @param code
 	 * @return message properties by code
 	 */
-	public static String getMessage(String code, String... values) {
+	private static String getMessage(String code, String... values) {
 		String message = messageSource.getMessage(code, values, EXCEPTION_MESSAGE_DEFAULT, null);
 		return message;
 	}

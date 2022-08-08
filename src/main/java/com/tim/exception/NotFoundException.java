@@ -15,7 +15,7 @@ public class NotFoundException extends CustomException{
 	public NotFoundException(ETimMessages eTimMessages, String field) {
 		super(eTimMessages);
 		this.field = field;
-		this.setMessage(Utility.getMessage(eTimMessages.code, field));
+		this.setMessage(Utility.getMessage(eTimMessages, field));
 	}
 	public String getField() {
 		return field;

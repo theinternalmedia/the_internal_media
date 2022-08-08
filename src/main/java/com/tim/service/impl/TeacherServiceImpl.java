@@ -2,24 +2,22 @@ package com.tim.service.impl;
 
 import java.util.List;
 
-import javax.persistence.EntityNotFoundException;
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tim.converter.TeacherConverter;
+import com.tim.data.ETimMessages;
+import com.tim.data.TimConstants;
+import com.tim.dto.ResponseDto;
 import com.tim.dto.teacher.TeacherDto;
 import com.tim.entity.Teacher;
 import com.tim.repository.TeacherRepository;
 import com.tim.service.TeacherService;
 import com.tim.service.excel.ExcelService;
+import com.tim.utils.Utility;
 
 @Service
-@Validated
 public class TeacherServiceImpl implements TeacherService {
 	
 	@Autowired
@@ -32,16 +30,19 @@ public class TeacherServiceImpl implements TeacherService {
 	private ExcelService excelService;
 
 	@Override
-	public long save(@Valid TeacherDto dto) {
+	public ResponseDto save(TeacherDto dto) {
 		Teacher entity = teacherConverter.toEntity(dto);
-        return teacherRepository.save(entity).getId();
+        return new ResponseDto(teacherRepository.save(entity));
 	}
 
 	@Override
-	public TeacherDto findByUserId(@NotBlank String userId) {
-		// TODO Auto-generated method stub
-		return teacherConverter.toDto(teacherRepository.findByUserId(userId)
-				.orElseThrow(()-> new EntityNotFoundException("Không tìm thấy người dùng với id = " + userId)));
+	public ResponseDto findByUserId(String userId) {
+		Teacher entity = teacherRepository.findByUserId(userId).orElse(null);
+		if(entity == null) {
+			return new ResponseDto(Utility.getMessage(ETimMessages.ENTITY_NOT_FOUND, 
+					TimConstants.ActualEntityName.TEACHER, "Mã GV", userId), entity);
+		}
+		return new ResponseDto(entity);
 	}
 
 	@Override
