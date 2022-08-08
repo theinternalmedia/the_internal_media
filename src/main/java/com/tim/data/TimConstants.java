@@ -10,9 +10,11 @@ public final class TimConstants {
 	// Admin root
 	public static final String ADMIN_ROOT = "admin";
 
+	// Response
 	public static final String OK_STATUS = "ok";
-	public static final String UNEXPECTED_STATUS = "unexpected";
+	public static final String NOT_OK_STATUS = "not ok";
 	public static final String OK_MESSAGE = "success";
+	public static final String NOT_OK_MESSAGE = "unsuccess";
 
 	public static final List<String> IMAGE_MIME_TYPE = Arrays.asList("png", "jpeg", "jpg", "gif");
 	public static final List<String> VIDEO_MIME_TYPE = Arrays.asList("mpeg-4", "mpeg-2", "mp4", "flv", "avi");
@@ -106,7 +108,7 @@ public final class TimConstants {
 	}
 	
 	public static class ActualEntityName {
-		public static final String TEACHER = "GiaoVien";
-		public static final String STUDENT = "SinhVien";
+		public static final String TEACHER = "Giáo Viên";
+		public static final String STUDENT = "Sinh Viên";
 	}
 }

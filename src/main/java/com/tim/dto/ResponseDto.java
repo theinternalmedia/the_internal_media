@@ -2,6 +2,7 @@ package com.tim.dto;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.tim.data.TimConstants;
@@ -32,17 +33,23 @@ public class ResponseDto implements Serializable {
 	@Setter
 	private Object data = null;
 
-	public ResponseDto(String message, Object data) {
+	public ResponseDto(String message) {
 		super();
-		this.message = message;
-		this.data = data;
-		if (!StringUtils.equalsIgnoreCase(message, message)) {
-			this.status = TimConstants.UNEXPECTED_STATUS;
+		this.status = TimConstants.NOT_OK_STATUS;
+		if (StringUtils.isEmpty(this.message)) {
+			this.message = TimConstants.NOT_OK_MESSAGE;
+		} else {
+			this.message = message;
 		}
 	}
 
 	public ResponseDto(Object data) {
 		super();
-		this.data = data;
+		if (ObjectUtils.isEmpty(data)) {
+			this.status = TimConstants.NOT_OK_STATUS;
+			this.message = TimConstants.NOT_OK_MESSAGE;
+		} else {
+			this.data = data;
+		}
 	}
 }

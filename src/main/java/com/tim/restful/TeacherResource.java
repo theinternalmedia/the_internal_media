@@ -5,9 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,11 +35,16 @@ public class TeacherResource extends AbstractResource {
 		return ResponseEntity.ok(teacherService.save(teacherDto));
 	}
 	
-//	@PostMapping(TimApiPath.Teacher.UPLOAD_EXCEL)
-//	public List<?> uplaodExcelFile(@RequestPart("file") MultipartFile file) {
-//		List<TeacherDto> dtos = teacherService.importExcelFile(file);
-//		teacherService.exportExcelFile(TimConstants.ExcelFiledName.TEACHER, dtos);
-//		return dtos;
-//	}
+	@PostMapping(TimApiPath.Teacher.UPLOAD_EXCEL)
+	public List<?> uplaodExcelFile(@RequestPart("file") MultipartFile file) {
+		List<TeacherDto> dtos = teacherService.importExcelFile(file);
+		teacherService.exportExcelFile(TimConstants.ExcelFiledName.TEACHER, dtos);
+		return dtos;
+	}
+	
+	@GetMapping(TimApiPath.Teacher.GET)
+	public ResponseEntity<ResponseDto> get(@RequestParam("userId") String userId){
+		return ResponseEntity.ok(teacherService.findByUserId(userId));
+	}
 	
 }

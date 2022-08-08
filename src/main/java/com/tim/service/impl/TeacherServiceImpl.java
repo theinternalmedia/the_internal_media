@@ -32,7 +32,7 @@ public class TeacherServiceImpl implements TeacherService {
 	@Override
 	public ResponseDto save(TeacherDto dto) {
 		Teacher entity = teacherConverter.toEntity(dto);
-        return new ResponseDto(teacherRepository.save(entity));
+        return new ResponseDto(teacherConverter.toDto(teacherRepository.save(entity)));
 	}
 
 	@Override
@@ -40,9 +40,9 @@ public class TeacherServiceImpl implements TeacherService {
 		Teacher entity = teacherRepository.findByUserId(userId).orElse(null);
 		if(entity == null) {
 			return new ResponseDto(Utility.getMessage(ETimMessages.ENTITY_NOT_FOUND, 
-					TimConstants.ActualEntityName.TEACHER, "Mã GV", userId), entity);
+					TimConstants.ActualEntityName.TEACHER, "Mã GV", userId));
 		}
-		return new ResponseDto(entity);
+		return new ResponseDto(teacherConverter.toDto(entity));
 	}
 
 	@Override
