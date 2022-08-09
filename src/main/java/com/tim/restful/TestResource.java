@@ -1,9 +1,8 @@
 package com.tim.restful;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.tim.dto.teacher.TeacherDto;
+import com.tim.utils.ValidationUtils;
+import org.springframework.web.bind.annotation.*;
 
 import com.tim.data.ETimMessages;
 import com.tim.utils.Utility;
@@ -15,6 +14,12 @@ public class TestResource extends AbstractResource {
 	
 	@GetMapping("/message")
 	public String testGetExceptionMessage() {
+		return Utility.getMessage(ETimMessages.ACCESS_DENIED);
+	}
+
+	@PostMapping("/message/teacher")
+	public String testExceptionMessage(@RequestBody TeacherDto teacherDto) {
+		ValidationUtils.validateObject(teacherDto);
 		return Utility.getMessage(ETimMessages.ACCESS_DENIED);
 	}
 }

@@ -22,8 +22,8 @@ import lombok.ToString;
 public class UserDto extends BaseDto {
 	private static final long serialVersionUID = -551690367785937349L;
 
-	@NotBlank(message = ValidationInput.User.ID_NOTBLANK)
-	@Size(max = 20, message = ValidationInput.User.ID_MAX_SIZE)
+	@NotBlank
+	@Size(max = 20)
 	private String userId;
 
 	@NotBlank(message = ValidationInput.User.NAME_NOTBLANK)
