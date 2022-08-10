@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.tim.data.TimConstants;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,7 +21,6 @@ import lombok.ToString;
  */
 @ToString
 @Getter
-@NoArgsConstructor
 public class ResponseDto implements Serializable {
 
 	private static final long serialVersionUID = -7573806538377205333L;
@@ -33,6 +33,10 @@ public class ResponseDto implements Serializable {
 	@Setter
 	private Object data = null;
 
+	/**
+	 * If have any problem and cannot get data, response a message to client
+	 * @param message
+	 */
 	public ResponseDto(String message) {
 		super();
 		this.status = TimConstants.NOT_OK_STATUS;
@@ -43,6 +47,10 @@ public class ResponseDto implements Serializable {
 		}
 	}
 
+	/**
+	 * Get data success
+	 * @param data
+	 */
 	public ResponseDto(Object data) {
 		super();
 		if (ObjectUtils.isEmpty(data)) {

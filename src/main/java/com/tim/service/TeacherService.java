@@ -7,6 +7,7 @@ import javax.validation.constraints.NotBlank;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.tim.dto.PagingResponseDto;
 import com.tim.dto.ResponseDto;
 import com.tim.dto.teacher.TeacherDto;
 
@@ -18,4 +19,6 @@ public interface TeacherService {
 	List<TeacherDto> importExcelFile(MultipartFile file);
 
 	void exportExcelFile(String fileName, List<TeacherDto> teacherDtos);
+	
+	PagingResponseDto getPaging(String facultyCode, String name, String userId, int page, int size);
 }

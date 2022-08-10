@@ -38,6 +38,17 @@ public class Faculty extends BaseEntity {
 	@OneToOne
 	private Teacher headOfFaculty;
 
+	@OneToMany(mappedBy = "faculty")
+	private Set<Teacher> teachers = new HashSet<>();
+	
+	public Set<Teacher> getTeachers() {
+		return teachers;
+	}
+
+	public void setTeachers(Set<Teacher> teachers) {
+		this.teachers = teachers;
+	}
+
 	public Teacher getHeadOfFaculty() {
 		return headOfFaculty;
 	}
