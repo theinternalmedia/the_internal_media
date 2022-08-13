@@ -1,16 +1,21 @@
 package com.tim.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "class")
+@Getter
+@Setter
 public class Class extends BaseEntity {
 
+	@Getter(AccessLevel.NONE)
 	private static final long serialVersionUID = 4599295413576661341L;
 
 	@Column(nullable = false, length = 50)
@@ -33,43 +38,7 @@ public class Class extends BaseEntity {
 	@JoinColumn(name = "faculty_id")
 	private Faculty faculty;
 
-	public Faculty getFaculty() {
-		return faculty;
-	}
+	@OneToMany(mappedBy = "aClass")
+	private Set<Student> students = new HashSet<>();
 
-	public void setFaculty(Faculty faculty) {
-		this.faculty = faculty;
-	}
-
-	public SchoolYear getSchoolYear() {
-		return schoolYear;
-	}
-
-	public void setSchoolYear(SchoolYear schoolYear) {
-		this.schoolYear = schoolYear;
-	}
-
-	public Teacher getAdviser() {
-		return adviser;
-	}
-
-	public void setAdviser(Teacher adviser) {
-		this.adviser = adviser;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
 }

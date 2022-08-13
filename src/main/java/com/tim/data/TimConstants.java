@@ -1,9 +1,7 @@
 package com.tim.data;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public final class TimConstants {
 	// App name
@@ -12,9 +10,11 @@ public final class TimConstants {
 	// Admin root
 	public static final String ADMIN_ROOT = "admin";
 
+	// Response
 	public static final String OK_STATUS = "ok";
+	public static final String NOT_OK_STATUS = "not ok";
 	public static final String OK_MESSAGE = "success";
-	public static final String FAIL_MESSAGE = "fail";
+	public static final String NOT_OK_MESSAGE = "unsuccess";
 
 	public static final List<String> IMAGE_MIME_TYPE = Arrays.asList("png", "jpeg", "jpg", "gif");
 	public static final List<String> VIDEO_MIME_TYPE = Arrays.asList("mpeg-4", "mpeg-2", "mp4", "flv", "avi");
@@ -56,6 +56,12 @@ public final class TimConstants {
 		public static final String[] TEACHER = { "userId", "name", "gender", "dob", "address", "phone" };
 	}
 	
+	/**
+	 * Header Field Name of Excel file be imported
+	 * 
+	 * @appName the_internal_media
+	 *
+	 */
 	public static class HeaderFields{
 		public static final String LINE_NUMBER = "STT";
 		public static final String[] TEACHER = { "Mã GV", "Họ tên", "Giới tính", "Ngày sinh", "Địa chỉ", "Điện thoại" };
@@ -74,11 +80,23 @@ public final class TimConstants {
 		public static final boolean FEMALE_BOOL = false;
 	}
 
-	public static class ExcelFileName {
+	/**
+	 * Excel file name be exported
+	 * 
+	 * @appName the_internal_media
+	 *
+	 */
+	public static class ExcelFiledName {
 		public static final String TEACHER = "GiaoVien";
 		public static final String STUDENT = "SinhVien";
 	}
 
+	/**
+	 * Type Value to get value from Excel Cell
+	 * 
+	 * @appName the_internal_media
+	 *
+	 */
 	public static class FieldType {
 		public static final String DOUBLE = "Double";
 		public static final String INTEGER = "Integer";
@@ -89,13 +107,9 @@ public final class TimConstants {
 		public static final String LONG = "Long";
 	}
 	
-	public static final Map<String, String> FIELD_NAME_CLIENT = new HashMap<String, String>();
-	static {
-		FIELD_NAME_CLIENT.put("userId", "Mã số SV/GV");
-		FIELD_NAME_CLIENT.put("address", "Địa chỉ");
-		FIELD_NAME_CLIENT.put("phone", "Số điện thoại");
-		FIELD_NAME_CLIENT.put("gender", "Giới tính");
-		FIELD_NAME_CLIENT.put("email", "Email");
-		FIELD_NAME_CLIENT.put("dob", "Ngày sinh");
+	public static class ActualEntityName {
+		public static final String TEACHER = "Giáo Viên";
+		public static final String STUDENT = "Sinh Viên";
+		public static final String NEWS = "Tin tức";
 	}
 }

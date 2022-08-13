@@ -1,5 +1,9 @@
 package com.tim.entity;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,8 +17,11 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "subject")
+@Setter
+@Getter
 public class Subject extends BaseEntity {
 
+	@Getter(value = AccessLevel.NONE)
 	private static final long serialVersionUID = -2808568424623733508L;
 
 	@Column(unique = true, nullable = false, length = 20)
@@ -41,51 +48,4 @@ public class Subject extends BaseEntity {
 	@OneToMany(mappedBy = "subject")
 	private Set<EducationProgramSubject> educationProgramSubjects = new HashSet<>();
 
-	public Set<EducationProgramSubject> getEducationProgramSubjects() {
-		return educationProgramSubjects;
-	}
-
-	public void setEducationProgramSubjects(Set<EducationProgramSubject> educationProgramSubjects) {
-		this.educationProgramSubjects = educationProgramSubjects;
-	}
-
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public int getNumberOfCredits() {
-		return numberOfCredits;
-	}
-
-	public void setNumberOfCredits(int numberOfCredits) {
-		this.numberOfCredits = numberOfCredits;
-	}
-
-	public boolean isMandatory() {
-		return mandatory;
-	}
-
-	public void setMandatory(boolean mandatory) {
-		this.mandatory = mandatory;
-	}
-
-	public float getPassMarks() {
-		return passMarks;
-	}
-
-	public void setPassMarks(float passMarks) {
-		this.passMarks = passMarks;
-	}
 }

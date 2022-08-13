@@ -16,7 +16,7 @@ public class CustomException extends RuntimeException {
 	
 	public CustomException(ETimMessages eTimMessages, String...values) {
 		this.code = eTimMessages.code;
-		this.message = Utility.getMessage(eTimMessages.code, values);
+		this.message = Utility.getMessage(eTimMessages, values);
 	}
 
 	public String getCode() {

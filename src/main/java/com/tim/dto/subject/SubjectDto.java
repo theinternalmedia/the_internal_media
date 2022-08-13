@@ -4,9 +4,9 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-import com.tim.data.ValidationInput;
 import com.tim.dto.BaseDto;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -21,17 +21,15 @@ import lombok.ToString;
 @ToString
 public class SubjectDto extends BaseDto {
 
-	/**
-	 * 
-	 */
+	@Getter(value = AccessLevel.NONE)
 	private static final long serialVersionUID = 1295707391155869293L;
 
-	@NotBlank(message = ValidationInput.General.CODE_NOTBLANK)
-	@Size(max = 50, message = ValidationInput.General.CODE_MAX_SIZE)
+	@Size(max = 20, min = 5)
+	@NotBlank
 	private String code;
 
-	@NotBlank(message = ValidationInput.General.NAME_NOTBLANK)
-	@Size(max = 50, message = ValidationInput.General.NAME_MAX_SIZE)
+	@Size(max = 50)
+	@NotBlank
 	private String name;
 
 	@Min(value = 1)
@@ -39,6 +37,6 @@ public class SubjectDto extends BaseDto {
 
 	private boolean mandatory = true;
 
-	@Size(min = 0, max = 10, message = ValidationInput.Mark.MARKS_MAX_SIZE)
+	@Size(min = 0, max = 10)
 	private float passMarks;
 }

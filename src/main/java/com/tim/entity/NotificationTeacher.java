@@ -1,15 +1,10 @@
 package com.tim.entity;
 
-import java.io.Serializable;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
 
 /**
  * 
@@ -19,13 +14,13 @@ import javax.persistence.UniqueConstraint;
 @Entity
 @Table(name = "notification_teacher", uniqueConstraints = 
 	@UniqueConstraint(columnNames = { "teacher_id", "notification_id" }))
-public class NotificationTeacher implements Serializable {
+@Getter
+@Setter
+public class NotificationTeacher extends BaseEntity {
 
+	@Getter(value = AccessLevel.NONE)
 	private static final long serialVersionUID = -6004676980630477079L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
 
 	@ManyToOne
 	@JoinColumn(name = "teacher_id")
@@ -35,27 +30,4 @@ public class NotificationTeacher implements Serializable {
 	@JoinColumn(name = "notification_id")
 	private Notification notification;
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Teacher getTeacher() {
-		return teacher;
-	}
-
-	public void setTeacher(Teacher teacher) {
-		this.teacher = teacher;
-	}
-
-	public Notification getNotification() {
-		return notification;
-	}
-
-	public void setNotification(Notification notification) {
-		this.notification = notification;
-	}
 }

@@ -1,5 +1,9 @@
 package com.tim.entity;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,11 +20,11 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "notification_group")
+@Getter
+@Setter
 public class NotificationGroup extends BaseEntity {
 
-	/**
-	 * 
-	 */
+	@Getter(value = AccessLevel.NONE)
 	private static final long serialVersionUID = 6768709466183693166L;
 
 	@Column(unique = true, nullable = false, length = 50)
@@ -34,19 +38,4 @@ public class NotificationGroup extends BaseEntity {
 	@OneToMany(mappedBy = "notificationGroup")
 	private Set<Notification> notifications = new HashSet<Notification>();
 
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
 }

@@ -1,5 +1,9 @@
 package com.tim.entity;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,8 +20,11 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "school_year")
+@Getter
+@Setter
 public class SchoolYear extends BaseEntity {
 
+	@Getter(value = AccessLevel.NONE)
 	private static final long serialVersionUID = -2144733263108216524L;
 
 	@Column(unique = true, nullable = false, length = 50)
@@ -33,36 +40,5 @@ public class SchoolYear extends BaseEntity {
 	
 	@OneToMany(mappedBy = "schoolYear")
 	private Set<Class> classes = new HashSet<Class>();
-	
-	public Set<Class> getClasses() {
-		return classes;
-	}
 
-	public void setClasses(Set<Class> classes) {
-		this.classes = classes;
-	}
-
-	public Set<EducationProgram> getEducationPrograms() {
-		return educationPrograms;
-	}
-
-	public void setEducationPrograms(Set<EducationProgram> educationPrograms) {
-		this.educationPrograms = educationPrograms;
-	}
-
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
 }

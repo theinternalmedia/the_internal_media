@@ -1,13 +1,13 @@
 package com.tim.entity;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.Size;
 
 /**
@@ -17,8 +17,11 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "faculty")
+@Getter
+@Setter
 public class Faculty extends BaseEntity {
 
+	@Getter(value = AccessLevel.NONE)
 	private static final long serialVersionUID = -1231129795415461931L;
 
 	@Column(unique = true, nullable = false, length = 50)
@@ -35,46 +38,10 @@ public class Faculty extends BaseEntity {
 	@OneToMany(mappedBy = "faculty")
 	private Set<Class> classes = new HashSet<Class>();
 
+	@ManyToMany(mappedBy = "faculties")
+	private Set<News> news = new HashSet<>();
+
 	@OneToOne
 	private Teacher headOfFaculty;
 
-	public Teacher getHeadOfFaculty() {
-		return headOfFaculty;
-	}
-
-	public void setHeadOfFaculty(Teacher headOfFaculty) {
-		this.headOfFaculty = headOfFaculty;
-	}
-
-	public Set<Class> getClasses() {
-		return classes;
-	}
-
-	public void setClasses(Set<Class> classes) {
-		this.classes = classes;
-	}
-
-	public Set<EducationProgram> getEducationPrograms() {
-		return educationPrograms;
-	}
-
-	public void setEducationPrograms(Set<EducationProgram> educationPrograms) {
-		this.educationPrograms = educationPrograms;
-	}
-
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
 }

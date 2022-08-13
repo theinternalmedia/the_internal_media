@@ -1,14 +1,13 @@
 package com.tim.entity;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * 
@@ -17,8 +16,11 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "student")
+@Getter
+@Setter
 public class Student extends User {
 
+	@Getter(value = AccessLevel.NONE)
 	private static final long serialVersionUID = 3541331733217756229L;
 
 	@ManyToMany
@@ -28,20 +30,8 @@ public class Student extends User {
 	@OneToMany(mappedBy = "student")
 	private Set<NotificationStudent> notificationStudents = new HashSet<NotificationStudent>();
 
-	public Set<NotificationStudent> getNotificationStudents() {
-		return notificationStudents;
-	}
-
-	public void setNotificationStudents(Set<NotificationStudent> notificationStudents) {
-		this.notificationStudents = notificationStudents;
-	}
-
-	public Set<Role> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(Set<Role> roles) {
-		this.roles = roles;
-	}
+	@ManyToOne
+	@JoinColumn(name = "class_id")
+	private Class aClass;
 
 }

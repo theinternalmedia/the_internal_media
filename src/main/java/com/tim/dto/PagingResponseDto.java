@@ -1,8 +1,8 @@
 package com.tim.dto;
 
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -14,10 +14,10 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class PagingResponseDto<T extends BaseDto> extends ResponseDto<T> {
+@Builder
+public class PagingResponseDto extends ResponseDto {
 
+	@Getter(value = AccessLevel.NONE)
 	private static final long serialVersionUID = -534561158613722144L;
 
 	private long totalItem;

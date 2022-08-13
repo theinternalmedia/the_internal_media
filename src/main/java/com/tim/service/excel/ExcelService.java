@@ -65,7 +65,7 @@ public class ExcelService implements ExcelFileService {
 				for (Field field : fields) {
 					field.setAccessible(true);
 					if (exf[i].getPojoAttribute().equalsIgnoreCase(field.getName())) {
-						validateMsg = ValidationUtils.getMessageValidateField(field, exf[i].getExcelHeader(),
+						validateMsg = ValidationUtils.getValidateFieldMessage(field, exf[i].getExcelHeader(),
 								exf[i].getExcelValue());
 						if (StringUtils.isNotBlank(validateMsg)) {
 							errs.add(exf[i].getCellAddress() + ": " + validateMsg);

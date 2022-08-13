@@ -40,7 +40,7 @@ public class ValidationUtils {
 	 * @param value     value of 'field'
 	 * @return Error Message if have any validated error, otherwise return NULL
 	 */
-	public static String getMessageValidateField(final Field field, final String fieldName, final Object value) {
+	public static String getValidateFieldMessage(final Field field, final String fieldName, final Object value) {
 		field.setAccessible(true);
 		if (field.isAnnotationPresent(Size.class)) {
 			Size size = field.getAnnotation(Size.class);
@@ -101,7 +101,7 @@ public class ValidationUtils {
 		Class<?> objectClass = object.getClass();
 
 		// Get actual name of object
-		String simpleName = objectClass.getSimpleName();
+		final String simpleName = objectClass.getSimpleName();
 
 		// Get List actual field name response to Client from file json config
 		final Map<String, String> actualFieldNames = Utility
@@ -109,20 +109,26 @@ public class ValidationUtils {
 						new TypeReference<Map<String, Map<String, String>>>() {
 				}).get(simpleName);
 		// Get actual object name response to Client from file json config
-		final String actualOjectName = Utility
+		String actualOjectName = Utility
 				.getObjectFromJsonFile(TimConstants.ACTUAL_OBJECT_NAME_FILE, 
 						new TypeReference<Map<String, String>>() {
 				}).get(simpleName);
+		if(actualOjectName == null) {
+			actualOjectName = simpleName;
+		}
 		// Get fields from parent class
 		Class<?> parent = objectClass.getSuperclass();
 
 		Field[] fields = ArrayUtils.addAll(parent.getDeclaredFields(), objectClass.getDeclaredFields());
 
 		// Loop to validate fields
+		String fieldName = null;
 		for (Field field : fields) {
 			field.setAccessible(true);
 			try {
-				String mes = getMessageValidateField(field, actualFieldNames.get(field.getName()), field.get(object));
+				fieldName = actualFieldNames.get(field.getName());
+				String mes = getValidateFieldMessage(field, 
+						fieldName != null ? fieldName : field.getName(), field.get(object));
 				if (mes != null) {
 					errMessages.add(mes);
 				}

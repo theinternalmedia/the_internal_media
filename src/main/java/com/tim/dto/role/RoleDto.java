@@ -1,46 +1,26 @@
 package com.tim.dto.role;
 
+import com.tim.dto.BaseDto;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-import com.tim.dto.BaseDto;
 
-/**
- * 
- * @appName the_internal_media
- *
- */
+@Getter
+@Setter
 public class RoleDto extends BaseDto {
 
-	private static final long serialVersionUID = -2024352697260945512L;
+    @Getter(value = AccessLevel.NONE)
+    private static final long serialVersionUID = 353045816102903559L;
 
-	@Size(max = 50)
-	private String code;
+    @NotBlank
+    @Size(max = 50, min = 4)
+    private String name;
 
-	@Size(max = 50)
-	private String name;
-
-
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
-
-	public RoleDto() {
-	}
-
-	public RoleDto(String name) {
-		super();
-		this.name = name;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
+    @NotBlank
+    @Size(max = 50, min = 4)
+    private String code;
 }

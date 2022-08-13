@@ -1,5 +1,9 @@
 package com.tim.entity;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,8 +22,11 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "teacher")
+@Getter
+@Setter
 public class Teacher extends User {
 
+	@Getter(value = AccessLevel.NONE)
 	private static final long serialVersionUID = 2186238218422351720L;
 
 	@Column(columnDefinition = "boolean default false")
@@ -37,44 +44,5 @@ public class Teacher extends User {
 	
 	@OneToMany(mappedBy = "teacher")
 	private Set<NotificationTeacher> notificationTeachers = new HashSet<NotificationTeacher>();
-	
-	public Set<NotificationTeacher> getNotificationTeachers() {
-		return notificationTeachers;
-	}
 
-	public void setNotificationTeachers(Set<NotificationTeacher> notificationTeachers) {
-		this.notificationTeachers = notificationTeachers;
-	}
-
-	public Set<Class> getClasses() {
-		return classes;
-	}
-
-	public void setClasses(Set<Class> classes) {
-		this.classes = classes;
-	}
-
-	public boolean isHeadOfFaculty() {
-		return isHeadOfFaculty;
-	}
-
-	public void setHeadOfFaculty(boolean isHeadOfFaculty) {
-		this.isHeadOfFaculty = isHeadOfFaculty;
-	}
-
-	public boolean isManager() {
-		return isManager;
-	}
-
-	public void setManager(boolean isManager) {
-		this.isManager = isManager;
-	}
-
-	public Set<Role> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(Set<Role> roles) {
-		this.roles = roles;
-	}
 }

@@ -1,4 +1,8 @@
 {
 	"TeacherDto": "Giảng Viên",
-	"StudentDto": "Sinh Viên"
+	"StudentDto": "Sinh Viên",
+	"SchoolYearDto": "Niên Khóa",
+	"NotificationDto": "Thông báo",
+	"NewsDto": "Tin tức",
+	"NotificationGroupDto": "Thông báo nhóm"
 }

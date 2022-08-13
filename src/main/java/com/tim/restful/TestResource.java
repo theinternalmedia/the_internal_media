@@ -11,10 +11,10 @@ import com.tim.utils.Utility;
 @RestController
 @RequestMapping("/test")
 public class TestResource extends AbstractResource {
-	
+
 	@GetMapping("/message")
 	public String testGetExceptionMessage() {
-		return Utility.getMessage(ETimMessages.ACCESS_DENIED);
+		return Utility.getMessage(ETimMessages.INTERNAL_SYSTEM_ERROR);
 	}
 
 	@PostMapping("/message/teacher")
