@@ -110,5 +110,6 @@ public final class TimConstants {
 	public static class ActualEntityName {
 		public static final String TEACHER = "Giáo Viên";
 		public static final String STUDENT = "Sinh Viên";
+		public static final String CLASS = "lớp"; 
 	}
 }
