@@ -1,5 +1,7 @@
 package com.tim.converter;
 
+import java.util.List;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -20,19 +22,37 @@ public abstract class AbstractConverter<T1 extends BaseDto, T2 extends BaseEntit
 	
 	/**
 	 * convert from Entity to Dto
-	 * @param entity
-	 * @return an Dto class after convert from an Entity
+	 * @param entity an Entity
+	 * @return an Dto after convert from an Entity
 	 */
 	public T1 toDto(T2 entity) {
 		return null;
 	};
 	
 	/**
+	 * convert from EntityList to DtoList
+	 * @param entityList an EntityList
+	 * @return an DtoList after convert from an EntityList
+	 */
+	public List<T1> toDtoList(List<T2> entityList) {
+		return null;
+	};
+	
+	/**
 	 * convert from Dto to Entity
-	 * @param dto
-	 * @return an Entity class after convert from an Dto
+	 * @param dto an Dto
+	 * @return an Entity after convert from an Dto
 	 */
 	public T2 toEntity(T1 dto) {
+		return null;
+	};
+	
+	/**
+	 * convert from dtoList to entityList
+	 * @param dtoList an DtoList
+	 * @return an EntityList after convert from an dtoList
+	 */
+	public List<T2> toEntityList(List<T1> dtoList) {
 		return null;
 	};
 	

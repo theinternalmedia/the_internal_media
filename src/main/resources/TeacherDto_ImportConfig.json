@@ -47,5 +47,12 @@
 		"excelColType": "LocalDate",
 		"excelValue": null,
 		"pojoAttribute": "dob"
+	},
+	{
+		"excelHeader": "Mã Khoa",
+		"excelIndex": 8,
+		"excelColType": "String",
+		"excelValue": null,
+		"pojoAttribute": "facultyCode"
 	}
 ]

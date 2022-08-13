@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
  * @appName the_internal_media
  *
  */
-public class BaseDto implements Serializable {
+public class BaseDto extends TestClass implements Serializable {
 
 	private static final long serialVersionUID = 7702340293141714083L;
 

@@ -52,11 +52,19 @@ public class Notification extends NewsAndNotify {
 		this.notificationTeachers = notificationTeachers;
 	}
 
-	public int getGroup() {
+	public int getType() {
 		return type;
 	}
 
-	public void setGroup(int group) {
-		this.type = group;
+	public void setType(int type) {
+		this.type = type;
+	}
+
+	public NotificationGroup getNotificationGroup() {
+		return notificationGroup;
+	}
+
+	public void setNotificationGroup(NotificationGroup notificationGroup) {
+		this.notificationGroup = notificationGroup;
 	}
 }

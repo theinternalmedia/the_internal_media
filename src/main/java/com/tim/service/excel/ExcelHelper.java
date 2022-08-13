@@ -69,11 +69,14 @@ public class ExcelHelper {
 	 * @param className is name of Object
 	 * @return List<ExcelField[]> is list Object In ExcelField
 	 */
-	public List<ExcelField[]> readFromExcel(final MultipartFile file, String className) {
+	public <T> List<ExcelField[]> readFromExcel(final MultipartFile file, Class<T> clazz) {
 
 		List<ExcelField[]> excelFieldArrayList = new ArrayList<ExcelField[]>();
 
 		List<String> cellErrs = new ArrayList<String>();
+		
+		// Get Object Name
+		final String className = clazz.getSimpleName();
 
 		// 1.Get workBook from file Excel
 		Workbook workBook = readExcel(file);
@@ -153,7 +156,7 @@ public class ExcelHelper {
 					}
 				} catch (IllegalStateException e) {
 					logger.error(e.getMessage(), e);
-					cellErrs.add(Utility.getMessage(ETimMessages.INVALID_EXCEL_VALUE, cell.getAddress().toString()));
+					cellErrs.add(Utility.getMessage(ETimMessages.INVALID_CELL_VALUE, cell.getAddress().toString()));
 					e.printStackTrace();
 					continue;
 				}
@@ -162,7 +165,8 @@ public class ExcelHelper {
 			excelFieldArrayList.add(excelFieldArr);
 		}
 		if (cellErrs.size() > 0) {
-			throw new ValidateException(ETimMessages.INVALID_EXCEL_VALUE, cellErrs);
+			throw new ValidateException(ETimMessages.INVALID_EXCEL_VALUE, cellErrs, 
+					Utility.getActualObjectName(className));
 		}
 		return excelFieldArrayList;
 	}

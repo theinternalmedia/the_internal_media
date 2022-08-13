@@ -30,16 +30,16 @@ public class TeacherResource extends AbstractResource {
 	private TeacherService teacherService;
 	
 	@PostMapping(TimApiPath.Teacher.SAVE)
-	public ResponseEntity<ResponseDto> save(@RequestBody TeacherDto teacherDto) {
+	public ResponseDto save(@RequestBody TeacherDto teacherDto) {
 		ValidationUtils.validateObject(teacherDto);
-		return ResponseEntity.ok(teacherService.save(teacherDto));
+//		return ResponseEntity.ok(teacherService.save(teacherDto));
+		return new ResponseDto();
+//		return teacherService.save(teacherDto);
 	}
 	
 	@PostMapping(TimApiPath.Teacher.UPLOAD_EXCEL)
-	public List<?> uplaodExcelFile(@RequestPart("file") MultipartFile file) {
-		List<TeacherDto> dtos = teacherService.importExcelFile(file);
-		teacherService.exportExcelFile(TimConstants.ExcelFiledName.TEACHER, dtos);
-		return dtos;
+	public ResponseDto uplaodExcelFile(@RequestPart("file") MultipartFile file) {
+		return teacherService.save(file);
 	}
 	
 	@GetMapping(TimApiPath.Teacher.GET)

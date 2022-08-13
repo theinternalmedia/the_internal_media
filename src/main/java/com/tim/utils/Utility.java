@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tim.data.ETimMessages;
+import com.tim.data.TimConstants;
 import com.tim.exception.CustomException;
 import com.tim.exception.GlobalExceptionHandler;
 
@@ -81,5 +83,15 @@ public class Utility {
 	private static String getMessage(String code, String... values) {
 		String message = messageSource.getMessage(code, values, EXCEPTION_MESSAGE_DEFAULT, null);
 		return message;
+	}
+	
+	/**
+	 * @author minhtuanitk43
+	 * @param key 
+	 * @return Actual Object Name (classSimpleName)
+	 */
+	public static String getActualObjectName(String key) {
+		return getObjectFromJsonFile(TimConstants.ACTUAL_OBJECT_NAME_FILE, new TypeReference<Map<String, String>>() {
+		}).get(key);
 	}
 }

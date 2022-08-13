@@ -6,7 +6,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -15,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.tim.data.ETimMessages;
 import com.tim.data.TimConstants;
 import com.tim.dto.excel.ExcelField;
@@ -35,18 +33,22 @@ public class ExcelService implements ExcelFileService {
 
 	final static DateTimeFormatter dtf = DateTimeFormatter.ofPattern(TimConstants.USER_DOB_FORMAT);
 
+	/**
+	 * getListObjectFromExcelFile
+	 * @param excelFile excelFile
+	 * @param clazz Object Class
+	 * @return List<T> list Object from file Excel
+	 */
 	@Override
 	public <T extends Object> List<T> getListObjectFromExcelFile(final MultipartFile excelFile, Class<T> clazz)
 			throws ValidateException {
+		List<T> list = new ArrayList<>();
 		List<String> errs = new ArrayList<String>();
 		String simpleName = clazz.getSimpleName();
 		// Get actual object name response to Client from file json config
-		final String actualOjectName = Utility
-				.getObjectFromJsonFile(TimConstants.ACTUAL_OBJECT_NAME_FILE, 
-						new TypeReference<Map<String, String>>() {
-				}).get(simpleName);
-		List<T> list = new ArrayList<>();
-		List<ExcelField[]> excelFields = excelHelper.readFromExcel(excelFile, simpleName);
+		final String actualOjectName = Utility.getActualObjectName(simpleName);
+		
+		List<ExcelField[]> excelFields = excelHelper.readFromExcel(excelFile, clazz);
 		String validateMsg = null;
 		for (ExcelField[] exf : excelFields) {
 			T t = null;
@@ -65,10 +67,13 @@ public class ExcelService implements ExcelFileService {
 				for (Field field : fields) {
 					field.setAccessible(true);
 					if (exf[i].getPojoAttribute().equalsIgnoreCase(field.getName())) {
-						validateMsg = ValidationUtils.getValidateFieldMessage(field, exf[i].getExcelHeader(),
-								exf[i].getExcelValue());
-						if (StringUtils.isNotBlank(validateMsg)) {
-							errs.add(exf[i].getCellAddress() + ": " + validateMsg);
+						// Validate field if field has annotations
+						if (field.getAnnotations().length > 0) {
+							validateMsg = ValidationUtils.getValidateFieldMessage(field, exf[i].getExcelHeader(),
+									exf[i].getExcelValue());
+							if (StringUtils.isNotBlank(validateMsg)) {
+								errs.add(exf[i].getCellAddress() + ": " + validateMsg);
+							}
 						}
 						try {
 							switch (exf[i].getExcelColType()) {

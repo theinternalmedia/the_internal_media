@@ -1,9 +1,13 @@
 package com.tim.entity;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
@@ -32,6 +36,17 @@ public class Class extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "faculty_id")
 	private Faculty faculty;
+	
+	@OneToMany(mappedBy = "myClass")
+	private Set<Student> students = new HashSet<Student>();
+
+	public Set<Student> getStudents() {
+		return students;
+	}
+
+	public void setStudents(Set<Student> students) {
+		this.students = students;
+	}
 
 	public Faculty getFaculty() {
 		return faculty;

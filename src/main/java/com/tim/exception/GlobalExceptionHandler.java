@@ -65,10 +65,10 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ErrorResponse> validateionException(Exception ex) {
-		logger.info(ex.getClass().getName());
+		logger.info(ex.getMessage());
 		ErrorResponse errorResponse = new ErrorResponse(
 				Utility.getMessage(ETimMessages.INTERNAL_SYSTEM_ERROR), null);
-		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 }

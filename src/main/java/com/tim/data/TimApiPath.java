@@ -14,4 +14,10 @@ public final class TimApiPath {
 		public static final String UPLOAD_EXCEL = "/upload-excel";
 		public static final String GET = "/get";
 	}
+	
+	public static class Notification{
+		public static final String PREFIX = TIM_API_PREFIX + "/notification";
+		public static final String SAVE = "/";
+		public static final String GET = "/";
+	}
 }

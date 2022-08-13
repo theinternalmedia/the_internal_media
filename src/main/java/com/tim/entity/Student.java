@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -27,6 +28,18 @@ public class Student extends User {
 	
 	@OneToMany(mappedBy = "student")
 	private Set<NotificationStudent> notificationStudents = new HashSet<NotificationStudent>();
+
+	@ManyToOne
+	@JoinColumn(name = "class_id")
+	private Class myClass;
+	
+	public Class getMyClass() {
+		return myClass;
+	}
+
+	public void setMyClass(Class myClass) {
+		this.myClass = myClass;
+	}
 
 	public Set<NotificationStudent> getNotificationStudents() {
 		return notificationStudents;

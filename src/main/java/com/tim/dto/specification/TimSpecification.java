@@ -16,7 +16,7 @@ import org.springframework.data.jpa.domain.Specification;
  *
  * @param <T> Entity
  */
-public class TimSpecification<T> implements Specification<T> {
+public class TimSpecification<T> implements Specification<T>{
 
 	private static final long serialVersionUID = -378544062055384017L;
 

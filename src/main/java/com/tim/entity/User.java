@@ -39,7 +39,7 @@ public abstract class User extends BaseEntity {
 	@Size(max = 100)
 	private String password;
 
-	@Column(columnDefinition = "boolean default false")
+	@Column(columnDefinition = "boolean default true")
 	private boolean gender = true;
 
 	@Column
