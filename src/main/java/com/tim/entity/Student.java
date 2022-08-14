@@ -31,14 +31,14 @@ public class Student extends User {
 
 	@ManyToOne
 	@JoinColumn(name = "class_id")
-	private Class myClass;
-	
-	public Class getMyClass() {
-		return myClass;
+	private Classz classz;
+
+	public Classz getClassz() {
+		return classz;
 	}
 
-	public void setMyClass(Class myClass) {
-		this.myClass = myClass;
+	public void setClassz(Classz classz) {
+		this.classz = classz;
 	}
 
 	public Set<NotificationStudent> getNotificationStudents() {

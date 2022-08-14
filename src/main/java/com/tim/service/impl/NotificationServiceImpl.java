@@ -51,7 +51,7 @@ public class NotificationServiceImpl implements NotificationService{
 		case TimConstants.NotificationType.TO_STUDENT:
 			if(ObjectUtils.isNotEmpty(requestDto.getSchoolYearCodes())) {
 				if(ObjectUtils.isNotEmpty(requestDto.getFacultyCodes())) {
-//					List<Student> students = studentRepository.getBy
+//					List<Student> students = studentRepository.getIn
 //					notificationStudentRepository
 				}
 			}

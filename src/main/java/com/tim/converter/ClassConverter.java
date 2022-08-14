@@ -3,7 +3,7 @@ package com.tim.converter;
 import org.springframework.stereotype.Component;
 
 import com.tim.dto.classes.ClassDto;
-import com.tim.entity.Class;
+import com.tim.entity.Classz;
 
 /**
  * 
@@ -11,16 +11,16 @@ import com.tim.entity.Class;
  *
  */
 @Component
-public class ClassConverter extends AbstractConverter<ClassDto, Class> {
+public class ClassConverter extends AbstractConverter<ClassDto, Classz> {
 
     @Override
-	public ClassDto toDto(Class entity) {
+	public ClassDto toDto(Classz entity) {
     	ClassDto model = this.modelMapper.map(entity, ClassDto.class);
         return model;
     }
 
     @Override
-	public Class toEntity(ClassDto dto) {
-        return this.modelMapper.map(dto, Class.class);
+	public Classz toEntity(ClassDto dto) {
+        return this.modelMapper.map(dto, Classz.class);
     }
 }

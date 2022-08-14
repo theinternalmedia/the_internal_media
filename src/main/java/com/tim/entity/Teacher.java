@@ -34,7 +34,7 @@ public class Teacher extends User {
 	private Set<Role> roles = new HashSet<>();
 
 	@OneToMany(mappedBy = "adviser")
-	private Set<Class> classes = new HashSet<Class>();;
+	private Set<Classz> classes = new HashSet<Classz>();;
 	
 	@OneToMany(mappedBy = "teacher")
 	private Set<NotificationTeacher> notificationTeachers = new HashSet<NotificationTeacher>();
@@ -58,11 +58,11 @@ public class Teacher extends User {
 		this.notificationTeachers = notificationTeachers;
 	}
 
-	public Set<Class> getClasses() {
+	public Set<Classz> getClasses() {
 		return classes;
 	}
 
-	public void setClasses(Set<Class> classes) {
+	public void setClasses(Set<Classz> classes) {
 		this.classes = classes;
 	}
 

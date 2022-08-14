@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "class")
-public class Class extends BaseEntity {
+public class Classz extends BaseEntity {
 
 	private static final long serialVersionUID = 4599295413576661341L;
 
@@ -37,7 +37,7 @@ public class Class extends BaseEntity {
 	@JoinColumn(name = "faculty_id")
 	private Faculty faculty;
 	
-	@OneToMany(mappedBy = "myClass")
+	@OneToMany(mappedBy = "classz")
 	private Set<Student> students = new HashSet<Student>();
 
 	public Set<Student> getStudents() {

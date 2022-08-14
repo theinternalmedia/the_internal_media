@@ -2,7 +2,7 @@ package com.tim.service.impl;
 
 import com.tim.converter.ClassConverter;
 import com.tim.dto.classes.ClassDto;
-import com.tim.entity.Class;
+import com.tim.entity.Classz;
 import com.tim.repository.ClassRepository;
 import com.tim.service.ClassService;
 
@@ -17,7 +17,7 @@ public class ClassServiceImpl implements ClassService {
 	private ClassConverter classConverter;
 	@Override
 	public long save(ClassDto classDto) {
-		Class entity = classConverter.toEntity(classDto);
+		Classz entity = classConverter.toEntity(classDto);
 		return classRepository.save(entity).getId();
 	}
 }

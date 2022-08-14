@@ -33,7 +33,7 @@ public class Faculty extends BaseEntity {
 	private Set<EducationProgram> educationPrograms = new HashSet<>();
 
 	@OneToMany(mappedBy = "faculty")
-	private Set<Class> classes = new HashSet<Class>();
+	private Set<Classz> classes = new HashSet<Classz>();
 
 	@OneToOne
 	private Teacher headOfFaculty;
@@ -57,11 +57,11 @@ public class Faculty extends BaseEntity {
 		this.headOfFaculty = headOfFaculty;
 	}
 
-	public Set<Class> getClasses() {
+	public Set<Classz> getClasses() {
 		return classes;
 	}
 
-	public void setClasses(Set<Class> classes) {
+	public void setClasses(Set<Classz> classes) {
 		this.classes = classes;
 	}
 
