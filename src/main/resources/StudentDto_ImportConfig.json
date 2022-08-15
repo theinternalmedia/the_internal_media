@@ -54,5 +54,12 @@
 		"excelColType": "String",
 		"excelValue": null,
 		"pojoAttribute": "classCode"
+	},
+	{
+		"excelHeader": "Mật khẩu",
+		"excelIndex": 9,
+		"excelColType": "String",
+		"excelValue": null,
+		"pojoAttribute": "password"
 	}
 ]

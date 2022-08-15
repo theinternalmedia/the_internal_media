@@ -1,9 +1,13 @@
 package com.tim.converter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import com.tim.dto.student.StudentDto;
 import com.tim.entity.Student;
+import com.tim.entity.Teacher;
 
 /**
  * 
@@ -24,4 +28,13 @@ public class StudentConverter extends AbstractConverter<StudentDto, Student> {
 	public Student toEntity(StudentDto dto) {
         return this.modelMapper.map(dto, Student.class);
     }
+    
+    @Override
+    	public List<StudentDto> toDtoList(List<Student> entityList) {
+    	List<StudentDto> result = new ArrayList<>();
+    	entityList.forEach(item -> {
+			result.add(toDto(item));
+		});
+		return result;
+    	}
 }

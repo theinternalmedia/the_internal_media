@@ -1,5 +1,6 @@
 package com.tim.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,4 +17,6 @@ public interface StudentRepository extends JpaRepository<Student, Long>, JpaSpec
 	Optional<Student> findByUserId(String userId);
 
 	Boolean existsByUserId(String userId);
+
+	List<Student> getByStatusTrue();
 }

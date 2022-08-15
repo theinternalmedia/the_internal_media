@@ -30,4 +30,6 @@ public class FacultyDto extends BaseDto {
 	@Size(max = 50)
 	@NotBlank
 	private String name;
+	
+	private String headOfFacultyUserId;
 }

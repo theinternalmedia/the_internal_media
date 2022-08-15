@@ -1,7 +1,8 @@
 package com.tim.service;
 
-import com.tim.dto.classes.ClassDto;
+import com.tim.dto.ResponseDto;
+import com.tim.dto.classz.ClassDto;
 
 public interface ClassService {
-	long save(ClassDto classDto);
+	ResponseDto insert(ClassDto classDto);
 }

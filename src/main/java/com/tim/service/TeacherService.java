@@ -12,7 +12,7 @@ public interface TeacherService {
 	 * @param dto
 	 * @return ResponseDto include status ok if success, else not ok. message and data if have return data
 	 */
-	ResponseDto save(TeacherDto dto);
+	ResponseDto insert(TeacherDto dto);
 
 	/**
 	 * @author minhtuanitk43
@@ -26,7 +26,7 @@ public interface TeacherService {
 	 * @param file excel file
 	 * @return ResponseDto include status ok if success, else not ok. message and data if have return data
 	 */
-	ResponseDto save(MultipartFile file);
+	ResponseDto insert(MultipartFile file);
 	
 	String exportToExcelFile();
 	
@@ -40,4 +40,5 @@ public interface TeacherService {
 	 * @return PagingResponseDto include totalItem, totalPage, page, size and content(data)
 	 */
 	PagingResponseDto getPaging(String facultyCode, String name, String userId, int page, int size);
+
 }

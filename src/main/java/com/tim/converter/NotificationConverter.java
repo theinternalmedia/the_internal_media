@@ -18,4 +18,9 @@ public class NotificationConverter extends AbstractConverter<NotificationDto, No
 	public Notification toEntity(NotificationDto dto) {
 		return this.modelMapper.map(dto, Notification.class);
 	}
+	
+	@Override
+	public NotificationDto toDto(Notification entity) {
+		return modelMapper.map(entity, NotificationDto.class);
+	}
 }

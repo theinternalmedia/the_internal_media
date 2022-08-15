@@ -2,7 +2,7 @@ package com.tim.converter;
 
 import org.springframework.stereotype.Component;
 
-import com.tim.dto.classes.ClassDto;
+import com.tim.dto.classz.ClassDto;
 import com.tim.entity.Classz;
 
 /**

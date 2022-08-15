@@ -1,4 +1,4 @@
-package com.tim.dto.classes;
+package com.tim.dto.classz;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -30,5 +30,11 @@ public class ClassDto extends BaseDto {
 	@Size(max = 50)
 	@NotBlank
 	private String name;
+	
+	private String facultyCode;
+	
+	private String advisorId;
+	
+	private String schoolYearCode;
 
 }
