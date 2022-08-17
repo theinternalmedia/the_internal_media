@@ -47,7 +47,8 @@ public class SwaggerConfig {
 	        .securitySchemes(Arrays.asList(apiKey()))
 	        .select()
 	        .apis(RequestHandlerSelectors.basePackage("com.tim.restful"))
-	        .paths(PathSelectors.ant("/api/*"))
+//	        .apis(RequestHandlerSelectors.any())
+	        .paths(PathSelectors.any())
 	        .build();
 	  }
 

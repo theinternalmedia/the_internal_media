@@ -23,7 +23,7 @@ public class Notification extends NewsAndNotify {
 
 	private static final long serialVersionUID = -3329374106026587815L;
 
-	@Column(nullable = false, columnDefinition = "integer default 1")
+	@Column(nullable = false, columnDefinition = "integer default 0")
 	private int type = TimConstants.NotificationType.TO_ALL;
 	
 	@OneToMany(mappedBy = "notification")

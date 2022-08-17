@@ -14,7 +14,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 
@@ -121,21 +120,6 @@ public class ValidationUtils {
 			fields = ArrayUtils.addAll(objectClass.getDeclaredFields());
 			objectClass = objectClass.getSuperclass();
 		}
-		// Get parent class
-//		Class<?> parent = objectClass.getSuperclass();
-//		// Parent fieldName map
-//		Map<String, String> actualParentFieldNames = new HashMap<>();
-//		if (ObjectUtils.isNotEmpty(parent)) {
-//			// Get List actual field name from parent from file json config
-//			actualParentFieldNames = Utility.getObjectFromJsonFile(TimConstants.ACTUAL_FIELDNAME_DTO_NAME_FILE,
-//					new TypeReference<Map<String, Map<String, String>>>() {
-//					}).get(parent.getSimpleName());
-//		}
-//		// Get List actual field name response to Client from file json config
-//		Map<String, String> actualFieldNames = Utility.getObjectFromJsonFile(
-//				TimConstants.ACTUAL_FIELDNAME_DTO_NAME_FILE, new TypeReference<Map<String, Map<String, String>>>() {
-//				}).get(simpleName);
-//		actualFieldNames.putAll(actualParentFieldNames);
 
 		// Get actual object name response to Client from file json config
 		String actualOjectName = Utility
@@ -144,8 +128,6 @@ public class ValidationUtils {
 		if (actualOjectName == null) {
 			actualOjectName = simpleName;
 		}
-		// Get fields from parent class
-//		Field[] fields = ArrayUtils.addAll(parent.getDeclaredFields(), objectClass.getDeclaredFields());
 
 		// Loop to validate fields
 		String fieldName = null;

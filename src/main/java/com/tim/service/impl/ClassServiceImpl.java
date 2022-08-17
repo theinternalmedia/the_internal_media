@@ -60,6 +60,7 @@ public class ClassServiceImpl implements ClassService {
 			}
 			entity.setAdviser(teacher);
 		}
-		return new ResponseDto(classConverter.toDto(classRepository.save(entity)));
+		entity = classRepository.save(entity);
+		return new ResponseDto(classConverter.toDto(entity));
 	}
 }

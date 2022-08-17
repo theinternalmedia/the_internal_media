@@ -31,10 +31,12 @@ public class ClassDto extends BaseDto {
 	@NotBlank
 	private String name;
 	
+	@NotBlank
 	private String facultyCode;
 	
 	private String advisorId;
 	
+	@NotBlank
 	private String schoolYearCode;
 
 }

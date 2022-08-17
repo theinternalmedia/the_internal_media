@@ -41,6 +41,7 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 					.orElseThrow(() -> new UsernameNotFoundException(
 							"Uer not found with username: " + username));
 			userModel = modelMapper.map(teacher, UserModel.class);
+			userModel.setTeacher(true);
 		}
 		for(Role r : userModel.getRoles()) {
 			if(!r.getStatus()) {

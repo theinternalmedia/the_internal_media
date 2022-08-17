@@ -24,4 +24,5 @@ public interface TeacherRepository extends JpaRepository<Teacher, Long>, JpaSpec
 	List<Teacher> getByFaculty_CodeIn(Collection<String> facultyCodes);
 
 	List<Teacher> getByStatusTrue();
+
 }

@@ -3,7 +3,9 @@ package com.tim.dto;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 /**
@@ -13,8 +15,10 @@ import lombok.ToString;
  */
 @ToString
 @Getter
+@Setter
 public class NewsAndNotifyDto extends BaseDto{
 	
+	@Getter(value = AccessLevel.NONE)
 	private static final long serialVersionUID = -9097269347613338779L;
 
 	@NotBlank

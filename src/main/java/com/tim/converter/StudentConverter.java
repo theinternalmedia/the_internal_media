@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 import com.tim.dto.student.StudentDto;
 import com.tim.entity.Student;
-import com.tim.entity.Teacher;
 
 /**
  * 
@@ -17,24 +16,23 @@ import com.tim.entity.Teacher;
 @Component
 public class StudentConverter extends AbstractConverter<StudentDto, Student> {
 
-    @Override
-	public
-    StudentDto toDto(Student entity) {
-    	StudentDto model = this.modelMapper.map(entity, StudentDto.class);
-        return model;
-    }
+	@Override
+	public StudentDto toDto(Student entity) {
+		StudentDto model = this.modelMapper.map(entity, StudentDto.class);
+		return model;
+	}
 
-    @Override
+	@Override
 	public Student toEntity(StudentDto dto) {
-        return this.modelMapper.map(dto, Student.class);
-    }
-    
-    @Override
-    	public List<StudentDto> toDtoList(List<Student> entityList) {
-    	List<StudentDto> result = new ArrayList<>();
-    	entityList.forEach(item -> {
+		return this.modelMapper.map(dto, Student.class);
+	}
+
+	@Override
+	public List<StudentDto> toDtoList(List<Student> entityList) {
+		List<StudentDto> result = new ArrayList<>();
+		entityList.forEach(item -> {
 			result.add(toDto(item));
 		});
 		return result;
-    	}
+	}
 }

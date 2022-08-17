@@ -15,6 +15,7 @@ import com.tim.dto.PagingResponseDto;
 import com.tim.dto.ResponseDto;
 import com.tim.dto.notification.NotificationRequestDto;
 import com.tim.service.NotificationService;
+import com.tim.utils.PrincipalUtils;
 import com.tim.utils.ValidationUtils;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -38,6 +39,7 @@ public class NotificationResource {
 	
 	@GetMapping(TimApiPath.Notification.GET_PAGE)
 	public PagingResponseDto getPage(@RequestParam("page") int page, @RequestParam("size") int size) {
-		return notificationService.getPage(page, size);
+		return notificationService.getPage(page, size, PrincipalUtils.getAuthenticatedUsersUserId(), 
+				PrincipalUtils.authenticatedUserIsTeacher());
 	}
 }

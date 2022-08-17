@@ -84,18 +84,20 @@ public class TeacherServiceImpl implements TeacherService {
 
 	@Override
 	public String exportToExcelFile() {
-//		excelService.writeListObjectToExcel(TimConstants.ExcelFiledName.TEACHER, teacherDtos);
+		List<Teacher> entityList = teacherRepository.findAll();
+		List<TeacherDto> dtos = teacherConverter.toDtoList(entityList);
+		excelService.writeListObjectToExcel(TimConstants.ExcelFiledName.TEACHER, dtos);
 		return null;
 	}
 
 	@Override
-	public PagingResponseDto getPaging(String facultyCode, String name, String userId, int page, int size) {
+	public PagingResponseDto getPage(String facultyCode, String name, String userId, int page, int size) {
 		TimSpecification<Teacher> timSpecification = new TimSpecification<>();
 		if (StringUtils.isNotEmpty(name)) {
-			timSpecification.add(new SearchCriteria("name", facultyCode, SearchOperation.LIKE));
+			timSpecification.add(new SearchCriteria("name", name, SearchOperation.LIKE));
 		}
 		if (StringUtils.isNotEmpty(userId)) {
-			timSpecification.add(new SearchCriteria("userId", facultyCode, SearchOperation.EQUAL));
+			timSpecification.add(new SearchCriteria("userId", userId, SearchOperation.EQUAL));
 		}
 		Specification<Teacher> specification = timSpecification;
 		if (StringUtils.isNotEmpty(facultyCode)) {
@@ -103,11 +105,14 @@ public class TeacherServiceImpl implements TeacherService {
 				return builder.equal(root.join("faculty").get("code"), facultyCode);
 			});
 		}
-		Pageable pageable = PageRequest.of(page, size, Sort.by("name"));
+		Pageable pageable = PageRequest.of(page - 1, size, Sort.by("name"));
 		Page<Teacher> pageTeachers = teacherRepository.findAll(specification, pageable);
 		List<TeacherDto> data = teacherConverter.toDtoList(pageTeachers.getContent());
-		return new PagingResponseDto(pageTeachers.getTotalElements(), pageTeachers.getTotalPages(),
-				pageTeachers.getNumber(), pageTeachers.getSize(), data);
+		return new PagingResponseDto(pageTeachers.getTotalElements(), 
+				pageTeachers.getTotalPages(),
+				pageTeachers.getNumber() + 1, 
+				pageTeachers.getSize(), 
+				data);
 	}
 
 }

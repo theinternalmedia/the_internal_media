@@ -28,4 +28,6 @@ public interface StudentService {
 	 */
 	List<Student> findByChoolYearAndFacultyAndClass(Set<String> schoolYearCodes, Set<String> facultyCodes,
 			Set<String> classCodes);
+	
+	String exportToExcelFile();
 }

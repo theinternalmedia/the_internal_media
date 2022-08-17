@@ -1,0 +1,20 @@
+{
+	"TeacherDto": {
+		"userId": "Mã GV",
+		"name": "Họ tên",
+		"email": "Email",
+		"gender": "Giới  tính",
+		"address": "Địa chỉ",
+		"phone": "Điện thoại",
+		"dob": "Ngày sinh"
+	},
+	"StudentDto": {
+		"userId": "Mã SV",
+		"name": "Họ tên",
+		"email": "Email",
+		"gender": "Giới  tính",
+		"address": "Địa chỉ",
+		"phone": "Điện thoại",
+		"dob": "Ngày sinh"
+	}
+}

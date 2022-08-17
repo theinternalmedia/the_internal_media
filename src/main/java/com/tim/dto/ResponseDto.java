@@ -52,8 +52,7 @@ public class ResponseDto implements Serializable {
 	public ResponseDto(Object data) {
 		super();
 		if (ObjectUtils.isEmpty(data)) {
-			this.status = TimConstants.NOT_OK_STATUS;
-			this.message = TimConstants.NOT_OK_MESSAGE;
+			this.message = TimConstants.DATA_EMPTY_MESSAGE;
 		} else {
 			this.data = data;
 		}

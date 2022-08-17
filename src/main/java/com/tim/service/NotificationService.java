@@ -10,5 +10,5 @@ public interface NotificationService {
 
 	ResponseDto getById(Long notificationId);
 
-	PagingResponseDto getPage(int page, int size);
+	PagingResponseDto getPage(int page, int size, String usersUserId, boolean isTeacher);
 }

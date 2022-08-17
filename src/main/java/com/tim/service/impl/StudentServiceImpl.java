@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tim.converter.StudentConverter;
+import com.tim.data.TimConstants;
 import com.tim.dto.ResponseDto;
 import com.tim.dto.specification.TimSpecification;
 import com.tim.dto.student.StudentDto;
@@ -76,7 +77,7 @@ public class StudentServiceImpl implements StudentService {
 				{
 					Join<Classz, Student> studentClass = root.join("classz", JoinType.INNER);
 					Join<Classz, SchoolYear> classSchooYear = studentClass.join("schoolYear", JoinType.INNER);
-					return builder.and(builder.in(classSchooYear.get("code")).value(schoolYearCodes));
+					return builder.in(classSchooYear.get("code")).value(schoolYearCodes);
 				}
 			});
 		}
@@ -85,7 +86,7 @@ public class StudentServiceImpl implements StudentService {
 				{
 					Join<Classz, Student> studentClass = root.join("classz", JoinType.INNER);
 					Join<Classz, Faculty> classFaculty = studentClass.join("faculty", JoinType.INNER);
-					return builder.and(builder.in(classFaculty.get("code")).value(facultyCodes));
+					return builder.in(classFaculty.get("code")).value(facultyCodes);
 				}
 			});
 		}
@@ -96,5 +97,13 @@ public class StudentServiceImpl implements StudentService {
 		}
 		List<Student> students = studentRepository.findAll(timSpecification);
 		return students;
+	}
+
+	@Override
+	public String exportToExcelFile() {
+		List<Student> entityList = studentRepository.findAll();
+		List<StudentDto> dtos = studentConverter.toDtoList(entityList);
+		excelService.writeListObjectToExcel(TimConstants.ExcelFiledName.STUDENT, dtos);
+		return null;
 	}
 }

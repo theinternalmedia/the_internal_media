@@ -17,19 +17,20 @@ import com.tim.dto.ResponseDto;
 import com.tim.dto.student.StudentDto;
 import com.tim.repository.StudentRepository;
 import com.tim.service.StudentService;
+import com.tim.service.TeacherService;
 import com.tim.utils.Utility;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping(TimApiPath.TIM_API + "test")
-public class TestResource extends AbstractResource {
+@RequestMapping(TimApiPath.TIM_API + "/test")
+public class TestResource {
 
 	@Autowired
 	StudentService studentService;
 	@Autowired
 	private StudentConverter studentConverter;
 	@Autowired
-	private StudentRepository studentRepository;
+	private TeacherService teacherService;
 
 	@GetMapping("/message")
 	public String testGetExceptionMessage() {
@@ -46,6 +47,18 @@ public class TestResource extends AbstractResource {
 	
 	@GetMapping("/listStudentInUserIds")
 	public ResponseDto listStudentInUserIds(@RequestParam("userIds") List<String> userIds) {
+		return new ResponseDto();
+	}
+	
+	@GetMapping("/exportStudents")
+	public ResponseDto exportStudents() {
+		studentService.exportToExcelFile();
+		return new ResponseDto();
+	}
+	
+	@GetMapping("/exportTeachers")
+	public ResponseDto exportTeachers() {
+		teacherService.exportToExcelFile();
 		return new ResponseDto();
 	}
 }
