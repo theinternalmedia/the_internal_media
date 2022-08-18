@@ -13,6 +13,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.ss.usermodel.Cell;
@@ -69,11 +70,14 @@ public class ExcelHelper {
 	 * @param className is name of Object
 	 * @return List<ExcelField[]> is list Object In ExcelField
 	 */
-	public List<ExcelField[]> readFromExcel(final MultipartFile file, String className) {
+	public <T> List<ExcelField[]> readFromExcel(final MultipartFile file, Class<T> clazz) {
 
 		List<ExcelField[]> excelFieldArrayList = new ArrayList<ExcelField[]>();
 
 		List<String> cellErrs = new ArrayList<String>();
+		
+		// Get Object Name
+		final String className = clazz.getSimpleName();
 
 		// 1.Get workBook from file Excel
 		Workbook workBook = readExcel(file);
@@ -153,7 +157,7 @@ public class ExcelHelper {
 					}
 				} catch (IllegalStateException e) {
 					logger.error(e.getMessage(), e);
-					cellErrs.add(Utility.getMessage(ETimMessages.INVALID_EXCEL_VALUE, cell.getAddress().toString()));
+					cellErrs.add(Utility.getMessage(ETimMessages.INVALID_CELL_VALUE, cell.getAddress().toString()));
 					e.printStackTrace();
 					continue;
 				}
@@ -162,7 +166,8 @@ public class ExcelHelper {
 			excelFieldArrayList.add(excelFieldArr);
 		}
 		if (cellErrs.size() > 0) {
-			throw new ValidateException(ETimMessages.INVALID_EXCEL_VALUE, cellErrs);
+			throw new ValidateException(ETimMessages.INVALID_EXCEL_VALUE, cellErrs, 
+					Utility.getActualObjectName(className));
 		}
 		return excelFieldArrayList;
 	}
@@ -214,18 +219,20 @@ public class ExcelHelper {
 			int columnCount = 1;
 
 			// 3.2 Get HeaderFields and ObjectFields
-			String[] headerFields = TimConstants.HeaderFields.TEACHER;
-			String[] objectFields = TimConstants.ObjectFields.TEACHER;
+			final Map<String, String> mapFieldNames = Utility.getObjectFromJsonFile(
+					TimConstants.FIELDNAMES_EXPORTCONFIG_NAME_FILE,
+					new TypeReference<Map<String, Map<String, String>>>() {
+					}).get(clazz.getSimpleName());
 
 			// 3.3 Create Header Row
 			Row row = sheet.createRow(rowCount++);
 			// Write LineNumberHeader to Excel
 			cell = row.createCell(0);
-			cell.setCellValue(TimConstants.HeaderFields.LINE_NUMBER);
+			cell.setCellValue(TimConstants.LINE_NUMBER);
 			// Write HeaderFields to Excel
-			for (String headerField : headerFields) {
+			for (String headerKey : mapFieldNames.keySet()) {
 				cell = row.createCell(columnCount++);
-				cell.setCellValue(headerField);
+				cell.setCellValue(mapFieldNames.get(headerKey));
 			}
 			int num = 1;
 			for (T t : data) {
@@ -233,7 +240,7 @@ public class ExcelHelper {
 				// Create row
 				row = sheet.createRow(rowCount++);
 				columnCount = 1;
-				for (String objectField : objectFields) {
+				for (String objectField : mapFieldNames.keySet()) {
 					// Write line number
 					Cell cellFirst = row.createCell(0);
 					cellFirst.setCellValue(num);

@@ -33,7 +33,7 @@ public enum ETimMessages {
 	INVALID_OBJECT_VALUE("msg.403", "invalid object value"),
 	INVALID_CELL_VALUE("msg.404", "invalid cell value"),
 	NULL_CELL_VALUE("msg.405", "null cell value"),
-	
+	INVALID_OBJECT_VALUE_2("msg.406", "invalid object value return value"),
 	
 	/* INTERNAL_SYSTEM_ERROR */
 	INTERNAL_SYSTEM_ERROR("msg.999", "Internal System Error message");

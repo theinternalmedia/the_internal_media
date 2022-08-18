@@ -32,13 +32,13 @@ public class SchoolYear extends BaseEntity {
 	private Set<EducationProgram> educationPrograms = new HashSet<>();
 	
 	@OneToMany(mappedBy = "schoolYear")
-	private Set<Class> classes = new HashSet<Class>();
+	private Set<Classz> classes = new HashSet<Classz>();
 	
-	public Set<Class> getClasses() {
+	public Set<Classz> getClasses() {
 		return classes;
 	}
 
-	public void setClasses(Set<Class> classes) {
+	public void setClasses(Set<Classz> classes) {
 		this.classes = classes;
 	}
 

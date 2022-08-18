@@ -2,6 +2,7 @@ package com.tim.utils;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -94,6 +95,8 @@ public class ValidationUtils {
 	 * @param object need to validate
 	 */
 	public static void validateObject(final Object object) {
+		final String onjectClassName = "Object";
+
 		// Declare list Error Message
 		List<String> errMessages = new ArrayList<>();
 
@@ -103,32 +106,40 @@ public class ValidationUtils {
 		// Get actual name of object
 		final String simpleName = objectClass.getSimpleName();
 
-		// Get List actual field name response to Client from file json config
-		final Map<String, String> actualFieldNames = Utility
-				.getObjectFromJsonFile(TimConstants.ACTUAL_FIELDNAME_DTO_NAME_FILE, 
-						new TypeReference<Map<String, Map<String, String>>>() {
-				}).get(simpleName);
+		// Get class fields
+		Field[] fields = objectClass.getDeclaredFields();
+		Map<String, String> actualFieldNames = new HashMap<String, String>();
+		Map<String, String> actFieldNames = null;
+		while (objectClass != null && !objectClass.getSimpleName().equals(onjectClassName)) {
+			actFieldNames = Utility.getObjectFromJsonFile(TimConstants.ACTUAL_FIELDNAME_DTO_NAME_FILE,
+					new TypeReference<Map<String, Map<String, String>>>() {
+					}).get(objectClass.getSimpleName());
+			if (actFieldNames != null) {
+				actualFieldNames.putAll(actFieldNames);
+			}
+			fields = ArrayUtils.addAll(objectClass.getDeclaredFields());
+			objectClass = objectClass.getSuperclass();
+		}
+
 		// Get actual object name response to Client from file json config
 		String actualOjectName = Utility
-				.getObjectFromJsonFile(TimConstants.ACTUAL_OBJECT_NAME_FILE, 
-						new TypeReference<Map<String, String>>() {
+				.getObjectFromJsonFile(TimConstants.ACTUAL_OBJECT_NAME_FILE, new TypeReference<Map<String, String>>() {
 				}).get(simpleName);
-		if(actualOjectName == null) {
+		if (actualOjectName == null) {
 			actualOjectName = simpleName;
 		}
-		// Get fields from parent class
-		Class<?> parent = objectClass.getSuperclass();
-
-		Field[] fields = ArrayUtils.addAll(parent.getDeclaredFields(), objectClass.getDeclaredFields());
 
 		// Loop to validate fields
 		String fieldName = null;
 		for (Field field : fields) {
+			if (field.getAnnotations().length == 0) {
+				continue;
+			}
 			field.setAccessible(true);
 			try {
 				fieldName = actualFieldNames.get(field.getName());
-				String mes = getValidateFieldMessage(field, 
-						fieldName != null ? fieldName : field.getName(), field.get(object));
+				String mes = getValidateFieldMessage(field, fieldName != null ? fieldName : field.getName(),
+						field.get(object));
 				if (mes != null) {
 					errMessages.add(mes);
 				}
@@ -144,8 +155,27 @@ public class ValidationUtils {
 		}
 		// If Error Message not empty, throw ValidateException
 		if (errMessages.size() > 0) {
-			throw new ValidateException(ETimMessages.INVALID_OBJECT_VALUE, errMessages,
-					actualOjectName);
+			throw new ValidateException(ETimMessages.INVALID_OBJECT_VALUE, errMessages, actualOjectName);
+		}
+	}
+
+	/**
+	 * Validate Value if is Instant Of Object
+	 * 
+	 * @author minhtuanitk43
+	 * @param <T>
+	 * @param value
+	 * @param clazz
+	 * @param fieldName
+	 * @return value if validation is success, otherwise ValidateException will be throw
+	 */
+	public static <T> T getValue(Object value, Class<T> clazz, String fieldName) {
+		try {
+			return clazz.cast(value);
+		} catch (Exception e) {
+			throw new ValidateException(ETimMessages.INVALID_OBJECT_VALUE_2, null, 
+					StringUtils.isBlank(fieldName) ? "Dữ liệu" : fieldName,
+							String.valueOf(value));
 		}
 	}
 

@@ -4,9 +4,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -21,12 +23,24 @@ public class Student extends User {
 
 	private static final long serialVersionUID = 3541331733217756229L;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "role_student", joinColumns = @JoinColumn(name = "student_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = new HashSet<>();
 	
-	@OneToMany(mappedBy = "student")
+	@OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
 	private Set<NotificationStudent> notificationStudents = new HashSet<NotificationStudent>();
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "class_id")
+	private Classz classz;
+
+	public Classz getClassz() {
+		return classz;
+	}
+
+	public void setClassz(Classz classz) {
+		this.classz = classz;
+	}
 
 	public Set<NotificationStudent> getNotificationStudents() {
 		return notificationStudents;

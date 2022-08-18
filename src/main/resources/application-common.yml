@@ -1,7 +1,8 @@
 #port
 server:
   port: 8080
-  
+#  servlet:
+#    context-path: /tim-api  
 #Jwe secret
 tim:
   jwtExpirationMs: 86400000

@@ -7,9 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.tim.data.TimConstants;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -49,15 +47,21 @@ public class ResponseDto implements Serializable {
 
 	/**
 	 * Get data success
-	 * @param data
+	 * @param data content response to client
 	 */
 	public ResponseDto(Object data) {
 		super();
 		if (ObjectUtils.isEmpty(data)) {
-			this.status = TimConstants.NOT_OK_STATUS;
-			this.message = TimConstants.NOT_OK_MESSAGE;
+			this.message = TimConstants.DATA_EMPTY_MESSAGE;
 		} else {
 			this.data = data;
 		}
+	}
+
+	/**
+	 * Execute success return nothing
+	 */
+	public ResponseDto() {
+		super();
 	}
 }

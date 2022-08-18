@@ -1,24 +1,44 @@
 package com.tim.service;
 
-import java.util.List;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.ResponseDto;
-import com.tim.dto.teacher.TeacherDto;
+import com.tim.dto.teacher.TeacherRequestDto;
 
 public interface TeacherService {
-	ResponseDto save(@Valid TeacherDto dto);
+	/**
+	 * @author minhtuanitk43
+	 * @param dto
+	 * @return ResponseDto include status ok if success, else not ok. message and data if have return data
+	 */
+	ResponseDto insert(TeacherRequestDto requestDto);
 
-	ResponseDto findByUserId(@NotBlank String userId);
+	/**
+	 * @author minhtuanitk43
+	 * @param userId
+	 * @return ResponseDto include status ok if success, else not ok. message and data if have return data
+	 */
+	ResponseDto findByUserId(String userId);
 
-	List<TeacherDto> importExcelFile(MultipartFile file);
-
-	void exportExcelFile(String fileName, List<TeacherDto> teacherDtos);
+	/**
+	 * @author minhtuanitk43
+	 * @param file excel file
+	 * @return ResponseDto include status ok if success, else not ok. message and data if have return data
+	 */
+	ResponseDto insert(MultipartFile file);
 	
-	PagingResponseDto getPaging(String facultyCode, String name, String userId, int page, int size);
+	String exportToExcelFile();
+	
+	/**
+	 * @author minhtuanitk43
+	 * @param facultyCode
+	 * @param name
+	 * @param userId
+	 * @param page
+	 * @param size
+	 * @return PagingResponseDto include totalItem, totalPage, page, size and content(data)
+	 */
+	PagingResponseDto getPage(String facultyCode, String name, String userId, int page, int size);
+
 }

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.ObjectUtils;
+
 import com.tim.data.ETimMessages;
 
 import lombok.Getter;
@@ -22,7 +24,9 @@ public class ValidateException extends CustomException{
 
 	public ValidateException(ETimMessages eTimMessages, List<String> errMsgs, String... values) {
 		super(eTimMessages, values);
-		this.errMsgs = errMsgs.stream().sorted().collect(Collectors.toList());;
+		if(ObjectUtils.isNotEmpty(errMsgs)) {
+			this.errMsgs = errMsgs.stream().sorted().collect(Collectors.toList());
+		}
 	}
 
 }

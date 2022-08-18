@@ -42,8 +42,8 @@ import com.tim.security.services.UserDetailsImpl;
  */
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping(TimApiPath.Auth.PREFIX)
-public class AuthResource extends AbstractResource {
+@RequestMapping(TimApiPath.TIM_API)
+public class AuthResource {
 	@Autowired
 	AuthenticationManager authenticationManager;
 	@Autowired

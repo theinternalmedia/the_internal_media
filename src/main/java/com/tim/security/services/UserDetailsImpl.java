@@ -32,11 +32,12 @@ public class UserDetailsImpl implements UserDetails{
 	private Boolean status;
 	private String name;
 	private String avatar;
+	private boolean isTeacher;
 	
 	private Collection<? extends GrantedAuthority> authorities;
 	
 	public UserDetailsImpl(Long id, String username, String name, String email, String password, boolean status,
-			Collection<? extends GrantedAuthority> authorities, List<String> roles, String avatar) {
+			Collection<? extends GrantedAuthority> authorities, List<String> roles, String avatar, boolean isTeacher) {
 		this.id = id;
 		this.username = username;
 		this.name = name;
@@ -46,6 +47,7 @@ public class UserDetailsImpl implements UserDetails{
 		this.status = status;
 		this.roles = roles;
 		this.avatar = avatar;
+		this.isTeacher = isTeacher;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -60,7 +62,8 @@ public class UserDetailsImpl implements UserDetails{
 				user.getStatus(),
 				authorities,
 				user.getRoles().stream().map(r -> r.getName()).collect(Collectors.toList()),
-				user.getAvatar());
+				user.getAvatar(),
+				user.isTeacher());
 	}
 
 	private static Collection<? extends GrantedAuthority> getAuthorities(Collection<Role> roles) {
@@ -100,18 +103,22 @@ public class UserDetailsImpl implements UserDetails{
 	public String getName() {
 		return name;
 	}
-
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return authorities;
-	}
-
+	
 	public Long getId() {
 		return id;
 	}
 
 	public String getEmail() {
 		return email;
+	}
+
+	public boolean isTeacher() {
+		return isTeacher;
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return authorities;
 	}
 
 	@Override

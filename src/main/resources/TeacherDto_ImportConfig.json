@@ -47,5 +47,19 @@
 		"excelColType": "LocalDate",
 		"excelValue": null,
 		"pojoAttribute": "dob"
+	},
+	{
+		"excelHeader": "Mã Khoa",
+		"excelIndex": 8,
+		"excelColType": "String",
+		"excelValue": null,
+		"pojoAttribute": "facultyCode"
+	},
+	{
+		"excelHeader": "Mật khẩu",
+		"excelIndex": 9,
+		"excelColType": "String",
+		"excelValue": null,
+		"pojoAttribute": "password"
 	}
 ]

@@ -1,6 +1,6 @@
 package com.tim.restful;
 
-import java.util.List;
+import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,36 +15,42 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tim.data.TimApiPath;
-import com.tim.data.TimConstants;
 import com.tim.dto.ResponseDto;
-import com.tim.dto.teacher.TeacherDto;
+import com.tim.dto.teacher.TeacherRequestDto;
 import com.tim.service.TeacherService;
 import com.tim.utils.ValidationUtils;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping(TimApiPath.Teacher.PREFIX)
-public class TeacherResource extends AbstractResource {
+@RequestMapping(TimApiPath.TIM_API)
+public class TeacherResource {
 	
 	@Autowired
 	private TeacherService teacherService;
 	
-	@PostMapping(TimApiPath.Teacher.SAVE)
-	public ResponseEntity<ResponseDto> save(@RequestBody TeacherDto teacherDto) {
-		ValidationUtils.validateObject(teacherDto);
-		return ResponseEntity.ok(teacherService.save(teacherDto));
+	@PostMapping(TimApiPath.Teacher.INSERT)
+	public ResponseDto save(@RequestBody TeacherRequestDto requestDto) {
+		ValidationUtils.validateObject(requestDto);
+		return teacherService.insert(requestDto);
 	}
 	
 	@PostMapping(TimApiPath.Teacher.UPLOAD_EXCEL)
-	public List<?> uplaodExcelFile(@RequestPart("file") MultipartFile file) {
-		List<TeacherDto> dtos = teacherService.importExcelFile(file);
-		teacherService.exportExcelFile(TimConstants.ExcelFiledName.TEACHER, dtos);
-		return dtos;
+	public ResponseDto uplaodExcelFile(@RequestPart("file") MultipartFile file) {
+		return teacherService.insert(file);
 	}
 	
-	@GetMapping(TimApiPath.Teacher.GET)
+	@GetMapping(TimApiPath.Teacher.GET_ONE)
 	public ResponseEntity<ResponseDto> get(@RequestParam("userId") String userId){
 		return ResponseEntity.ok(teacherService.findByUserId(userId));
+	}
+	
+	@GetMapping(TimApiPath.Teacher.GET_PAGE)
+	public ResponseEntity<ResponseDto> getPage(@PathParam("facultyCode") String facultyCode,
+			@PathParam("name") String name, 
+			@PathParam("userId") String userId,
+			@RequestParam("page") int page,
+			@RequestParam("size") int size){
+		return ResponseEntity.ok(teacherService.getPage(facultyCode, name, userId, page, size));
 	}
 	
 }
