@@ -49,5 +49,32 @@
 	"NotificationGroupRequestDto": {
 		"code": "Mã Nhóm Thông Báo",
 		"name": "Tên Nhóm Thông Báo"
+	},
+	"SchoolYearDto": {
+		"name": "Niên khóa",
+		"code": "Mã niên khóa"
+	},
+	"NewsDto": {
+		"title": "Tiêu đề",
+		"shortDescription": "Mô tả ngắn",
+		"content": "Nội dung",
+		"thumbnail": "Hình ảnh"
+	},
+	"SubjectDto": {
+		"code": "Mã môn học",
+		"name": "Tên môn học",
+		"numberOfCredits": "Số tín chỉ",
+		"mandatory": "Bắt buộc",
+		"passMarks": "Điểm qua môn"
+	},
+	"NotificationDto": {
+		"title": "Tiêu đề",
+		"shortDescription": "Mô tả ngắn",
+		"content": "Nội dung",
+		"thumbnail": "Hình ảnh"
+	},
+	"NotificationGroupDto": {
+		"name": "Nhóm thông báo",
+		"code": "Mã nhóm"
 	}
 }

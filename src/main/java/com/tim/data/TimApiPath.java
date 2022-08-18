@@ -75,4 +75,22 @@ public final class TimApiPath {
 		public static final String TOGGLE_STATUS = PREFIX_V1 + TOGGLE_STATUS_STR;
 		public static final String DELETE = PREFIX_V1;
 	}
+
+	public static class NotificationGroup{
+		public static final String PREFIX_V1 = VER_V1 + "/notification-groups";
+		public static final String INSERT = PREFIX_V1;
+		public static final String GET_ONE = PREFIX_V1 + PATH_VARIABLE_CODE;
+		public static final String UPDATE = PREFIX_V1;
+		public static final String TOGGLE_STATUS = PREFIX_V1 + TOGGLE_STATUS_STR;
+		public static final String DELETE = PREFIX_V1;
+	}
+
+	public static class News{
+		public static final String PREFIX_V1 = VER_V1 + "/news";
+		public static final String INSERT = PREFIX_V1;
+		public static final String GET_ONE = PREFIX_V1 + PATH_VARIABLE_ID;
+		public static final String UPDATE = PREFIX_V1;
+		public static final String TOGGLE_STATUS = PREFIX_V1 + TOGGLE_STATUS_STR;
+		public static final String DELETE = PREFIX_V1;
+	}
 }

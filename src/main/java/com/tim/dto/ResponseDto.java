@@ -2,6 +2,7 @@ package com.tim.dto;
 
 import java.io.Serializable;
 
+import lombok.*;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -21,6 +22,7 @@ import lombok.ToString;
 @Getter
 public class ResponseDto implements Serializable {
 
+	@Getter(value = AccessLevel.NONE)
 	private static final long serialVersionUID = -7573806538377205333L;
 
 	@Getter

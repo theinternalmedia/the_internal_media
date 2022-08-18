@@ -97,5 +97,6 @@ public final class TimConstants {
 		public static final String FACULTY = "Khoa";
 		public static final String CLASS = "Lớp";
 		public static final String SCHOOL_YEAR = "Khóa";
+		public static final String NEWS = "Tin tức";
 	}
 }

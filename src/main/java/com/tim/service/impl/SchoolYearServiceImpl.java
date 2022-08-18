@@ -22,4 +22,18 @@ public class SchoolYearServiceImpl implements SchoolYearService {
 		return new ResponseDto(schoolYearConverter.toDto(schoolYearRepository.save(schoolYear)));
 	}
 	
+    @Override
+    public ResponseDto update(SchoolYearDto dto) {
+        return null;
+    }
+
+    @Override
+    public ResponseDto getOne(String code) {
+        return null;
+    }
+
+    @Override
+    public void toggleStatus(Long id) {
+
+    }
 }

@@ -5,4 +5,10 @@ import com.tim.dto.schoolyear.SchoolYearDto;
 
 public interface SchoolYearService {
 	ResponseDto insert(SchoolYearDto dto);
+
+    ResponseDto update(SchoolYearDto dto);
+
+    ResponseDto getOne(String code);
+
+    void toggleStatus(Long id);
 }

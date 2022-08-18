@@ -40,5 +40,7 @@ public interface TeacherService {
 	 * @return PagingResponseDto include totalItem, totalPage, page, size and content(data)
 	 */
 	PagingResponseDto getPage(String facultyCode, String name, String userId, int page, int size);
+	
+	ResponseDto getOne(String userId);
 
 }

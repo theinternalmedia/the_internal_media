@@ -4,5 +4,9 @@
 	"StudentDto": "Sinh Viên",
 	"StudentRequestDto": "Sinh Viên",
 	"NotificationRequestDto": "Thông Báo",
-	"NotificationGroupRequestDto": "Nhóm Thông Báo"
+	"NotificationDto": "Thông báo",
+	"NotificationGroupRequestDto": "Nhóm Thông Báo",
+	"NotificationGroupDto": "Thông báo nhóm",
+	"SchoolYearDto": "Niên Khóa",
+	"NewsDto": "Tin tức"
 }

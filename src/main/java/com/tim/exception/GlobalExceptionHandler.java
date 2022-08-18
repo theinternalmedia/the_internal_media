@@ -1,10 +1,8 @@
 package com.tim.exception;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.EntityNotFoundException;
-
+import com.tim.data.ETimMessages;
+import com.tim.dto.errorresponse.ErrorResponse;
+import com.tim.utils.Utility;
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +12,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.tim.data.ETimMessages;
-import com.tim.dto.errorresponse.ErrorResponse;
-import com.tim.utils.Utility;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 
@@ -28,8 +25,8 @@ public class GlobalExceptionHandler {
 	private final Logger logger = org.slf4j.LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
 
-	@ExceptionHandler(EntityNotFoundException.class)
-	public ResponseEntity<String> entityNotFoundException(EntityNotFoundException e) {
+	@ExceptionHandler(NotFoundException.class)
+	public ResponseEntity<String> entityNotFoundException(NotFoundException e) {
 		return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
 	}
 
@@ -62,6 +59,28 @@ public class GlobalExceptionHandler {
 		ErrorResponse errorResponse = new ErrorResponse(Utility.getMessage(eTimMessages, e.getObjectName()), errors);
 		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
+
+	/*@ExceptionHandler(ConstraintViolationException.class)
+	public ResponseEntity<ErrorResponse> handleConstraintViolationException(ConstraintViolationException e){
+		logger.error("Data input constrain violation: {}", e.getMessage());
+		List<String> errors = new ArrayList<>();
+		e.getConstraintViolations().forEach((error) -> {
+			String fieldName = ((FieldError) error).getField();
+			String errorMessage = ((FieldError) error).getDefaultMessage();
+			errors.add((fieldName + ": " + errorMessage));
+		});
+		ETimMessages eTimMessages = ETimMessages.CONSTRAIN_VAIOLATION_MESSAGE;
+		ErrorResponse errorResponse = new ErrorResponse(Utility.getMessage(eTimMessages, e.getMessage()), errors);
+		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(DataIntegrityViolationException.class)
+	public ResponseEntity<ErrorResponse> validateionException(DataIntegrityViolationException ex) {
+		logger.info(ex.getClass().getName());
+		ErrorResponse errorResponse = new ErrorResponse(
+				Utility.getMessage(ETimMessages.CONSTRAIN_VAIOLATION_MESSAGE), null);
+		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+	}*/
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ErrorResponse> validateionException(Exception ex) {

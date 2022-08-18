@@ -58,7 +58,7 @@ public class TeacherServiceImpl implements TeacherService {
 	}
 
 	@Override
-	public ResponseDto findByUserId(String userId) {
+	public ResponseDto getOne(String userId) {
 		Teacher entity = teacherRepository.findByUserId(userId).orElse(null);
 		if (entity == null) {
 			return new ResponseDto(Utility.getMessage(ETimMessages.ENTITY_NOT_FOUND,
@@ -114,6 +114,12 @@ public class TeacherServiceImpl implements TeacherService {
 				pageTeachers.getNumber() + 1, 
 				pageTeachers.getSize(), 
 				data);
+	}
+
+	@Override
+	public ResponseDto findByUserId(String userId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -41,7 +41,7 @@ public class TeacherResource {
 	
 	@GetMapping(TimApiPath.Teacher.GET_ONE)
 	public ResponseEntity<ResponseDto> get(@RequestParam("userId") String userId){
-		return ResponseEntity.ok(teacherService.findByUserId(userId));
+		return ResponseEntity.ok(teacherService.getOne(userId));
 	}
 	
 	@GetMapping(TimApiPath.Teacher.GET_PAGE)

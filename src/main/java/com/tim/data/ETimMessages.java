@@ -33,8 +33,10 @@ public enum ETimMessages {
 	INVALID_OBJECT_VALUE("msg.403", "invalid object value"),
 	INVALID_CELL_VALUE("msg.404", "invalid cell value"),
 	NULL_CELL_VALUE("msg.405", "null cell value"),
-	INVALID_OBJECT_VALUE_2("msg.406", "invalid object value return value"),
-	
+	CONSTRAIN_VAIOLATION_MESSAGE("msg.406", "constrain vaiolation message"),
+	INVALID_OBJECT_VALUE_2("msg.407", "invalid object value return value"),
+	ACCESS_DENIED("msg.000", "temporiry message"),
+
 	/* INTERNAL_SYSTEM_ERROR */
 	INTERNAL_SYSTEM_ERROR("msg.999", "Internal System Error message");
 	

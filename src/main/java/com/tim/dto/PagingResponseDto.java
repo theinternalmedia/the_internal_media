@@ -1,5 +1,6 @@
 package com.tim.dto;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +15,7 @@ import lombok.Setter;
 @Setter
 public class PagingResponseDto extends ResponseDto {
 
+	@Getter(value = AccessLevel.NONE)
 	private static final long serialVersionUID = -534561158613722144L;
 
 	private long totalItem;

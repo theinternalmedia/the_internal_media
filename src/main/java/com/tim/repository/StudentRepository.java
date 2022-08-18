@@ -19,4 +19,9 @@ public interface StudentRepository extends JpaRepository<Student, Long>, JpaSpec
 	Boolean existsByUserId(String userId);
 
 	List<Student> getByStatusTrue();
+	Student getOneById(Long studentId);
+
+	Student findByEmail(String email);
+
+	Student findByName(String name);
 }

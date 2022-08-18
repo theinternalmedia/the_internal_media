@@ -6,6 +6,7 @@ import java.util.Set;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tim.dto.ResponseDto;
+import com.tim.dto.student.StudentDto;
 import com.tim.dto.student.StudentRequestDto;
 import com.tim.entity.Student;
 
@@ -30,4 +31,14 @@ public interface StudentService {
 			Set<String> classCodes);
 	
 	String exportToExcelFile();
+
+    ResponseDto update(StudentDto dto);
+
+    ResponseDto getOne(Long id);
+
+    ResponseDto getByUserName(String name);
+
+    ResponseDto getByEmail(String email);
+
+    ResponseDto toggleStatus(Long id);
 }

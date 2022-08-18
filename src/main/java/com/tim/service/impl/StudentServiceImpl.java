@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tim.converter.StudentConverter;
+import com.tim.data.ETimMessages;
 import com.tim.data.TimConstants;
 import com.tim.dto.ResponseDto;
 import com.tim.dto.specification.TimSpecification;
@@ -29,6 +30,9 @@ import com.tim.repository.ClassRepository;
 import com.tim.repository.StudentRepository;
 import com.tim.service.StudentService;
 import com.tim.service.excel.ExcelService;
+import com.tim.utils.Utility;
+
+import java.util.Optional;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -107,4 +111,57 @@ public class StudentServiceImpl implements StudentService {
 		excelService.writeListObjectToExcel(TimConstants.ExcelFiledName.STUDENT, dtos);
 		return null;
 	}
+
+    @Override
+    public ResponseDto update(StudentDto dto) {
+        Student student = studentConverter.toEntity(dto);
+        Long studentId = dto.getId();
+        if(studentId != null){
+            Student oldStudent = studentRepository.getOneById(studentId);
+            oldStudent.setClassz(student.getClassz());
+            oldStudent.setRoles(student.getRoles());
+            oldStudent.setPhone(student.getPhone());
+            oldStudent.setGender(student.getGender());
+            oldStudent.setAddress(student.getAddress());
+            return new ResponseDto(studentConverter.toDto(studentRepository.save(oldStudent)));
+        }
+        return new ResponseDto(TimConstants.NOT_OK_MESSAGE);
+    }
+
+    @Override
+    public ResponseDto getOne(Long id) {
+        Optional<Student> student = studentRepository.findById(id);
+        if(student.isPresent()){
+            return new ResponseDto(studentConverter.toDto(student.get()));
+        }
+        return new ResponseDto(Utility.getMessage(ETimMessages.ENTITY_NOT_FOUND,
+                                TimConstants.ActualEntityName.STUDENT,
+                                "Id", id.toString()));
+    }
+
+    @Override
+    public ResponseDto getByUserName(String name){
+        Student student = studentRepository.findByUserId(name).orElse(null);
+        if(student != null){
+            return new ResponseDto(studentConverter.toDto(student));
+        }
+        return new ResponseDto(Utility.getMessage(ETimMessages.USER_NOT_FOUND));
+    }
+
+    @Override
+    public ResponseDto getByEmail(String email) {
+        Student student = studentRepository.findByEmail(email);
+        if(student != null){
+            return new ResponseDto(studentConverter.toDto(student));
+        }
+        return new ResponseDto(Utility.getMessage(ETimMessages.USER_NOT_FOUND));
+    }
+
+    @Override
+    public ResponseDto toggleStatus(Long id) {
+        Student student = studentRepository.getOneById(id);
+        student.setStatus(false);
+        studentRepository.save(student);
+        return new ResponseDto();
+    }
 }

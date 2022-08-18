@@ -11,6 +11,7 @@ import javax.validation.constraints.Size;
 import com.tim.annotation.Phone;
 import com.tim.dto.role.RoleDto;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -19,7 +20,10 @@ import lombok.ToString;
 @Setter
 @ToString
 public class UserDto extends BaseDto {
+
+	@Getter(value = AccessLevel.NONE)
 	private static final long serialVersionUID = -551690367785937349L;
+
 
 	@NotBlank
 	@Size(max = 20, min = 5)
@@ -49,14 +53,7 @@ public class UserDto extends BaseDto {
 
 	private String avatar;
 
-	private Set<RoleDto> roles = new HashSet<RoleDto>();
+	private String remark;
 
-	public boolean getGender() {
-		return gender;
-	}
-
-	public void setGender(boolean gender) {
-		this.gender = gender;
-	}
-
+	private Set<RoleDto> roles = new HashSet<>();
 }
