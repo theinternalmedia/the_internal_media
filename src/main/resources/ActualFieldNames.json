@@ -12,9 +12,42 @@
 		"userId": "Mã GV",
 		"facultyCode": "Mã Khoa"
 	},
+	"TeacherRequestDto": {
+		"userId": "Mã GV",
+		"facultyCode": "Mã Khoa",
+		"name": "Họ tên",
+		"email": "Email",
+		"gender": "Giới  tính",
+		"address": "Địa chỉ",
+		"phone": "Điện thoại",
+		"dob": "Ngày sinh",
+		"avatar": "Hình đại diện"
+	},
 	"StudentDto": {
 		"userId": "Mã SV",
 		"classCode": "Mã Lớp",
 		"remark": "Ghi Chú"
+	},
+	"StudentRequestDto": {
+		"name": "Họ tên",
+		"email": "Email",
+		"gender": "Giới  tính",
+		"address": "Địa chỉ",
+		"phone": "Điện thoại",
+		"dob": "Ngày sinh",
+		"avatar": "Hình đại diện",
+		"userId": "Mã SV",
+		"classCode": "Mã Lớp",
+		"remark": "Ghi Chú"
+	},
+	"NotificationRequestDto": {
+		"title": "Tiêu đề",
+		"shortDescription": "Mô tả ngắn",
+		"content": "Nội dung",
+		"notificationGroupCode": "Mã nhóm thông báo"
+	},
+	"NotificationGroupRequestDto": {
+		"code": "Mã Nhóm Thông Báo",
+		"name": "Tên Nhóm Thông Báo"
 	}
 }

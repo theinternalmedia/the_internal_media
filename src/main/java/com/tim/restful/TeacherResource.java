@@ -16,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.tim.data.TimApiPath;
 import com.tim.dto.ResponseDto;
-import com.tim.dto.teacher.TeacherDto;
+import com.tim.dto.teacher.TeacherRequestDto;
 import com.tim.service.TeacherService;
 import com.tim.utils.ValidationUtils;
 
@@ -29,9 +29,9 @@ public class TeacherResource {
 	private TeacherService teacherService;
 	
 	@PostMapping(TimApiPath.Teacher.INSERT)
-	public ResponseDto save(@RequestBody TeacherDto teacherDto) {
-		ValidationUtils.validateObject(teacherDto);
-		return teacherService.insert(teacherDto);
+	public ResponseDto save(@RequestBody TeacherRequestDto requestDto) {
+		ValidationUtils.validateObject(requestDto);
+		return teacherService.insert(requestDto);
 	}
 	
 	@PostMapping(TimApiPath.Teacher.UPLOAD_EXCEL)

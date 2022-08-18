@@ -6,11 +6,11 @@ import java.util.Set;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tim.dto.ResponseDto;
-import com.tim.dto.student.StudentDto;
+import com.tim.dto.student.StudentRequestDto;
 import com.tim.entity.Student;
 
 public interface StudentService {
-    ResponseDto insert(StudentDto studentDto);
+    ResponseDto insert(StudentRequestDto studentRequestDto);
     
     /**
 	 * @author minhtuanitk43

@@ -24,6 +24,7 @@ import com.tim.dto.ResponseDto;
 import com.tim.dto.specification.SearchCriteria;
 import com.tim.dto.specification.TimSpecification;
 import com.tim.dto.teacher.TeacherDto;
+import com.tim.dto.teacher.TeacherRequestDto;
 import com.tim.entity.Faculty;
 import com.tim.entity.Teacher;
 import com.tim.repository.FacultyRepository;
@@ -48,9 +49,9 @@ public class TeacherServiceImpl implements TeacherService {
 
 	@Override
 	@Transactional
-	public ResponseDto insert(TeacherDto dto) {
-		Teacher entity = teacherConverter.toEntity(dto);
-		Faculty faculty = facultyRepository.getByCode(dto.getFacultyCode()).orElse(null);
+	public ResponseDto insert(TeacherRequestDto requestDto) {
+		Teacher entity = teacherConverter.toEntity(requestDto);
+		Faculty faculty = facultyRepository.getByCode(requestDto.getFacultyCode()).orElse(null);
 		entity.setFaculty(faculty);
 		entity.setPassword(encoder.encode(entity.getPassword()));
 		return new ResponseDto(teacherConverter.toDto(teacherRepository.save(entity)));

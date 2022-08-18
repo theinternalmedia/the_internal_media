@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.tim.dto.student.StudentDto;
+import com.tim.dto.student.StudentRequestDto;
 import com.tim.entity.Student;
 
 /**
@@ -34,5 +35,9 @@ public class StudentConverter extends AbstractConverter<StudentDto, Student> {
 			result.add(toDto(item));
 		});
 		return result;
+	}
+
+	public Student toEntity(StudentRequestDto requestDto) {
+		return this.modelMapper.map(requestDto, Student.class);
 	}
 }

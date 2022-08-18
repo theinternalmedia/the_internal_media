@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.tim.data.TimApiPath;
 import com.tim.dto.ResponseDto;
-import com.tim.dto.student.StudentDto;
+import com.tim.dto.student.StudentRequestDto;
 import com.tim.service.StudentService;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -26,7 +26,7 @@ public class StudentResource {
 	}
 	
 	@PostMapping(TimApiPath.Student.INSERT)
-	public ResponseDto insert(@RequestBody StudentDto studentDto) {
-		return studentService.insert(studentDto);
+	public ResponseDto insert(@RequestBody StudentRequestDto requestDto) {
+		return studentService.insert(requestDto);
 	}
 }

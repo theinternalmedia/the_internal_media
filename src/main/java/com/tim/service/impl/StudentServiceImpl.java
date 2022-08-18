@@ -20,6 +20,7 @@ import com.tim.data.TimConstants;
 import com.tim.dto.ResponseDto;
 import com.tim.dto.specification.TimSpecification;
 import com.tim.dto.student.StudentDto;
+import com.tim.dto.student.StudentRequestDto;
 import com.tim.entity.Classz;
 import com.tim.entity.Faculty;
 import com.tim.entity.SchoolYear;
@@ -44,9 +45,9 @@ public class StudentServiceImpl implements StudentService {
 
 	@Transactional
 	@Override
-	public ResponseDto insert(StudentDto studentDto) {
-		Student entity = studentConverter.toEntity(studentDto);
-		Classz classz = classRepository.getByCode(studentDto.getClassCode());
+	public ResponseDto insert(StudentRequestDto requestDto) {
+		Student entity = studentConverter.toEntity(requestDto);
+		Classz classz = classRepository.getByCode(requestDto.getClassCode());
 		entity.setClassz(classz);
 		entity.setPassword(encoder.encode(entity.getPassword()));
 		return new ResponseDto(studentConverter.toDto(studentRepository.save(entity) ));

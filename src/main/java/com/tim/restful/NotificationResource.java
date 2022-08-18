@@ -22,24 +22,24 @@ import com.tim.utils.ValidationUtils;
 @RestController
 @RequestMapping(TimApiPath.TIM_API)
 public class NotificationResource {
-	
+
 	@Autowired
 	private NotificationService notificationService;
-	
+
 	@PostMapping(TimApiPath.Notification.INSERT)
 	public ResponseDto save(@RequestBody NotificationRequestDto requestDto) {
 		ValidationUtils.validateObject(requestDto);
 		return notificationService.insert(requestDto);
 	}
-	
+
 	@GetMapping(TimApiPath.Notification.GET_ONE)
-	public ResponseDto getOne(@PathVariable("notificationId") long notificationId) {
-		return notificationService.getById(notificationId);
+	public ResponseDto getOne(@PathVariable("id") Long id) {
+		return notificationService.getById(id);
 	}
-	
+
 	@GetMapping(TimApiPath.Notification.GET_PAGE)
 	public PagingResponseDto getPage(@RequestParam("page") int page, @RequestParam("size") int size) {
-		return notificationService.getPage(page, size, PrincipalUtils.getAuthenticatedUsersUserId(), 
+		return notificationService.getPage(page, size, PrincipalUtils.getAuthenticatedUsersUserId(),
 				PrincipalUtils.authenticatedUserIsTeacher());
 	}
 }

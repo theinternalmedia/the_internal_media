@@ -159,4 +159,24 @@ public class ValidationUtils {
 		}
 	}
 
+	/**
+	 * Validate Value if is Instant Of Object
+	 * 
+	 * @author minhtuanitk43
+	 * @param <T>
+	 * @param value
+	 * @param clazz
+	 * @param fieldName
+	 * @return value if validation is success, otherwise ValidateException will be throw
+	 */
+	public static <T> T getValue(Object value, Class<T> clazz, String fieldName) {
+		try {
+			return clazz.cast(value);
+		} catch (Exception e) {
+			throw new ValidateException(ETimMessages.INVALID_OBJECT_VALUE_2, null, 
+					StringUtils.isBlank(fieldName) ? "Dữ liệu" : fieldName,
+							String.valueOf(value));
+		}
+	}
+
 }

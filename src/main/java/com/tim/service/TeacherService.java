@@ -4,7 +4,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.ResponseDto;
-import com.tim.dto.teacher.TeacherDto;
+import com.tim.dto.teacher.TeacherRequestDto;
 
 public interface TeacherService {
 	/**
@@ -12,7 +12,7 @@ public interface TeacherService {
 	 * @param dto
 	 * @return ResponseDto include status ok if success, else not ok. message and data if have return data
 	 */
-	ResponseDto insert(TeacherDto dto);
+	ResponseDto insert(TeacherRequestDto requestDto);
 
 	/**
 	 * @author minhtuanitk43
