@@ -26,7 +26,7 @@ public class FacultyServiceImpl implements FacultyService {
 	private TeacherRepository teacherRepository;
 
 	@Override
-	public ResponseDto insert(FacultyDto dto) {
+	public ResponseDto create(FacultyDto dto) {
 		Faculty entity = facultyConverter.toEntity(dto);
 		if (StringUtils.isNotBlank(dto.getHeadOfFacultyUserId())) {
 			Teacher teacher = teacherRepository.getByUserId(dto.getHeadOfFacultyUserId()).orElse(null);

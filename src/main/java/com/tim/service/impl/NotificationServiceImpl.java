@@ -31,6 +31,7 @@ import com.tim.repository.TeacherRepository;
 import com.tim.service.NotificationService;
 import com.tim.service.StudentService;
 import com.tim.utils.Utility;
+import com.tim.utils.ValidationUtils;
 
 @Service
 public class NotificationServiceImpl implements NotificationService {
@@ -51,7 +52,10 @@ public class NotificationServiceImpl implements NotificationService {
 	private StudentService studentService;
 
 	@Override
-	public ResponseDto insert(NotificationRequestDto requestDto) {
+	public ResponseDto create(NotificationRequestDto requestDto) {
+		// Validate input
+		ValidationUtils.validateObject(requestDto);
+		
 		Notification entity = notificationConverter.toEntity(requestDto);
 		final Notification notification = notificationRepository.save(entity);
 

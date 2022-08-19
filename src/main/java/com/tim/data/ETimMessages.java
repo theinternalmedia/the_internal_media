@@ -35,6 +35,7 @@ public enum ETimMessages {
 	NULL_CELL_VALUE("msg.405", "null cell value"),
 	CONSTRAIN_VAIOLATION_MESSAGE("msg.406", "constrain vaiolation message"),
 	INVALID_OBJECT_VALUE_2("msg.407", "invalid object value return value"),
+	INVALID_JSON_OBJECT("msg.408", "invalid string json object"),
 	ACCESS_DENIED("msg.000", "temporiry message"),
 
 	/* INTERNAL_SYSTEM_ERROR */

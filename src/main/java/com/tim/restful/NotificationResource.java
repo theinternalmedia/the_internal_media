@@ -16,7 +16,6 @@ import com.tim.dto.ResponseDto;
 import com.tim.dto.notification.NotificationRequestDto;
 import com.tim.service.NotificationService;
 import com.tim.utils.PrincipalUtils;
-import com.tim.utils.ValidationUtils;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -26,10 +25,9 @@ public class NotificationResource {
 	@Autowired
 	private NotificationService notificationService;
 
-	@PostMapping(TimApiPath.Notification.INSERT)
-	public ResponseDto save(@RequestBody NotificationRequestDto requestDto) {
-		ValidationUtils.validateObject(requestDto);
-		return notificationService.insert(requestDto);
+	@PostMapping(TimApiPath.Notification.CREATE)
+	public ResponseDto create(@RequestBody NotificationRequestDto requestDto) {
+		return notificationService.create(requestDto);
 	}
 
 	@GetMapping(TimApiPath.Notification.GET_ONE)
@@ -38,8 +36,10 @@ public class NotificationResource {
 	}
 
 	@GetMapping(TimApiPath.Notification.GET_PAGE)
-	public PagingResponseDto getPage(@RequestParam("page") int page, @RequestParam("size") int size) {
-		return notificationService.getPage(page, size, PrincipalUtils.getAuthenticatedUsersUserId(),
+	public PagingResponseDto getPage(@RequestParam("page") int page, 
+			@RequestParam("size") int size) {
+		return notificationService.getPage(page, size, 
+				PrincipalUtils.getAuthenticatedUsersUserId(),
 				PrincipalUtils.authenticatedUserIsTeacher());
 	}
 }

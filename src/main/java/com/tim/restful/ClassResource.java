@@ -19,8 +19,8 @@ public class ClassResource {
 	@Autowired
 	private ClassService classService;
 	
-	@PostMapping(TimApiPath.Class.INSERT)
-	public ResponseDto insert(@RequestBody ClassDto classDto) {
-		return classService.insert(classDto);
+	@PostMapping(TimApiPath.Class.CREATE)
+	public ResponseDto create(@RequestBody ClassDto classDto) {
+		return classService.create(classDto);
 	}
 }

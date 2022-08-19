@@ -1,0 +1,5 @@
+spring:
+  datasource:
+    password: 191e5cb227588610787ef31783bd1d3cff424d357c3f0d6b2e77f9d23ace6a6b
+    url: jdbc:postgresql://ec2-44-205-63-142.compute-1.amazonaws.com/d540pr88om7h7k
+    username: qcruszlegbahrl

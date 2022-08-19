@@ -1,23 +1,37 @@
 package com.tim.service.impl;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+
 import com.tim.converter.NewsConverter;
 import com.tim.data.ETimMessages;
+import com.tim.data.SearchOperation;
 import com.tim.data.TimConstants;
+import com.tim.dto.PagingResponseDto;
 import com.tim.dto.ResponseDto;
 import com.tim.dto.news.NewsDto;
+import com.tim.dto.news.NewsRequestDto;
+import com.tim.dto.specification.SearchCriteria;
+import com.tim.dto.specification.TimSpecification;
 import com.tim.entity.Faculty;
 import com.tim.entity.News;
 import com.tim.repository.FacultyRepository;
 import com.tim.repository.NewsRepository;
 import com.tim.service.NewsService;
 import com.tim.utils.Utility;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import com.tim.utils.ValidationUtils;
 
 @Service
 public class NewsServiceImpl implements NewsService {
@@ -31,17 +45,15 @@ public class NewsServiceImpl implements NewsService {
 
 
     @Override
-    public ResponseDto create(/*@Valid*/ NewsDto newsDto) {
-        List<Long> facultyIds = newsDto.getFacultyDtos();
-        News entity = newsConverter.toEntity(newsDto);
-        if (!facultyIds.isEmpty()) {
+    public ResponseDto create(NewsRequestDto requestDto) {
+    	// Validate Object
+    	ValidationUtils.validateObject(requestDto);
+    	
+        List<String> facultyCodes = requestDto.getFacultyCodes();
+        News entity = newsConverter.toEntity(requestDto);
+        if (CollectionUtils.isNotEmpty(facultyCodes)) {
             Set<Faculty> faculties = new HashSet<>();
-            facultyIds.forEach(id -> {
-                Optional<Faculty> faculty = facultyRepository.findById(id);
-                if ((faculty).isPresent()) {
-                    faculties.add(faculty.get());
-                }
-            });
+            faculties = facultyRepository.findByCodeIn(facultyCodes);
             entity.setFaculties(faculties);
         }
         return new ResponseDto(newsConverter.toDto(newsRepository.save(entity)));
@@ -49,6 +61,9 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public ResponseDto update(NewsDto newsDto) {
+    	// Validate Object
+    	ValidationUtils.validateObject(newsDto);
+    	
         Long newsId = newsDto.getId();
         if (newsId != null) {
             News oldNews = newsRepository.getOneById(newsId);
@@ -83,4 +98,27 @@ public class NewsServiceImpl implements NewsService {
         }
         return new ResponseDto(TimConstants.NOT_OK_MESSAGE);
     }
+
+	@Override
+	public ResponseDto getPage(int page, int size, boolean status, String facultyCode) {
+		TimSpecification<News> timSpecification = new TimSpecification<News>();
+		timSpecification.add(new SearchCriteria("status", status, SearchOperation.EQUAL));
+		Specification<News> specification = Specification.where(
+				(root, query, builder) -> {
+					return builder.equal(root.get("status"), status);
+				});
+		if(StringUtils.isNotBlank(facultyCode)) {
+			specification = specification.and((root, query, builder) -> {
+				return builder.equal(root.join("faculties").get("code"), facultyCode);
+			});
+		}
+		Pageable pageable = PageRequest.of(page - 1, size, Sort.by("createdDate"));
+		Page<News> pageTeachers = newsRepository.findAll(specification, pageable);
+		List<NewsDto> data = newsConverter.toDtoList(pageTeachers.getContent());
+		return new PagingResponseDto(pageTeachers.getTotalElements(), 
+				pageTeachers.getTotalPages(),
+				pageTeachers.getNumber() + 1, 
+				pageTeachers.getSize(), 
+				data);
+	}
 }

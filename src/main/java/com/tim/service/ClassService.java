@@ -7,5 +7,5 @@ import com.tim.dto.classz.ClassDto;
 
 @Service
 public interface ClassService {
-	ResponseDto insert(ClassDto classDto);
+	ResponseDto create(ClassDto classDto);
 }

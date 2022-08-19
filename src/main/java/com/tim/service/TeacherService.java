@@ -12,7 +12,7 @@ public interface TeacherService {
 	 * @param dto
 	 * @return ResponseDto include status ok if success, else not ok. message and data if have return data
 	 */
-	ResponseDto insert(TeacherRequestDto requestDto);
+	ResponseDto create(TeacherRequestDto requestDto);
 
 	/**
 	 * @author minhtuanitk43
@@ -26,7 +26,7 @@ public interface TeacherService {
 	 * @param file excel file
 	 * @return ResponseDto include status ok if success, else not ok. message and data if have return data
 	 */
-	ResponseDto insert(MultipartFile file);
+	ResponseDto create(MultipartFile file);
 	
 	String exportToExcelFile();
 	

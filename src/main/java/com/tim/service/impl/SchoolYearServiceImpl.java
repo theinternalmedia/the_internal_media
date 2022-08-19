@@ -17,7 +17,7 @@ public class SchoolYearServiceImpl implements SchoolYearService {
 	@Autowired
 	private SchoolYearRepository schoolYearRepository;
 	@Override
-	public ResponseDto insert(SchoolYearDto dto) {
+	public ResponseDto create(SchoolYearDto dto) {
 		SchoolYear schoolYear = schoolYearConverter.toEntity(dto);
 		return new ResponseDto(schoolYearConverter.toDto(schoolYearRepository.save(schoolYear)));
 	}

@@ -4,5 +4,5 @@ import com.tim.dto.ResponseDto;
 import com.tim.dto.faculty.FacultyDto;
 
 public interface FacultyService {
-	ResponseDto insert(FacultyDto dto);
+	ResponseDto create(FacultyDto dto);
 }

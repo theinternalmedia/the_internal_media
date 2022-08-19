@@ -2,18 +2,18 @@ package com.tim.service;
 
 import com.tim.dto.ResponseDto;
 import com.tim.dto.news.NewsDto;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
+import com.tim.dto.news.NewsRequestDto;
 
 public interface NewsService {
 
-    ResponseDto create(@Valid NewsDto newsDto);
+    ResponseDto create(NewsRequestDto requestDto);
 
-    ResponseDto update(@Valid NewsDto newsDto);
+    ResponseDto update(NewsDto newsDto);
 
-    ResponseDto getOne(@NotBlank Long id);
+    ResponseDto getOne(Long id);
 
-    ResponseDto toogleStatus(@NotBlank Long id);
+    ResponseDto toogleStatus(Long id);
+
+	ResponseDto getPage(int page, int size, boolean status, String facultyCode);
 
 }

@@ -33,7 +33,7 @@ public class ClassServiceImpl implements ClassService {
 	@Autowired
 	private TeacherRepository teacherRepository;
 	@Override
-	public ResponseDto insert(ClassDto classDto) {
+	public ResponseDto create(ClassDto classDto) {
 		Classz entity = classConverter.toEntity(classDto);
 		if(StringUtils.isNotBlank(classDto.getFacultyCode())) {
 			Faculty faculty = facultyRepository.getByCode(classDto.getFacultyCode()).orElse(null);

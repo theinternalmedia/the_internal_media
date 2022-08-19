@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tim.data.ETimMessages;
@@ -31,6 +32,8 @@ public class Utility {
 	private static MessageSource messageSource;
 
 	private static final String EXCEPTION_MESSAGE_DEFAULT = "Có gì đó sai sai, vui lòng thử lại";
+	
+	private static ObjectMapper objectMapper = new ObjectMapper();
 
 	/**
 	 * Constructor inject Beans
@@ -53,15 +56,27 @@ public class Utility {
 	 */
 	public static <T> T getObjectFromJsonFile(final String fileName, final TypeReference<T> typeReference) {
 		T t = null;
-		ObjectMapper objectMapper = new ObjectMapper();
 		try {
 			String jsonConfig = new String(
 					Files.readAllBytes(Paths.get(ClassLoader.getSystemResource(fileName).toURI())));
-			t = objectMapper.readValue(jsonConfig, typeReference);
+			t = convertStringJsonToObject(jsonConfig, typeReference);
 		} catch (IOException | URISyntaxException e) {
 			logger.error("Cannot read file json: {}", fileName);
 			e.printStackTrace();
 			throw new CustomException(ETimMessages.INTERNAL_SYSTEM_ERROR);
+		}
+		return t;
+	}
+	
+	public static <T> T convertStringJsonToObject(final String stringJson, final TypeReference<T> typeReference) {
+		T t = null;
+		try {
+			t = objectMapper.readValue(stringJson, typeReference);
+		} catch (JsonProcessingException e) {
+			String typeName = typeReference.getType().getTypeName();
+			logger.error("Cannot convert stringJson to object: {}", typeName);
+			e.printStackTrace();
+			throw new CustomException(ETimMessages.INVALID_JSON_OBJECT, typeName);
 		}
 		return t;
 	}

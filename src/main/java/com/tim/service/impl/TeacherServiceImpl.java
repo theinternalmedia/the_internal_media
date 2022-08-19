@@ -32,6 +32,7 @@ import com.tim.repository.TeacherRepository;
 import com.tim.service.TeacherService;
 import com.tim.service.excel.ExcelService;
 import com.tim.utils.Utility;
+import com.tim.utils.ValidationUtils;
 
 @Service
 public class TeacherServiceImpl implements TeacherService {
@@ -49,7 +50,10 @@ public class TeacherServiceImpl implements TeacherService {
 
 	@Override
 	@Transactional
-	public ResponseDto insert(TeacherRequestDto requestDto) {
+	public ResponseDto create(TeacherRequestDto requestDto) {
+		// Validate input
+		ValidationUtils.validateObject(requestDto);
+		
 		Teacher entity = teacherConverter.toEntity(requestDto);
 		Faculty faculty = facultyRepository.getByCode(requestDto.getFacultyCode()).orElse(null);
 		entity.setFaculty(faculty);
@@ -69,7 +73,7 @@ public class TeacherServiceImpl implements TeacherService {
 
 	@Override
 	@Transactional
-	public ResponseDto insert(MultipartFile file) {
+	public ResponseDto create(MultipartFile file) {
 		List<TeacherDto> dtoList = excelService.getListObjectFromExcelFile(file, TeacherDto.class);
 		List<Teacher> entityList = new ArrayList<Teacher>();
 		dtoList.forEach(item -> {

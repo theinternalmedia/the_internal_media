@@ -1,15 +1,14 @@
 package com.tim.dto.news;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
 import com.tim.dto.BaseDto;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter
@@ -31,7 +30,5 @@ public class NewsDto extends BaseDto{
 	private String content;
 
 	private String thumbnail;
-
-	private List<Long> facultyDtos = new ArrayList<>();
 
 }

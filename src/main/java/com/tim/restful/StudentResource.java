@@ -22,11 +22,11 @@ public class StudentResource {
 	
 	@PostMapping(TimApiPath.Student.UPLOAD_EXCEL)
 	public ResponseDto uplaodExcelFile(@RequestPart("file") MultipartFile file) {
-		return studentService.insert(file);
+		return studentService.create(file);
 	}
 	
-	@PostMapping(TimApiPath.Student.INSERT)
-	public ResponseDto insert(@RequestBody StudentRequestDto requestDto) {
-		return studentService.insert(requestDto);
+	@PostMapping(TimApiPath.Student.CREATE)
+	public ResponseDto create(@RequestBody StudentRequestDto requestDto) {
+		return studentService.create(requestDto);
 	}
 }

@@ -19,8 +19,8 @@ public class SchoolYearResource {
 	@Autowired
 	private SchoolYearService schoolYearService;
 	
-	@PostMapping(TimApiPath.SchoolYear.INSERT)
-	public ResponseDto insert(@RequestBody SchoolYearDto schoolYearDto) {
-		return schoolYearService.insert(schoolYearDto);
+	@PostMapping(TimApiPath.SchoolYear.CREATE)
+	public ResponseDto create(@RequestBody SchoolYearDto schoolYearDto) {
+		return schoolYearService.create(schoolYearDto);
 	}
 }

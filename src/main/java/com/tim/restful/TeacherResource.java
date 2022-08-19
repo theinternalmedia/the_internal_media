@@ -18,7 +18,6 @@ import com.tim.data.TimApiPath;
 import com.tim.dto.ResponseDto;
 import com.tim.dto.teacher.TeacherRequestDto;
 import com.tim.service.TeacherService;
-import com.tim.utils.ValidationUtils;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -28,15 +27,14 @@ public class TeacherResource {
 	@Autowired
 	private TeacherService teacherService;
 	
-	@PostMapping(TimApiPath.Teacher.INSERT)
-	public ResponseDto save(@RequestBody TeacherRequestDto requestDto) {
-		ValidationUtils.validateObject(requestDto);
-		return teacherService.insert(requestDto);
+	@PostMapping(TimApiPath.Teacher.CREATE)
+	public ResponseDto create(@RequestBody TeacherRequestDto requestDto) {
+		return teacherService.create(requestDto);
 	}
 	
 	@PostMapping(TimApiPath.Teacher.UPLOAD_EXCEL)
 	public ResponseDto uplaodExcelFile(@RequestPart("file") MultipartFile file) {
-		return teacherService.insert(file);
+		return teacherService.create(file);
 	}
 	
 	@GetMapping(TimApiPath.Teacher.GET_ONE)

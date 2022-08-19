@@ -20,8 +20,8 @@ public class FacultyResource {
 	@Autowired
 	private FacultyService facultyService;
 	
-	@PostMapping(TimApiPath.Faculty.INSERT)
-	public ResponseDto insert(@RequestBody FacultyDto facultyDto) {
-		return facultyService.insert(facultyDto);
+	@PostMapping(TimApiPath.Faculty.CREATE)
+	public ResponseDto create(@RequestBody FacultyDto facultyDto) {
+		return facultyService.create(facultyDto);
 	}
 }

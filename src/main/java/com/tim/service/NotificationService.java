@@ -6,7 +6,7 @@ import com.tim.dto.notification.NotificationRequestDto;
 
 public interface NotificationService {
 
-	ResponseDto insert(NotificationRequestDto requestDto);
+	ResponseDto create(NotificationRequestDto requestDto);
 
 	ResponseDto getById(Long notificationId);
 

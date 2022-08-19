@@ -31,6 +31,7 @@ import com.tim.repository.StudentRepository;
 import com.tim.service.StudentService;
 import com.tim.service.excel.ExcelService;
 import com.tim.utils.Utility;
+import com.tim.utils.ValidationUtils;
 
 import java.util.Optional;
 
@@ -49,7 +50,10 @@ public class StudentServiceImpl implements StudentService {
 
 	@Transactional
 	@Override
-	public ResponseDto insert(StudentRequestDto requestDto) {
+	public ResponseDto create(StudentRequestDto requestDto) {
+		// Validate input
+		ValidationUtils.validateObject(requestDto);
+		
 		Student entity = studentConverter.toEntity(requestDto);
 		Classz classz = classRepository.getByCode(requestDto.getClassCode());
 		entity.setClassz(classz);
@@ -59,7 +63,7 @@ public class StudentServiceImpl implements StudentService {
 
 	@Transactional
 	@Override
-	public ResponseDto insert(MultipartFile file) {
+	public ResponseDto create(MultipartFile file) {
 		List<StudentDto> dtoList = excelService.getListObjectFromExcelFile(file, StudentDto.class);
 		List<Student> entityList = new ArrayList<>();
 		dtoList.forEach(item -> {
