@@ -30,7 +30,7 @@ public class NewsRequestDto implements Serializable{
 	@NotBlank
 	private String content;
 
-	private MultipartFile thumbnailFile;
+	private String thumbnail;
 
 	private List<String> facultyCodes = new ArrayList<>();
 }

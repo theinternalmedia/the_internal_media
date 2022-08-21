@@ -24,47 +24,49 @@ import com.tim.security.services.UserDetailsServiceImpl;
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-	@Autowired
-	UserDetailsServiceImpl userDetailsService;
+    @Autowired
+    UserDetailsServiceImpl userDetailsService;
 
-	@Autowired
-	private AuthEntryPointJwt unauthorizedHandler;
+    @Autowired
+    private AuthEntryPointJwt unauthorizedHandler;
 
-	@Bean
-	public AuthTokenFilter authenticationJwtTokenFilter() {
-		return new AuthTokenFilter();
-	}
+    @Bean
+    public AuthTokenFilter authenticationJwtTokenFilter() {
+        return new AuthTokenFilter();
+    }
 
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-	}
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+    }
 
-	@Bean
-	@Override
-	public AuthenticationManager authenticationManagerBean() throws Exception {
-		return super.authenticationManagerBean();
-	}
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
 
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http.cors().and().csrf().disable().authorizeRequests()
-			.antMatchers("/test/**").permitAll()
-			.antMatchers("/api/user/**").authenticated().and().exceptionHandling()
-			.authenticationEntryPoint(unauthorizedHandler).and().sessionManagement()
-			.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and();
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.cors().and().csrf().disable().authorizeRequests()
+                .antMatchers("/test/**").permitAll()
+                .antMatchers("/api/user/**").authenticated()
+                .and().exceptionHandling()
+                .authenticationEntryPoint(unauthorizedHandler)
+                .and().sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and();
 
-		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-	}
+        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+    }
 
-	@Override
-	public void configure(WebSecurity web) {
-		web.ignoring().antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources/**",
-				"/configuration/security", "/swagger-ui.html", "/webjars/**");
-	}
+    @Override
+    public void configure(WebSecurity web) {
+        web.ignoring().antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources/**",
+                "/configuration/security", "/swagger-ui.html", "/webjars/**");
+    }
 }

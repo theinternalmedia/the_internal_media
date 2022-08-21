@@ -1,10 +1,13 @@
 package com.tim.service.impl;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.tim.utils.ImageFileUploadUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +35,8 @@ import com.tim.repository.NewsRepository;
 import com.tim.service.NewsService;
 import com.tim.utils.Utility;
 import com.tim.utils.ValidationUtils;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class NewsServiceImpl implements NewsService {
@@ -45,18 +50,31 @@ public class NewsServiceImpl implements NewsService {
 
 
     @Override
-    public ResponseDto create(NewsRequestDto requestDto) {
+    @Transactional
+    public ResponseDto create(String newsDtoJsonRequest, MultipartFile image) throws IOException {
+        NewsRequestDto newsRequestDto = Utility.convertStringJsonToObject(newsDtoJsonRequest,
+                                                        new TypeReference<NewsRequestDto>() {});
     	// Validate Object
-    	ValidationUtils.validateObject(requestDto);
-    	
-        List<String> facultyCodes = requestDto.getFacultyCodes();
-        News entity = newsConverter.toEntity(requestDto);
+    	ValidationUtils.validateObject(newsRequestDto);
+
+    	String thumbnailName = org.springframework.util.StringUtils.cleanPath(image.getOriginalFilename());
+    	newsRequestDto.setThumbnail(thumbnailName);
+
+        List<String> facultyCodes = newsRequestDto.getFacultyCodes();
+        News entity = newsConverter.toEntity(newsRequestDto);
         if (CollectionUtils.isNotEmpty(facultyCodes)) {
             Set<Faculty> faculties = new HashSet<>();
             faculties = facultyRepository.findByCodeIn(facultyCodes);
             entity.setFaculties(faculties);
         }
-        return new ResponseDto(newsConverter.toDto(newsRepository.save(entity)));
+
+        String uploadDir = "src/main/resources/news-photos/"; // + savedUser.getId()
+        ImageFileUploadUtil.saveFile(uploadDir, thumbnailName, image);
+
+        NewsDto savedUser = newsConverter.toDto(newsRepository.save(entity));
+        savedUser.setThumbnailUrl("/user-photos/" + savedUser.getThumbnail());
+
+        return new ResponseDto(savedUser);
     }
 
     @Override
