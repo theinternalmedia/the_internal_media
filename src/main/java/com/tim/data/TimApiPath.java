@@ -12,6 +12,7 @@ public final class TimApiPath {
 	public static class Auth {
 		public static final String PREFIX = "/auth";
 		public static final String LOGIN = PREFIX + "/login";
+		public static final String REFRESH_TOKEN = PREFIX + "/refresh-token";
 	}
 
 	public static class Teacher {
@@ -83,6 +84,7 @@ public final class TimApiPath {
 		public static final String UPDATE = PREFIX_V1;
 		public static final String TOGGLE_STATUS = PREFIX_V1 + TOGGLE_STATUS_STR;
 		public static final String DELETE = PREFIX_V1;
+		public static final String GET_ALL = PREFIX_V1;
 	}
 
 	public static class News{

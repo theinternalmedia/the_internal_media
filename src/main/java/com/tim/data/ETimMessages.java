@@ -36,6 +36,9 @@ public enum ETimMessages {
 	CONSTRAIN_VAIOLATION_MESSAGE("msg.406", "constrain vaiolation message"),
 	INVALID_OBJECT_VALUE_2("msg.407", "invalid object value return value"),
 	INVALID_JSON_OBJECT("msg.408", "invalid string json object"),
+	EXPIRED_TOKEN("msg.409", "expired token"),
+	INVALID_TOKEN("msg.410", "invalid token"),
+	
 	ACCESS_DENIED("msg.000", "temporiry message"),
 
 	/* INTERNAL_SYSTEM_ERROR */

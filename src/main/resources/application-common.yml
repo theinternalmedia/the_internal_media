@@ -6,6 +6,7 @@ server:
 #Jwe secret
 tim:
   jwtExpirationMs: 86400000
+  jwtRefreshExpirationMs: 2592000000
   jwtSecret: mySecretKey
   
 # Logging

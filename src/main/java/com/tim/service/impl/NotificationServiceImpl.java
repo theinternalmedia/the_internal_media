@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,10 +20,12 @@ import com.tim.dto.ResponseDto;
 import com.tim.dto.notification.NotificationDto;
 import com.tim.dto.notification.NotificationRequestDto;
 import com.tim.entity.Notification;
+import com.tim.entity.NotificationGroup;
 import com.tim.entity.NotificationStudent;
 import com.tim.entity.NotificationTeacher;
 import com.tim.entity.Student;
 import com.tim.entity.Teacher;
+import com.tim.repository.NotificationGroupRepository;
 import com.tim.repository.NotificationRepository;
 import com.tim.repository.NotificationStudentRepository;
 import com.tim.repository.NotificationTeacherRepository;
@@ -50,13 +53,20 @@ public class NotificationServiceImpl implements NotificationService {
 	private NotificationRepository notificationRepository;
 	@Autowired
 	private StudentService studentService;
-
+	@Autowired
+	private NotificationGroupRepository notificationGroupRepository;
+	
 	@Override
 	public ResponseDto create(NotificationRequestDto requestDto) {
 		// Validate input
 		ValidationUtils.validateObject(requestDto);
 		
 		Notification entity = notificationConverter.toEntity(requestDto);
+		if (StringUtils.isNotBlank(requestDto.getNotificationGroupCode())) {
+			NotificationGroup notificationGroup = notificationGroupRepository.getByCode(
+					requestDto.getNotificationGroupCode());
+			entity.setNotificationGroup(notificationGroup);
+		}
 		final Notification notification = notificationRepository.save(entity);
 
 		switch (notification.getType()) {

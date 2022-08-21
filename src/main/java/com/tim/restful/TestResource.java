@@ -15,7 +15,6 @@ import com.tim.data.ETimMessages;
 import com.tim.data.TimApiPath;
 import com.tim.dto.ResponseDto;
 import com.tim.dto.student.StudentDto;
-import com.tim.repository.StudentRepository;
 import com.tim.service.StudentService;
 import com.tim.service.TeacherService;
 import com.tim.utils.Utility;
@@ -60,5 +59,10 @@ public class TestResource {
 	public ResponseDto exportTeachers() {
 		teacherService.exportToExcelFile();
 		return new ResponseDto();
+	}
+	
+	@GetMapping("/generate-slugs")
+	public String generateSlugs(@RequestParam("string") String string) {
+		return Utility.generateSlugs(string);
 	}
 }

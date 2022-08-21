@@ -43,7 +43,8 @@ public class TeacherResource {
 	}
 	
 	@GetMapping(TimApiPath.Teacher.GET_PAGE)
-	public ResponseEntity<ResponseDto> getPage(@PathParam("facultyCode") String facultyCode,
+	public ResponseEntity<ResponseDto> getPage(
+			@PathParam("facultyCode") String facultyCode,
 			@PathParam("name") String name, 
 			@PathParam("userId") String userId,
 			@RequestParam("page") int page,

@@ -59,6 +59,16 @@ public class GlobalExceptionHandler {
 		ErrorResponse errorResponse = new ErrorResponse(Utility.getMessage(eTimMessages, e.getObjectName()), errors);
 		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
+	
+	// Custom exception handler
+	@ExceptionHandler({ CustomException.class, AuthException.class })
+	public ResponseEntity<ErrorResponse> handleCustomException(CustomException e) {
+		logger.error("CustomException error: {}", e.getMessage());
+
+		ErrorResponse errorResponse = new ErrorResponse(e.getMessage(), null);
+		
+		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+	}
 
 	/*@ExceptionHandler(ConstraintViolationException.class)
 	public ResponseEntity<ErrorResponse> handleConstraintViolationException(ConstraintViolationException e){

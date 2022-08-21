@@ -27,13 +27,13 @@ public class NotificationRequestDto {
 
 	@NotBlank
 	private String content;
-	
+
 	@NotBlank
 	private String notificationGroupCode;
 
 	private Set<String> facultyCodes = new HashSet<String>();
-	
+
 	private Set<String> schoolYearCodes = new HashSet<String>();
-	
+
 	private Set<String> classCodes = new HashSet<String>();
 }

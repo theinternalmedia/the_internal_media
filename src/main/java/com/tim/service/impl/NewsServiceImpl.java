@@ -43,7 +43,6 @@ public class NewsServiceImpl implements NewsService {
     @Autowired
     private FacultyRepository facultyRepository;
 
-
     @Override
     public ResponseDto create(NewsRequestDto requestDto) {
     	// Validate Object
@@ -100,7 +99,7 @@ public class NewsServiceImpl implements NewsService {
     }
 
 	@Override
-	public ResponseDto getPage(int page, int size, boolean status, String facultyCode) {
+	public PagingResponseDto getPage(int page, int size, boolean status, String facultyCode) {
 		TimSpecification<News> timSpecification = new TimSpecification<News>();
 		timSpecification.add(new SearchCriteria("status", status, SearchOperation.EQUAL));
 		Specification<News> specification = Specification.where(

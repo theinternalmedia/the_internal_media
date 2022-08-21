@@ -1,7 +1,5 @@
 package com.tim.restful;
 
-import java.util.List;
-
 import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +19,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.tim.data.TimApiPath;
+import com.tim.data.TimConstants;
 import com.tim.dto.ResponseDto;
 import com.tim.dto.news.NewsDto;
 import com.tim.dto.news.NewsRequestDto;
 import com.tim.service.NewsService;
 import com.tim.utils.Utility;
+
+import io.swagger.annotations.ApiParam;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -36,9 +37,11 @@ public class NewsResource {
 	private NewsService newsService;
 
 	@PostMapping(value = TimApiPath.News.CREATE)
-	public ResponseEntity<ResponseDto> create(
-			@RequestPart(value = "file", required = false) MultipartFile file,
-			@RequestParam("newsRequestDtoJson") String newsRequestDtoJson) {
+	public ResponseEntity<ResponseDto> create(@RequestPart(value = "file", required = false) MultipartFile file,
+			@ApiParam(value = "NewsRequestDto in String Json, FacultyCodes can be empty", 
+			example = TimConstants.ApiParamExample.News.CREATE_newsRequestDtoJson) 
+				@RequestParam("newsRequestDtoJson") String newsRequestDtoJson) {
+		
 		NewsRequestDto requestDto = Utility.convertStringJsonToObject(newsRequestDtoJson,
 				new TypeReference<NewsRequestDto>() {
 				});
@@ -57,7 +60,8 @@ public class NewsResource {
 	}
 	
 	@GetMapping(value = TimApiPath.News.GET_PAGE)
-	public ResponseEntity<ResponseDto> getPage(@RequestParam("page") int page, 
+	public ResponseEntity<ResponseDto> getPage(
+			@RequestParam("page") int page, 
 			@RequestParam("size") int size,
 			@RequestParam("status") boolean status,
 			@PathParam("facultyCode") String facultyCode) {
