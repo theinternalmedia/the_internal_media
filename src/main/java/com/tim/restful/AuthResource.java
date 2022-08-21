@@ -7,14 +7,12 @@ import java.util.Set;
 
 import javax.validation.Valid;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,8 +31,6 @@ import com.tim.payload.request.LoginRequest;
 import com.tim.payload.request.TokenRefreshRequest;
 import com.tim.payload.response.JwtResponse;
 import com.tim.payload.response.TokenRefreshResponse;
-import com.tim.repository.PermissionRepository;
-import com.tim.repository.RoleRepository;
 import com.tim.repository.StudentRepository;
 import com.tim.repository.TeacherRepository;
 import com.tim.security.jwt.JwtUtils;
@@ -51,21 +47,13 @@ import com.tim.service.RefreshTokenService;
 @RequestMapping(TimApiPath.TIM_API)
 public class AuthResource {
 	@Autowired
-	AuthenticationManager authenticationManager;
+	public AuthenticationManager authenticationManager;
 	@Autowired
-	StudentRepository studentRepository;
+	private StudentRepository studentRepository;
 	@Autowired
-	TeacherRepository teacherRepository;
+	private TeacherRepository teacherRepository;
 	@Autowired
-	RoleRepository roleRepository;
-	@Autowired
-	PasswordEncoder encoder;
-	@Autowired
-	ModelMapper modelMapper;
-	@Autowired
-	JwtUtils jwtUtils;
-	@Autowired
-	PermissionRepository permissionRepository;
+	private JwtUtils jwtUtils;
 	@Autowired
 	private RefreshTokenService refreshTokenService;
 

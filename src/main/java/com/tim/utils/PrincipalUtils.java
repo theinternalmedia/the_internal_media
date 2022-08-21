@@ -1,5 +1,6 @@
 package com.tim.utils;
 
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -42,11 +43,11 @@ public final class PrincipalUtils {
 	 */
 	public static UserDetailsImpl getAuthenticatedUserDetail() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		if (auth != null) {
-			UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
-			return userDetails;
+		if (auth == null | auth instanceof AnonymousAuthenticationToken) {
+			return null;
 		}
-		return null;
+		UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
+		return userDetails;
 	}
 	
 	/**

@@ -6,6 +6,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,7 +31,7 @@ public class TestResource {
 	private StudentConverter studentConverter;
 	@Autowired
 	private TeacherService teacherService;
-
+	
 	@GetMapping("/message")
 	public String testGetExceptionMessage() {
 		return Utility.getMessage(ETimMessages.INTERNAL_SYSTEM_ERROR);
@@ -62,7 +63,10 @@ public class TestResource {
 	}
 	
 	@GetMapping("/generate-slugs")
-	public String generateSlugs(@RequestParam("string") String string) {
+	public String generateSlugs(@RequestHeader(value="userId") String headerStr,
+			@RequestHeader(value="password") String password,
+			@RequestParam("string") String string) {
+		System.out.print(string);
 		return Utility.generateSlugs(string);
 	}
 }

@@ -28,6 +28,9 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
 	private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
 
+	private static final String USERS_USER_NAME = "userId";
+	private static final String USERS_PASSWORD = "password";
+
 	@Autowired
 	private JwtUtils jwtUtils;
 
@@ -38,22 +41,54 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		try {
-			String jwt = parseJwt(request);
+			final String jwt = parseJwt(request);
+			// Has jwtToken
 			if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
 				String username = jwtUtils.getUsernameFromJwtToken(jwt);
 				UserDetails userDetail = userDetailsService.loadUserByUsername(username);
-				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-						userDetail,
-						null, 
-						userDetail.getAuthorities());
-				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-				SecurityContextHolder.getContext().setAuthentication(authentication);
+				// setAuthentication
+				setAuthentication(userDetail, request);
+			// Has'nt jwtToken
+			} else {
+				// Get userId and password from header
+				final String usersUserId = request.getHeader(USERS_USER_NAME);
+				final String usersUserPassword = request.getHeader(USERS_PASSWORD);
+				
+				// Present userId and password in header
+				if (StringUtils.hasText(usersUserPassword) && StringUtils.hasText(usersUserId)) {
+					logger.info("Authenticate user:  {}, apiPath: {}", usersUserId, request.getRequestURI());
+					UserDetails userDetail = userDetailsService.loadUserByUsername(usersUserId);
+					if (userDetail.getPassword().equals(usersUserPassword)) {
+						// setAuthentication
+						setAuthentication(userDetail, request);
+					}
+				}
 			}
 		} catch (Exception e) {
 			logger.error("Cannot set user authentication: {}", e);
 		}
-		
+
 		filterChain.doFilter(request, response);
+
+	}
+
+	/**
+	 * SetAuthentication
+	 * 
+	 * @author minhtuanitk43
+	 * @param userDetail
+	 * @param request
+	 */
+	private void setAuthentication(UserDetails userDetail, HttpServletRequest request) {
+		UsernamePasswordAuthenticationToken authentication = 
+				new UsernamePasswordAuthenticationToken(
+						userDetail, 
+						null,
+						userDetail.getAuthorities());
+		authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+		logger.info("Authenticate successfully user:  {}, apiPath: {}", userDetail.getUsername(),
+				request.getRequestURI());
 
 	}
 
