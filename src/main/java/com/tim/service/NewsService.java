@@ -2,8 +2,8 @@ package com.tim.service;
 
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.ResponseDto;
-import com.tim.dto.news.NewsDto;
 import com.tim.dto.news.NewsRequestDto;
+import com.tim.dto.news.NewsUpdateDto;
 
 public interface NewsService {
 
@@ -23,7 +23,7 @@ public interface NewsService {
      * @param newsDto
      * @return ResponseDto
      */
-    ResponseDto update(NewsDto newsDto);
+    ResponseDto update(NewsUpdateDto newsDto);
 
     /**
      * @author minhtuanitk43
@@ -48,9 +48,19 @@ public interface NewsService {
      * @param page
      * @param size
      * @param status
+     * @param id 
      * @param facultyCode
+     * @param facultyCode2 
      * @return
      */
-	PagingResponseDto getPage(int page, int size, boolean status, String facultyCode);
+	PagingResponseDto getPage(int page, int size, boolean status, 
+			Long id, String search, String facultyCode);
+
+	/**
+	 * @author minhtuanitk43
+	 * @param slug
+	 * @return ResponseDto
+	 */
+	ResponseDto getOne(String slug);
 
 }

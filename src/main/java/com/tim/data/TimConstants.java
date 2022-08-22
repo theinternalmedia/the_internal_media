@@ -105,7 +105,12 @@ public final class TimConstants {
 			public static final String CREATE_newsRequestDtoJson = 
 					"{\"title\":\"String\", "
 					+ "\"content\":\"String\", "
-					+ "\"shortDescription\":\"String\", \"facultyCodes\":\"[]\"}";
+					+ "\"shortDescription\":\"String\", \"facultyCodes\":\"[String]\"}";
+			public static final String UPDATE_newsRequestDtoJson = 
+					"{\"id\":\"Long\", "
+					+ "{\"title\":\"String\", "
+					+ "\"content\":\"String\", "
+					+ "\"shortDescription\":\"String\", \"facultyCodes\":\"[String]\"}";
 		}
 	}
 }

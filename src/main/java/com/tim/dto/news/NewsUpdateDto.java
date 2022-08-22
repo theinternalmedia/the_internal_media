@@ -1,5 +1,6 @@
 package com.tim.dto.news;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import lombok.AccessLevel;
@@ -16,5 +17,6 @@ public class NewsUpdateDto extends NewsRequestDto{
 	private static final long serialVersionUID = 1342576901149328177L;
 	
 	@NotNull
+	@Min(value = 1)
 	private Long id;
 }

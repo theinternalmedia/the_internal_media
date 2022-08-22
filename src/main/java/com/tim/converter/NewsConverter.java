@@ -39,4 +39,11 @@ public class NewsConverter extends AbstractConverter<NewsDto, News> {
 		});
 		return result;
 	}
+	
+	public News toEntity(NewsRequestDto dto, News oldNews) {
+		oldNews.setContent(dto.getContent());
+		oldNews.setTitle(dto.getTitle());
+		oldNews.setShortDescription(dto.getShortDescription());
+		return oldNews;
+	}
 }
