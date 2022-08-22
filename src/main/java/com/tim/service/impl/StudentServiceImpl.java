@@ -163,9 +163,12 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public ResponseDto toggleStatus(Long id) {
-        Student student = studentRepository.getOneById(id);
-        student.setStatus(false);
-        studentRepository.save(student);
-        return new ResponseDto();
+        Student student = studentRepository.findById(id).orElse(null);
+        if (student != null) {
+        	student.setStatus(!student.getStatus());
+            studentRepository.save(student);
+            return new ResponseDto();
+        }
+        return new ResponseDto(TimConstants.NOT_OK_MESSAGE);
     }
 }

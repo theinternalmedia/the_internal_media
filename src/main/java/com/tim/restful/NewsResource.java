@@ -63,12 +63,12 @@ public class NewsResource {
 	}
 
 	@GetMapping(value = TimApiPath.News.GET_BY_ID)
-	public ResponseEntity<ResponseDto> getOne(@PathVariable("id") Long id) {
+	public ResponseEntity<ResponseDto> getById(@PathVariable("id") Long id) {
 		return ResponseEntity.ok(newsService.getOne(id));
 	}
 	
 	@GetMapping(value = TimApiPath.News.GET_BY_SLUG)
-	public ResponseEntity<ResponseDto> getOne(@PathVariable("slug") String slug) {
+	public ResponseEntity<ResponseDto> getBySlug(@PathParam("slug") String slug) {
 		return ResponseEntity.ok(newsService.getOne(slug));
 	}
 	
@@ -84,7 +84,7 @@ public class NewsResource {
 	}
 
 	@PutMapping(value = TimApiPath.News.TOGGLE_STATUS)
-	public ResponseEntity<ResponseDto> delete(@PathVariable("id") Long id) {
+	public ResponseEntity<ResponseDto> toggleStatus(@PathVariable("id") Long id) {
 		return ResponseEntity.ok(newsService.toogleStatus(id));
 	}
 }

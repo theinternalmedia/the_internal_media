@@ -1,5 +1,6 @@
 package com.tim.dto.notification;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -8,12 +9,16 @@ import javax.validation.constraints.Size;
 
 import com.tim.data.TimConstants;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.ToString;
 
 @ToString
 @Getter
-public class NotificationRequestDto {
+public class NotificationRequestDto implements Serializable{
+
+	@Getter(value = AccessLevel.NONE)
+	private static final long serialVersionUID = 7569445856618041347L;
 
 	private int type = TimConstants.NotificationType.TO_ALL;
 

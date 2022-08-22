@@ -3,6 +3,9 @@ package com.tim.data;
 public enum ETimMessages {
 	
 	USER_NOT_FOUND("msg.000", "User not found"),
+	/**
+	 * Không tìm thấy {0} với {1} = {2}
+	 */
 	ENTITY_NOT_FOUND("msg.001", "ENTITY_NOT_FOUND"),
 	
 //	INVALID_SHEET_NAME("msg.004", "invalid sheet name"),

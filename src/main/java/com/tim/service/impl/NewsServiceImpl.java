@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.transaction.Transactional;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,6 +69,7 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
+    @Transactional
     public ResponseDto update(NewsUpdateDto requestDto) {
     	// Validate Object
     	ValidationUtils.validateObject(requestDto);
@@ -107,17 +110,17 @@ public class NewsServiceImpl implements NewsService {
         if (news == null) {
             return new ResponseDto(Utility.getMessage(ETimMessages.ENTITY_NOT_FOUND,
                     TimConstants.ActualEntityName.NEWS,
-                    "Id", id.toString()));
+                    "ID", String.valueOf(id)));
         }
         return new ResponseDto(newsConverter.toDto(news));
     }
 
     @Override
     public ResponseDto toogleStatus(Long id) {
-        Optional<News> news = newsRepository.findById(id);
-        if (news.isPresent()) {
-        	News entity = news.get();
-            newsRepository.save(entity);
+        News news = newsRepository.findById(id).orElse(null);
+        if (news != null) {
+        	news.setStatus(!news.getStatus());
+            newsRepository.save(news);
             return new ResponseDto();
         }
         return new ResponseDto(TimConstants.NOT_OK_MESSAGE);

@@ -98,6 +98,7 @@ public final class TimConstants {
 		public static final String CLASS = "Lớp";
 		public static final String SCHOOL_YEAR = "Khóa";
 		public static final String NEWS = "Tin tức";
+		public static final String NOTIFICATION = "Thông báo";
 	}
 	
 	public static final class ApiParamExample{
@@ -105,12 +106,32 @@ public final class TimConstants {
 			public static final String CREATE_newsRequestDtoJson = 
 					"{\"title\":\"String\", "
 					+ "\"content\":\"String\", "
-					+ "\"shortDescription\":\"String\", \"facultyCodes\":\"[String]\"}";
+					+ "\"shortDescription\":\"String\", "
+					+ "\"facultyCodes\":[\"String\"]}";
 			public static final String UPDATE_newsRequestDtoJson = 
 					"{\"id\":\"Long\", "
 					+ "{\"title\":\"String\", "
 					+ "\"content\":\"String\", "
-					+ "\"shortDescription\":\"String\", \"facultyCodes\":\"[String]\"}";
+					+ "\"shortDescription\":\"String\", "
+					+ "\"facultyCodes\":[\"String\"]}";
+		}
+		
+		public static final class Notification {
+			public static final String CREATE_notifyRequestDtoJson = 
+					"{\"title\":\"String\", "
+					+ "\"content\":\"String\", "
+					+ "\"shortDescription\":\"String\", "
+					+ "\"facultyCodes\":[\"String\"], "
+					+ "\"schoolYearCodes\":[\"String\"], "
+					+ "\"classCodes\":[\"String\"]}";
+			public static final String UPDATE_notifyRequestDtoJson = 
+					"{\"id\":\"Long\", "
+					+ "{\"title\":\"String\", "
+					+ "\"content\":\"String\", "
+					+ "\"shortDescription\":\"String\", "
+					+ "\"facultyCodes\":[\"String\"], "
+					+ "\"schoolYearCodes\":[\"String\"], "
+					+ "\"classCodes\":[\"String\"]}";
 		}
 	}
 }
