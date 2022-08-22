@@ -41,4 +41,6 @@ public interface StudentService {
     ResponseDto getByEmail(String email);
 
     ResponseDto toggleStatus(Long id);
+
+    ResponseDto upload(String studentDtoJsonRequest, MultipartFile image);
 }

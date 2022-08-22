@@ -30,6 +30,7 @@ public final class TimApiPath {
 	public static class Student {
 		private static final String PREFIX_V1 = VER_V1 + "/students";
 		public static final String UPLOAD_EXCEL = PREFIX_V1 + UPLOAD_EXCEL_STR;
+		public static final String UPLOAD_STUDENT = PREFIX_V1 + "/upload";
 		public static final String CREATE = PREFIX_V1;
 		public static final String GET_ONE = PREFIX_V1 + PATH_VARIABLE_CODE;
 		public static final String UPDATE = PREFIX_V1;

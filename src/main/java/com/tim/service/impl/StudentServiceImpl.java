@@ -1,20 +1,6 @@
 package com.tim.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.JoinType;
-
-import org.apache.commons.lang3.ObjectUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.tim.converter.StudentConverter;
 import com.tim.data.ETimMessages;
 import com.tim.data.TimConstants;
@@ -30,10 +16,24 @@ import com.tim.repository.ClassRepository;
 import com.tim.repository.StudentRepository;
 import com.tim.service.StudentService;
 import com.tim.service.excel.ExcelService;
+import com.tim.utils.ImageFileUploadUtil;
 import com.tim.utils.Utility;
 import com.tim.utils.ValidationUtils;
+import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -47,6 +47,29 @@ public class StudentServiceImpl implements StudentService {
 	private ClassRepository classRepository;
 	@Autowired
 	private PasswordEncoder encoder;
+
+
+	@Override
+	public ResponseDto upload(String studentDtoJsonRequest, MultipartFile image) {
+		StudentRequestDto studentRequestDto = Utility.convertStringJsonToObject(studentDtoJsonRequest,
+											new TypeReference<StudentRequestDto>(){} );
+		ValidationUtils.validateObject(studentRequestDto);
+		ValidationUtils.validateImage(image);
+
+//		if(studentRequestDto.getClassCode())
+
+		Student student = studentConverter.toEntity(studentRequestDto);
+		String fileName = ImageFileUploadUtil.createFileName(image, TimConstants.Upload.USER_PREFIX);
+		try{
+			ImageFileUploadUtil.saveFile(TimConstants.Upload.USER_UPLOAD_DIR, fileName, image);
+		}catch(IOException e){
+			return new ResponseDto(TimConstants.Upload.SAVE_UNSUCCESS);
+		}
+		String userAvatarImage = TimConstants.Upload.USER_PATH + fileName;
+		student.setAvatar(userAvatarImage);
+		StudentDto savedStudent = studentConverter.toDto(studentRepository.save(student));
+		return new ResponseDto(savedStudent);
+	}
 
 	@Transactional
 	@Override
@@ -168,4 +191,5 @@ public class StudentServiceImpl implements StudentService {
         studentRepository.save(student);
         return new ResponseDto();
     }
+
 }

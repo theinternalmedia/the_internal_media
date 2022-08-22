@@ -31,6 +31,4 @@ public class NewsDto extends BaseDto{
 
 	private String thumbnail;
 
-	private String thumbnailUrl;
-
 }

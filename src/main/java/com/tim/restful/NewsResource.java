@@ -31,12 +31,9 @@ public class NewsResource {
 		/*NewsRequestDto requestDto = Utility.convertStringJsonToObject(newsDtoJsonRequest,
 									new TypeReference<NewsRequestDto>() {});*/
 //		requestDto.setThumbnailFile(image);
-		try {
-			return ResponseEntity.ok(newsService.create(newsDtoJsonRequest, image));
-		} catch (IOException e) {
-			e.printStackTrace();
-			return ResponseEntity.ok(new ResponseDto("Save image unsuccess"));
-		}
+
+		return ResponseEntity.ok(newsService.create(newsDtoJsonRequest, image));
+
 	}
 
 	@PutMapping(value = TimApiPath.News.UPDATE)

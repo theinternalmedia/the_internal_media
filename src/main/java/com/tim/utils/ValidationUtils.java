@@ -13,6 +13,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -23,6 +24,8 @@ import com.tim.data.ETimMessages;
 import com.tim.data.TimConstants;
 import com.tim.exception.GlobalExceptionHandler;
 import com.tim.exception.ValidateException;
+import org.springframework.web.multipart.MultipartException;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 
@@ -176,6 +179,13 @@ public class ValidationUtils {
 			throw new ValidateException(ETimMessages.INVALID_OBJECT_VALUE_2, null, 
 					StringUtils.isBlank(fieldName) ? "Dữ liệu" : fieldName,
 							String.valueOf(value));
+		}
+	}
+
+	public static void validateImage(MultipartFile image){
+		String imageExtension = FilenameUtils.getExtension(image.getOriginalFilename());
+		if(!TimConstants.IMAGE_MIME_TYPE.contains(imageExtension)){
+			throw new MultipartException("Not image");
 		}
 	}
 }

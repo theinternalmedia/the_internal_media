@@ -37,7 +37,27 @@ public final class TimConstants {
 	
 	/** Line Number Header Name in Export Excel File */
 	public static final String LINE_NUMBER = "STT";
-	
+
+
+	/*file path*/
+	public static class Upload{
+		public static final String PHOTOS_FILE_DIR = "src/main/resources/photos/";
+		public static final String THUMBNAIL_UPLOAD_DIR = PHOTOS_FILE_DIR + "thumbnail/";
+		public static final String USER_UPLOAD_DIR = PHOTOS_FILE_DIR + "user/";
+		public static final String UPLOAD_FILE_DIR = PHOTOS_FILE_DIR + "uploadfile/";
+
+		public static final String THUMBNAIL_PATH = "/photos/thumbnail/";
+		public static final String USER_PATH = "/photos/user/";
+		public static final String UPLOAD_FILE_PATH = "/photos/uploadfile/";
+
+		public static final String NEWS_PREFIX = "news_";
+        public static final String USER_PREFIX = "user_";
+        public static final String UPLOAD_FILE_PREFIX = "uploadfile_";
+
+        public static final String SAVE_UNSUCCESS = "Save image unseccess";
+
+	}
+
 
 	/**
 	 * Notification Type

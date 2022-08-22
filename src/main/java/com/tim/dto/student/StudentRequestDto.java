@@ -53,4 +53,6 @@ public class StudentRequestDto {
 
 	@Size(max = 100)
 	private String remark;
+
+	private String avatar;
 }

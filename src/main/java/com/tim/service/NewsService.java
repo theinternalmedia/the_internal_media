@@ -2,14 +2,11 @@ package com.tim.service;
 
 import com.tim.dto.ResponseDto;
 import com.tim.dto.news.NewsDto;
-import com.tim.dto.news.NewsRequestDto;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
 
 public interface NewsService {
 
-    ResponseDto create( String newsDtoJsonRequest, MultipartFile image) throws IOException;
+    ResponseDto create( String newsDtoJsonRequest, MultipartFile image);
 
     ResponseDto update(NewsDto newsDto);
 
