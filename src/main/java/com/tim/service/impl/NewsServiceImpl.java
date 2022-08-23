@@ -1,12 +1,14 @@
 package com.tim.service.impl;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.tim.utils.ImageFileUploadUtil;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -49,37 +51,31 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     @Transactional
-    public ResponseDto create(String newsDtoJsonRequest, MultipartFile image) {
+    public ResponseDto create(String newsDtoJsonRequest, MultipartFile image) throws IOException {
         NewsRequestDto newsRequestDto = Utility.convertStringJsonToObject(newsDtoJsonRequest,
                                                         new TypeReference<NewsRequestDto>() {});
+    	// Validate Object
     	ValidationUtils.validateObject(newsRequestDto);
-        ValidationUtils.validateImage(image);
 
-        News entity = newsConverter.toEntity(newsRequestDto);
+    	String thumbnailName = org.springframework.util.StringUtils.cleanPath(image.getOriginalFilename());
+    	newsRequestDto.setThumbnail(thumbnailName);
 
         List<String> facultyCodes = newsRequestDto.getFacultyCodes();
+        News entity = newsConverter.toEntity(newsRequestDto);
         if (CollectionUtils.isNotEmpty(facultyCodes)) {
             Set<Faculty> faculties = new HashSet<>();
             faculties = facultyRepository.findByCodeIn(facultyCodes);
             entity.setFaculties(faculties);
         }
 
-        //save file to resources
-        String fileName = ImageFileUploadUtil.createFileName(image, TimConstants.Upload.NEWS_PREFIX);
-        try{
-            ImageFileUploadUtil.saveFile(TimConstants.Upload.THUMBNAIL_UPLOAD_DIR, fileName, image);
-        }catch(IOException e){
-            return new ResponseDto(TimConstants.Upload.SAVE_UNSUCCESS);
-        }
+        String uploadDir = "src/main/resources/news-photos/"; // + savedUser.getId()
+        ImageFileUploadUtil.saveFile(uploadDir, thumbnailName, image);
 
-        //set imagePath to thumbnail of newsEntity and save to db
-        String newsImagePath = TimConstants.Upload.THUMBNAIL_PATH + fileName;
-        entity.setThumbnail(newsImagePath);
         NewsDto savedUser = newsConverter.toDto(newsRepository.save(entity));
+        savedUser.setThumbnailUrl("/user-photos/" + savedUser.getThumbnail());
 
         return new ResponseDto(savedUser);
     }
-
 
     @Override
     public ResponseDto update(NewsDto newsDto) {
