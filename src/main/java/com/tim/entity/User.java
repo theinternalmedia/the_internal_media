@@ -100,11 +100,11 @@ public abstract class User extends BaseEntity {
 		this.password = password;
 	}
 
-	public Boolean getGender() {
+	public boolean getGender() {
 		return gender;
 	}
 
-	public void setGender(Boolean gender) {
+	public void setGender(boolean gender) {
 		this.gender = gender;
 	}
 
@@ -130,10 +130,6 @@ public abstract class User extends BaseEntity {
 
 	public void setDob(LocalDate dob) {
 		this.dob = dob;
-	}
-
-	public void setGender(boolean gender) {
-		this.gender = gender;
 	}
 
 	public String getAvatar() {

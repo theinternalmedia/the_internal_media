@@ -25,6 +25,7 @@ public class PagingResponseDto extends ResponseDto {
 
 	/**
 	 * Get data success
+	 * @return status ok
 	 * @param data
 	 */
 	public PagingResponseDto(long totalItem, long totalPage, int page, int size, Object data) {
@@ -37,6 +38,7 @@ public class PagingResponseDto extends ResponseDto {
 
 	/**
 	 * Get data success
+	 * @return status ok
 	 * @param data
 	 */
 	public PagingResponseDto(Object data) {
@@ -46,6 +48,7 @@ public class PagingResponseDto extends ResponseDto {
 
 	/**
 	 * If have any problem and cannot get data, response a message to client
+	 * @return status not ok
 	 * @param message
 	 */
 	public PagingResponseDto(String message) {

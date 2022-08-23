@@ -2,11 +2,14 @@ package com.tim.data;
 
 public enum ETimMessages {
 	
+	/** Thông tin tài khoản không chính xác. */
 	USER_NOT_FOUND("msg.000", "User not found"),
-	/**
-	 * Không tìm thấy {0} với {1} = {2}
-	 */
+	/** Không tìm thấy {0} với {1} = {2}. */
 	ENTITY_NOT_FOUND("msg.001", "ENTITY_NOT_FOUND"),
+	/** Expired Token: {0}. */
+	EXPIRED_TOKEN("msg.002", "expired token"),
+	/** Invalid Token: {0}. */
+	INVALID_TOKEN("msg.003", "invalid token"),
 	
 //	INVALID_SHEET_NAME("msg.004", "invalid sheet name"),
 //	USER_NAME_ALREADY_EXISTS("msg.002", "Tài khoản đã tồn tại"),
@@ -30,21 +33,27 @@ public enum ETimMessages {
 //	EMAIL_USERNAME_NOT_FOUND("msg.013", " not found"),
 	
 	/* ========== VALIDATION MESSAGE =================*/
+	/** Dữ liệu không hợp lệ. */
 	VALIDATION_ERR_MESSAGE("msg.400", "vaidation error message"),
+	/** Định dạng tệp tin phải là Excel */
 	INVALID_EXCEL_FILE("msg.401", "invalid excel file"),
+	/** Danh sách {0} vừa nhập vào không đúng tại các ô. */
 	INVALID_EXCEL_VALUE("msg.402", "invalid excel value"),
+	/** {0} vừa nhập vào không hợp lệ. */
 	INVALID_OBJECT_VALUE("msg.403", "invalid object value"),
+	/** {0}: Kiểu dữ liệu không đúng định dạng. */
 	INVALID_CELL_VALUE("msg.404", "invalid cell value"),
+	/** {0}: Dữ liệu trống. */
 	NULL_CELL_VALUE("msg.405", "null cell value"),
-	CONSTRAIN_VAIOLATION_MESSAGE("msg.406", "constrain vaiolation message"),
+//	CONSTRAIN_VAIOLATION_MESSAGE("msg.406", "constrain vaiolation message"),
+	/** {0} vừa nhập vào không hợp lệ: {1}. */
 	INVALID_OBJECT_VALUE_2("msg.407", "invalid object value return value"),
-	INVALID_JSON_OBJECT("msg.408", "invalid string json object"),
-	EXPIRED_TOKEN("msg.409", "expired token"),
-	INVALID_TOKEN("msg.410", "invalid token"),
+//	INVALID_JSON_OBJECT("msg.408", "invalid string json object"),
 	
 	ACCESS_DENIED("msg.000", "temporiry message"),
 
 	/* INTERNAL_SYSTEM_ERROR */
+	/** Lỗi hệ thống, vui lòng kiểm tra và thử lại */
 	INTERNAL_SYSTEM_ERROR("msg.999", "Internal System Error message");
 	
 	/**

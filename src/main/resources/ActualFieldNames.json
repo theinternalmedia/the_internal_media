@@ -6,29 +6,18 @@
 		"address": "Địa chỉ",
 		"phone": "Điện thoại",
 		"dob": "Ngày sinh",
-		"avatar": "Hình đại diện"
+		"avatar": "Hình đại diện",
+		"remark": "Ghi Chú"
 	},
 	"TeacherDto": {
 		"userId": "Mã GV",
 		"facultyCode": "Mã Khoa"
 	},
-	"TeacherRequestDto": {
-		"userId": "Mã GV",
-		"facultyCode": "Mã Khoa",
-		"name": "Họ tên",
-		"email": "Email",
-		"gender": "Giới  tính",
-		"address": "Địa chỉ",
-		"phone": "Điện thoại",
-		"dob": "Ngày sinh",
-		"avatar": "Hình đại diện"
-	},
 	"StudentDto": {
 		"userId": "Mã SV",
-		"classCode": "Mã Lớp",
-		"remark": "Ghi Chú"
+		"classCode": "Mã Lớp"
 	},
-	"StudentRequestDto": {
+	"UserRequestDto":{
 		"name": "Họ tên",
 		"email": "Email",
 		"gender": "Giới  tính",
@@ -36,19 +25,21 @@
 		"phone": "Điện thoại",
 		"dob": "Ngày sinh",
 		"avatar": "Hình đại diện",
+		"remark": "Ghi Chú",
+		"password": "Mật khẩu"
+	},
+	"TeacherRequestDto": {
+		"userId": "Mã GV",
+		"facultyCode": "Mã Khoa"
+	},
+	"StudentRequestDto": {
 		"userId": "Mã SV",
-		"classCode": "Mã Lớp",
-		"remark": "Ghi Chú"
+		"classCode": "Mã Lớp"
 	},
-	"NotificationRequestDto": {
-		"title": "Tiêu đề",
-		"shortDescription": "Mô tả ngắn",
-		"content": "Nội dung",
-		"notificationGroupCode": "Mã nhóm thông báo"
-	},
-	"NotificationGroupRequestDto": {
-		"code": "Mã Nhóm Thông Báo",
-		"name": "Tên Nhóm Thông Báo"
+	"StudentUpdateRequestDto":{
+		"id": "ID",
+		"userId": "Mã SV",
+		"classCode": "Mã Lớp"
 	},
 	"SchoolYearDto": {
 		"name": "Niên khóa",
@@ -60,12 +51,30 @@
 		"content": "Nội dung",
 		"thumbnail": "Hình ảnh"
 	},
+	"NewsRequestDto":{
+		"title": "Tiêu đề",
+		"shortDescription": "Mô tả ngắn",
+		"content": "Nội dung"
+	},
+	"NewsUpdateDto":{
+		"id": "ID"
+	},
 	"SubjectDto": {
 		"code": "Mã môn học",
 		"name": "Tên môn học",
 		"numberOfCredits": "Số tín chỉ",
 		"mandatory": "Bắt buộc",
 		"passMarks": "Điểm qua môn"
+	},
+	"NotificationRequestDto": {
+		"title": "Tiêu đề",
+		"shortDescription": "Mô tả ngắn",
+		"content": "Nội dung",
+		"notificationGroupCode": "Mã nhóm thông báo"
+	},
+	"NotificationGroupRequestDto": {
+		"code": "Mã Nhóm Thông Báo",
+		"name": "Tên Nhóm Thông Báo"
 	},
 	"NotificationDto": {
 		"title": "Tiêu đề",
@@ -76,5 +85,8 @@
 	"NotificationGroupDto": {
 		"name": "Nhóm thông báo",
 		"code": "Mã nhóm"
+	},
+	"NotificationUpdateRequestDto":{
+		"id": "ID"
 	}
 }

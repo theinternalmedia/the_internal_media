@@ -8,6 +8,7 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,6 +23,7 @@ import com.tim.dto.ResponseDto;
 import com.tim.dto.specification.TimSpecification;
 import com.tim.dto.student.StudentDto;
 import com.tim.dto.student.StudentRequestDto;
+import com.tim.dto.student.StudentUpdateRequestDto;
 import com.tim.entity.Classz;
 import com.tim.entity.Faculty;
 import com.tim.entity.SchoolYear;
@@ -55,7 +57,11 @@ public class StudentServiceImpl implements StudentService {
 		ValidationUtils.validateObject(requestDto);
 		
 		Student entity = studentConverter.toEntity(requestDto);
-		Classz classz = classRepository.getByCode(requestDto.getClassCode());
+		Classz classz = classRepository.getByCode(requestDto.getClassCode()).orElse(null);
+		if(classz == null) {
+			return new ResponseDto(Utility.getMessage(ETimMessages.ENTITY_NOT_FOUND, "Lớp Học",
+					"Mã Lớp", requestDto.getClassCode()));
+		}
 		entity.setClassz(classz);
 		entity.setPassword(encoder.encode(entity.getPassword()));
 		return new ResponseDto(studentConverter.toDto(studentRepository.save(entity) ));
@@ -66,13 +72,17 @@ public class StudentServiceImpl implements StudentService {
 	public ResponseDto create(MultipartFile file) {
 		List<StudentDto> dtoList = excelService.getListObjectFromExcelFile(file, StudentDto.class);
 		List<Student> entityList = new ArrayList<>();
-		dtoList.forEach(item -> {
-			Student entity = studentConverter.toEntity(item);
-			Classz classz = classRepository.getByCode(item.getClassCode());
+		for(StudentDto dto : dtoList){
+			Student entity = studentConverter.toEntity(dto);
+			Classz classz = classRepository.getByCode(dto.getClassCode()).orElse(null);
+			if(classz == null) {
+				return new ResponseDto(Utility.getMessage(ETimMessages.ENTITY_NOT_FOUND, "Lớp học",
+						"Mã Lớp", dto.getClassCode()));
+			}
 			entity.setClassz(classz);
 			entity.setPassword(encoder.encode(entity.getPassword()));
 			entityList.add(entity);
-		});
+		}
 		studentRepository.saveAll(entityList);
 		return new ResponseDto();
 	}
@@ -117,19 +127,27 @@ public class StudentServiceImpl implements StudentService {
 	}
 
     @Override
-    public ResponseDto update(StudentDto dto) {
-        Student student = studentConverter.toEntity(dto);
-        Long studentId = dto.getId();
-        if(studentId != null){
-            Student oldStudent = studentRepository.getOneById(studentId);
-            oldStudent.setClassz(student.getClassz());
-            oldStudent.setRoles(student.getRoles());
-            oldStudent.setPhone(student.getPhone());
-            oldStudent.setGender(student.getGender());
-            oldStudent.setAddress(student.getAddress());
-            return new ResponseDto(studentConverter.toDto(studentRepository.save(oldStudent)));
-        }
-        return new ResponseDto(TimConstants.NOT_OK_MESSAGE);
+    public ResponseDto update(StudentUpdateRequestDto requestDto) {
+    	// Validate input
+    	ValidationUtils.validateObject(requestDto);
+    	
+		Student student = studentRepository.findById(requestDto.getId()).orElse(null);
+		if (student != null) {
+			student = studentConverter.toEntity(requestDto, student);
+			Classz classz = classRepository.getByCode(requestDto.getClassCode()).orElse(null);
+			if (classz == null) {
+				return new ResponseDto(Utility.getMessage(
+						ETimMessages.ENTITY_NOT_FOUND, "Lớp học", "Mã Lớp", requestDto.getClassCode()));
+			}
+			student.setClassz(classz);
+			// If password has changed
+			if (StringUtils.isNotBlank(requestDto.getPassword())) {
+				student.setPassword(encoder.encode(requestDto.getPassword()));
+			}
+			student = studentRepository.save(student);
+			return new ResponseDto(studentConverter.toDto(student));
+		}
+		return new ResponseDto(TimConstants.NOT_OK_MESSAGE);
     }
 
     @Override
@@ -138,18 +156,22 @@ public class StudentServiceImpl implements StudentService {
         if(student.isPresent()){
             return new ResponseDto(studentConverter.toDto(student.get()));
         }
-        return new ResponseDto(Utility.getMessage(ETimMessages.ENTITY_NOT_FOUND,
-                                TimConstants.ActualEntityName.STUDENT,
-                                "Id", id.toString()));
+        return new ResponseDto(Utility.getMessage(
+        		ETimMessages.ENTITY_NOT_FOUND,
+                "Sinh viên",
+                "ID", id.toString()));
     }
 
     @Override
-    public ResponseDto getByUserName(String name){
-        Student student = studentRepository.findByUserId(name).orElse(null);
+    public ResponseDto getByUserId(String userId){
+        Student student = studentRepository.findByUserId(userId).orElse(null);
         if(student != null){
             return new ResponseDto(studentConverter.toDto(student));
         }
-        return new ResponseDto(Utility.getMessage(ETimMessages.USER_NOT_FOUND));
+        return new ResponseDto(Utility.getMessage(
+        		ETimMessages.ENTITY_NOT_FOUND,
+                "Sinh viên",
+                "Mã SV", userId));
     }
 
     @Override
@@ -158,7 +180,10 @@ public class StudentServiceImpl implements StudentService {
         if(student != null){
             return new ResponseDto(studentConverter.toDto(student));
         }
-        return new ResponseDto(Utility.getMessage(ETimMessages.USER_NOT_FOUND));
+        return new ResponseDto(Utility.getMessage(
+        		ETimMessages.ENTITY_NOT_FOUND,
+                "Sinh viên",
+                "Email", email));
     }
 
     @Override

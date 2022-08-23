@@ -1,12 +1,15 @@
 {
-	"TeacherDto": "Giảng Viên",
-	"TeacherRequestDto": "Giảng Viên",
-	"StudentDto": "Sinh Viên",
-	"StudentRequestDto": "Sinh Viên",
-	"NotificationRequestDto": "Thông Báo",
+	"TeacherDto": "Giảng viên",
+	"TeacherRequestDto": "Giảng viên",
+	"StudentDto": "Sinh viên",
+	"StudentRequestDto": "Sinh viên",
+	"StudentUpdateRequestDto": "Sinh viên",
+	"NotificationRequestDto": "Thông báo",
 	"NotificationDto": "Thông báo",
-	"NotificationGroupRequestDto": "Nhóm Thông Báo",
+	"NotificationGroupRequestDto": "Nhóm thông báo",
 	"NotificationGroupDto": "Thông báo nhóm",
+	"NotificationUpdateRequestDto": "Thông báo",
 	"SchoolYearDto": "Niên Khóa",
-	"NewsDto": "Tin tức"
+	"NewsDto": "Tin tức",
+	"NewsUpdateDto": "Tin tức"
 }

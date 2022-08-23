@@ -56,6 +56,10 @@ public class TeacherServiceImpl implements TeacherService {
 		
 		Teacher entity = teacherConverter.toEntity(requestDto);
 		Faculty faculty = facultyRepository.getByCode(requestDto.getFacultyCode()).orElse(null);
+		if (faculty == null) {
+			return new ResponseDto(Utility.getMessage(ETimMessages.ENTITY_NOT_FOUND,
+					"Khoa", "Mã Khoa", requestDto.getFacultyCode()));
+		}
 		entity.setFaculty(faculty);
 		entity.setPassword(encoder.encode(entity.getPassword()));
 		return new ResponseDto(teacherConverter.toDto(teacherRepository.save(entity)));
@@ -66,7 +70,7 @@ public class TeacherServiceImpl implements TeacherService {
 		Teacher entity = teacherRepository.findByUserId(userId).orElse(null);
 		if (entity == null) {
 			return new ResponseDto(Utility.getMessage(ETimMessages.ENTITY_NOT_FOUND,
-					TimConstants.ActualEntityName.TEACHER, "Mã GV", userId));
+					"Giáo Viên", "Mã GV", userId));
 		}
 		return new ResponseDto(teacherConverter.toDto(entity));
 	}
