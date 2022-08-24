@@ -28,9 +28,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
@@ -48,7 +48,8 @@ public class NewsServiceImpl implements NewsService {
     private FacultyRepository facultyRepository;
 
     @Override
-    public ResponseDto create(NewsRequestDto requestDto) {
+    @Transactional
+    public ResponseDto create(NewsRequestDto requestDto, MultipartFile image) {
         // Validate Object
         ValidationUtils.validateObject(requestDto);
 
@@ -59,9 +60,12 @@ public class NewsServiceImpl implements NewsService {
             faculties = facultyRepository.findByCodeIn(facultyCodes);
             entity.setFaculties(faculties);
         }
-        if (requestDto.getThumbnailFile() != null) {
-            // upload thumbnail
-            entity.setThumbnail(null);
+        if (image != null) {
+            try {
+                ImageFileUploadUtil.uploadThumbnail(image, entity);
+            }catch (IOException e){
+                return new ResponseDto(TimConstants.Upload.SAVE_UNSUCCESS);
+            }
         }
         // Set Slug
         entity.setSlug(Utility.generateSlugs(entity.getTitle()));
@@ -71,7 +75,7 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     @Transactional
-    public ResponseDto update(NewsUpdateDto requestDto) {
+    public ResponseDto update(NewsUpdateDto requestDto, MultipartFile image) {
         // Validate Object
         ValidationUtils.validateObject(requestDto);
 
@@ -79,18 +83,12 @@ public class NewsServiceImpl implements NewsService {
         News oldNews = newsRepository.findById(newsId).orElse(null);
         if (oldNews != null) {
             oldNews = newsConverter.toEntity(requestDto, oldNews);
-            MultipartFile image = requestDto.getThumbnailFile();
             if (image != null) {
-                // upload thumbnail file:
-                ValidationUtils.validateImage(image);
-                String fileName = ImageFileUploadUtil.createFileName(image, TimConstants.Upload.NEWS_PREFIX);
-                try {
-                    ImageFileUploadUtil.uploadFile(TimConstants.Upload.THUMBNAIL_UPLOAD_DIR, fileName, image);
-                } catch (IOException e) {
+                try{
+                    ImageFileUploadUtil.uploadThumbnail(image, oldNews);
+                }catch (IOException e){
                     return new ResponseDto(TimConstants.Upload.SAVE_UNSUCCESS);
                 }
-                String thumbnailPath = TimConstants.Upload.THUMBNAIL_PATH + fileName;
-                oldNews.setThumbnail(thumbnailPath);
             }
             List<String> facultyCodes = requestDto.getFacultyCodes();
 
@@ -110,6 +108,14 @@ public class NewsServiceImpl implements NewsService {
         }
         return new ResponseDto(TimConstants.NOT_OK_MESSAGE);
     }
+
+    /*private void uploadThumbnail(MultipartFile image, NewsAndNotify entity) throws IOException{
+        ValidationUtils.validateImage(image);
+        String fileName = ImageFileUploadUtil.createFileName(image, TimConstants.Upload.NEWS_PREFIX);
+        ImageFileUploadUtil.uploadFile(TimConstants.Upload.THUMBNAIL_UPLOAD_DIR, fileName, image);
+        String thumbnailPath = TimConstants.Upload.THUMBNAIL_PATH + fileName;
+        entity.setThumbnail(thumbnailPath);
+    }*/
 
     @Override
     public ResponseDto getOne(Long id) {

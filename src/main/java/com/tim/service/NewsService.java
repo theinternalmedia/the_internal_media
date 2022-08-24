@@ -15,7 +15,7 @@ public interface NewsService {
 	 * @param requestDto
 	 * @return ResponseDto
 	 */
-    ResponseDto create(NewsRequestDto requestDto);
+    ResponseDto create(NewsRequestDto requestDto, MultipartFile image);
 
     /**
      * Update News.
@@ -24,7 +24,7 @@ public interface NewsService {
      * @param newsDto
      * @return ResponseDto
      */
-    ResponseDto update(NewsUpdateDto newsDto);
+    ResponseDto update(NewsUpdateDto newsDto, MultipartFile image);
 
     /**
      * @author minhtuanitk43

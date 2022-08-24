@@ -6,12 +6,12 @@ import java.util.Set;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tim.dto.ResponseDto;
-import com.tim.dto.student.StudentDto;
 import com.tim.dto.student.StudentRequestDto;
+import com.tim.dto.student.StudentUpdateRequestDto;
 import com.tim.entity.Student;
 
 public interface StudentService {
-    ResponseDto create(StudentRequestDto studentRequestDto);
+    ResponseDto create(StudentRequestDto requestDto);
     
     /**
 	 * @author minhtuanitk43
@@ -32,15 +32,17 @@ public interface StudentService {
 	
 	String exportToExcelFile();
 
-    ResponseDto update(StudentDto dto);
+	ResponseDto updateAvatar(MultipartFile avatar, String UserId);
+
+    ResponseDto update(StudentUpdateRequestDto requestDto);
 
     ResponseDto getOne(Long id);
 
-    ResponseDto getByUserName(String name);
+    ResponseDto getByUserId(String userId);
 
     ResponseDto getByEmail(String email);
 
     ResponseDto toggleStatus(Long id);
 
-    ResponseDto upload(String studentDtoJsonRequest, MultipartFile image);
+//    ResponseDto upload(String studentDtoJsonRequest, MultipartFile image);
 }

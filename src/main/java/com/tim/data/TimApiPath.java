@@ -8,6 +8,7 @@ public final class TimApiPath {
 	private static final String ALL_ = "/all";
 	private static final String TOGGLE_STATUS_= "/toggle-status";
 	private static final String UPLOAD_EXCEL_ = "/upload-excel";
+	private static final String UPLOAD_IMAGE_ = "/upload-image";
 	private static final String PATH_VARIABLE_ID = "/{id}";
 
 	public static class Auth {
@@ -27,6 +28,7 @@ public final class TimApiPath {
 		public static final String TOGGLE_STATUS = PREFIX_V1 + TOGGLE_STATUS_ + PATH_VARIABLE_ID;
 		public static final String DELETE = PREFIX_V1;
 		public static final String GET_PAGE = PREFIX_V1 + PAGE_;
+		public static final String UPLOAD_IMAGE = PREFIX_V1 + UPLOAD_IMAGE_;
 	}
 
 	public static class Student {
@@ -38,6 +40,7 @@ public final class TimApiPath {
 		public static final String UPDATE = PREFIX_V1;
 		public static final String TOGGLE_STATUS = PREFIX_V1 + TOGGLE_STATUS_ + PATH_VARIABLE_ID;
 		public static final String DELETE = PREFIX_V1;
+		public static final String UPLOAD_IMAGE = PREFIX_V1 + UPLOAD_IMAGE_;
 	}
 
 	public static class Notification {

@@ -8,6 +8,7 @@ import javax.validation.constraints.Size;
 
 import com.tim.annotation.Phone;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -25,10 +26,8 @@ public class UserRequestDto {
 	@Email
 	private String email;
 
-	@NotBlank
-	@Size(max = 100, min = 6)
-	private String password;
-
+	@Getter(value = AccessLevel.NONE)
+	@Setter(value = AccessLevel.NONE)
 	private boolean gender = true;
 
 	@Size(max = 100)
@@ -41,4 +40,12 @@ public class UserRequestDto {
 	
 	@Size(max = 100)
 	private String remark;
+
+	public boolean getGender() {
+		return gender;
+	}
+
+	public void setGender(boolean gender) {
+		this.gender = gender;
+	}
 }

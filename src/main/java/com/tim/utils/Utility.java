@@ -85,7 +85,7 @@ public class Utility {
 			String typeName = typeReference.getType().getTypeName();
 			logger.error("Cannot convert stringJson to object: {}", typeName);
 			e.printStackTrace();
-			throw new CustomException(ETimMessages.INVALID_JSON_OBJECT, typeName);
+			throw new CustomException(ETimMessages.VALIDATION_ERR_MESSAGE);
 		}
 		return t;
 	}

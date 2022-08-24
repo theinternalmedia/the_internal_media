@@ -29,6 +29,8 @@ public interface TeacherService {
 	ResponseDto create(MultipartFile file);
 	
 	String exportToExcelFile();
+
+	ResponseDto updateAvatar(MultipartFile avatar, String UserId);
 	
 	/**
 	 * @author minhtuanitk43

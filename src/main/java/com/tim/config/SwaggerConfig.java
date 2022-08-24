@@ -20,7 +20,8 @@ import java.util.List;
  *
  */
 @Configuration
-
+@EnableSwagger2
+public class SwaggerConfig{
 	public static final String AUTHORIZATION_HEADER = "Authorization";
 
 	  private ApiInfo apiInfo() {

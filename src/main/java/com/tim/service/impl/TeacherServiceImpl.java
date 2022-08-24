@@ -1,20 +1,5 @@
 package com.tim.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.tim.converter.TeacherConverter;
 import com.tim.data.ETimMessages;
 import com.tim.data.SearchOperation;
@@ -31,8 +16,25 @@ import com.tim.repository.FacultyRepository;
 import com.tim.repository.TeacherRepository;
 import com.tim.service.TeacherService;
 import com.tim.service.excel.ExcelService;
+import com.tim.utils.ImageFileUploadUtil;
 import com.tim.utils.Utility;
 import com.tim.utils.ValidationUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TeacherServiceImpl implements TeacherService {
@@ -56,6 +58,10 @@ public class TeacherServiceImpl implements TeacherService {
 		
 		Teacher entity = teacherConverter.toEntity(requestDto);
 		Faculty faculty = facultyRepository.getByCode(requestDto.getFacultyCode()).orElse(null);
+		if (faculty == null) {
+			return new ResponseDto(Utility.getMessage(ETimMessages.ENTITY_NOT_FOUND,
+					"Khoa", "Mã Khoa", requestDto.getFacultyCode()));
+		}
 		entity.setFaculty(faculty);
 		entity.setPassword(encoder.encode(entity.getPassword()));
 		return new ResponseDto(teacherConverter.toDto(teacherRepository.save(entity)));
@@ -66,7 +72,7 @@ public class TeacherServiceImpl implements TeacherService {
 		Teacher entity = teacherRepository.findByUserId(userId).orElse(null);
 		if (entity == null) {
 			return new ResponseDto(Utility.getMessage(ETimMessages.ENTITY_NOT_FOUND,
-					TimConstants.ActualEntityName.TEACHER, "Mã GV", userId));
+					"Giáo Viên", "Mã GV", userId));
 		}
 		return new ResponseDto(teacherConverter.toDto(entity));
 	}
@@ -104,6 +110,23 @@ public class TeacherServiceImpl implements TeacherService {
 		List<TeacherDto> dtos = teacherConverter.toDtoList(entityList);
 		excelService.writeListObjectToExcel(TimConstants.ExcelFiledName.TEACHER, dtos);
 		return null;
+	}
+
+	@Override
+	@Transactional
+	public ResponseDto updateAvatar(MultipartFile avatar, String UserId) {
+		try {
+			String avatarPath = ImageFileUploadUtil.uploadAvatar(avatar);
+			Optional<Teacher> student = teacherRepository.findByUserId(UserId);
+			if(student.isPresent()){
+				student.get().setAvatar(avatarPath);
+				teacherRepository.save(student.get());
+				return new ResponseDto();
+			}
+			return new ResponseDto(TimConstants.Upload.SAVE_UNSUCCESS);
+		}catch(IOException e){
+			return new ResponseDto(TimConstants.Upload.SAVE_UNSUCCESS);
+		}
 	}
 
 	@Override

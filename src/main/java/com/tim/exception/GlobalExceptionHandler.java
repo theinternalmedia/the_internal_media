@@ -26,10 +26,10 @@ public class GlobalExceptionHandler {
 	private final Logger logger = org.slf4j.LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
 
-	@ExceptionHandler(MultipartException.class)
+	/*@ExceptionHandler(MultipartException.class)
 	public ResponseEntity<String> multipartException(MultipartException e){
 		return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-	}
+	}*/
 
 	@ExceptionHandler(NotFoundException.class)
 	public ResponseEntity<String> entityNotFoundException(NotFoundException e) {

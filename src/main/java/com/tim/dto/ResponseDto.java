@@ -35,6 +35,7 @@ public class ResponseDto implements Serializable {
 
 	/**
 	 * If have any problem and cannot get data, response a message to client
+	 * @return status not ok
 	 * @param message
 	 */
 	public ResponseDto(String message) {
@@ -49,6 +50,7 @@ public class ResponseDto implements Serializable {
 
 	/**
 	 * Execute success return data 
+	 * @return status ok
 	 * @param data content response to client
 	 */
 	public ResponseDto(Object data) {
@@ -62,6 +64,7 @@ public class ResponseDto implements Serializable {
 
 	/**
 	 * Execute success return nothing
+	 * @return status ok
 	 */
 	public ResponseDto() {
 		super();

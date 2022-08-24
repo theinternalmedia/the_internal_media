@@ -22,4 +22,8 @@ public class TeacherRequestDto extends UserRequestDto {
 	@NotBlank
 	@Size(max = 20, min = 5)
 	private String userId;
+	
+	@NotBlank
+	@Size(max = 100, min = 6)
+	private String password;
 }

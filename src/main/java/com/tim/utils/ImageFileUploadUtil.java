@@ -1,5 +1,7 @@
 package com.tim.utils;
 
+import com.tim.data.TimConstants;
+import com.tim.entity.NewsAndNotify;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,9 +16,7 @@ import java.util.Date;
 public class ImageFileUploadUtil {
     public static void uploadFile(String uploadDir, String fileName,
                                   MultipartFile multipartFile) throws IOException {
-
         Path uploadPath = Paths.get(uploadDir);
-
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
         }
@@ -35,5 +35,21 @@ public class ImageFileUploadUtil {
         String extension = FilenameUtils.getExtension(image.getOriginalFilename());
         fileName.append("." + extension);
         return fileName.toString();
+    }
+
+    public static void uploadThumbnail(MultipartFile image, NewsAndNotify entity) throws IOException{
+        ValidationUtils.validateImage(image);
+        String fileName = createFileName(image, TimConstants.Upload.NEWS_PREFIX);
+        uploadFile(TimConstants.Upload.THUMBNAIL_UPLOAD_DIR, fileName, image);
+        String thumbnailPath = TimConstants.Upload.THUMBNAIL_PATH + fileName;
+        entity.setThumbnail(thumbnailPath);
+    }
+
+    public static String uploadAvatar(MultipartFile avatar) throws IOException{
+        ValidationUtils.validateImage(avatar);
+        String fileName = createFileName(avatar, TimConstants.Upload.USER_PREFIX);
+        uploadFile(TimConstants.Upload.USER_UPLOAD_DIR, fileName, avatar);
+        String avatarPath = TimConstants.Upload.USER_PATH + fileName;
+        return avatarPath;
     }
 }

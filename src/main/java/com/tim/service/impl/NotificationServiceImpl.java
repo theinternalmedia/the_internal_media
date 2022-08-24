@@ -1,9 +1,11 @@
 package com.tim.service.impl;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import com.tim.utils.ImageFileUploadUtil;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tim.converter.NotificationConverter;
@@ -39,6 +42,7 @@ import com.tim.service.StudentService;
 import com.tim.utils.Utility;
 import com.tim.utils.ValidationUtils;
 
+
 @Service
 public class NotificationServiceImpl implements NotificationService {
 
@@ -60,6 +64,7 @@ public class NotificationServiceImpl implements NotificationService {
 	private NotificationGroupRepository notificationGroupRepository;
 	
 	@Override
+	@Transactional
 	public ResponseDto create(NotificationRequestDto requestDto, MultipartFile thumbnail) {
 		// Validate input
 		ValidationUtils.validateObject(requestDto);
@@ -72,7 +77,12 @@ public class NotificationServiceImpl implements NotificationService {
 		}
 		// Save thumbnail 
 		if (thumbnail != null) {
-			// :TODO 
+			// :TODO
+			try{
+				ImageFileUploadUtil.uploadThumbnail(thumbnail, entity);
+			}catch (IOException e){
+				return new ResponseDto(TimConstants.Upload.SAVE_UNSUCCESS);
+			}
 		}
 		
 		// Save slug
@@ -89,6 +99,7 @@ public class NotificationServiceImpl implements NotificationService {
 	}
 
 	@Override
+	@Transactional
 	public ResponseDto update(NotificationUpdateRequestDto requestDto, MultipartFile thumbnail) {
 		// Validate input
 		ValidationUtils.validateObject(requestDto);
@@ -106,6 +117,11 @@ public class NotificationServiceImpl implements NotificationService {
 			// Save thumbnail
 			if (thumbnail != null) {
 				// :TODO
+				try{
+					ImageFileUploadUtil.uploadThumbnail(thumbnail, entity);
+				}catch (IOException e){
+					return new ResponseDto(TimConstants.Upload.SAVE_UNSUCCESS);
+				}
 			}
 			
 			// Save slug
