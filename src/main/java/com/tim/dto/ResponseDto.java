@@ -48,7 +48,7 @@ public class ResponseDto implements Serializable {
 	}
 
 	/**
-	 * Get data success
+	 * Execute success return data 
 	 * @param data content response to client
 	 */
 	public ResponseDto(Object data) {

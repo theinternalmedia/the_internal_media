@@ -7,33 +7,35 @@ import java.util.Set;
 
 import javax.validation.Valid;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tim.data.ETimMessages;
 import com.tim.data.TimApiPath;
 import com.tim.entity.Permission;
+import com.tim.entity.RefreshToken;
 import com.tim.entity.Role;
 import com.tim.entity.Student;
 import com.tim.entity.Teacher;
+import com.tim.exception.CustomException;
 import com.tim.payload.request.LoginRequest;
+import com.tim.payload.request.TokenRefreshRequest;
 import com.tim.payload.response.JwtResponse;
-import com.tim.repository.PermissionRepository;
-import com.tim.repository.RoleRepository;
+import com.tim.payload.response.TokenRefreshResponse;
 import com.tim.repository.StudentRepository;
 import com.tim.repository.TeacherRepository;
 import com.tim.security.jwt.JwtUtils;
 import com.tim.security.services.UserDetailsImpl;
+import com.tim.service.RefreshTokenService;
 
 /**
  * 
@@ -45,26 +47,20 @@ import com.tim.security.services.UserDetailsImpl;
 @RequestMapping(TimApiPath.TIM_API)
 public class AuthResource {
 	@Autowired
-	AuthenticationManager authenticationManager;
+	public AuthenticationManager authenticationManager;
 	@Autowired
-	StudentRepository studentRepository;
+	private StudentRepository studentRepository;
 	@Autowired
-	TeacherRepository teacherRepository;
+	private TeacherRepository teacherRepository;
 	@Autowired
-	RoleRepository roleRepository;
+	private JwtUtils jwtUtils;
 	@Autowired
-	PasswordEncoder encoder;
-	@Autowired
-	ModelMapper modelMapper;
-	@Autowired
-	JwtUtils jwtUtils;
-	@Autowired
-	PermissionRepository permissionRepository;
+	private RefreshTokenService refreshTokenService;
 
 	/**
 	 * @author minhtuanitk43
 	 * @param loginRequest
-	 * @return
+	 * @return JwtResponse include accessToken and refreshAccessToken
 	 */
 	@PostMapping(TimApiPath.Auth.LOGIN)
 	public ResponseEntity<JwtResponse> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -91,7 +87,29 @@ public class AuthResource {
 				permissions.add(p.getCode().toString());
 			}
 		}
-		return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(),
-				userDetails.getEmail(), roles, userDetails.getName(), userDetails.getAvatar(), permissions));
+		
+		RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getUsername());
+		return ResponseEntity.ok(new JwtResponse(jwt, refreshToken.getToken(), 
+				userDetails.getId(), userDetails.getUsername(),
+				userDetails.getEmail(), roles, userDetails.getName(), 
+				userDetails.getAvatar(), permissions));
 	}
+	
+	/**
+	 * @author minhtuanitk43
+	 * @param request
+	 * @return TokenRefreshResponse include new accessToken
+	 */
+	@PostMapping(TimApiPath.Auth.REFRESH_TOKEN)
+	  public ResponseEntity<TokenRefreshResponse> refreshtoken(TokenRefreshRequest request) {
+		final String usersUserId = request.getUsersUserId();
+		RefreshToken refreshToken = refreshTokenService
+				.findByTokenAndUserId(request.getRefreshToken(), usersUserId).orElse(null);
+		if (refreshToken == null) {
+			throw new CustomException(ETimMessages.INVALID_TOKEN, request.getRefreshToken());
+		}
+		refreshTokenService.verifyExpiration(refreshToken);
+		String token = jwtUtils.generateTokenFromUsername(usersUserId);
+	  	return ResponseEntity.ok(new TokenRefreshResponse(token, request.getRefreshToken()));
+	  }
 }

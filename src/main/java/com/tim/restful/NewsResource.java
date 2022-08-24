@@ -1,16 +1,23 @@
 package com.tim.restful;
 
+
+import org.springframework.web.bind.annotation.CrossOrigin;
+
+import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.tim.data.TimApiPath;
+import com.tim.data.TimConstants;
 import com.tim.dto.ResponseDto;
-import com.tim.dto.news.NewsDto;
 import com.tim.dto.news.NewsRequestDto;
+import com.tim.dto.news.NewsUpdateDto;
 import com.tim.service.NewsService;
 import com.tim.utils.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import io.swagger.annotations.ApiParam;
 
 import javax.websocket.server.PathParam;
 import java.io.IOException;
@@ -25,37 +32,56 @@ public class NewsResource {
 
 
 	@PostMapping(value = TimApiPath.News.CREATE)
-	public ResponseEntity<ResponseDto> create(
-					@RequestPart(value = "image", required = false) MultipartFile image,
-					@RequestParam("newsRequestDtoJson") String newsDtoJsonRequest) {
-		/*NewsRequestDto requestDto = Utility.convertStringJsonToObject(newsDtoJsonRequest,
-									new TypeReference<NewsRequestDto>() {});*/
-//		requestDto.setThumbnailFile(image);
-
-		return ResponseEntity.ok(newsService.create(newsDtoJsonRequest, image));
-
+	public ResponseEntity<ResponseDto> create(@RequestPart(
+			value = "file", required = false) MultipartFile file,
+			@ApiParam(value = "NewsRequestDto in String Json, FacultyCodes can be empty", 
+			example = TimConstants.ApiParamExample.News.CREATE_newsRequestDtoJson) 
+			@RequestParam("newsRequestDtoJson") String newsRequestDtoJson) {
+		
+		NewsRequestDto requestDto = Utility.convertStringJsonToObject(newsRequestDtoJson,
+				new TypeReference<NewsRequestDto>() {
+				});
+		requestDto.setThumbnailFile(file);
+		return ResponseEntity.ok(newsService.create(requestDto));
 	}
-
+	
 	@PutMapping(value = TimApiPath.News.UPDATE)
-	public ResponseEntity<ResponseDto> update(@RequestBody NewsDto newsDto) {
-		return ResponseEntity.ok(newsService.update(newsDto));
+	public ResponseEntity<ResponseDto> update(
+			@RequestPart(value = "file", required = false) MultipartFile file,
+			@ApiParam(value = "NewsRequestDto in String Json, FacultyCodes can be empty", 
+			example = TimConstants.ApiParamExample.News.UPDATE_newsRequestDtoJson) 
+			@RequestParam("newsRequestDtoJson") String newsRequestDtoJson) {
+		
+		NewsUpdateDto requestDto = Utility.convertStringJsonToObject(newsRequestDtoJson,
+				new TypeReference<NewsUpdateDto>() {
+				});
+		requestDto.setThumbnailFile(file);
+		return ResponseEntity.ok(newsService.update(requestDto));
 	}
 
-	@GetMapping(value = TimApiPath.News.GET_ONE)
-	public ResponseEntity<ResponseDto> getOne(@PathVariable("id") Long id) {
+	@GetMapping(value = TimApiPath.News.GET_BY_ID)
+	public ResponseEntity<ResponseDto> getById(@PathVariable("id") Long id) {
 		return ResponseEntity.ok(newsService.getOne(id));
 	}
 	
+	@GetMapping(value = TimApiPath.News.GET_BY_SLUG)
+	public ResponseEntity<ResponseDto> getBySlug(@PathParam("slug") String slug) {
+		return ResponseEntity.ok(newsService.getOne(slug));
+	}
+	
 	@GetMapping(value = TimApiPath.News.GET_PAGE)
-	public ResponseEntity<ResponseDto> getPage(@RequestParam("page") int page, 
+	public ResponseEntity<ResponseDto> getPage(
+			@RequestParam("page") int page, 
 			@RequestParam("size") int size,
 			@RequestParam("status") boolean status,
+			@PathParam("id") Long id,
+			@PathParam("search") String search,
 			@PathParam("facultyCode") String facultyCode) {
-		return ResponseEntity.ok(newsService.getPage(page, size, status, facultyCode));
+		return ResponseEntity.ok(newsService.getPage(page, size, status, id, search, facultyCode));
 	}
 
-	@DeleteMapping(value = TimApiPath.News.DELETE)
-	public ResponseEntity<ResponseDto> delete(@RequestParam Long id) {
+	@PutMapping(value = TimApiPath.News.TOGGLE_STATUS)
+	public ResponseEntity<ResponseDto> toggleStatus(@PathVariable("id") Long id) {
 		return ResponseEntity.ok(newsService.toogleStatus(id));
 	}
 }

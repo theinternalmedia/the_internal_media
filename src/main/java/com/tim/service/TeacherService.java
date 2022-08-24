@@ -43,4 +43,6 @@ public interface TeacherService {
 	
 	ResponseDto getOne(String userId);
 
+	ResponseDto toggleStatus(Long id);
+
 }

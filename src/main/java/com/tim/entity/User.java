@@ -57,6 +57,7 @@ public abstract class User extends BaseEntity {
 	@Size(max = 100)
 	private String avatar;
 
+	@Size(max = 100)
 	private String remark;
 
 	public String getRemark() {

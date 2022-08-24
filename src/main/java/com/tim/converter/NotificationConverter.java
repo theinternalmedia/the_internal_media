@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import com.tim.dto.notification.NotificationDto;
 import com.tim.dto.notification.NotificationRequestDto;
+import com.tim.dto.notification.NotificationUpdateRequestDto;
 import com.tim.entity.Notification;
 
 @Component
@@ -34,5 +35,13 @@ public class NotificationConverter extends AbstractConverter<NotificationDto, No
 			result.add(toDto(item));
 		});
 		return result;
+	}
+
+	public Notification toEntity(NotificationUpdateRequestDto requestDto, Notification entity) {
+		entity.setContent(requestDto.getContent());
+		entity.setTitle(requestDto.getTitle());
+		entity.setShortDescription(requestDto.getShortDescription());
+		entity.setType(requestDto.getType());
+		return entity;
 	}
 }

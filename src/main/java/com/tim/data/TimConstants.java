@@ -65,7 +65,7 @@ public final class TimConstants {
 	 * @appName the_internal_media
 	 *
 	 */
-	public static class NotificationType {
+	public static final class NotificationType {
 		public static final int TO_ALL = 0;
 		public static final int TO_TEACHER = 1;
 		public static final int TO_STUDENT = 2;
@@ -77,7 +77,7 @@ public final class TimConstants {
 	 * @appName the_internal_media
 	 *
 	 */
-	public static class Gender {
+	public static final class Gender {
 		public static final String MALE_STR = "Nam";
 		public static final boolean MALE_BOOL = true;
 		public static final String FEMALE_STR = "Nữ";
@@ -90,7 +90,7 @@ public final class TimConstants {
 	 * @appName the_internal_media
 	 *
 	 */
-	public static class ExcelFiledName {
+	public static final class ExcelFiledName {
 		public static final String TEACHER = "GiaoVien";
 		public static final String STUDENT = "SinhVien";
 	}
@@ -101,7 +101,7 @@ public final class TimConstants {
 	 * @appName the_internal_media
 	 *
 	 */
-	public static class FieldType {
+	public static final class FieldType {
 		public static final String DOUBLE = "Double";
 		public static final String INTEGER = "Integer";
 		public static final String STRING = "String";
@@ -111,12 +111,47 @@ public final class TimConstants {
 		public static final String LONG = "Long";
 	}
 	
-	public static class ActualEntityName {
+	public static final class ActualEntityName {
 		public static final String TEACHER = "Giáo Viên";
 		public static final String STUDENT = "Sinh Viên";
 		public static final String FACULTY = "Khoa";
 		public static final String CLASS = "Lớp";
 		public static final String SCHOOL_YEAR = "Khóa";
 		public static final String NEWS = "Tin tức";
+		public static final String NOTIFICATION = "Thông báo";
+	}
+	
+	public static final class ApiParamExample{
+		public static final class News {
+			public static final String CREATE_newsRequestDtoJson = 
+					"{\"title\":\"String\", "
+					+ "\"content\":\"String\", "
+					+ "\"shortDescription\":\"String\", "
+					+ "\"facultyCodes\":[\"String\"]}";
+			public static final String UPDATE_newsRequestDtoJson = 
+					"{\"id\":\"Long\", "
+					+ "{\"title\":\"String\", "
+					+ "\"content\":\"String\", "
+					+ "\"shortDescription\":\"String\", "
+					+ "\"facultyCodes\":[\"String\"]}";
+		}
+		
+		public static final class Notification {
+			public static final String CREATE_notifyRequestDtoJson = 
+					"{\"title\":\"String\", "
+					+ "\"content\":\"String\", "
+					+ "\"shortDescription\":\"String\", "
+					+ "\"facultyCodes\":[\"String\"], "
+					+ "\"schoolYearCodes\":[\"String\"], "
+					+ "\"classCodes\":[\"String\"]}";
+			public static final String UPDATE_notifyRequestDtoJson = 
+					"{\"id\":\"Long\", "
+					+ "{\"title\":\"String\", "
+					+ "\"content\":\"String\", "
+					+ "\"shortDescription\":\"String\", "
+					+ "\"facultyCodes\":[\"String\"], "
+					+ "\"schoolYearCodes\":[\"String\"], "
+					+ "\"classCodes\":[\"String\"]}";
+		}
 	}
 }

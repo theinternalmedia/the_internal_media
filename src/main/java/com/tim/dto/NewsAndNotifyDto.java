@@ -31,4 +31,8 @@ public class NewsAndNotifyDto extends BaseDto{
 
 	@NotBlank
 	private String content;
+	
+	private String thumbnail;
+	
+	private String slug;
 }

@@ -72,6 +72,17 @@ public class TeacherServiceImpl implements TeacherService {
 	}
 
 	@Override
+	public ResponseDto toggleStatus(Long id) {
+		Teacher teacher = teacherRepository.findById(id).orElse(null);
+		if(teacher != null){
+			teacher.setStatus(!teacher.getStatus());
+			teacherRepository.save(teacher);
+			return new ResponseDto();
+		}
+		return new ResponseDto(TimConstants.NOT_OK_MESSAGE);
+	}
+
+	@Override
 	@Transactional
 	public ResponseDto create(MultipartFile file) {
 		List<TeacherDto> dtoList = excelService.getListObjectFromExcelFile(file, TeacherDto.class);

@@ -12,8 +12,8 @@ import java.nio.file.StandardCopyOption;
 import java.util.Date;
 
 public class ImageFileUploadUtil {
-    public static void saveFile(String uploadDir, String fileName,
-                                MultipartFile multipartFile) throws IOException {
+    public static void uploadFile(String uploadDir, String fileName,
+                                  MultipartFile multipartFile) throws IOException {
 
         Path uploadPath = Paths.get(uploadDir);
 
@@ -24,7 +24,6 @@ public class ImageFileUploadUtil {
 
         try (InputStream inputStream = multipartFile.getInputStream()) {
             Path filePath = uploadPath.resolve(fileName);
-
             Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException ioe) {
             throw new IOException("Could not save image file: " + fileName, ioe);

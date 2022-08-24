@@ -2,17 +2,17 @@ package com.tim.service;
 
 import com.tim.dto.ResponseDto;
 import com.tim.dto.notification.NotificationGroupDto;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
+import com.tim.dto.notification.NotificationGroupRequestDto;
 
 public interface NotificationGroupService {
 
-    ResponseDto create(@Valid NotificationGroupDto dto);
+    ResponseDto create(NotificationGroupRequestDto dto);
 
-    ResponseDto update(@Valid NotificationGroupDto dto);
+    ResponseDto update(NotificationGroupDto dto);
 
-    ResponseDto getOne(@NotBlank String code);
+    ResponseDto getOne(String code);
 
-    void toggleStatus(@NotBlank Long id);
+    void toggleStatus(Long id);
+
+    ResponseDto getAll();
 }

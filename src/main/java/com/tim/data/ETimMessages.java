@@ -3,6 +3,9 @@ package com.tim.data;
 public enum ETimMessages {
 	
 	USER_NOT_FOUND("msg.000", "User not found"),
+	/**
+	 * Không tìm thấy {0} với {1} = {2}
+	 */
 	ENTITY_NOT_FOUND("msg.001", "ENTITY_NOT_FOUND"),
 	
 //	INVALID_SHEET_NAME("msg.004", "invalid sheet name"),
@@ -36,6 +39,9 @@ public enum ETimMessages {
 	CONSTRAIN_VAIOLATION_MESSAGE("msg.406", "constrain vaiolation message"),
 	INVALID_OBJECT_VALUE_2("msg.407", "invalid object value return value"),
 	INVALID_JSON_OBJECT("msg.408", "invalid string json object"),
+	EXPIRED_TOKEN("msg.409", "expired token"),
+	INVALID_TOKEN("msg.410", "invalid token"),
+	
 	ACCESS_DENIED("msg.000", "temporiry message"),
 
 	/* INTERNAL_SYSTEM_ERROR */

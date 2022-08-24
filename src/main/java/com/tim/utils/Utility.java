@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.Normalizer;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -68,7 +69,15 @@ public class Utility {
 		return t;
 	}
 	
-	public static <T> T convertStringJsonToObject(final String stringJson, final TypeReference<T> typeReference) {
+	/**
+	 * @author minhtuanitk43
+	 * @param <T>
+	 * @param stringJson
+	 * @param typeReference
+	 * @return Object <T> get from String Json
+	 */
+	public static <T> T convertStringJsonToObject(final String stringJson, 
+			final TypeReference<T> typeReference) {
 		T t = null;
 		try {
 			t = objectMapper.readValue(stringJson, typeReference);
@@ -102,11 +111,41 @@ public class Utility {
 	
 	/**
 	 * @author minhtuanitk43
-	 * @param key 
+	 * @param key Object class name
 	 * @return Actual Object Name (classSimpleName)
 	 */
 	public static String getActualObjectName(String key) {
-		return getObjectFromJsonFile(TimConstants.ACTUAL_OBJECT_NAME_FILE, new TypeReference<Map<String, String>>() {
+		return getObjectFromJsonFile(TimConstants.ACTUAL_OBJECT_NAME_FILE, 
+				new TypeReference<Map<String, String>>() {
 		}).get(key);
+	}
+	
+	/**
+	 * @author tuan_nguyen
+	 * @param string
+	 * @return
+	 */
+	public static String generateSlugs(String string) {
+		string = unaccent(string);
+
+		StringBuilder tem = new StringBuilder();
+		for (int i = 0; i < string.length(); ++i) {
+			if (string.charAt(i) >= 'a' && string.charAt(i) <= 'z') {
+				tem.append(string.charAt(i));
+			} else {
+				tem.append(' ');
+			}
+		}
+		String after = tem.toString().trim().replaceAll(" +", "-");
+		return after;
+	}
+	
+	/**
+	 * @author tuan_nguyen
+	 * @param src
+	 * @return
+	 */
+	private static String unaccent(String src) {
+		return Normalizer.normalize(src, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
 	}
 }

@@ -61,7 +61,7 @@ public class StudentServiceImpl implements StudentService {
 		Student student = studentConverter.toEntity(studentRequestDto);
 		String fileName = ImageFileUploadUtil.createFileName(image, TimConstants.Upload.USER_PREFIX);
 		try{
-			ImageFileUploadUtil.saveFile(TimConstants.Upload.USER_UPLOAD_DIR, fileName, image);
+			ImageFileUploadUtil.uploadFile(TimConstants.Upload.USER_UPLOAD_DIR, fileName, image);
 		}catch(IOException e){
 			return new ResponseDto(TimConstants.Upload.SAVE_UNSUCCESS);
 		}
@@ -186,10 +186,13 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public ResponseDto toggleStatus(Long id) {
-        Student student = studentRepository.getOneById(id);
-        student.setStatus(false);
-        studentRepository.save(student);
-        return new ResponseDto();
+        Student student = studentRepository.findById(id).orElse(null);
+        if (student != null) {
+        	student.setStatus(!student.getStatus());
+            studentRepository.save(student);
+            return new ResponseDto();
+        }
+        return new ResponseDto(TimConstants.NOT_OK_MESSAGE);
     }
 
 }

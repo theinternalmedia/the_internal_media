@@ -38,7 +38,7 @@ public class UserController {
 
         String uploadDir = "src/main/resources/user-photos/" + savedUser.getId();
 
-        ImageFileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+        ImageFileUploadUtil.uploadFile(uploadDir, fileName, multipartFile);
 
         return new ResponseDto(savedUser);
     }
