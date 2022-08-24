@@ -12,11 +12,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import lombok.EqualsAndHashCode;
+
 /**
  * 
  * @appName the_internal_media
  *
  */
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "student")
 public class Student extends User {

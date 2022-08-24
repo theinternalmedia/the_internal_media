@@ -5,12 +5,15 @@ import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import lombok.EqualsAndHashCode;
+
 /**
  * 
  * @appName the_internal_media
  *
  */
 @MappedSuperclass
+@EqualsAndHashCode(callSuper = true)
 public abstract class NewsAndNotify extends BaseEntity{
 
 	private static final long serialVersionUID = 8440585126556203337L;

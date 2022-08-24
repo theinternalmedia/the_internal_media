@@ -1,7 +1,9 @@
 package com.tim.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.tim.converter.TeacherConverter;
 import com.tim.data.ETimMessages;
+import com.tim.data.ETimRoles;
 import com.tim.data.SearchOperation;
 import com.tim.data.TimConstants;
 import com.tim.dto.PagingResponseDto;
@@ -25,9 +28,12 @@ import com.tim.dto.specification.SearchCriteria;
 import com.tim.dto.specification.TimSpecification;
 import com.tim.dto.teacher.TeacherDto;
 import com.tim.dto.teacher.TeacherRequestDto;
+import com.tim.dto.teacher.TeacherUpdateRequestDto;
 import com.tim.entity.Faculty;
+import com.tim.entity.Role;
 import com.tim.entity.Teacher;
 import com.tim.repository.FacultyRepository;
+import com.tim.repository.RoleRepository;
 import com.tim.repository.TeacherRepository;
 import com.tim.service.TeacherService;
 import com.tim.service.excel.ExcelService;
@@ -47,6 +53,8 @@ public class TeacherServiceImpl implements TeacherService {
 	private FacultyRepository facultyRepository;
 	@Autowired
 	private PasswordEncoder encoder;
+	@Autowired
+	private RoleRepository roleRepository;
 
 	@Override
 	@Transactional
@@ -61,6 +69,13 @@ public class TeacherServiceImpl implements TeacherService {
 					"Khoa", "Mã Khoa", requestDto.getFacultyCode()));
 		}
 		entity.setFaculty(faculty);
+		Set<Role> roles = new HashSet<Role>();
+		requestDto.getRoleCodes().add(ETimRoles.ROLE_TEACHER);
+		for(ETimRoles code : requestDto.getRoleCodes()) {
+			Role role = roleRepository.findByCode(code);
+			roles.add(role);
+		}
+		entity.setRoles(roles);
 		entity.setPassword(encoder.encode(entity.getPassword()));
 		return new ResponseDto(teacherConverter.toDto(teacherRepository.save(entity)));
 	}
@@ -128,6 +143,51 @@ public class TeacherServiceImpl implements TeacherService {
 	public ResponseDto findByUserId(String userId) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public ResponseDto update(TeacherUpdateRequestDto requestDto) {
+		// Validate input
+		ValidationUtils.validateObject(requestDto);
+		
+		Teacher entity = teacherRepository.findById(requestDto.getId()).orElse(null);
+		entity = teacherConverter.toEntity(requestDto, entity);		
+		// Faculty
+		Faculty faculty = facultyRepository.getByCode(requestDto.getFacultyCode()).orElse(null);
+		if (faculty == null) {
+			return new ResponseDto(Utility.getMessage(
+					ETimMessages.ENTITY_NOT_FOUND,
+					"Khoa", "Mã Khoa", 
+					requestDto.getFacultyCode()));
+		}
+		entity.setFaculty(faculty);
+		// Reset roles
+		Set<Role> roles = new HashSet<Role>();
+		requestDto.getRoleCodes().add(ETimRoles.ROLE_TEACHER);
+		for(ETimRoles code : requestDto.getRoleCodes()) {
+			Role role = roleRepository.findByCode(code);
+			roles.add(role);
+		}
+		entity.setRoles(roles);
+		// Set password
+		if (StringUtils.isNotEmpty(requestDto.getPassword())) {
+			entity.setPassword(encoder.encode(requestDto.getPassword()));
+		}
+		return new ResponseDto(teacherConverter.toDto(teacherRepository.save(entity)));
+	}
+
+	@Override
+	public ResponseDto toggleStatus(Long id) {
+		Teacher teacher = teacherRepository.findById(id).orElse(null);
+		if (teacher != null) {
+			teacher.setStatus(teacher.getStatus());
+			teacherRepository.save(teacher);
+			return new ResponseDto();
+		}
+		return new ResponseDto(Utility.getMessage(
+				ETimMessages.ENTITY_NOT_FOUND, 
+				"Giảng viên", 
+				"ID", String.valueOf(id)));
 	}
 
 }

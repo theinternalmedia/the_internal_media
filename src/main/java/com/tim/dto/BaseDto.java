@@ -1,11 +1,11 @@
 package com.tim.dto;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.io.Serializable;
 import java.time.LocalDateTime;
+
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.Getter;
 
 /**
  * 
@@ -13,8 +13,7 @@ import java.time.LocalDateTime;
  *
  */
 
-@Getter
-@Setter
+@Data
 public class BaseDto implements Serializable {
 
 	@Getter(value = AccessLevel.NONE)

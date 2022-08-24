@@ -2,12 +2,12 @@ package com.tim.dto;
 
 import java.io.Serializable;
 
-import lombok.*;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.tim.data.TimConstants;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

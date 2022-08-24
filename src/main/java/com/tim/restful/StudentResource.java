@@ -1,5 +1,7 @@
 package com.tim.restful;
 
+import javax.websocket.server.PathParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,5 +46,10 @@ public class StudentResource {
 			@ApiParam("StudentRequestDto to update Student")
 				@RequestBody StudentUpdateRequestDto requestDto) {
 		return studentService.update(requestDto);
+	}
+	
+	@PutMapping(TimApiPath.Student.TOGGLE_STATUS)
+	public ResponseDto toggleStatus(@PathParam("id") Long id) {
+		return studentService.toggleStatus(id);
 	}
 }

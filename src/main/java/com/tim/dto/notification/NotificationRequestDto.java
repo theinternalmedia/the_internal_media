@@ -10,11 +10,10 @@ import javax.validation.constraints.Size;
 import com.tim.data.TimConstants;
 
 import lombok.AccessLevel;
+import lombok.Data;
 import lombok.Getter;
-import lombok.ToString;
 
-@ToString
-@Getter
+@Data
 public class NotificationRequestDto implements Serializable{
 
 	@Getter(value = AccessLevel.NONE)

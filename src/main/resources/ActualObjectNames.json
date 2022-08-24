@@ -1,6 +1,7 @@
 {
 	"TeacherDto": "Giảng viên",
 	"TeacherRequestDto": "Giảng viên",
+	"TeacherUpdateRequestDto": "Giảng viên",
 	"StudentDto": "Sinh viên",
 	"StudentRequestDto": "Sinh viên",
 	"StudentUpdateRequestDto": "Sinh viên",

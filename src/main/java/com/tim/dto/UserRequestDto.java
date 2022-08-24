@@ -9,13 +9,11 @@ import javax.validation.constraints.Size;
 import com.tim.annotation.Phone;
 
 import lombok.AccessLevel;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
-@Getter
-@Setter
-@ToString
+@Data
 public class UserRequestDto {
 	
 	@NotBlank

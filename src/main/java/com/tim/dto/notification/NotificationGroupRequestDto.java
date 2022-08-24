@@ -2,13 +2,9 @@ package com.tim.dto.notification;
 
 import javax.validation.constraints.Size;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
-@ToString
-@Getter
-@Setter
+@Data
 public class NotificationGroupRequestDto {
 
 	@Size(max = 50)

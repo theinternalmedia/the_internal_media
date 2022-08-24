@@ -4,18 +4,17 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import lombok.AccessLevel;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 
 /**
  * 
  * @appName the_internal_media
  *
  */
-@ToString
-@Getter
-@Setter
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class NewsAndNotifyDto extends BaseDto{
 	
 	@Getter(value = AccessLevel.NONE)

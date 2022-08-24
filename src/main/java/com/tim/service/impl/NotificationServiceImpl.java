@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -65,10 +64,14 @@ public class NotificationServiceImpl implements NotificationService {
 		ValidationUtils.validateObject(requestDto);
 		
 		Notification entity = notificationConverter.toEntity(requestDto);
-		if (StringUtils.isNotBlank(requestDto.getNotificationGroupCode())) {
-			NotificationGroup notificationGroup = notificationGroupRepository.getByCode(
-					requestDto.getNotificationGroupCode());
-			entity.setNotificationGroup(notificationGroup);
+		// Set Notification Group
+		NotificationGroup notificationGroup = notificationGroupRepository
+				.findByCode(requestDto.getNotificationGroupCode()).orElse(null);
+		if (notificationGroup == null) {
+			return new ResponseDto(Utility.getMessage(
+					ETimMessages.ENTITY_NOT_FOUND, 
+					"Nhóm Thông Báo", 
+					"Mã", requestDto.getNotificationGroupCode()));
 		}
 		// Save thumbnail 
 		if (thumbnail != null) {
@@ -96,13 +99,16 @@ public class NotificationServiceImpl implements NotificationService {
 		Notification entity = notificationRepository.findById(requestDto.getId()).orElse(null);
 		if (entity != null) {
 			entity = notificationConverter.toEntity(requestDto, entity);
-			// clear Notification Group
-			entity.setNotificationGroup(null);
-			if (StringUtils.isNotBlank(requestDto.getNotificationGroupCode())) {
-				NotificationGroup notificationGroup = notificationGroupRepository
-						.getByCode(requestDto.getNotificationGroupCode());
-				entity.setNotificationGroup(notificationGroup);
+			// Set Notification Group
+			NotificationGroup notificationGroup = notificationGroupRepository
+					.findByCode(requestDto.getNotificationGroupCode()).orElse(null);
+			if (notificationGroup == null) {
+				return new ResponseDto(Utility.getMessage(
+						ETimMessages.ENTITY_NOT_FOUND, 
+						"Nhóm Thông Báo", 
+						"Mã", requestDto.getNotificationGroupCode()));
 			}
+			entity.setNotificationGroup(notificationGroup);
 			// Save thumbnail
 			if (thumbnail != null) {
 				// :TODO

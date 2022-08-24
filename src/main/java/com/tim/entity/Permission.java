@@ -13,11 +13,14 @@ import javax.validation.constraints.Size;
 
 import com.tim.data.ETimPermissions;
 
+import lombok.EqualsAndHashCode;
+
 /**
  * 
  * @appName the_internal_media
  *
  */
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "permissions")
 public class Permission extends BaseEntity {

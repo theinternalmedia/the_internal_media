@@ -6,13 +6,12 @@ import javax.validation.constraints.Size;
 import com.tim.dto.NewsAndNotifyDto;
 
 import lombok.AccessLevel;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 
-@Getter
-@Setter
-@ToString
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class NewsDto extends NewsAndNotifyDto{
 
 	@Getter(value = AccessLevel.NONE)

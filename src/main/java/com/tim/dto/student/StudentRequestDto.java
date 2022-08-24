@@ -5,18 +5,16 @@ import javax.validation.constraints.Size;
 
 import com.tim.dto.UserRequestDto;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 
  * @appName the_internal_media
  *
  */
-@Getter
-@Setter
-@ToString
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class StudentRequestDto extends UserRequestDto {
 
 	@NotBlank

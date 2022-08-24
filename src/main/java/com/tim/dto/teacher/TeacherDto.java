@@ -5,13 +5,12 @@ import javax.validation.constraints.NotBlank;
 import com.tim.dto.UserDto;
 
 import lombok.AccessLevel;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 
-@Getter
-@Setter
-@ToString
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class TeacherDto extends UserDto {
 
 	@Getter(value = AccessLevel.NONE)

@@ -123,7 +123,9 @@ public class NewsServiceImpl implements NewsService {
             newsRepository.save(news);
             return new ResponseDto();
         }
-        return new ResponseDto(TimConstants.NOT_OK_MESSAGE);
+        return new ResponseDto(Utility.getMessage(ETimMessages.ENTITY_NOT_FOUND,
+                TimConstants.ActualEntityName.NEWS,
+                "ID", String.valueOf(id)));
     }
 
 	@Override

@@ -11,11 +11,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import lombok.EqualsAndHashCode;
+
 /**
  * 
  * @appName the_internal_media
  *
  */
+@EqualsAndHashCode
 @Entity
 @Table(name = "educationProgram_subject", uniqueConstraints = 
 	@UniqueConstraint(columnNames = {"educationProgram_id", "subject_id"}))

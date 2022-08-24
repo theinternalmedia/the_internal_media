@@ -12,11 +12,14 @@ import javax.persistence.Table;
 
 import com.tim.data.TimConstants;
 
+import lombok.EqualsAndHashCode;
+
 /**
  * 
  * @appName the_internal_media
  *
  */
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "notifications")
 public class Notification extends NewsAndNotify {

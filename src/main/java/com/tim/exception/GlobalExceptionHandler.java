@@ -1,8 +1,8 @@
 package com.tim.exception;
 
-import com.tim.data.ETimMessages;
-import com.tim.dto.errorresponse.ErrorResponse;
-import com.tim.utils.Utility;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +12,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.tim.data.ETimMessages;
+import com.tim.dto.errorresponse.ErrorResponse;
+import com.tim.utils.Utility;
 
 /**
  * 
@@ -23,12 +24,6 @@ import java.util.List;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 	private final Logger logger = org.slf4j.LoggerFactory.getLogger(GlobalExceptionHandler.class);
-
-
-	@ExceptionHandler(NotFoundException.class)
-	public ResponseEntity<String> entityNotFoundException(NotFoundException e) {
-		return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-	}
 
 	// Validation Exception
 	@ExceptionHandler(ValidateException.class)
@@ -61,7 +56,7 @@ public class GlobalExceptionHandler {
 	}
 	
 	// Custom exception handler
-	@ExceptionHandler({ CustomException.class, AuthException.class })
+	@ExceptionHandler({ CustomException.class})
 	public ResponseEntity<ErrorResponse> handleCustomException(CustomException e) {
 		logger.error("CustomException error: {}", e.getMessage());
 

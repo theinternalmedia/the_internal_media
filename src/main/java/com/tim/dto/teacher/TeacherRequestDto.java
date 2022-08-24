@@ -1,17 +1,20 @@
 package com.tim.dto.teacher;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+import com.tim.data.ETimRoles;
 import com.tim.dto.UserRequestDto;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-@Getter
-@Setter
-@ToString
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class TeacherRequestDto extends UserRequestDto {
 
 	private boolean isManager = false;
@@ -26,4 +29,7 @@ public class TeacherRequestDto extends UserRequestDto {
 	@NotBlank
 	@Size(max = 100, min = 6)
 	private String password;
+	
+	@NotEmpty
+	private Set<ETimRoles> roleCodes = new HashSet<>();
 }

@@ -9,11 +9,14 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
+import lombok.EqualsAndHashCode;
+
 /**
  * 
  * @appName the_internal_media
  *
  */
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "notification_group")
 public class NotificationGroup extends BaseEntity {

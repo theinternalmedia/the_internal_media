@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import com.tim.dto.teacher.TeacherDto;
 import com.tim.dto.teacher.TeacherRequestDto;
+import com.tim.dto.teacher.TeacherUpdateRequestDto;
 import com.tim.entity.Teacher;
 
 /**
@@ -47,5 +48,18 @@ public class TeacherConverter extends AbstractConverter<TeacherDto, Teacher> {
 
 	public Teacher toEntity(TeacherRequestDto requestDto) {
 		return this.modelMapper.map(requestDto, Teacher.class);
+	}
+
+	public Teacher toEntity(TeacherUpdateRequestDto requestDto, Teacher entity) {
+		entity.setAddress(requestDto.getAddress());
+		entity.setDob(requestDto.getDob());
+		entity.setEmail(requestDto.getEmail());
+		entity.setGender(requestDto.getGender());
+		entity.setManager(requestDto.isManager());
+		entity.setName(requestDto.getName());
+		entity.setPhone(requestDto.getPhone());
+		entity.setRemark(requestDto.getRemark());
+		entity.setUserId(requestDto.getUserId());
+		return entity;
 	}
 }

@@ -30,7 +30,14 @@
 	},
 	"TeacherRequestDto": {
 		"userId": "Mã GV",
-		"facultyCode": "Mã Khoa"
+		"facultyCode": "Mã Khoa",
+		"roleCodes": "Vai trò"
+	},
+	"TeacherUpdateRequestDto":{
+		"id": "ID",
+		"userId": "Mã GV",
+		"facultyCode": "Mã Khoa",
+		"roleCodes": "Vai trò"
 	},
 	"StudentRequestDto": {
 		"userId": "Mã SV",

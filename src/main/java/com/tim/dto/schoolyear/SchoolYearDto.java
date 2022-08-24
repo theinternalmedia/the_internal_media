@@ -6,18 +6,17 @@ import javax.validation.constraints.Size;
 import com.tim.dto.BaseDto;
 
 import lombok.AccessLevel;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 
 /**
  * 
  * @appName the_internal_media
  *
  */
-@Getter
-@Setter
-@ToString
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class SchoolYearDto extends BaseDto {
 
 	@Getter(value = AccessLevel.NONE)

@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.tim.data.TimApiPath;
 import com.tim.dto.ResponseDto;
 import com.tim.dto.teacher.TeacherRequestDto;
+import com.tim.dto.teacher.TeacherUpdateRequestDto;
 import com.tim.service.TeacherService;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -30,6 +32,11 @@ public class TeacherResource {
 	@PostMapping(TimApiPath.Teacher.CREATE)
 	public ResponseDto create(@RequestBody TeacherRequestDto requestDto) {
 		return teacherService.create(requestDto);
+	}
+	
+	@PutMapping(TimApiPath.Teacher.UPDATE)
+	public ResponseDto update(@RequestBody TeacherUpdateRequestDto requestDto) {
+		return teacherService.update(requestDto);
 	}
 	
 	@PostMapping(TimApiPath.Teacher.UPLOAD_EXCEL)
@@ -52,4 +59,8 @@ public class TeacherResource {
 		return ResponseEntity.ok(teacherService.getPage(facultyCode, name, userId, page, size));
 	}
 	
+	@PutMapping(TimApiPath.Teacher.TOGGLE_STATUS)
+	public ResponseDto toggleStatus(@PathParam("id") Long id) {
+		return teacherService.toggleStatus(id);
+	}
 }

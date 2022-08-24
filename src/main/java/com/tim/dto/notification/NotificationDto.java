@@ -3,13 +3,11 @@ package com.tim.dto.notification;
 import com.tim.data.TimConstants;
 import com.tim.dto.NewsAndNotifyDto;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-@ToString
-@Getter
-@Setter
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class NotificationDto extends NewsAndNotifyDto {
 
 	private static final long serialVersionUID = -6423343053212448460L;

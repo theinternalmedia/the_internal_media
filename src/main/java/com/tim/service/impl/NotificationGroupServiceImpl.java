@@ -6,12 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tim.converter.NotificationGroupConverter;
+import com.tim.data.ETimMessages;
 import com.tim.dto.ResponseDto;
 import com.tim.dto.notification.NotificationGroupDto;
 import com.tim.dto.notification.NotificationGroupRequestDto;
 import com.tim.entity.NotificationGroup;
 import com.tim.repository.NotificationGroupRepository;
 import com.tim.service.NotificationGroupService;
+import com.tim.utils.Utility;
 
 @Service
 public class NotificationGroupServiceImpl implements NotificationGroupService {
@@ -35,7 +37,13 @@ public class NotificationGroupServiceImpl implements NotificationGroupService {
 
     @Override
     public ResponseDto getOne(String code) {
-    	NotificationGroup entity = notificationGroupRepository.findByCode(code);
+    	NotificationGroup entity = notificationGroupRepository.findByCode(code).orElse(null);
+    	if (entity == null) {
+			return new ResponseDto(Utility.getMessage(
+					ETimMessages.ENTITY_NOT_FOUND, 
+					"Nhóm Thông Báo", 
+					"Mã", code));
+		}
     	NotificationGroupDto dto = notificationGroupConverter.toDto(entity);
         return new ResponseDto(dto);
     }

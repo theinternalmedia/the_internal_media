@@ -5,6 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.ResponseDto;
 import com.tim.dto.teacher.TeacherRequestDto;
+import com.tim.dto.teacher.TeacherUpdateRequestDto;
 
 public interface TeacherService {
 	/**
@@ -42,5 +43,14 @@ public interface TeacherService {
 	PagingResponseDto getPage(String facultyCode, String name, String userId, int page, int size);
 	
 	ResponseDto getOne(String userId);
+
+	/**
+	 * @author minhtuanitk43
+	 * @param requestDto
+	 * @return ResponseDto
+	 */
+	ResponseDto update(TeacherUpdateRequestDto requestDto);
+
+	ResponseDto toggleStatus(Long id);
 
 }

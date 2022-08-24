@@ -12,11 +12,14 @@ import javax.persistence.PreRemove;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
+import lombok.EqualsAndHashCode;
+
 /**
  * 
  * @appName the_internal_media
  *
  */
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "roles")
 public class Role extends BaseEntity {

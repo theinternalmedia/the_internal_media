@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.tim.converter.StudentConverter;
 import com.tim.data.ETimMessages;
+import com.tim.data.ETimRoles;
 import com.tim.data.TimConstants;
 import com.tim.dto.ResponseDto;
 import com.tim.dto.specification.TimSpecification;
@@ -26,9 +27,11 @@ import com.tim.dto.student.StudentRequestDto;
 import com.tim.dto.student.StudentUpdateRequestDto;
 import com.tim.entity.Classz;
 import com.tim.entity.Faculty;
+import com.tim.entity.Role;
 import com.tim.entity.SchoolYear;
 import com.tim.entity.Student;
 import com.tim.repository.ClassRepository;
+import com.tim.repository.RoleRepository;
 import com.tim.repository.StudentRepository;
 import com.tim.service.StudentService;
 import com.tim.service.excel.ExcelService;
@@ -49,6 +52,9 @@ public class StudentServiceImpl implements StudentService {
 	private ClassRepository classRepository;
 	@Autowired
 	private PasswordEncoder encoder;
+	@Autowired
+	private RoleRepository roleRepository;
+	
 
 	@Transactional
 	@Override
@@ -57,12 +63,16 @@ public class StudentServiceImpl implements StudentService {
 		ValidationUtils.validateObject(requestDto);
 		
 		Student entity = studentConverter.toEntity(requestDto);
+		// Set Class
 		Classz classz = classRepository.getByCode(requestDto.getClassCode()).orElse(null);
 		if(classz == null) {
 			return new ResponseDto(Utility.getMessage(ETimMessages.ENTITY_NOT_FOUND, "Lớp Học",
 					"Mã Lớp", requestDto.getClassCode()));
 		}
 		entity.setClassz(classz);
+		// Set Role
+		Role role = roleRepository.findByCode(ETimRoles.ROLE_STUDENT);
+		entity.setRoles(Set.of(role));
 		entity.setPassword(encoder.encode(entity.getPassword()));
 		return new ResponseDto(studentConverter.toDto(studentRepository.save(entity) ));
 	}
@@ -194,6 +204,9 @@ public class StudentServiceImpl implements StudentService {
             studentRepository.save(student);
             return new ResponseDto();
         }
-        return new ResponseDto(TimConstants.NOT_OK_MESSAGE);
+        return new ResponseDto(Utility.getMessage(
+        		ETimMessages.ENTITY_NOT_FOUND, 
+				"Sinh viên", 
+				"ID", String.valueOf(id)));
     }
 }

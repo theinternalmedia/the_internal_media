@@ -4,11 +4,12 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import lombok.AccessLevel;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.ToString;
 
-@ToString
-@Getter
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class NotificationUpdateRequestDto extends NotificationRequestDto {
 
 	@Getter(value = AccessLevel.NONE)

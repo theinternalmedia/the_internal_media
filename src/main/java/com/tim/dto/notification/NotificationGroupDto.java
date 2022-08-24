@@ -1,15 +1,17 @@
 package com.tim.dto.notification;
 
-import com.tim.dto.BaseDto;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
-
 import javax.validation.constraints.Size;
 
+import com.tim.dto.BaseDto;
 
-@Getter
-@Setter
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+
+
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class NotificationGroupDto extends BaseDto {
 
     @Getter(value = AccessLevel.NONE)

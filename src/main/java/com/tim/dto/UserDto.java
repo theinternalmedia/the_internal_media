@@ -12,13 +12,12 @@ import com.tim.annotation.Phone;
 import com.tim.dto.role.RoleDto;
 
 import lombok.AccessLevel;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 
-@Getter
-@Setter
-@ToString
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class UserDto extends BaseDto {
 
 	@Getter(value = AccessLevel.NONE)
