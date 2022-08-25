@@ -34,7 +34,6 @@ import com.tim.data.TimConstants;
 import com.tim.dto.excel.ExcelField;
 import com.tim.dto.student.StudentDto;
 import com.tim.dto.teacher.TeacherDto;
-import com.tim.exception.GlobalExceptionHandler;
 import com.tim.exception.ValidateException;
 import com.tim.utils.Utility;
 
@@ -46,7 +45,7 @@ import com.tim.utils.Utility;
  */
 @Component
 public class ExcelHelper {
-	private final Logger logger = org.slf4j.LoggerFactory.getLogger(GlobalExceptionHandler.class);
+	private final Logger logger = org.slf4j.LoggerFactory.getLogger(ExcelHelper.class);
 
 	private static final String TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 

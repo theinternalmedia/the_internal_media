@@ -1,7 +1,9 @@
 package com.tim.service.impl;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.persistence.criteria.Join;
@@ -30,15 +32,15 @@ import com.tim.entity.Faculty;
 import com.tim.entity.Role;
 import com.tim.entity.SchoolYear;
 import com.tim.entity.Student;
+import com.tim.exception.CustomException;
 import com.tim.repository.ClassRepository;
 import com.tim.repository.RoleRepository;
 import com.tim.repository.StudentRepository;
 import com.tim.service.StudentService;
 import com.tim.service.excel.ExcelService;
+import com.tim.utils.UploadUtil;
 import com.tim.utils.Utility;
 import com.tim.utils.ValidationUtils;
-
-import java.util.Optional;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -55,6 +57,8 @@ public class StudentServiceImpl implements StudentService {
 	@Autowired
 	private RoleRepository roleRepository;
 	
+
+
 
 	@Transactional
 	@Override
@@ -136,7 +140,27 @@ public class StudentServiceImpl implements StudentService {
 		return null;
 	}
 
-    @Override
+	@Override
+	@Transactional
+	public ResponseDto updateAvatar(MultipartFile file, String usersUserId) {
+		Student student = studentRepository.findByUserId(usersUserId).orElse(null);
+		if (student != null) {
+			final String fileName = TimConstants.Upload.STUDENT_PREFIX + student.getUserId();
+			try {
+				if (StringUtils.isNotBlank(student.getAvatar())) {
+					UploadUtil.delelteFile(student.getAvatar());
+				}
+				String avatar = UploadUtil.uploadImage(file, TimConstants.Upload.AVATAR_DIR, fileName);
+				student.setAvatar(avatar);
+				return new ResponseDto();
+			} catch (IOException e) {
+				throw new CustomException(ETimMessages.INTERNAL_SYSTEM_ERROR);
+			}
+		}
+		return new ResponseDto(Utility.getMessage(ETimMessages.ENTITY_NOT_FOUND, 
+				"Sinh viên", "Mã SV", usersUserId));
+	}
+	@Override
     public ResponseDto update(StudentUpdateRequestDto requestDto) {
     	// Validate input
     	ValidationUtils.validateObject(requestDto);
@@ -163,14 +187,10 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public ResponseDto getOne(Long id) {
         Optional<Student> student = studentRepository.findById(id);
-        if(student.isPresent()){
-            return new ResponseDto(studentConverter.toDto(student.get()));
-        }
-        return new ResponseDto(Utility.getMessage(
-        		ETimMessages.ENTITY_NOT_FOUND,
-                "Sinh viên",
-                "ID", id.toString()));
-    }
+		return student.map(student1 -> new ResponseDto(studentConverter.toDto(student1)))
+							.orElseGet(() -> new ResponseDto(Utility.getMessage(
+							ETimMessages.ENTITY_NOT_FOUND, "Sinh viên", "ID", id.toString())));
+	}
 
     @Override
     public ResponseDto getByUserId(String userId){
@@ -209,4 +229,5 @@ public class StudentServiceImpl implements StudentService {
 				"Sinh viên", 
 				"ID", String.valueOf(id)));
     }
+
 }

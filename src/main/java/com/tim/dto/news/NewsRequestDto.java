@@ -7,8 +7,6 @@ import java.util.List;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
@@ -29,8 +27,6 @@ public class NewsRequestDto implements Serializable{
 
 	@NotBlank
 	private String content;
-
-	private MultipartFile thumbnailFile;
 
 	private List<String> facultyCodes = new ArrayList<>();
 }

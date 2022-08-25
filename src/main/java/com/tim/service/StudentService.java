@@ -32,6 +32,8 @@ public interface StudentService {
 	
 	String exportToExcelFile();
 
+	ResponseDto updateAvatar(MultipartFile avatar, String UserId);
+
     ResponseDto update(StudentUpdateRequestDto requestDto);
 
     ResponseDto getOne(Long id);
@@ -41,4 +43,6 @@ public interface StudentService {
     ResponseDto getByEmail(String email);
 
     ResponseDto toggleStatus(Long id);
+
+//    ResponseDto upload(String studentDtoJsonRequest, MultipartFile image);
 }

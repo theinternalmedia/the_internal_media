@@ -5,6 +5,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.Normalizer;
+import java.util.Date;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -18,7 +19,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tim.data.ETimMessages;
 import com.tim.data.TimConstants;
 import com.tim.exception.CustomException;
-import com.tim.exception.GlobalExceptionHandler;
 
 /**
  * 
@@ -28,7 +28,7 @@ import com.tim.exception.GlobalExceptionHandler;
 @Component
 public class Utility {
 
-	private static Logger logger = org.slf4j.LoggerFactory.getLogger(GlobalExceptionHandler.class);
+	private static Logger logger = org.slf4j.LoggerFactory.getLogger(Utility.class);
 
 	private static MessageSource messageSource;
 
@@ -119,25 +119,48 @@ public class Utility {
 				new TypeReference<Map<String, String>>() {
 		}).get(key);
 	}
+	/**
+	 * Get slugs
+	 * 
+	 * @author minhtuanitk43
+	 * @param string
+	 * @return
+	 */
+	public static String generateSlugs (String string) {
+		string = createSlugs(string);
+		return string.trim().replaceAll(" +", "-");
+	}
 	
+	/**
+	 * Format filename
+	 * 
+	 * @author minhtuanitk43
+	 * @param fileName
+	 * @return
+	 */
+	public static String formatFileName(String fileName) {
+		fileName = createSlugs(fileName);
+		return fileName.trim().replaceAll(" +", "_");
+	}
 	/**
 	 * @author tuan_nguyen
 	 * @param string
 	 * @return
 	 */
-	public static String generateSlugs(String string) {
+	private static String createSlugs(String string) {
 		string = unaccent(string);
 
 		StringBuilder tem = new StringBuilder();
 		for (int i = 0; i < string.length(); ++i) {
-			if (string.charAt(i) >= 'a' && string.charAt(i) <= 'z') {
+			if (string.charAt(i) >= 'a' && string.charAt(i) <= 'z'  
+					|| string.charAt(i) >= 'A' && string.charAt(i) <= 'Z' 
+							||Character.isDigit(string.charAt(i))) {
 				tem.append(string.charAt(i));
 			} else {
 				tem.append(' ');
 			}
 		}
-		String after = tem.toString().trim().replaceAll(" +", "-");
-		return after;
+		return tem.toString();
 	}
 	
 	/**
@@ -147,5 +170,16 @@ public class Utility {
 	 */
 	private static String unaccent(String src) {
 		return Normalizer.normalize(src, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
+	}
+
+	/**
+	 * Get fileName from current time
+	 * 
+	 * @author minhtuanitk43
+	 * @param newsPrefix
+	 * @return
+	 */
+	public static String getFileNameFromTime(String prefixName) {
+		return prefixName + new Date().getTime();
 	}
 }

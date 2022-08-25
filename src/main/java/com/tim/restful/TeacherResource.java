@@ -48,6 +48,12 @@ public class TeacherResource {
 	public ResponseEntity<ResponseDto> getByUserId(@RequestParam("userId") String userId){
 		return ResponseEntity.ok(teacherService.getOne(userId));
 	}
+
+	@PutMapping(TimApiPath.Teacher.UPLOAD_IMAGE)
+	public ResponseDto uploadAvatar(@RequestPart("avatar") MultipartFile avatar,
+									@RequestParam("userId") String userId){
+		return teacherService.updateAvatar(avatar, userId);
+	}
 	
 	@GetMapping(TimApiPath.Teacher.GET_PAGE)
 	public ResponseEntity<ResponseDto> getPage(

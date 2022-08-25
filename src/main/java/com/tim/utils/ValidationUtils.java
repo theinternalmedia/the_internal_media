@@ -27,7 +27,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.tim.annotation.Phone;
 import com.tim.data.ETimMessages;
 import com.tim.data.TimConstants;
-import com.tim.exception.GlobalExceptionHandler;
 import com.tim.exception.ValidateException;
 
 /**
@@ -36,7 +35,7 @@ import com.tim.exception.ValidateException;
  *
  */
 public class ValidationUtils {
-	private static Logger logger = org.slf4j.LoggerFactory.getLogger(GlobalExceptionHandler.class);
+	private static Logger logger = org.slf4j.LoggerFactory.getLogger(ValidationUtils.class);
 
 	/**
 	 * Get Message Validate Field
@@ -184,23 +183,23 @@ public class ValidationUtils {
 		}
 	}
 
-	/**
-	 * Validate Value if is Instant Of Object
-	 * 
-	 * @author minhtuanitk43
-	 * @param <T>
-	 * @param value
-	 * @param clazz
-	 * @param fieldName
-	 * @return value if validation is success, otherwise ValidateException will be throw
-	 */
-	public static <T> T getValue(Object value, Class<T> clazz, String fieldName) {
-		try {
-			return clazz.cast(value);
-		} catch (Exception e) {
-			throw new ValidateException(ETimMessages.INVALID_OBJECT_VALUE_2, null, 
-					StringUtils.isBlank(fieldName) ? "Dữ liệu" : fieldName,
-							String.valueOf(value));
-		}
-	}
+//	/**
+//	 * Validate Value if is Instant Of Object
+//	 * 
+//	 * @author minhtuanitk43
+//	 * @param <T>
+//	 * @param value
+//	 * @param clazz
+//	 * @param fieldName
+//	 * @return value if validation is success, otherwise ValidateException will be throw
+//	 */
+//	public static <T> T getValue(Object value, Class<T> clazz, String fieldName) {
+//		try {
+//			return clazz.cast(value);
+//		} catch (Exception e) {
+//			throw new ValidateException(ETimMessages.INVALID_OBJECT_VALUE_2, null, 
+//					StringUtils.isBlank(fieldName) ? "Dữ liệu" : fieldName,
+//							String.valueOf(value));
+//		}
+//	}
 }

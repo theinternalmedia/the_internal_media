@@ -18,7 +18,6 @@ import com.tim.data.ETimMessages;
 import com.tim.data.TimConstants;
 import com.tim.dto.excel.ExcelField;
 import com.tim.exception.CustomException;
-import com.tim.exception.GlobalExceptionHandler;
 import com.tim.exception.ValidateException;
 import com.tim.utils.Utility;
 import com.tim.utils.ValidationUtils;
@@ -26,7 +25,7 @@ import com.tim.utils.ValidationUtils;
 @Service
 public class ExcelService implements ExcelFileService {
 
-	private final Logger logger = org.slf4j.LoggerFactory.getLogger(GlobalExceptionHandler.class);
+	private final Logger logger = org.slf4j.LoggerFactory.getLogger(ExcelService.class);
 
 	@Autowired
 	private ExcelHelper excelHelper;

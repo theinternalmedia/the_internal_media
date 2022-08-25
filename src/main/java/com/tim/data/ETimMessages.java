@@ -45,7 +45,8 @@ public enum ETimMessages {
 	INVALID_CELL_VALUE("msg.404", "invalid cell value"),
 	/** {0}: Dữ liệu trống. */
 	NULL_CELL_VALUE("msg.405", "null cell value"),
-//	CONSTRAIN_VAIOLATION_MESSAGE("msg.406", "constrain vaiolation message"),
+	/** File hình ảnh không hợp lệ: {0}. */
+	INVALID_IMAGE_FILE("msg.406", "invalid_image_file"),
 	/** {0} vừa nhập vào không hợp lệ: {1}. */
 	INVALID_OBJECT_VALUE_2("msg.407", "invalid object value return value"),
 //	INVALID_JSON_OBJECT("msg.408", "invalid string json object"),

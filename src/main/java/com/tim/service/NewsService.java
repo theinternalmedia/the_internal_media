@@ -3,6 +3,7 @@ package com.tim.service;
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.ResponseDto;
 import com.tim.dto.news.NewsRequestDto;
+import org.springframework.web.multipart.MultipartFile;
 import com.tim.dto.news.NewsUpdateDto;
 
 public interface NewsService {
@@ -14,7 +15,7 @@ public interface NewsService {
 	 * @param requestDto
 	 * @return ResponseDto
 	 */
-    ResponseDto create(NewsRequestDto requestDto);
+    ResponseDto create(NewsRequestDto requestDto, MultipartFile image);
 
     /**
      * Update News.
@@ -23,7 +24,7 @@ public interface NewsService {
      * @param newsDto
      * @return ResponseDto
      */
-    ResponseDto update(NewsUpdateDto newsDto);
+    ResponseDto update(NewsUpdateDto newsDto, MultipartFile image);
 
     /**
      * @author minhtuanitk43

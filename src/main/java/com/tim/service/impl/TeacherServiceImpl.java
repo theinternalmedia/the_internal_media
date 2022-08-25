@@ -1,5 +1,6 @@
 package com.tim.service.impl;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -32,11 +33,13 @@ import com.tim.dto.teacher.TeacherUpdateRequestDto;
 import com.tim.entity.Faculty;
 import com.tim.entity.Role;
 import com.tim.entity.Teacher;
+import com.tim.exception.CustomException;
 import com.tim.repository.FacultyRepository;
 import com.tim.repository.RoleRepository;
 import com.tim.repository.TeacherRepository;
 import com.tim.service.TeacherService;
 import com.tim.service.excel.ExcelService;
+import com.tim.utils.UploadUtil;
 import com.tim.utils.Utility;
 import com.tim.utils.ValidationUtils;
 
@@ -90,6 +93,7 @@ public class TeacherServiceImpl implements TeacherService {
 		return new ResponseDto(teacherConverter.toDto(entity));
 	}
 
+
 	@Override
 	@Transactional
 	public ResponseDto create(MultipartFile file) {
@@ -112,6 +116,27 @@ public class TeacherServiceImpl implements TeacherService {
 		List<TeacherDto> dtos = teacherConverter.toDtoList(entityList);
 		excelService.writeListObjectToExcel(TimConstants.ExcelFiledName.TEACHER, dtos);
 		return null;
+	}
+
+	@Override
+	@Transactional
+	public ResponseDto updateAvatar(MultipartFile file, String usersUserId) {
+		Teacher teacher = teacherRepository.findByUserId(usersUserId).orElse(null);
+		if (teacher != null) {
+			final String fileName = TimConstants.Upload.TEACHER_PREFIX + teacher.getUserId();
+			try {
+				if (StringUtils.isNotBlank(teacher.getAvatar())) {
+					UploadUtil.delelteFile(teacher.getAvatar());
+				}
+				String avatar = UploadUtil.uploadImage(file, TimConstants.Upload.AVATAR_DIR, fileName);
+				teacher.setAvatar(avatar);
+				return new ResponseDto();
+			} catch (IOException e) {
+				throw new CustomException(ETimMessages.INTERNAL_SYSTEM_ERROR);
+			}
+		}
+		return new ResponseDto(Utility.getMessage(ETimMessages.ENTITY_NOT_FOUND, 
+				"Sinh viên", "Mã SV", usersUserId));
 	}
 
 	@Override

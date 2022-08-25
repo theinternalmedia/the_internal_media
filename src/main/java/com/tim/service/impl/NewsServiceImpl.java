@@ -1,22 +1,5 @@
 package com.tim.service.impl;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
-import javax.transaction.Transactional;
-
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
-
 import com.tim.converter.NewsConverter;
 import com.tim.data.ETimMessages;
 import com.tim.data.SearchOperation;
@@ -30,11 +13,30 @@ import com.tim.dto.specification.SearchCriteria;
 import com.tim.dto.specification.TimSpecification;
 import com.tim.entity.Faculty;
 import com.tim.entity.News;
+import com.tim.exception.CustomException;
 import com.tim.repository.FacultyRepository;
 import com.tim.repository.NewsRepository;
 import com.tim.service.NewsService;
+import com.tim.utils.UploadUtil;
 import com.tim.utils.Utility;
 import com.tim.utils.ValidationUtils;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class NewsServiceImpl implements NewsService {
@@ -47,10 +49,11 @@ public class NewsServiceImpl implements NewsService {
     private FacultyRepository facultyRepository;
 
     @Override
-    public ResponseDto create(NewsRequestDto requestDto) {
-    	// Validate Object
-    	ValidationUtils.validateObject(requestDto);
-    	
+    @Transactional
+    public ResponseDto create(NewsRequestDto requestDto, MultipartFile image) {
+        // Validate Object
+        ValidationUtils.validateObject(requestDto);
+
         List<String> facultyCodes = requestDto.getFacultyCodes();
         News entity = newsConverter.toEntity(requestDto);
         if (CollectionUtils.isNotEmpty(facultyCodes)) {
@@ -58,9 +61,14 @@ public class NewsServiceImpl implements NewsService {
             faculties = facultyRepository.findByCodeIn(facultyCodes);
             entity.setFaculties(faculties);
         }
-        if (requestDto.getThumbnailFile() != null) {
-        	// upload thumbnail
-        	entity.setThumbnail(null);
+        if (image != null) {
+        	final String fileName = Utility.getFileNameFromTime(TimConstants.Upload.NEWS_PREFIX);
+            try {
+                String thumnbnail = UploadUtil.uploadImage(image, TimConstants.Upload.THUMBNAIL_DIR, fileName);
+                entity.setThumbnail(thumnbnail);
+            }catch (IOException e){
+                throw new CustomException(ETimMessages.INTERNAL_SYSTEM_ERROR);
+            }
         }
         // Set Slug
         entity.setSlug(Utility.generateSlugs(entity.getTitle()));
@@ -70,24 +78,29 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     @Transactional
-    public ResponseDto update(NewsUpdateDto requestDto) {
-    	// Validate Object
-    	ValidationUtils.validateObject(requestDto);
-    	
-        Long newsId = requestDto.getId(); 
-        if (newsId != null) {
-            News oldNews = newsRepository.findById(newsId).orElse(null);
-            if (oldNews != null)
+    public ResponseDto update(NewsUpdateDto requestDto, MultipartFile image) {
+        // Validate Object
+        ValidationUtils.validateObject(requestDto);
+
+        Long newsId = requestDto.getId();
+        News oldNews = newsRepository.findById(newsId).orElse(null);
+        if (oldNews != null) {
             oldNews = newsConverter.toEntity(requestDto, oldNews);
-            if (requestDto.getThumbnailFile() != null) {
-            	// upload thumbnail file:
-            		// Kiểm tra định dạng -> throw Exception
-            		// Kiểm tra nếu tồn tại thì xóa xong ms save
-            		// Kiểm tra save thành công -> -> throw Exception
-            	 oldNews.setThumbnail(null);
+            if (image != null) {
+            	final String fileName = Utility.getFileNameFromTime(TimConstants.Upload.NEWS_PREFIX);
+                try {
+                	if (StringUtils.isNotBlank(oldNews.getThumbnail())) {
+                		UploadUtil.delelteFile(oldNews.getThumbnail());
+                    }
+                    String thumnbnail = UploadUtil.uploadImage(image, 
+                    		TimConstants.Upload.THUMBNAIL_DIR, fileName);
+                    oldNews.setThumbnail(thumnbnail);
+                }catch (IOException e){
+                    throw new CustomException(ETimMessages.INTERNAL_SYSTEM_ERROR);
+                }
             }
             List<String> facultyCodes = requestDto.getFacultyCodes();
-            
+
             // Clear faculties
             oldNews.getFaculties().clear();
             if (CollectionUtils.isNotEmpty(facultyCodes)) {
@@ -95,14 +108,23 @@ public class NewsServiceImpl implements NewsService {
                 faculties = facultyRepository.findByCodeIn(facultyCodes);
                 oldNews.setFaculties(faculties);
             }
-            
+
             // Set Slug
             oldNews.setSlug(Utility.generateSlugs(oldNews.getTitle()));
             oldNews = newsRepository.save(oldNews);
+
             return new ResponseDto(newsConverter.toDto(oldNews));
         }
         return new ResponseDto(TimConstants.NOT_OK_MESSAGE);
     }
+
+    /*private void uploadThumbnail(MultipartFile image, NewsAndNotify entity) throws IOException{
+        ValidationUtils.validateImage(image);
+        String fileName = ImageFileUploadUtil.createFileName(image, TimConstants.Upload.NEWS_PREFIX);
+        ImageFileUploadUtil.uploadFile(TimConstants.Upload.THUMBNAIL_UPLOAD_DIR, fileName, image);
+        String thumbnailPath = TimConstants.Upload.THUMBNAIL_PATH + fileName;
+        entity.setThumbnail(thumbnailPath);
+    }*/
 
     @Override
     public ResponseDto getOne(Long id) {
@@ -119,7 +141,7 @@ public class NewsServiceImpl implements NewsService {
     public ResponseDto toogleStatus(Long id) {
         News news = newsRepository.findById(id).orElse(null);
         if (news != null) {
-        	news.setStatus(!news.getStatus());
+            news.setStatus(!news.getStatus());
             newsRepository.save(news);
             return new ResponseDto();
         }
@@ -128,57 +150,57 @@ public class NewsServiceImpl implements NewsService {
                 "ID", String.valueOf(id)));
     }
 
-	@Override
-	public PagingResponseDto getPage(int page, int size, boolean status, 
-			Long id, String search, String facultyCode) {
-		TimSpecification<News> timSpecification = new TimSpecification<News>();
-		timSpecification.add(new SearchCriteria("status", status, SearchOperation.EQUAL));
-		
-		// Id not null
-		if (id != null) {
-			timSpecification.add(new SearchCriteria("id", id, SearchOperation.EQUAL));
-		}
-		
-		Specification<News> specification = Specification.where(null);
-		
-		// Search not null
-		if (StringUtils.isNotBlank(search)) {
-			specification = specification.and((root, query, builder) -> {
-				return builder.like(builder.lower(
-						root.get("title")), "%" + search.toLowerCase() + "%");
-			}).or((root, query, builder) -> {
-				return builder.like(builder.lower(
-						root.get("shortDescription")), "%" + search.toLowerCase() + "%");
-			}).or((root, query, builder) -> {
-				return builder.like(builder.lower(
-						root.get("content")), "%" + search.toLowerCase() + "%");
-			});
-		}
-		
-		// FacultyCode not null
-		if (StringUtils.isNotBlank(facultyCode)) {
-			specification = specification.and((root, query, builder) -> {
-				return builder.equal(root.join("faculties").get("code"), facultyCode);
-			});
-		}
-		Pageable pageable = PageRequest.of(page - 1, size, Sort.by("createdDate"));
-		Page<News> pageTeachers = newsRepository.findAll(specification.and(timSpecification), pageable);
-		List<NewsDto> data = newsConverter.toDtoList(pageTeachers.getContent());
-		return new PagingResponseDto(pageTeachers.getTotalElements(), 
-				pageTeachers.getTotalPages(),
-				pageTeachers.getNumber() + 1, 
-				pageTeachers.getSize(), 
-				data);
-	}
+    @Override
+    public PagingResponseDto getPage(int page, int size, boolean status,
+                                     Long id, String search, String facultyCode) {
+        TimSpecification<News> timSpecification = new TimSpecification<News>();
+        timSpecification.add(new SearchCriteria("status", status, SearchOperation.EQUAL));
 
-	@Override
-	public ResponseDto getOne(String slug) {
-		Optional<News> news = newsRepository.findBySlug(slug);
-        if (news.isEmpty()) {
+        // Id not null
+        if (id != null) {
+            timSpecification.add(new SearchCriteria("id", id, SearchOperation.EQUAL));
+        }
+
+        Specification<News> specification = Specification.where(null);
+
+        // Search not null
+        if (StringUtils.isNotBlank(search)) {
+            specification = specification.and((root, query, builder) -> {
+                return builder.like(builder.lower(
+                        root.get("title")), "%" + search.toLowerCase() + "%");
+            }).or((root, query, builder) -> {
+                return builder.like(builder.lower(
+                        root.get("shortDescription")), "%" + search.toLowerCase() + "%");
+            }).or((root, query, builder) -> {
+                return builder.like(builder.lower(
+                        root.get("content")), "%" + search.toLowerCase() + "%");
+            });
+        }
+
+        // FacultyCode not null
+        if (StringUtils.isNotBlank(facultyCode)) {
+            specification = specification.and((root, query, builder) -> {
+                return builder.equal(root.join("faculties").get("code"), facultyCode);
+            });
+        }
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("createdDate"));
+        Page<News> pageTeachers = newsRepository.findAll(specification.and(timSpecification), pageable);
+        List<NewsDto> data = newsConverter.toDtoList(pageTeachers.getContent());
+        return new PagingResponseDto(pageTeachers.getTotalElements(),
+                pageTeachers.getTotalPages(),
+                pageTeachers.getNumber() + 1,
+                pageTeachers.getSize(),
+                data);
+    }
+
+    @Override
+    public ResponseDto getOne(String slug) {
+        Optional<News> news = newsRepository.findBySlug(slug);
+        if (news.isPresent()) {
             return new ResponseDto(Utility.getMessage(ETimMessages.ENTITY_NOT_FOUND,
                     TimConstants.ActualEntityName.NEWS,
                     "Slug", slug));
         }
         return new ResponseDto(newsConverter.toDto(news.get()));
-	}
+    }
 }

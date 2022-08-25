@@ -17,6 +17,7 @@ import com.tim.dto.ResponseDto;
 import com.tim.dto.student.StudentRequestDto;
 import com.tim.dto.student.StudentUpdateRequestDto;
 import com.tim.service.StudentService;
+import com.tim.utils.PrincipalUtils;
 
 import io.swagger.annotations.ApiParam;
 
@@ -33,6 +34,12 @@ public class StudentResource {
 				@RequestPart("file") MultipartFile file) {
 		return studentService.create(file);
 	}
+
+	@PostMapping(TimApiPath.Student.UPLOAD_IMAGE)
+	public ResponseDto uploadAvatar(@RequestPart("avatar") MultipartFile avatar){
+		return studentService.updateAvatar(avatar, PrincipalUtils.getAuthenticatedUsersUserId());
+	}
+
 	
 	@PostMapping(TimApiPath.Student.CREATE)
 	public ResponseDto create(

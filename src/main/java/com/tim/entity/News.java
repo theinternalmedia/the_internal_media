@@ -31,5 +31,6 @@ public class News extends NewsAndNotify{
 	public void setFaculties(Set<Faculty> faculties) {
 		this.faculties = faculties;
 	}
+
 	
 }
