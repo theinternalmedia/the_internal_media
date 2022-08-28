@@ -9,6 +9,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.tim.annotation.Code;
 import com.tim.data.ETimRoles;
 import com.tim.dto.UserRequestDto;
 
@@ -26,10 +27,12 @@ public class TeacherUpdateRequestDto extends UserRequestDto {
 	private boolean isManager = false;
 
 	@NotBlank
+	@Code
 	private String facultyCode;
 	
 	@NotBlank
 	@Size(max = 20, min = 5)
+	@Code
 	private String userId;
 	
 	@Size(max = 100, min = 6)

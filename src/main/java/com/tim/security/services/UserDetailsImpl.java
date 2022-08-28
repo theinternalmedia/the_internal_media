@@ -61,7 +61,7 @@ public class UserDetailsImpl implements UserDetails{
 				user.getPassword(), 
 				user.getStatus(),
 				authorities,
-				user.getRoles().stream().map(r -> r.getName()).collect(Collectors.toList()),
+				user.getRoles().stream().map(r -> r.getCode()).collect(Collectors.toList()),
 				user.getAvatar(),
 				user.isTeacher());
 	}
@@ -83,7 +83,7 @@ public class UserDetailsImpl implements UserDetails{
 		List<String> permissions = new ArrayList<>();
 		List<Permission> collection = new ArrayList<>();
 		for (Role role : roles) {
-			permissions.add(role.getName().toString());
+			permissions.add(role.getCode().toString());
 			collection.addAll(role.getPermissions());
 		}
 		for (Permission item : collection) {

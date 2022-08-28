@@ -8,6 +8,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import com.tim.annotation.Code;
 import com.tim.annotation.Phone;
 import com.tim.dto.role.RoleDto;
 
@@ -26,6 +27,7 @@ public class UserDto extends BaseDto {
 
 	@NotBlank
 	@Size(max = 20, min = 5)
+	@Code
 	private String userId;
 
 	@NotBlank

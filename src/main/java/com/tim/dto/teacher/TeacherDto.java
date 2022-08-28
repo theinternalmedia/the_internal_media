@@ -2,6 +2,7 @@ package com.tim.dto.teacher;
 
 import javax.validation.constraints.NotBlank;
 
+import com.tim.annotation.Code;
 import com.tim.dto.UserDto;
 
 import lombok.AccessLevel;
@@ -19,5 +20,6 @@ public class TeacherDto extends UserDto {
 	private boolean isManager = false;
 	
 	@NotBlank
+	@Code
 	private String facultyCode;
 }

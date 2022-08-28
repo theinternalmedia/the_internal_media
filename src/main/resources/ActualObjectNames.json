@@ -11,6 +11,8 @@
 	"NotificationGroupDto": "Thông báo nhóm",
 	"NotificationUpdateRequestDto": "Thông báo",
 	"SchoolYearDto": "Niên Khóa",
+	"SchoolYearRequestDto": "Niên Khóa",
+	"SchoolYearUpdateRequestDto": "Niên Khóa",
 	"NewsDto": "Tin tức",
 	"NewsUpdateDto": "Tin tức",
 	"ClassDto" : "Lớp học",

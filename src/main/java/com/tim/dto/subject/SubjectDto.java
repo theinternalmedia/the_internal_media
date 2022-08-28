@@ -4,6 +4,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import com.tim.annotation.Code;
 import com.tim.dto.BaseDto;
 
 import lombok.AccessLevel;
@@ -25,6 +26,7 @@ public class SubjectDto extends BaseDto {
 
 	@Size(max = 20, min = 5)
 	@NotBlank
+	@Code
 	private String code;
 
 	@Size(max = 50)

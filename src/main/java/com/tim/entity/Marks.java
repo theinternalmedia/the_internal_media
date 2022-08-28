@@ -9,7 +9,7 @@ import javax.validation.constraints.Size;
 
 import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "marks")
 public class Marks extends BaseEntity {

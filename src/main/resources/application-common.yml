@@ -1,8 +1,6 @@
 #port
 server:
   port: 8080
-#  servlet:
-#    context-path: /tim-api  
 #Jwe secret
 tim:
   jwtExpirationMs: 86400000
@@ -32,6 +30,7 @@ spring:
         jdbc:
           lob:
             non_contextual_creation: true
+    show-sql: true
   web:
     resources.static-locations: classpath:/upload/,file:excel/, file:upload/
 #config swagger

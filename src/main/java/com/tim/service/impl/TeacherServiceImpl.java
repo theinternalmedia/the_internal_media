@@ -123,8 +123,10 @@ public class TeacherServiceImpl implements TeacherService {
 					() -> new TimNotFoundException("Khoa", "Mã Khoa", item.getFacultyCode()));
 			entity.setFaculty(faculty);
 			entity.setPassword(encoder.encode(entity.getPassword()));
-			
+			Role role = roleRepository.findByCode(ETimRoles.ROLE_TEACHER.toString());
+			entity.setRoles(Set.of(role));
 			entityList.add(entity);
+			
 			userIdSet.add(entity.getUserId());
 			if (StringUtils.isNotBlank(entity.getEmail())) {
 				emailSet.add(entity.getEmail());

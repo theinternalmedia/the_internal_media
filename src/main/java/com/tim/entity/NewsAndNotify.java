@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
  *
  */
 @MappedSuperclass
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 public abstract class NewsAndNotify extends BaseEntity{
 
 	private static final long serialVersionUID = 8440585126556203337L;

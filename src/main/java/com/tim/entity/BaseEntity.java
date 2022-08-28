@@ -24,7 +24,7 @@ import lombok.EqualsAndHashCode;
  *
  */
 @MappedSuperclass
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = {"createdDate", "modifiedDate"})
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity implements Serializable {
 

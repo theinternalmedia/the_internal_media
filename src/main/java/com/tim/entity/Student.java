@@ -19,7 +19,7 @@ import lombok.EqualsAndHashCode;
  * @appName the_internal_media
  *
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "student")
 public class Student extends User {
@@ -27,7 +27,9 @@ public class Student extends User {
 	private static final long serialVersionUID = 3541331733217756229L;
 
 	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "role_student", joinColumns = @JoinColumn(name = "student_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+	@JoinTable(name = "role_student", 
+		joinColumns = @JoinColumn(name = "student_id"), 
+		inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = new HashSet<>();
 	
 	@OneToMany(mappedBy = "student", fetch = FetchType.LAZY)

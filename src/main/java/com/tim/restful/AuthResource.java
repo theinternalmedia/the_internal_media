@@ -1,9 +1,7 @@
 package com.tim.restful;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -12,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,18 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tim.data.ETimMessages;
 import com.tim.data.TimApiPath;
-import com.tim.entity.Permission;
 import com.tim.entity.RefreshToken;
-import com.tim.entity.Role;
-import com.tim.entity.Student;
-import com.tim.entity.Teacher;
 import com.tim.exception.TimException;
 import com.tim.payload.request.LoginRequest;
 import com.tim.payload.request.TokenRefreshRequest;
 import com.tim.payload.response.JwtResponse;
 import com.tim.payload.response.TokenRefreshResponse;
-import com.tim.repository.StudentRepository;
-import com.tim.repository.TeacherRepository;
 import com.tim.security.jwt.JwtUtils;
 import com.tim.security.services.UserDetailsImpl;
 import com.tim.service.RefreshTokenService;
@@ -47,11 +40,7 @@ import com.tim.service.RefreshTokenService;
 @RequestMapping(TimApiPath.TIM_API)
 public class AuthResource {
 	@Autowired
-	public AuthenticationManager authenticationManager;
-	@Autowired
-	private StudentRepository studentRepository;
-	@Autowired
-	private TeacherRepository teacherRepository;
+	private AuthenticationManager authenticationManager;
 	@Autowired
 	private JwtUtils jwtUtils;
 	@Autowired
@@ -72,22 +61,12 @@ public class AuthResource {
 		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
 		List<String> roles = userDetails.getRoles();
-		Set<Role> setRole = new HashSet<Role>();
 		List<String> permissions = new ArrayList<>();
-
-		Student student = studentRepository.findByUserId(userDetails.getUsername()).orElse(null);
-		if (student != null) {
-			setRole = student.getRoles();
-		} else {
-			Teacher teacher = teacherRepository.findByUserId(userDetails.getUsername()).orElse(null);
-			setRole = teacher.getRoles();
-		}
-		for (Role role : setRole) {
-			for (Permission p : role.getPermissions()) {
-				permissions.add(p.getCode().toString());
+		for(GrantedAuthority permission : userDetails.getAuthorities()) {
+			if (!permission.getAuthority().startsWith("ROLE_")) {
+				permissions.add(permission.getAuthority());
 			}
 		}
-		
 		RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getUsername());
 		return ResponseEntity.ok(new JwtResponse(jwt, refreshToken.getToken(), 
 				userDetails.getId(), userDetails.getUsername(),

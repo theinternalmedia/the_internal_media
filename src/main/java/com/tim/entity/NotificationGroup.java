@@ -9,6 +9,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
+import com.tim.annotation.Code;
+
 import lombok.EqualsAndHashCode;
 
 /**
@@ -16,7 +18,7 @@ import lombok.EqualsAndHashCode;
  * @appName the_internal_media
  *
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "notification_group")
 public class NotificationGroup extends BaseEntity {
@@ -28,6 +30,7 @@ public class NotificationGroup extends BaseEntity {
 
 	@Column(unique = true, nullable = false, length = 50)
 	@Size(max = 50)
+	@Code
 	private String code;
 
 	@Column(unique = true, nullable = false, length = 50)

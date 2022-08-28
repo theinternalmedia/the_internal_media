@@ -5,6 +5,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.tim.annotation.Code;
 import com.tim.dto.UserRequestDto;
 
 import lombok.Data;
@@ -24,6 +25,7 @@ public class StudentUpdateRequestDto extends UserRequestDto {
 	private Long id;
 
 	@NotBlank
+	@Code
 	private String classCode;
 	
 	@NotBlank
