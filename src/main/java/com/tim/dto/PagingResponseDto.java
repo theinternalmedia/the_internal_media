@@ -1,8 +1,9 @@
 package com.tim.dto;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
-import lombok.Setter;
 
 /**
  * PagingResponseDto
@@ -11,9 +12,9 @@ import lombok.Setter;
  *
  * @param <T>
  */
-@Getter
-@Setter
-public class PagingResponseDto extends ResponseDto {
+@Data
+@AllArgsConstructor
+public class PagingResponseDto {
 
 	@Getter(value = AccessLevel.NONE)
 	private static final long serialVersionUID = -534561158613722144L;
@@ -22,37 +23,6 @@ public class PagingResponseDto extends ResponseDto {
 	private long totalPage;
 	private int page;
 	private int size;
+	private Object data = null;
 
-	/**
-	 * Get data success
-	 * @return status ok
-	 * @param data
-	 */
-	public PagingResponseDto(long totalItem, long totalPage, int page, int size, Object data) {
-		super(data);
-		this.totalItem = totalItem;
-		this.totalPage = totalPage;
-		this.page = page;
-		this.size = size;
-	}
-
-	/**
-	 * Get data success
-	 * @return status ok
-	 * @param data
-	 */
-	public PagingResponseDto(Object data) {
-		super(data);
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * If have any problem and cannot get data, response a message to client
-	 * @return status not ok
-	 * @param message
-	 */
-	public PagingResponseDto(String message) {
-		super(message);
-		// TODO Auto-generated constructor stub
-	}
 }

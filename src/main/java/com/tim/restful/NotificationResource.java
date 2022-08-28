@@ -3,7 +3,6 @@ package com.tim.restful;
 import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +18,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.tim.data.TimApiPath;
 import com.tim.data.TimConstants;
 import com.tim.dto.PagingResponseDto;
-import com.tim.dto.ResponseDto;
+import com.tim.dto.notification.NotificationDto;
 import com.tim.dto.notification.NotificationRequestDto;
 import com.tim.dto.notification.NotificationUpdateRequestDto;
 import com.tim.service.NotificationService;
@@ -37,7 +36,7 @@ public class NotificationResource {
 	private NotificationService notificationService;
 
 	@PostMapping(value = TimApiPath.Notification.CREATE)
-	public ResponseEntity<ResponseDto> create(@RequestPart(
+	public NotificationDto create(@RequestPart(
 			value = "file", required = false) MultipartFile file,
 			@ApiParam(value = "NotificationRequestDto in String Json.", 
 			example = TimConstants.ApiParamExample.Notification.CREATE_notifyRequestDtoJson) 
@@ -47,11 +46,11 @@ public class NotificationResource {
 				Utility.convertStringJsonToObject(
 						notifyRequestDtoJson, 
 						new TypeReference<NotificationRequestDto>() {});
-		return ResponseEntity.ok(notificationService.create(requestDto, file));
+		return notificationService.create(requestDto, file);
 	}
 
 	@PutMapping(value = TimApiPath.Notification.UPDATE)
-	public ResponseEntity<ResponseDto> update(@RequestPart(
+	public NotificationDto update(@RequestPart(
 			value = "file", required = false) MultipartFile file,
 			@ApiParam(value = "NotificationRequestDto in String Json.", 
 			example = TimConstants.ApiParamExample.Notification.UPDATE_notifyRequestDtoJson) 
@@ -61,16 +60,16 @@ public class NotificationResource {
 				Utility.convertStringJsonToObject(
 						notifyUpdateRequestDtoJson, 
 						new TypeReference<NotificationUpdateRequestDto>() {});
-		return ResponseEntity.ok(notificationService.update(requestDto, file));
+		return notificationService.update(requestDto, file);
 	}
 	
 	@GetMapping(TimApiPath.Notification.GET_BY_ID)
-	public ResponseDto getById(@PathVariable("id") Long id) {
+	public NotificationDto getById(@PathVariable("id") Long id) {
 		return notificationService.getOne(id);
 	}
 	
 	@GetMapping(TimApiPath.Notification.GET_BY_SLUG)
-	public ResponseDto getBySlug(@PathParam("slug") String slug) {
+	public NotificationDto getBySlug(@PathParam("slug") String slug) {
 		return notificationService.getOne(slug);
 	}
 

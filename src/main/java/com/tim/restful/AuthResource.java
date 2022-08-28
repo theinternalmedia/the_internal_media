@@ -26,7 +26,7 @@ import com.tim.entity.RefreshToken;
 import com.tim.entity.Role;
 import com.tim.entity.Student;
 import com.tim.entity.Teacher;
-import com.tim.exception.CustomException;
+import com.tim.exception.TimException;
 import com.tim.payload.request.LoginRequest;
 import com.tim.payload.request.TokenRefreshRequest;
 import com.tim.payload.response.JwtResponse;
@@ -106,7 +106,7 @@ public class AuthResource {
 		RefreshToken refreshToken = refreshTokenService
 				.findByTokenAndUserId(request.getRefreshToken(), usersUserId).orElse(null);
 		if (refreshToken == null) {
-			throw new CustomException(ETimMessages.INVALID_TOKEN, request.getRefreshToken());
+			throw new TimException(ETimMessages.INVALID_TOKEN, request.getRefreshToken());
 		}
 		refreshTokenService.verifyExpiration(refreshToken);
 		String token = jwtUtils.generateTokenFromUsername(usersUserId);

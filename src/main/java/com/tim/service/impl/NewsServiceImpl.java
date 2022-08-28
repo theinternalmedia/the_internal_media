@@ -1,26 +1,10 @@
 package com.tim.service.impl;
 
-import com.tim.converter.NewsConverter;
-import com.tim.data.ETimMessages;
-import com.tim.data.SearchOperation;
-import com.tim.data.TimConstants;
-import com.tim.dto.PagingResponseDto;
-import com.tim.dto.ResponseDto;
-import com.tim.dto.news.NewsDto;
-import com.tim.dto.news.NewsRequestDto;
-import com.tim.dto.news.NewsUpdateDto;
-import com.tim.dto.specification.SearchCriteria;
-import com.tim.dto.specification.TimSpecification;
-import com.tim.entity.Faculty;
-import com.tim.entity.News;
-import com.tim.exception.CustomException;
-import com.tim.repository.FacultyRepository;
-import com.tim.repository.NewsRepository;
-import com.tim.service.NewsService;
-import com.tim.utils.UploadUtil;
-import com.tim.utils.Utility;
-import com.tim.utils.ValidationUtils;
-import org.apache.commons.collections4.CollectionUtils;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -32,14 +16,30 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import com.tim.converter.NewsConverter;
+import com.tim.data.ETimMessages;
+import com.tim.data.SearchOperation;
+import com.tim.data.TimConstants;
+import com.tim.dto.PagingResponseDto;
+import com.tim.dto.news.NewsDto;
+import com.tim.dto.news.NewsRequestDto;
+import com.tim.dto.news.NewsUpdateDto;
+import com.tim.dto.specification.SearchCriteria;
+import com.tim.dto.specification.TimSpecification;
+import com.tim.entity.Faculty;
+import com.tim.entity.News;
+import com.tim.exception.TimException;
+import com.tim.exception.TimNotFoundException;
+import com.tim.repository.FacultyRepository;
+import com.tim.repository.NewsRepository;
+import com.tim.service.NewsService;
+import com.tim.utils.UploadUtils;
+import com.tim.utils.Utility;
+import com.tim.utils.ValidationUtils;
 
 @Service
 public class NewsServiceImpl implements NewsService {
+	private static final String NEWS = "Tin Tức";
 
     @Autowired
     private NewsRepository newsRepository;
@@ -50,104 +50,96 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     @Transactional
-    public ResponseDto create(NewsRequestDto requestDto, MultipartFile image) {
+    public NewsDto create(NewsRequestDto requestDto, MultipartFile image) {
         // Validate Object
         ValidationUtils.validateObject(requestDto);
 
         List<String> facultyCodes = requestDto.getFacultyCodes();
         News entity = newsConverter.toEntity(requestDto);
-        if (CollectionUtils.isNotEmpty(facultyCodes)) {
-            Set<Faculty> faculties = new HashSet<>();
-            faculties = facultyRepository.findByCodeIn(facultyCodes);
-            entity.setFaculties(faculties);
+        
+        // Map Faculties
+        Set<Faculty> faculties = new HashSet<>();
+        for (String facultyCode : facultyCodes) {
+        	Faculty faculty = facultyRepository.getByCode(facultyCode).orElseThrow(() -> 
+        			new TimNotFoundException(NEWS, "Mã", facultyCode));
+        	faculties.add(faculty);
         }
+        entity.setFaculties(faculties);
+        
+        // Save thumbnail
         if (image != null) {
         	final String fileName = Utility.getFileNameFromTime(TimConstants.Upload.NEWS_PREFIX);
             try {
-                String thumnbnail = UploadUtil.uploadImage(image, TimConstants.Upload.THUMBNAIL_DIR, fileName);
+                String thumnbnail = UploadUtils.uploadImage(image, TimConstants.Upload.THUMBNAIL_DIR, fileName);
                 entity.setThumbnail(thumnbnail);
             }catch (IOException e){
-                throw new CustomException(ETimMessages.INTERNAL_SYSTEM_ERROR);
+                throw new TimException(ETimMessages.INTERNAL_SYSTEM_ERROR);
             }
         }
         // Set Slug
         entity.setSlug(Utility.generateSlugs(entity.getTitle()));
         entity = newsRepository.save(entity);
-        return new ResponseDto(newsConverter.toDto(entity));
+        return newsConverter.toDto(entity);
     }
 
     @Override
     @Transactional
-    public ResponseDto update(NewsUpdateDto requestDto, MultipartFile image) {
+    public NewsDto update(NewsUpdateDto requestDto, MultipartFile image) {
         // Validate Object
         ValidationUtils.validateObject(requestDto);
 
         Long newsId = requestDto.getId();
-        News oldNews = newsRepository.findById(newsId).orElse(null);
-        if (oldNews != null) {
-            oldNews = newsConverter.toEntity(requestDto, oldNews);
-            if (image != null) {
-            	final String fileName = Utility.getFileNameFromTime(TimConstants.Upload.NEWS_PREFIX);
-                try {
-                	if (StringUtils.isNotBlank(oldNews.getThumbnail())) {
-                		UploadUtil.delelteFile(oldNews.getThumbnail());
-                    }
-                    String thumnbnail = UploadUtil.uploadImage(image, 
-                    		TimConstants.Upload.THUMBNAIL_DIR, fileName);
-                    oldNews.setThumbnail(thumnbnail);
-                }catch (IOException e){
-                    throw new CustomException(ETimMessages.INTERNAL_SYSTEM_ERROR);
+        News oldNews = newsRepository.findById(newsId).orElseThrow(() -> 
+        	new TimNotFoundException(NEWS, "ID", newsId.toString()));
+        oldNews = newsConverter.toEntity(requestDto, oldNews);
+        if (image != null) {
+        	final String fileName = Utility.getFileNameFromTime(TimConstants.Upload.NEWS_PREFIX);
+            try {
+            	if (StringUtils.isNotBlank(oldNews.getThumbnail())) {
+            		UploadUtils.delelteFile(oldNews.getThumbnail());
                 }
+                String thumnbnail = UploadUtils.uploadImage(image, 
+                		TimConstants.Upload.THUMBNAIL_DIR, fileName);
+                oldNews.setThumbnail(thumnbnail);
+            }catch (IOException e){
+                throw new TimException(ETimMessages.INTERNAL_SYSTEM_ERROR);
             }
-            List<String> facultyCodes = requestDto.getFacultyCodes();
-
-            // Clear faculties
-            oldNews.getFaculties().clear();
-            if (CollectionUtils.isNotEmpty(facultyCodes)) {
-                Set<Faculty> faculties = new HashSet<>();
-                faculties = facultyRepository.findByCodeIn(facultyCodes);
-                oldNews.setFaculties(faculties);
-            }
-
-            // Set Slug
-            oldNews.setSlug(Utility.generateSlugs(oldNews.getTitle()));
-            oldNews = newsRepository.save(oldNews);
-
-            return new ResponseDto(newsConverter.toDto(oldNews));
         }
-        return new ResponseDto(TimConstants.NOT_OK_MESSAGE);
-    }
+        List<String> facultyCodes = requestDto.getFacultyCodes();
 
-    /*private void uploadThumbnail(MultipartFile image, NewsAndNotify entity) throws IOException{
-        ValidationUtils.validateImage(image);
-        String fileName = ImageFileUploadUtil.createFileName(image, TimConstants.Upload.NEWS_PREFIX);
-        ImageFileUploadUtil.uploadFile(TimConstants.Upload.THUMBNAIL_UPLOAD_DIR, fileName, image);
-        String thumbnailPath = TimConstants.Upload.THUMBNAIL_PATH + fileName;
-        entity.setThumbnail(thumbnailPath);
-    }*/
-
-    @Override
-    public ResponseDto getOne(Long id) {
-        News news = newsRepository.findByIdAndStatusTrue(id);
-        if (news == null) {
-            return new ResponseDto(Utility.getMessage(ETimMessages.ENTITY_NOT_FOUND,
-                    TimConstants.ActualEntityName.NEWS,
-                    "ID", String.valueOf(id)));
+        // Clear faculties
+        oldNews.getFaculties().clear();
+        
+        // Map Faculties
+        Set<Faculty> faculties = new HashSet<>();
+        for (String facultyCode : facultyCodes) {
+        	Faculty faculty = facultyRepository.getByCode(facultyCode).orElseThrow(() -> 
+        			new TimNotFoundException(NEWS, "Mã", facultyCode));
+        	faculties.add(faculty);
         }
-        return new ResponseDto(newsConverter.toDto(news));
+        oldNews.setFaculties(faculties);
+
+        // Set Slug
+        oldNews.setSlug(Utility.generateSlugs(oldNews.getTitle()));
+        oldNews = newsRepository.save(oldNews);
+
+        return newsConverter.toDto(oldNews);
     }
 
     @Override
-    public ResponseDto toogleStatus(Long id) {
-        News news = newsRepository.findById(id).orElse(null);
-        if (news != null) {
-            news.setStatus(!news.getStatus());
-            newsRepository.save(news);
-            return new ResponseDto();
-        }
-        return new ResponseDto(Utility.getMessage(ETimMessages.ENTITY_NOT_FOUND,
-                TimConstants.ActualEntityName.NEWS,
-                "ID", String.valueOf(id)));
+    public NewsDto getOne(Long id) {
+        News news = newsRepository.findByIdAndStatusTrue(id).orElseThrow(() -> 
+        	new TimNotFoundException(NEWS, "ID", String.valueOf(id)));
+        return newsConverter.toDto(news);
+    }
+
+    @Override
+    public Long toogleStatus(Long id) {
+        News news = newsRepository.findById(id).orElseThrow(() -> 
+        	new TimNotFoundException(NEWS, "ID", String.valueOf(id)));
+        news.setStatus(!news.getStatus());
+        newsRepository.save(news);
+        return id;
     }
 
     @Override
@@ -194,13 +186,9 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public ResponseDto getOne(String slug) {
-        Optional<News> news = newsRepository.findBySlug(slug);
-        if (news.isPresent()) {
-            return new ResponseDto(Utility.getMessage(ETimMessages.ENTITY_NOT_FOUND,
-                    TimConstants.ActualEntityName.NEWS,
-                    "Slug", slug));
-        }
-        return new ResponseDto(newsConverter.toDto(news.get()));
+    public NewsDto getOne(String slug) {
+        News news = newsRepository.findBySlug(slug).orElseThrow(() -> 
+        	new TimNotFoundException(NEWS, "Slug", slug));
+        return newsConverter.toDto(news);
     }
 }

@@ -31,7 +31,6 @@ public abstract class User extends BaseEntity {
 	@Size(max = 50)
 	private String name;
 
-	@NotBlank
 	@Column(nullable = true, unique = true)
 	@Size(max = 50)
 	@Email

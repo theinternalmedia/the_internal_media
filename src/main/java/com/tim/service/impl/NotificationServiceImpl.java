@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import com.tim.utils.UploadUtil;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,6 @@ import com.tim.converter.NotificationConverter;
 import com.tim.data.ETimMessages;
 import com.tim.data.TimConstants;
 import com.tim.dto.PagingResponseDto;
-import com.tim.dto.ResponseDto;
 import com.tim.dto.notification.NotificationDto;
 import com.tim.dto.notification.NotificationRequestDto;
 import com.tim.dto.notification.NotificationUpdateRequestDto;
@@ -31,7 +29,8 @@ import com.tim.entity.NotificationStudent;
 import com.tim.entity.NotificationTeacher;
 import com.tim.entity.Student;
 import com.tim.entity.Teacher;
-import com.tim.exception.CustomException;
+import com.tim.exception.TimException;
+import com.tim.exception.TimNotFoundException;
 import com.tim.repository.NotificationGroupRepository;
 import com.tim.repository.NotificationRepository;
 import com.tim.repository.NotificationStudentRepository;
@@ -40,12 +39,14 @@ import com.tim.repository.StudentRepository;
 import com.tim.repository.TeacherRepository;
 import com.tim.service.NotificationService;
 import com.tim.service.StudentService;
+import com.tim.utils.UploadUtils;
 import com.tim.utils.Utility;
 import com.tim.utils.ValidationUtils;
 
 
 @Service
 public class NotificationServiceImpl implements NotificationService {
+	private static final String NOTIFICATION = "Thông Báo";
 
 	@Autowired
 	private NotificationConverter notificationConverter;
@@ -66,29 +67,28 @@ public class NotificationServiceImpl implements NotificationService {
 	
 	@Override
 	@Transactional
-	public ResponseDto create(NotificationRequestDto requestDto, MultipartFile thumbnail) {
+	public NotificationDto create(NotificationRequestDto requestDto, MultipartFile thumbnail) {
 		// Validate input
 		ValidationUtils.validateObject(requestDto);
 		
 		Notification entity = notificationConverter.toEntity(requestDto);
+		
 		// Set Notification Group
 		NotificationGroup notificationGroup = notificationGroupRepository
-				.findByCode(requestDto.getNotificationGroupCode()).orElse(null);
-		if (notificationGroup == null) {
-			return new ResponseDto(Utility.getMessage(
-					ETimMessages.ENTITY_NOT_FOUND, 
-					"Nhóm Thông Báo", 
-					"Mã", requestDto.getNotificationGroupCode()));
-		}
+				.findByCode(requestDto.getNotificationGroupCode()).orElseThrow(() -> 
+					new TimNotFoundException(
+							"Nhóm Thông Báo", "Mã", requestDto.getNotificationGroupCode()));
+		entity.setNotificationGroup(notificationGroup);
+		
 		// Save thumbnail 
 		if (thumbnail != null) {
 			final String fileName = Utility.getFileNameFromTime(TimConstants.Upload.NOTIFICATION_PREFIX);
             try {
-                String thumnbnail = UploadUtil.uploadImage(thumbnail, 
+                String thumnbnail = UploadUtils.uploadImage(thumbnail, 
                 		TimConstants.Upload.THUMBNAIL_DIR, fileName);
                 entity.setThumbnail(thumnbnail);
             }catch (IOException e){
-                throw new CustomException(ETimMessages.INTERNAL_SYSTEM_ERROR);
+                throw new TimException(ETimMessages.INTERNAL_SYSTEM_ERROR);
             }
 		}
 		
@@ -102,58 +102,54 @@ public class NotificationServiceImpl implements NotificationService {
 				requestDto.getSchoolYearCodes(),
 				requestDto.getFacultyCodes(),
 				requestDto.getClassCodes());
-		return new ResponseDto(notificationConverter.toDto(entity));
+		return notificationConverter.toDto(entity);
 	}
 
 	@Override
 	@Transactional
-	public ResponseDto update(NotificationUpdateRequestDto requestDto, MultipartFile thumbnail) {
+	public NotificationDto update(NotificationUpdateRequestDto requestDto, MultipartFile thumbnail) {
 		// Validate input
 		ValidationUtils.validateObject(requestDto);
 
-		Notification entity = notificationRepository.findById(requestDto.getId()).orElse(null);
-		if (entity != null) {
-			entity = notificationConverter.toEntity(requestDto, entity);
-			// Set Notification Group
-			NotificationGroup notificationGroup = notificationGroupRepository
-					.findByCode(requestDto.getNotificationGroupCode()).orElse(null);
-			if (notificationGroup == null) {
-				return new ResponseDto(Utility.getMessage(
-						ETimMessages.ENTITY_NOT_FOUND, 
-						"Nhóm Thông Báo", 
-						"Mã", requestDto.getNotificationGroupCode()));
-			}
-			entity.setNotificationGroup(notificationGroup);
-			// Save thumbnail
-			if (thumbnail != null) {
-				final String fileName = Utility.getFileNameFromTime(TimConstants.Upload.NEWS_PREFIX);
-                try {
-                	if (StringUtils.isNotBlank(entity.getThumbnail())) {
-                    	UploadUtil.delelteFile(entity.getThumbnail());
-                    }
-                    String thumnbnail = UploadUtil.uploadImage(thumbnail, 
-                    		TimConstants.Upload.THUMBNAIL_DIR, fileName);
-                    entity.setThumbnail(thumnbnail);
-                }catch (IOException e){
-                    throw new CustomException(ETimMessages.INTERNAL_SYSTEM_ERROR);
+		Notification entity = notificationRepository.findById(requestDto.getId()).orElseThrow(
+				() -> new TimNotFoundException(NOTIFICATION, "ID", requestDto.getId().toString()));
+		
+		entity = notificationConverter.toEntity(requestDto, entity);
+		
+		// Set Notification Group
+		NotificationGroup notificationGroup = notificationGroupRepository
+				.findByCode(requestDto.getNotificationGroupCode()).orElseThrow(() -> 
+				new TimNotFoundException(
+						"Nhóm Thông Báo", "Mã", requestDto.getNotificationGroupCode()));
+		entity.setNotificationGroup(notificationGroup);
+		
+		// Save thumbnail
+		if (thumbnail != null) {
+			final String fileName = Utility.getFileNameFromTime(TimConstants.Upload.NEWS_PREFIX);
+            try {
+            	if (StringUtils.isNotBlank(entity.getThumbnail())) {
+                	UploadUtils.delelteFile(entity.getThumbnail());
                 }
-			}
-			
-			// Save slug
-			entity.setSlug(Utility.generateSlugs(entity.getTitle()));
-			
-			entity = notificationRepository.save(entity);
-
-			// notify to users
-			saveNotification(
-					entity, 
-					requestDto.getSchoolYearCodes(), 
-					requestDto.getFacultyCodes(),
-					requestDto.getClassCodes());
-			return new ResponseDto(notificationConverter.toDto(entity));
+                String thumnbnail = UploadUtils.uploadImage(thumbnail, 
+                		TimConstants.Upload.THUMBNAIL_DIR, fileName);
+                entity.setThumbnail(thumnbnail);
+            }catch (IOException e){
+                throw new TimException(ETimMessages.INTERNAL_SYSTEM_ERROR);
+            }
 		}
-		return new ResponseDto(Utility.getMessage(ETimMessages.ENTITY_NOT_FOUND, 
-				TimConstants.ActualEntityName.NOTIFICATION, "Id", requestDto.getId().toString()));
+		
+		// Save slug
+		entity.setSlug(Utility.generateSlugs(entity.getTitle()));
+		
+		entity = notificationRepository.save(entity);
+
+		// notify to users
+		saveNotification(
+				entity, 
+				requestDto.getSchoolYearCodes(), 
+				requestDto.getFacultyCodes(),
+				requestDto.getClassCodes());
+		return notificationConverter.toDto(entity);
 	}
 
 	/**
@@ -210,15 +206,10 @@ public class NotificationServiceImpl implements NotificationService {
 	}
 
 	@Override
-	public ResponseDto getOne(Long notificationId) {
-		Notification notification = notificationRepository.findById(notificationId).orElse(null);
-		if (notification == null) {
-			return new ResponseDto(Utility.getMessage(
-					ETimMessages.ENTITY_NOT_FOUND,
-					TimConstants.ActualEntityName.TEACHER, "ID", 
-					String.valueOf(notificationId)));
-		}
-		return new ResponseDto(notificationConverter.toDto(notification));
+	public NotificationDto getOne(Long notificationId) {
+		Notification notification = notificationRepository.findById(notificationId).orElseThrow(
+				() -> new TimNotFoundException(NOTIFICATION, "ID", notificationId.toString()));
+		return notificationConverter.toDto(notification);
 	}
 
 	@Override
@@ -243,14 +234,9 @@ public class NotificationServiceImpl implements NotificationService {
 	}
 
 	@Override
-	public ResponseDto getOne(String slug) {
-		Notification notification = notificationRepository.findBySlug(slug).orElse(null);
-		if (notification == null) {
-			return new ResponseDto(Utility.getMessage(
-					ETimMessages.ENTITY_NOT_FOUND,
-					TimConstants.ActualEntityName.TEACHER, "SLUG", 
-					slug));
-		}
-		return new ResponseDto(notificationConverter.toDto(notification));
+	public NotificationDto getOne(String slug) {
+		Notification notification = notificationRepository.findBySlug(slug).orElseThrow(
+				() -> new TimNotFoundException(NOTIFICATION, "Slug", slug));
+		return notificationConverter.toDto(notification);
 	}
 }

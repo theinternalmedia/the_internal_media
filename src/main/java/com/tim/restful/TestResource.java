@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tim.converter.StudentConverter;
 import com.tim.data.ETimMessages;
 import com.tim.data.TimApiPath;
-import com.tim.dto.ResponseDto;
 import com.tim.dto.student.StudentDto;
 import com.tim.service.StudentService;
 import com.tim.service.TeacherService;
+import com.tim.utils.MessageUtils;
 import com.tim.utils.Utility;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -34,7 +34,7 @@ public class TestResource {
 	
 	@GetMapping("/message")
 	public String testGetExceptionMessage() {
-		return Utility.getMessage(ETimMessages.INTERNAL_SYSTEM_ERROR);
+		return MessageUtils.get(ETimMessages.INTERNAL_SYSTEM_ERROR);
 	}
 
 	@GetMapping("/findByChoolYearAndFacultyAndClass")
@@ -43,23 +43,6 @@ public class TestResource {
 			@RequestParam(value = "facultyCodes", required = false) Set<String> facultyCodes,
 			@RequestParam(value = "classCodes", required = false) Set<String> classCodes) {
 		return studentConverter.toDtoList(studentService.findByChoolYearAndFacultyAndClass(schooYearCodes, facultyCodes, classCodes));
-	}
-	
-	@GetMapping("/listStudentInUserIds")
-	public ResponseDto listStudentInUserIds(@RequestParam("userIds") List<String> userIds) {
-		return new ResponseDto();
-	}
-	
-	@GetMapping("/exportStudents")
-	public ResponseDto exportStudents() {
-		studentService.exportToExcelFile();
-		return new ResponseDto();
-	}
-	
-	@GetMapping("/exportTeachers")
-	public ResponseDto exportTeachers() {
-		teacherService.exportToExcelFile();
-		return new ResponseDto();
 	}
 	
 	@GetMapping("/generate-slugs")

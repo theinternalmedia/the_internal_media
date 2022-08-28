@@ -13,4 +13,6 @@ public interface NotificationGroupRepository extends JpaRepository<NotificationG
 
 	List<NotificationGroup> findAllByStatusTrue();
 
+	List<NotificationGroup> findAllByStatus(boolean status);
+
 }

@@ -8,7 +8,6 @@ import java.util.Set;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.tim.data.ETimRoles;
 import com.tim.entity.Role;
 
 /**
@@ -29,5 +28,5 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
 
 	Set<Role> findByCodeIn(Collection<String> roleCodes);
 
-	Role findByCode(ETimRoles roleTeacher);
+	Role findByCode(String roleTeacher);
 }

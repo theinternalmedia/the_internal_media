@@ -1,26 +1,25 @@
 package com.tim.service.impl;
 
-import com.tim.dto.ResponseDto;
-import com.tim.dto.subject.SubjectDto;
 import org.springframework.stereotype.Service;
 
+import com.tim.dto.subject.SubjectDto;
 import com.tim.service.SubjectService;
 
 @Service
 public class SubjectServiceImpl implements SubjectService{
 
     @Override
-    public ResponseDto create(SubjectDto dto) {
+    public SubjectDto create(SubjectDto dto) {
         return null;
     }
 
     @Override
-    public ResponseDto update(SubjectDto dto) {
+    public SubjectDto update(SubjectDto dto) {
         return null;
     }
 
     @Override
-    public ResponseDto getOne(String code){
+    public SubjectDto getOne(String code){
         return null;
     }
 

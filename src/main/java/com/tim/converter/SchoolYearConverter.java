@@ -3,6 +3,7 @@ package com.tim.converter;
 import org.springframework.stereotype.Component;
 
 import com.tim.dto.schoolyear.SchoolYearDto;
+import com.tim.dto.schoolyear.SchoolYearRequestDto;
 import com.tim.entity.SchoolYear;
 
 /**
@@ -21,5 +22,9 @@ public class SchoolYearConverter extends AbstractConverter<SchoolYearDto, School
 	@Override
 	public SchoolYear toEntity(SchoolYearDto dto) {
 		return this.modelMapper.map(dto, SchoolYear.class);
+	}
+
+	public SchoolYear toEntity(SchoolYearRequestDto requestDto) {
+		return this.modelMapper.map(requestDto, SchoolYear.class);
 	}
 }

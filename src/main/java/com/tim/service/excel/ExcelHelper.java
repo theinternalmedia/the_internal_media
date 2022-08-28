@@ -35,6 +35,7 @@ import com.tim.dto.excel.ExcelField;
 import com.tim.dto.student.StudentDto;
 import com.tim.dto.teacher.TeacherDto;
 import com.tim.exception.ValidateException;
+import com.tim.utils.MessageUtils;
 import com.tim.utils.Utility;
 
 /**
@@ -110,7 +111,7 @@ public class ExcelHelper {
 				// If Cell's Value is null
 				if(cell == null) {
 					String colString = CellReference.convertNumToColString(cellIndex);
-					cellErrs.add(Utility.getMessage(ETimMessages.NULL_CELL_VALUE, colString + (i + 1)) );
+					cellErrs.add(MessageUtils.get(ETimMessages.NULL_CELL_VALUE, colString + (i + 1)) );
 					continue;
 				}
 
@@ -156,7 +157,7 @@ public class ExcelHelper {
 					}
 				} catch (IllegalStateException e) {
 					logger.error(e.getMessage(), e);
-					cellErrs.add(Utility.getMessage(ETimMessages.INVALID_CELL_VALUE, cell.getAddress().toString()));
+					cellErrs.add(MessageUtils.get(ETimMessages.INVALID_CELL_VALUE, cell.getAddress().toString()));
 					e.printStackTrace();
 					continue;
 				}

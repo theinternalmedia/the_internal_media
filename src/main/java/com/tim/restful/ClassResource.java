@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tim.data.TimApiPath;
-import com.tim.dto.ResponseDto;
 import com.tim.dto.classz.ClassDto;
+import com.tim.dto.classz.ClassRequestDto;
 import com.tim.service.ClassService;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -20,7 +20,7 @@ public class ClassResource {
 	private ClassService classService;
 	
 	@PostMapping(TimApiPath.Class.CREATE)
-	public ResponseDto create(@RequestBody ClassDto classDto) {
-		return classService.create(classDto);
+	public ClassDto create(@RequestBody ClassRequestDto requestDto) {
+		return classService.create(requestDto);
 	}
 }

@@ -11,12 +11,8 @@ public final class TimConstants {
 	public static final String ADMIN_ROOT = "admin";
 
 	// Response
-	public static final String OK_STATUS = "ok";
-	public static final String NOT_OK_STATUS = "not ok";
-	public static final String OK_MESSAGE = "success.";
-	public static final String NOT_OK_MESSAGE = "unsuccess.";
-	public static final String DATA_EMPTY_MESSAGE = "data is empty.";
-
+	public static final String SUCCESS = "success.";
+	public static final String UNSUCCESS = "unsuccess.";
 	public static final String REGEX_PHONE_VN = "(0[3|5|7|8|9])+([0-9]{8})";
 	public static final String REGEX_EMAIL = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
 
@@ -117,7 +113,7 @@ public final class TimConstants {
 	}
 	
 	public static final class ActualEntityName {
-		public static final String TEACHER = "Giáo Viên";
+		public static final String TEACHER = "Giảng Viên";
 		public static final String STUDENT = "Sinh Viên";
 		public static final String FACULTY = "Khoa";
 		public static final String CLASS = "Lớp";

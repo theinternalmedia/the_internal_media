@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.tim.data.ETimMessages;
 import com.tim.dto.errorresponse.ErrorResponse;
-import com.tim.utils.Utility;
+import com.tim.utils.MessageUtils;
 
 /**
  * 
@@ -25,9 +25,9 @@ import com.tim.utils.Utility;
 public class GlobalExceptionHandler {
 	private final Logger logger = org.slf4j.LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-	// Validation Exception
-	@ExceptionHandler(ValidateException.class)
-	public ResponseEntity<ErrorResponse> validateException(ValidateException e) {
+	// TimException handler
+	@ExceptionHandler({TimException.class, TimNotFoundException.class, ValidateException.class})
+	public ResponseEntity<ErrorResponse> validateException(TimException e) {
 		ErrorResponse errorResponse = new ErrorResponse(e.getMessage(), e.getErrMsgs());
 		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
@@ -36,7 +36,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(value = { BadCredentialsException.class })
 	public ResponseEntity<ErrorResponse> userNotFoundException(BadCredentialsException e) {
 		ErrorResponse errorResponse = ErrorResponse.builder()
-				.message(Utility.getMessage(ETimMessages.USER_NOT_FOUND)).build();
+				.message(MessageUtils.get(ETimMessages.USER_NOT_FOUND)).build();
 		return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
 	}
 
@@ -51,20 +51,10 @@ public class GlobalExceptionHandler {
 			errors.add(fieldName + ": " + errorMessage);
 		});
 		ETimMessages eTimMessages = ETimMessages.VALIDATION_ERR_MESSAGE;
-		ErrorResponse errorResponse = new ErrorResponse(Utility.getMessage(eTimMessages, e.getObjectName()), errors);
+		ErrorResponse errorResponse = new ErrorResponse(MessageUtils.get(eTimMessages, e.getObjectName()), errors);
 		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
 	
-	// Custom exception handler
-	@ExceptionHandler({ CustomException.class})
-	public ResponseEntity<ErrorResponse> handleCustomException(CustomException e) {
-		logger.error("CustomException error: {}", e.getMessage());
-
-		ErrorResponse errorResponse = new ErrorResponse(e.getMessage(), null);
-		
-		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-	}
-
 	/*@ExceptionHandler(ConstraintViolationException.class)
 	public ResponseEntity<ErrorResponse> handleConstraintViolationException(ConstraintViolationException e){
 		logger.error("Data input constrain violation: {}", e.getMessage());
@@ -75,7 +65,7 @@ public class GlobalExceptionHandler {
 			errors.add((fieldName + ": " + errorMessage));
 		});
 		ETimMessages eTimMessages = ETimMessages.CONSTRAIN_VAIOLATION_MESSAGE;
-		ErrorResponse errorResponse = new ErrorResponse(Utility.getMessage(eTimMessages, e.getMessage()), errors);
+		ErrorResponse errorResponse = new ErrorResponse(MessageUtils.get(eTimMessages, e.getMessage()), errors);
 		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
 
@@ -83,7 +73,7 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<ErrorResponse> validateionException(DataIntegrityViolationException ex) {
 		logger.info(ex.getClass().getName());
 		ErrorResponse errorResponse = new ErrorResponse(
-				Utility.getMessage(ETimMessages.CONSTRAIN_VAIOLATION_MESSAGE), null);
+				MessageUtils.get(ETimMessages.CONSTRAIN_VAIOLATION_MESSAGE), null);
 		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 	}*/
 
@@ -91,7 +81,7 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<ErrorResponse> validateionException(Exception ex) {
 		logger.info(ex.getMessage());
 		ErrorResponse errorResponse = new ErrorResponse(
-				Utility.getMessage(ETimMessages.INTERNAL_SYSTEM_ERROR), null);
+				MessageUtils.get(ETimMessages.INTERNAL_SYSTEM_ERROR), null);
 		return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 

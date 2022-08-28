@@ -13,4 +13,8 @@ public interface SchoolYearRepository extends JpaRepository<SchoolYear, Long>{
 
 	Optional<SchoolYear> getByCode(String schoolYearCode);
 
+	boolean existsByCode(String code);
+
+	Optional<SchoolYear> findByCode(String code);
+
 }

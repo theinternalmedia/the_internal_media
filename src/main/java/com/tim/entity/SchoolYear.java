@@ -24,7 +24,7 @@ public class SchoolYear extends BaseEntity {
 	private static final long serialVersionUID = -2144733263108216524L;
 
 	@Column(unique = true, nullable = false, length = 50)
-	@Size(max = 50)
+	@Size(min =3, max = 50)
 	private String code;
 
 	@Column(unique = true, nullable = false, length = 50)

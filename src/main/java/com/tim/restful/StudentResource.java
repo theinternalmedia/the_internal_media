@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tim.data.TimApiPath;
-import com.tim.dto.ResponseDto;
+import com.tim.data.TimConstants;
+import com.tim.dto.student.StudentDto;
 import com.tim.dto.student.StudentRequestDto;
 import com.tim.dto.student.StudentUpdateRequestDto;
 import com.tim.service.StudentService;
-import com.tim.utils.PrincipalUtils;
 
 import io.swagger.annotations.ApiParam;
 
@@ -30,33 +30,28 @@ public class StudentResource {
 	private StudentService studentService;
 	
 	@PostMapping(TimApiPath.Student.UPLOAD_EXCEL)
-	public ResponseDto uplaodExcelFile(
+	public String uploadExcelFile(
 				@RequestPart("file") MultipartFile file) {
-		return studentService.create(file);
+		studentService.create(file);
+		return TimConstants.SUCCESS;
 	}
-
-	@PostMapping(TimApiPath.Student.UPLOAD_IMAGE)
-	public ResponseDto uploadAvatar(@RequestPart("avatar") MultipartFile avatar){
-		return studentService.updateAvatar(avatar, PrincipalUtils.getAuthenticatedUsersUserId());
-	}
-
 	
 	@PostMapping(TimApiPath.Student.CREATE)
-	public ResponseDto create(
+	public StudentDto create(
 			@ApiParam("StudentRequestDto to create new Student")
 				@RequestBody StudentRequestDto requestDto) {
 		return studentService.create(requestDto);
 	}
 	
 	@PutMapping(TimApiPath.Student.UPDATE)
-	public ResponseDto update(
+	public StudentDto update(
 			@ApiParam("StudentRequestDto to update Student")
 				@RequestBody StudentUpdateRequestDto requestDto) {
 		return studentService.update(requestDto);
 	}
 	
 	@PutMapping(TimApiPath.Student.TOGGLE_STATUS)
-	public ResponseDto toggleStatus(@PathParam("id") Long id) {
+	public Long toggleStatus(@PathParam("id") Long id) {
 		return studentService.toggleStatus(id);
 	}
 }

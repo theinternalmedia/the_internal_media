@@ -1,6 +1,5 @@
 package com.tim.service.impl;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -16,6 +15,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tim.converter.TeacherConverter;
@@ -24,7 +24,6 @@ import com.tim.data.ETimRoles;
 import com.tim.data.SearchOperation;
 import com.tim.data.TimConstants;
 import com.tim.dto.PagingResponseDto;
-import com.tim.dto.ResponseDto;
 import com.tim.dto.specification.SearchCriteria;
 import com.tim.dto.specification.TimSpecification;
 import com.tim.dto.teacher.TeacherDto;
@@ -33,19 +32,20 @@ import com.tim.dto.teacher.TeacherUpdateRequestDto;
 import com.tim.entity.Faculty;
 import com.tim.entity.Role;
 import com.tim.entity.Teacher;
-import com.tim.exception.CustomException;
+import com.tim.exception.TimException;
+import com.tim.exception.TimNotFoundException;
 import com.tim.repository.FacultyRepository;
 import com.tim.repository.RoleRepository;
 import com.tim.repository.TeacherRepository;
 import com.tim.service.TeacherService;
 import com.tim.service.excel.ExcelService;
-import com.tim.utils.UploadUtil;
-import com.tim.utils.Utility;
+import com.tim.utils.PrincipalUtils;
+import com.tim.utils.UploadUtils;
 import com.tim.utils.ValidationUtils;
 
 @Service
 public class TeacherServiceImpl implements TeacherService {
-
+	private static final String TEACHER = "Giảng Viên";
 	@Autowired
 	private TeacherRepository teacherRepository;
 	@Autowired
@@ -61,53 +61,97 @@ public class TeacherServiceImpl implements TeacherService {
 
 	@Override
 	@Transactional
-	public ResponseDto create(TeacherRequestDto requestDto) {
+	public TeacherDto create(TeacherRequestDto requestDto) {
 		// Validate input
 		ValidationUtils.validateObject(requestDto);
 		
-		Teacher entity = teacherConverter.toEntity(requestDto);
-		Faculty faculty = facultyRepository.getByCode(requestDto.getFacultyCode()).orElse(null);
-		if (faculty == null) {
-			return new ResponseDto(Utility.getMessage(ETimMessages.ENTITY_NOT_FOUND,
-					"Khoa", "Mã Khoa", requestDto.getFacultyCode()));
+		// Check exists UserId
+		if (teacherRepository.existsByUserId(requestDto.getUserId())) {
+			throw new TimException(
+					ETimMessages.ALREADY_EXISTS, "Mã SV", requestDto.getUserId());
 		}
+		
+		// Check exists Email
+		if (StringUtils.isNotBlank(requestDto.getEmail())) {
+			if (teacherRepository.existsByEmail(requestDto.getEmail())) {
+				throw new TimException(
+						ETimMessages.ALREADY_EXISTS, "Email", requestDto.getEmail());
+			}
+		}
+		
+		Teacher entity = teacherConverter.toEntity(requestDto);
+		
+		// Mapping Faculty
+		Faculty faculty = facultyRepository.getByCode(requestDto.getFacultyCode()).orElseThrow(
+				() -> new TimNotFoundException("Khoa", "Mã Khoa", requestDto.getFacultyCode()));
 		entity.setFaculty(faculty);
+		
+		// Mapping Roles
 		Set<Role> roles = new HashSet<Role>();
 		requestDto.getRoleCodes().add(ETimRoles.ROLE_TEACHER);
 		for(ETimRoles code : requestDto.getRoleCodes()) {
-			Role role = roleRepository.findByCode(code);
+			Role role = roleRepository.findByCode(code.toString());
 			roles.add(role);
 		}
 		entity.setRoles(roles);
 		entity.setPassword(encoder.encode(entity.getPassword()));
-		return new ResponseDto(teacherConverter.toDto(teacherRepository.save(entity)));
+		return teacherConverter.toDto(teacherRepository.save(entity));
 	}
 
 	@Override
-	public ResponseDto getOne(String userId) {
-		Teacher entity = teacherRepository.findByUserId(userId).orElse(null);
-		if (entity == null) {
-			return new ResponseDto(Utility.getMessage(ETimMessages.ENTITY_NOT_FOUND,
-					"Giáo Viên", "Mã GV", userId));
-		}
-		return new ResponseDto(teacherConverter.toDto(entity));
+	public TeacherDto getOne(String userId) {
+		Teacher entity = teacherRepository.findByUserId(userId).orElseThrow(
+				() -> new TimNotFoundException(TEACHER, "Mã GV", userId));
+		return teacherConverter.toDto(entity);
 	}
 
 
 	@Override
 	@Transactional
-	public ResponseDto create(MultipartFile file) {
+	public void create(MultipartFile file) {
+		// Get dto list from excel file
 		List<TeacherDto> dtoList = excelService.getListObjectFromExcelFile(file, TeacherDto.class);
+		
 		List<Teacher> entityList = new ArrayList<Teacher>();
+		// UserID Set
+		Set<String> userIdSet = new HashSet<String>();
+		// Email Set
+		Set<String> emailSet = new HashSet<String>();
 		dtoList.forEach(item -> {
 			Teacher entity = teacherConverter.toEntity(item);
-			Faculty faculty = facultyRepository.getByCode(item.getFacultyCode()).orElse(null);
+			Faculty faculty = facultyRepository.getByCode(item.getFacultyCode()).orElseThrow(
+					() -> new TimNotFoundException("Khoa", "Mã Khoa", item.getFacultyCode()));
 			entity.setFaculty(faculty);
 			entity.setPassword(encoder.encode(entity.getPassword()));
+			
 			entityList.add(entity);
+			userIdSet.add(entity.getUserId());
+			if (StringUtils.isNotBlank(entity.getEmail())) {
+				emailSet.add(entity.getEmail());
+			}
 		});
+		// Check exists UserId
+		List<Teacher> teacherLst = teacherRepository.findByUserIdIn(userIdSet);
+		userIdSet.clear();
+		if (!CollectionUtils.isEmpty(teacherLst)) {
+			teacherLst.forEach(item -> {
+				userIdSet.add(item.getUserId());
+			});
+			throw new TimException(List.of(userIdSet.toString()), 
+					ETimMessages.ALREADY_EXISTS, "Mã GV", "[Chi tiết]");
+		}
+		// Check exists Email
+		if (emailSet.size() > 0) {
+			teacherLst = teacherRepository.findByEmailIn(emailSet);
+			if (!CollectionUtils.isEmpty(teacherLst)) {
+				teacherLst.forEach(item -> {
+					emailSet.add(item.getEmail());
+				});
+				throw new TimException(List.of(emailSet.toString()), 
+						ETimMessages.ALREADY_EXISTS, "Email", "[Chi tiết]");
+			}
+		}
 		teacherRepository.saveAll(entityList);
-		return new ResponseDto();
 	}
 
 	@Override
@@ -120,23 +164,22 @@ public class TeacherServiceImpl implements TeacherService {
 
 	@Override
 	@Transactional
-	public ResponseDto updateAvatar(MultipartFile file, String usersUserId) {
-		Teacher teacher = teacherRepository.findByUserId(usersUserId).orElse(null);
-		if (teacher != null) {
-			final String fileName = TimConstants.Upload.TEACHER_PREFIX + teacher.getUserId();
-			try {
-				if (StringUtils.isNotBlank(teacher.getAvatar())) {
-					UploadUtil.delelteFile(teacher.getAvatar());
-				}
-				String avatar = UploadUtil.uploadImage(file, TimConstants.Upload.AVATAR_DIR, fileName);
-				teacher.setAvatar(avatar);
-				return new ResponseDto();
-			} catch (IOException e) {
-				throw new CustomException(ETimMessages.INTERNAL_SYSTEM_ERROR);
+	public String updateAvatar(MultipartFile file) {
+		String usersUserId = PrincipalUtils.getAuthenticatedUsersUserId();
+		Teacher teacher = teacherRepository.findByUserId(usersUserId).orElseThrow(
+				() -> new TimNotFoundException(TEACHER, "Mã GV", usersUserId));
+		final String fileName = TimConstants.Upload.TEACHER_PREFIX + teacher.getUserId();
+		try {
+			if (StringUtils.isNotBlank(teacher.getAvatar())) {
+				UploadUtils.delelteFile(teacher.getAvatar());
 			}
+			String avatar = UploadUtils.uploadImage(file, TimConstants.Upload.AVATAR_DIR, fileName);
+			teacher.setAvatar(avatar);
+			teacherRepository.save(teacher);
+			return avatar;
+		} catch (Exception e) {
+			throw new TimException(ETimMessages.INTERNAL_SYSTEM_ERROR);
 		}
-		return new ResponseDto(Utility.getMessage(ETimMessages.ENTITY_NOT_FOUND, 
-				"Sinh viên", "Mã SV", usersUserId));
 	}
 
 	@Override
@@ -165,54 +208,68 @@ public class TeacherServiceImpl implements TeacherService {
 	}
 
 	@Override
-	public ResponseDto findByUserId(String userId) {
+	public TeacherDto findByUserId(String userId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ResponseDto update(TeacherUpdateRequestDto requestDto) {
+	public TeacherDto update(TeacherUpdateRequestDto requestDto) {
 		// Validate input
 		ValidationUtils.validateObject(requestDto);
 		
-		Teacher entity = teacherRepository.findById(requestDto.getId()).orElse(null);
-		entity = teacherConverter.toEntity(requestDto, entity);		
-		// Faculty
-		Faculty faculty = facultyRepository.getByCode(requestDto.getFacultyCode()).orElse(null);
-		if (faculty == null) {
-			return new ResponseDto(Utility.getMessage(
-					ETimMessages.ENTITY_NOT_FOUND,
-					"Khoa", "Mã Khoa", 
-					requestDto.getFacultyCode()));
+		// Get Teacher Entity
+		Teacher entity = teacherRepository.findById(requestDto.getId()).orElseThrow(
+				() -> new TimNotFoundException(TEACHER, "ID", requestDto.getId().toString()));
+		
+		// Check exists UserId and not equals old entity
+		if (!entity.getUserId().equals(requestDto.getUserId())) {
+			if(teacherRepository.existsByUserId(requestDto.getUserId())) {
+				throw new TimException(
+						ETimMessages.ALREADY_EXISTS, "Mã SV", requestDto.getUserId());
+			}
 		}
+		
+		// Check exists Email
+		if (StringUtils.isNotBlank(requestDto.getEmail())
+				&& !entity.getEmail().equals(requestDto.getEmail())) {
+			if (teacherRepository.existsByEmail(requestDto.getUserId())) {
+				throw new TimException(
+						ETimMessages.ALREADY_EXISTS, "Email", requestDto.getEmail());
+			}
+		}
+		
+		// Convert to entity from old entity and request dto
+		entity = teacherConverter.toEntity(requestDto, entity);		
+		
+		// Mapping Faculty
+		Faculty faculty = facultyRepository.getByCode(requestDto.getFacultyCode()).orElseThrow(
+				() -> new TimNotFoundException("Khoa", "Mã Khoa", requestDto.getFacultyCode()));
 		entity.setFaculty(faculty);
-		// Reset roles
+		
+		// Reset - Mapping Roles
 		Set<Role> roles = new HashSet<Role>();
 		requestDto.getRoleCodes().add(ETimRoles.ROLE_TEACHER);
 		for(ETimRoles code : requestDto.getRoleCodes()) {
-			Role role = roleRepository.findByCode(code);
+			Role role = roleRepository.findByCode(code.toString());
 			roles.add(role);
 		}
 		entity.setRoles(roles);
+		
 		// Set password
 		if (StringUtils.isNotEmpty(requestDto.getPassword())) {
 			entity.setPassword(encoder.encode(requestDto.getPassword()));
 		}
-		return new ResponseDto(teacherConverter.toDto(teacherRepository.save(entity)));
+		return teacherConverter.toDto(teacherRepository.save(entity));
 	}
 
 	@Override
-	public ResponseDto toggleStatus(Long id) {
-		Teacher teacher = teacherRepository.findById(id).orElse(null);
-		if (teacher != null) {
-			teacher.setStatus(teacher.getStatus());
-			teacherRepository.save(teacher);
-			return new ResponseDto();
-		}
-		return new ResponseDto(Utility.getMessage(
-				ETimMessages.ENTITY_NOT_FOUND, 
-				"Giảng viên", 
-				"ID", String.valueOf(id)));
+	public Long toggleStatus(Long id) {
+		Teacher teacher = teacherRepository.findById(id).orElseThrow(
+				() -> new TimNotFoundException(TEACHER, "ID", id.toString()));
+		teacher.setStatus(!teacher.getStatus());
+		teacherRepository.save(teacher);
+		return id;
 	}
 
 }

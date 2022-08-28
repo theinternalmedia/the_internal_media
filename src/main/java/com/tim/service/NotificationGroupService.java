@@ -1,18 +1,20 @@
 package com.tim.service;
 
-import com.tim.dto.ResponseDto;
+import java.util.List;
+
 import com.tim.dto.notification.NotificationGroupDto;
 import com.tim.dto.notification.NotificationGroupRequestDto;
+import com.tim.dto.notification.NotificationGroupUpdateRequestDto;
 
 public interface NotificationGroupService {
 
-    ResponseDto create(NotificationGroupRequestDto dto);
+	NotificationGroupDto create(NotificationGroupRequestDto dto);
 
-    ResponseDto update(NotificationGroupDto dto);
+	NotificationGroupDto update(NotificationGroupUpdateRequestDto dto);
 
-    ResponseDto getOne(String code);
+	NotificationGroupDto getOne(String code);
 
-    void toggleStatus(Long id);
+    Long toggleStatus(Long id);
 
-    ResponseDto getAll();
+    List<NotificationGroupDto> getAll(boolean status);
 }

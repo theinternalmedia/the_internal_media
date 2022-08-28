@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.tim.data.ETimMessages;
 import com.tim.data.TimConstants;
 import com.tim.dto.excel.ExcelField;
-import com.tim.exception.CustomException;
+import com.tim.exception.TimException;
 import com.tim.exception.ValidateException;
 import com.tim.utils.Utility;
 import com.tim.utils.ValidationUtils;
@@ -56,7 +56,7 @@ public class ExcelService implements ExcelFileService {
 			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
 					| InvocationTargetException | NoSuchMethodException | SecurityException e1) {
 				e1.printStackTrace();
-				throw new CustomException(ETimMessages.INTERNAL_SYSTEM_ERROR);
+				throw new TimException(ETimMessages.INTERNAL_SYSTEM_ERROR);
 			}
 			Class<? extends Object> classz = t.getClass();
 

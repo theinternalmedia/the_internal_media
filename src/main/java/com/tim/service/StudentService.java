@@ -5,20 +5,22 @@ import java.util.Set;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.tim.dto.ResponseDto;
+import com.tim.dto.student.StudentDto;
 import com.tim.dto.student.StudentRequestDto;
 import com.tim.dto.student.StudentUpdateRequestDto;
 import com.tim.entity.Student;
 
 public interface StudentService {
-    ResponseDto create(StudentRequestDto requestDto);
+    StudentDto create(StudentRequestDto requestDto);
     
     /**
 	 * @author minhtuanitk43
 	 * @param file excel file
 	 * @return ResponseDto include status ok if success, else not ok. message and data if have return data
 	 */
-    ResponseDto create(MultipartFile file);
+    void create(MultipartFile file);
+    
+    StudentDto update(StudentUpdateRequestDto requestDto);
     
     /**
 	 * @author minhtuanitk43
@@ -32,17 +34,12 @@ public interface StudentService {
 	
 	String exportToExcelFile();
 
-	ResponseDto updateAvatar(MultipartFile avatar, String UserId);
+	String updateAvatar(MultipartFile avatar);
 
-    ResponseDto update(StudentUpdateRequestDto requestDto);
+	StudentDto getOne(Long id);
 
-    ResponseDto getOne(Long id);
+	Long toggleStatus(Long id);
+	
+	StudentDto getByUserId(String userId);
 
-    ResponseDto getByUserId(String userId);
-
-    ResponseDto getByEmail(String email);
-
-    ResponseDto toggleStatus(Long id);
-
-//    ResponseDto upload(String studentDtoJsonRequest, MultipartFile image);
 }

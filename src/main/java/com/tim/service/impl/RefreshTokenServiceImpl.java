@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.tim.data.ETimMessages;
 import com.tim.entity.RefreshToken;
-import com.tim.exception.CustomException;
+import com.tim.exception.TimException;
 import com.tim.repository.RefreshTokenRepository;
 import com.tim.service.RefreshTokenService;
 @Service
@@ -47,7 +47,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
   public RefreshToken verifyExpiration(RefreshToken token) {
     if (token.getExpiryDate().isBefore(Instant.now())) {
       refreshTokenRepository.delete(token);
-      throw new CustomException(ETimMessages.EXPIRED_TOKEN, token.getToken());
+      throw new TimException(ETimMessages.EXPIRED_TOKEN, token.getToken());
     }
     return token;
   }

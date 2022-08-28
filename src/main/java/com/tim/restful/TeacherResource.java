@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tim.data.TimApiPath;
-import com.tim.dto.ResponseDto;
+import com.tim.data.TimConstants;
+import com.tim.dto.PagingResponseDto;
+import com.tim.dto.teacher.TeacherDto;
 import com.tim.dto.teacher.TeacherRequestDto;
 import com.tim.dto.teacher.TeacherUpdateRequestDto;
 import com.tim.service.TeacherService;
@@ -30,33 +32,28 @@ public class TeacherResource {
 	private TeacherService teacherService;
 	
 	@PostMapping(TimApiPath.Teacher.CREATE)
-	public ResponseDto create(@RequestBody TeacherRequestDto requestDto) {
+	public TeacherDto create(@RequestBody TeacherRequestDto requestDto) {
 		return teacherService.create(requestDto);
 	}
 	
 	@PutMapping(TimApiPath.Teacher.UPDATE)
-	public ResponseDto update(@RequestBody TeacherUpdateRequestDto requestDto) {
+	public TeacherDto update(@RequestBody TeacherUpdateRequestDto requestDto) {
 		return teacherService.update(requestDto);
 	}
 	
 	@PostMapping(TimApiPath.Teacher.UPLOAD_EXCEL)
-	public ResponseDto uplaodExcelFile(@RequestPart("file") MultipartFile file) {
-		return teacherService.create(file);
+	public String uplaodExcelFile(@RequestPart("file") MultipartFile file) {
+		teacherService.create(file);
+		return TimConstants.SUCCESS;
 	}
 	
 	@GetMapping(TimApiPath.Teacher.GET_BY_USERID)
-	public ResponseEntity<ResponseDto> getByUserId(@RequestParam("userId") String userId){
-		return ResponseEntity.ok(teacherService.getOne(userId));
+	public TeacherDto getByUserId(@RequestParam("userId") String userId){
+		return teacherService.getOne(userId);
 	}
 
-	@PutMapping(TimApiPath.Teacher.UPLOAD_IMAGE)
-	public ResponseDto uploadAvatar(@RequestPart("avatar") MultipartFile avatar,
-									@RequestParam("userId") String userId){
-		return teacherService.updateAvatar(avatar, userId);
-	}
-	
 	@GetMapping(TimApiPath.Teacher.GET_PAGE)
-	public ResponseEntity<ResponseDto> getPage(
+	public ResponseEntity<PagingResponseDto> getPage(
 			@PathParam("facultyCode") String facultyCode,
 			@PathParam("name") String name, 
 			@PathParam("userId") String userId,
@@ -66,7 +63,7 @@ public class TeacherResource {
 	}
 	
 	@PutMapping(TimApiPath.Teacher.TOGGLE_STATUS)
-	public ResponseDto toggleStatus(@PathParam("id") Long id) {
+	public Long toggleStatus(@PathParam("id") Long id) {
 		return teacherService.toggleStatus(id);
 	}
 }

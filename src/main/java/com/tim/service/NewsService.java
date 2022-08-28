@@ -1,9 +1,10 @@
 package com.tim.service;
 
-import com.tim.dto.PagingResponseDto;
-import com.tim.dto.ResponseDto;
-import com.tim.dto.news.NewsRequestDto;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.tim.dto.PagingResponseDto;
+import com.tim.dto.news.NewsDto;
+import com.tim.dto.news.NewsRequestDto;
 import com.tim.dto.news.NewsUpdateDto;
 
 public interface NewsService {
@@ -15,7 +16,7 @@ public interface NewsService {
 	 * @param requestDto
 	 * @return ResponseDto
 	 */
-    ResponseDto create(NewsRequestDto requestDto, MultipartFile image);
+	NewsDto create(NewsRequestDto requestDto, MultipartFile image);
 
     /**
      * Update News.
@@ -24,14 +25,14 @@ public interface NewsService {
      * @param newsDto
      * @return ResponseDto
      */
-    ResponseDto update(NewsUpdateDto newsDto, MultipartFile image);
+	NewsDto update(NewsUpdateDto newsDto, MultipartFile image);
 
     /**
      * @author minhtuanitk43
      * @param id
      * @return
      */
-    ResponseDto getOne(Long id);
+	NewsDto getOne(Long id);
 
     /**
      * Toogle status.
@@ -40,7 +41,7 @@ public interface NewsService {
      * @param id
      * @return ResponseDto
      */
-    ResponseDto toogleStatus(Long id);
+    Long toogleStatus(Long id);
     
     /**
      * Get news page.
@@ -62,6 +63,6 @@ public interface NewsService {
 	 * @param slug
 	 * @return ResponseDto
 	 */
-	ResponseDto getOne(String slug);
+	NewsDto getOne(String slug);
 
 }

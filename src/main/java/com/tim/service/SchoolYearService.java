@@ -1,14 +1,16 @@
 package com.tim.service;
 
-import com.tim.dto.ResponseDto;
 import com.tim.dto.schoolyear.SchoolYearDto;
+import com.tim.dto.schoolyear.SchoolYearRequestDto;
+import com.tim.dto.schoolyear.SchoolYearUpdateRequestDto;
 
 public interface SchoolYearService {
-	ResponseDto create(SchoolYearDto dto);
+	SchoolYearDto create(SchoolYearRequestDto requestDto);
 
-    ResponseDto update(SchoolYearDto dto);
+	SchoolYearDto update(SchoolYearUpdateRequestDto requestDto);
+	
+	SchoolYearDto getOne(String code);
 
-    ResponseDto getOne(String code);
-
-    void toggleStatus(Long id);
+    Long toggleStatus(Long id);
+	
 }

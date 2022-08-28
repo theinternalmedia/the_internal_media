@@ -95,5 +95,15 @@
 	},
 	"NotificationUpdateRequestDto":{
 		"id": "ID"
+	},
+	"ClassDto": {
+		"name": "Lớp học",
+		"code": "Mã lớp"
+	},
+	"ClassRequestDto": {
+		"name": "Lớp học",
+		"code": "Mã lớp",
+		"facultyCode": "Mã khoa",
+		"schoolYearCode": "Mã khóa"
 	}
 }

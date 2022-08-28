@@ -3,13 +3,15 @@ package com.tim.data;
 public enum ETimMessages {
 	
 	/** Thông tin tài khoản không chính xác. */
-	USER_NOT_FOUND("msg.000", "User not found"),
+	USER_NOT_FOUND("msg.000", "Thông tin tài khoản không chính xác."),
 	/** Không tìm thấy {0} với {1} = {2}. */
-	ENTITY_NOT_FOUND("msg.001", "ENTITY_NOT_FOUND"),
+	ENTITY_NOT_FOUND("msg.001", "Không tìm thấy thực thể."),
 	/** Expired Token: {0}. */
-	EXPIRED_TOKEN("msg.002", "expired token"),
+	EXPIRED_TOKEN("msg.002", "expired token."),
 	/** Invalid Token: {0}. */
-	INVALID_TOKEN("msg.003", "invalid token"),
+	INVALID_TOKEN("msg.003", "invalid token."),
+	/** {0} đã tồn tại: {1}. */
+	ALREADY_EXISTS("msg.004", "Thực thể đã tồn tại."),
 	
 //	INVALID_SHEET_NAME("msg.004", "invalid sheet name"),
 //	USER_NAME_ALREADY_EXISTS("msg.002", "Tài khoản đã tồn tại"),
@@ -34,39 +36,39 @@ public enum ETimMessages {
 	
 	/* ========== VALIDATION MESSAGE =================*/
 	/** Dữ liệu không hợp lệ. */
-	VALIDATION_ERR_MESSAGE("msg.400", "vaidation error message"),
-	/** Định dạng tệp tin phải là Excel */
-	INVALID_EXCEL_FILE("msg.401", "invalid excel file"),
+	VALIDATION_ERR_MESSAGE("msg.400", "Dữ liệu không hợp lệ."),
+	/** Định dạng tệp tin phải là Excel. */
+	INVALID_EXCEL_FILE("msg.401", "Định dạng tệp tin phải là Excel."),
 	/** Danh sách {0} vừa nhập vào không đúng tại các ô. */
-	INVALID_EXCEL_VALUE("msg.402", "invalid excel value"),
+	INVALID_EXCEL_VALUE("msg.402", "Danh sách vừa nhập vào không đúng tại các ô."),
 	/** {0} vừa nhập vào không hợp lệ. */
-	INVALID_OBJECT_VALUE("msg.403", "invalid object value"),
+	INVALID_OBJECT_VALUE("msg.403", "Dữ liệu vừa nhập vào không hợp lệ"),
 	/** {0}: Kiểu dữ liệu không đúng định dạng. */
-	INVALID_CELL_VALUE("msg.404", "invalid cell value"),
+	INVALID_CELL_VALUE("msg.404", "Kiểu dữ liệu không đúng định dạng."),
 	/** {0}: Dữ liệu trống. */
-	NULL_CELL_VALUE("msg.405", "null cell value"),
+	NULL_CELL_VALUE("msg.405", "Dữ liệu trống."),
 	/** File hình ảnh không hợp lệ: {0}. */
-	INVALID_IMAGE_FILE("msg.406", "invalid_image_file"),
+	INVALID_IMAGE_FILE("msg.406", "File hình ảnh không hợp lệ."),
 	/** {0} vừa nhập vào không hợp lệ: {1}. */
-	INVALID_OBJECT_VALUE_2("msg.407", "invalid object value return value"),
+	INVALID_OBJECT_VALUE_2("msg.407", "Dữ liệu vừa nhập vào không hợp lệ."),
 //	INVALID_JSON_OBJECT("msg.408", "invalid string json object"),
 	
 	ACCESS_DENIED("msg.000", "temporiry message"),
 
 	/* INTERNAL_SYSTEM_ERROR */
-	/** Lỗi hệ thống, vui lòng kiểm tra và thử lại */
-	INTERNAL_SYSTEM_ERROR("msg.999", "Internal System Error message");
+	/** Lỗi hệ thống, vui lòng kiểm tra và thử lại. */
+	INTERNAL_SYSTEM_ERROR("msg.999", "Lỗi hệ thống, vui lòng kiểm tra và thử lại.");
 	
 	/**
 	 * code of message properties
 	 */
 	public final String code;
 	/**
-	 * description of message
+	 * message
 	 */
-    public final String description;
-    ETimMessages (String code, String description) {
+    public final String message;
+    ETimMessages (String code, String message) {
         this.code = code;
-        this.description = description;
+        this.message = message;
     }
 }

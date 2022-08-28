@@ -15,8 +15,8 @@ import com.tim.data.ETimMessages;
 import com.tim.data.TimConstants;
 import com.tim.exception.ValidateException;
 
-public class UploadUtil {
-	private static final Logger logger = org.slf4j.LoggerFactory.getLogger(UploadUtil.class);
+public class UploadUtils {
+	private static final Logger logger = org.slf4j.LoggerFactory.getLogger(UploadUtils.class);
 	private static final String RESOURCE = "upload";
 	
 	/**
