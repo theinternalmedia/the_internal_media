@@ -13,8 +13,11 @@ public final class TimConstants {
 	// Response
 	public static final String SUCCESS = "success.";
 	public static final String UNSUCCESS = "unsuccess.";
+	
+	// Regex
 	public static final String REGEX_PHONE_VN = "(0[3|5|7|8|9])+([0-9]{8})";
 	public static final String REGEX_EMAIL = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
+	public static final String REGEX_CODE = "^[a-zA-Z0-9_-]*$";
 
 	public static final String USER_DOB_FORMAT = "dd-MM-yyyy";
 	public static final String LOCAL_DATE_TIME_FORMAT = "dd-MM-yyyy HH:mm:ss";
@@ -22,6 +25,7 @@ public final class TimConstants {
 	public static final String TRUE_STR = "true";
 	public static final String FALSE_STR = "false";
 	
+	// Resource file name
 	public static final String ACTUAL_FIELDNAME_DTO_NAME_FILE = "ActualFieldNames.json";
 	public static final String FIELDNAMES_EXPORTCONFIG_NAME_FILE = "FieldNames_ExportConfig.json";
 	public static final String ACTUAL_OBJECT_NAME_FILE = "ActualObjectNames.json";

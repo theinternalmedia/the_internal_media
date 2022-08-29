@@ -11,7 +11,7 @@ import javax.persistence.Table;
 
 import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "news")
 public class News extends NewsAndNotify{

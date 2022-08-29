@@ -7,6 +7,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+import com.tim.annotation.Code;
 import com.tim.data.ETimRoles;
 import com.tim.dto.UserRequestDto;
 
@@ -20,6 +21,7 @@ public class TeacherRequestDto extends UserRequestDto {
 	private boolean isManager = false;
 
 	@NotBlank
+	@Code
 	private String facultyCode;
 	
 	@NotBlank

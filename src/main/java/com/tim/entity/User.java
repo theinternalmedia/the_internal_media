@@ -8,6 +8,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import com.tim.annotation.Code;
+
 import lombok.EqualsAndHashCode;
 
 /**
@@ -23,7 +25,8 @@ public abstract class User extends BaseEntity {
 
 	@NotBlank
 	@Column(nullable = false, unique = true, length = 20)
-	@Size(max = 20)
+	@Size(min = 3, max = 20)
+	@Code
 	private String userId;
 
 	@NotBlank

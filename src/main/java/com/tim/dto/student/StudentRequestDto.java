@@ -3,6 +3,7 @@ package com.tim.dto.student;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import com.tim.annotation.Code;
 import com.tim.dto.UserRequestDto;
 
 import lombok.Data;
@@ -18,6 +19,7 @@ import lombok.EqualsAndHashCode;
 public class StudentRequestDto extends UserRequestDto {
 
 	@NotBlank
+	@Code
 	private String classCode;
 	
 	@NotBlank

@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
  * @appName the_internal_media
  *
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "notification_teacher", uniqueConstraints = 
 	@UniqueConstraint(columnNames = { "teacher_id", "notification_id" }))

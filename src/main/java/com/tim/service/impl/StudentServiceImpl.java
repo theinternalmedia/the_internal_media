@@ -109,7 +109,9 @@ public class StudentServiceImpl implements StudentService {
 			}
 			entity.setClassz(classz);
 			entity.setPassword(encoder.encode(entity.getPassword()));
+			Role role = roleRepository.findByCode(ETimRoles.ROLE_STUDENT.toString());
 			
+			entity.setRoles(Set.of(role));
 			entityList.add(entity);
 			userIdSet.add(entity.getUserId());
 			if (StringUtils.isNotBlank(entity.getEmail())) {

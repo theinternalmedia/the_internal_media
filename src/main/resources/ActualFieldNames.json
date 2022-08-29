@@ -52,6 +52,13 @@
 		"name": "Niên khóa",
 		"code": "Mã niên khóa"
 	},
+	"SchoolYearRequestDto": {
+		"name": "Niên khóa",
+		"code": "Mã niên khóa"
+	},
+	"SchoolYearUpdateRequestDto": {
+		"id": "ID"
+	},
 	"NewsDto": {
 		"title": "Tiêu đề",
 		"shortDescription": "Mô tả ngắn",

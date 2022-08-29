@@ -9,6 +9,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
+import com.tim.annotation.Code;
+
 import lombok.EqualsAndHashCode;
 
 /**
@@ -16,7 +18,7 @@ import lombok.EqualsAndHashCode;
  * @appName the_internal_media
  *
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "school_year")
 public class SchoolYear extends BaseEntity {
@@ -25,6 +27,7 @@ public class SchoolYear extends BaseEntity {
 
 	@Column(unique = true, nullable = false, length = 50)
 	@Size(min =3, max = 50)
+	@Code
 	private String code;
 
 	@Column(unique = true, nullable = false, length = 50)

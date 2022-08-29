@@ -11,9 +11,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
+import com.tim.annotation.Code;
+
 import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "class")
 public class Classz extends BaseEntity {
@@ -25,7 +27,8 @@ public class Classz extends BaseEntity {
 	private String name;
 
 	@Column(unique = true, nullable = false, length = 20)
-	@Size(max = 20)
+	@Size(min = 3, max = 20)
+	@Code
 	private String code;
 
 	@ManyToOne

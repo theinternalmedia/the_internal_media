@@ -11,9 +11,11 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import com.tim.annotation.Code;
+
 import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "subject")
 public class Subject extends BaseEntity {
@@ -23,6 +25,7 @@ public class Subject extends BaseEntity {
 	@Column(unique = true, nullable = false, length = 20)
 	@NotBlank
 	@Size(max = 20)
+	@Code
 	private String code;
 
 	@Column(unique = true, nullable = false, length = 20)

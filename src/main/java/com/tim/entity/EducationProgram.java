@@ -12,6 +12,8 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Size;
 
+import com.tim.annotation.Code;
+
 import lombok.EqualsAndHashCode;
 
 /**
@@ -19,7 +21,7 @@ import lombok.EqualsAndHashCode;
  * @appName the_internal_media
  *
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "educationProgram", uniqueConstraints = 
 	@UniqueConstraint(columnNames = { "schoolYear_id", "faculty_id" }))
@@ -28,7 +30,8 @@ public class EducationProgram extends BaseEntity {
 	private static final long serialVersionUID = -3739672079388550708L;
 
 	@Column(unique = true, nullable = false, length = 50)
-	@Size(max = 50)
+	@Size(min = 3, max = 50)
+	@Code
 	private String code;
 
 	@Column(unique = true, nullable = false, length = 50)

@@ -3,6 +3,7 @@ package com.tim.dto.educationprogram;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import com.tim.annotation.Code;
 import com.tim.dto.BaseDto;
 
 import lombok.AccessLevel;
@@ -24,6 +25,7 @@ public class EducationProgramDto extends BaseDto {
 
 	@Size(max = 20, min = 5)
 	@NotBlank
+	@Code
 	private String code;
 
 	@Size(max = 50)

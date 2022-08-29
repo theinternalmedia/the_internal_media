@@ -11,6 +11,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
+import com.tim.annotation.Code;
 import com.tim.data.ETimPermissions;
 
 import lombok.EqualsAndHashCode;
@@ -20,7 +21,7 @@ import lombok.EqualsAndHashCode;
  * @appName the_internal_media
  *
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "permissions")
 public class Permission extends BaseEntity {
@@ -30,6 +31,7 @@ public class Permission extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	@Column(unique = true, nullable = false, length = 50)
 	@Size(max = 50)
+	@Code
 	private ETimPermissions code;
 
 	@Column(unique = true, nullable = false, length = 50)

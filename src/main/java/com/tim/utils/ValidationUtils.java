@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.springframework.util.CollectionUtils;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.tim.annotation.Code;
 import com.tim.annotation.Phone;
 import com.tim.data.ETimMessages;
 import com.tim.data.TimConstants;
@@ -48,13 +49,13 @@ public class ValidationUtils {
 	 */
 	public static String getValidateFieldMessage(final Field field, final String fieldName, final Object value) {
 		field.setAccessible(true);
-		// Not BLANK
+		// Not blank
 		if (field.isAnnotationPresent(NotBlank.class)) {
 			if (StringUtils.isBlank((String) value)) {
 				return "'" + fieldName + "' không được để trống.";
 			}
 		}
-		// Not NULL
+		// Not null
 		if (field.isAnnotationPresent(NotNull.class)) {
 			if (value == null) {
 				return "'" + fieldName + "' không được để trống.";
@@ -81,7 +82,6 @@ public class ValidationUtils {
 					return "'" + fieldName + "' không nhỏ hơn " + min + " ký tự.";
 				}
 			}
-
 			if (field.isAnnotationPresent(Email.class)) {
 				if (!((String) value).matches(TimConstants.REGEX_EMAIL)) {
 					return "'" + fieldName + "' không đúng định dạng.";
@@ -103,9 +103,13 @@ public class ValidationUtils {
 				if ((long) value > max.value()) {
 					return "'" + fieldName + "' phải nhỏ hơn " + max.value() + ".";
 				}
-			} else if (field.isAnnotationPresent(Phone.class)) {
+			} if (field.isAnnotationPresent(Phone.class)) {
 				if (!((String) value).matches(TimConstants.REGEX_PHONE_VN)) {
 					return "'" + fieldName + "' không đúng định dạng.";
+				}
+			} if (field.isAnnotationPresent(Code.class)) {
+				if (!((String) value).matches(TimConstants.REGEX_CODE)) {
+					return "'" + fieldName + "' chỉ bao gồm chữ cái không dấu, số, và các ký tự: '_', '-'.";
 				}
 			}
 		}

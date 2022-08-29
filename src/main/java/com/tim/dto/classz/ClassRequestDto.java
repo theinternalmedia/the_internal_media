@@ -3,6 +3,8 @@ package com.tim.dto.classz;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import com.tim.annotation.Code;
+
 import lombok.Data;
 
 /**
@@ -15,6 +17,7 @@ public class ClassRequestDto {
 
 	@Size(max = 20, min = 5)
 	@NotBlank
+	@Code
 	private String code;
 
 	@Size(max = 50)
