@@ -2,10 +2,11 @@ package com.tim.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.Size;
 
 import lombok.EqualsAndHashCode;
 
@@ -16,7 +17,8 @@ public class Marks extends BaseEntity {
 
 	private static final long serialVersionUID = -2808568424623733508L;
 
-	@Size(min = 0, max = 10)
+	@Min(value = 0)
+	@Max (value = 10)
 	private float finalMarks;
 
 	@Column(columnDefinition = "integer default 1")
@@ -31,6 +33,9 @@ public class Marks extends BaseEntity {
 	
 	@OneToOne
 	private Subject subject;
+	
+	@ManyToOne
+	private Teacher teacher;
 
 	public Student getStudent() {
 		return student;
@@ -80,5 +85,13 @@ public class Marks extends BaseEntity {
 
 	public void setNote(String note) {
 		this.note = note;
+	}
+
+	public Teacher getTeacher() {
+		return teacher;
+	}
+
+	public void setTeacher(Teacher teacher) {
+		this.teacher = teacher;
 	}
 }

@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tim.data.TimApiPath;
-import com.tim.data.TimConstants;
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.teacher.TeacherDto;
 import com.tim.dto.teacher.TeacherRequestDto;
@@ -42,9 +41,8 @@ public class TeacherResource {
 	}
 	
 	@PostMapping(TimApiPath.Teacher.UPLOAD_EXCEL)
-	public String uplaodExcelFile(@RequestPart("file") MultipartFile file) {
-		teacherService.create(file);
-		return TimConstants.SUCCESS;
+	public long uplaodExcelFile(@RequestPart("file") MultipartFile file) {
+		return teacherService.create(file);
 	}
 	
 	@GetMapping(TimApiPath.Teacher.GET_BY_USERID)

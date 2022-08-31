@@ -1,0 +1,37 @@
+[
+	{
+		"excelHeader": "Mã Môn Học",
+		"excelIndex": 1,
+		"excelColType": "String",
+		"excelValue": null,
+		"pojoAttribute": "subjectCode"
+	},
+	{
+		"excelHeader": "Mã Sinh Viên",
+		"excelIndex": 3,
+		"excelColType": "String",
+		"excelValue": null,
+		"pojoAttribute": "studentUserId"
+	},
+	{
+		"excelHeader": "Điểm Tổng Kết",
+		"excelIndex": 5,
+		"excelColType": "Float",
+		"excelValue": null,
+		"pojoAttribute": "finalMarks"
+	},
+	{
+		"excelHeader": "Mã Giảng Viên",
+		"excelIndex": 6,
+		"excelColType": "String",
+		"excelValue": null,
+		"pojoAttribute": "teacherUserId"
+	},
+	{
+		"excelHeader": "Ghi Chú",
+		"excelIndex": 8,
+		"excelColType": "String",
+		"excelValue": null,
+		"pojoAttribute": "note"
+	}
+]

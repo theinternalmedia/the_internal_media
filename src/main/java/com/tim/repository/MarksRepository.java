@@ -6,4 +6,6 @@ import com.tim.entity.Marks;
 
 public interface MarksRepository extends JpaRepository<Marks, Long>, JpaSpecificationExecutor<Marks> {
 
+	long countByStudent_UserIdAndSubject_Code(String studentUserId, String studentUserId2);
+
 }

@@ -94,7 +94,7 @@ public class StudentServiceImpl implements StudentService {
 
 	@Transactional
 	@Override
-	public void create(MultipartFile file) {
+	public long create(MultipartFile file) {
 		List<StudentDto> dtoList = excelService.getListObjectFromExcelFile(file, StudentDto.class);
 		List<Student> entityList = new ArrayList<>();
 		// UserID Set
@@ -140,6 +140,7 @@ public class StudentServiceImpl implements StudentService {
 			}
 		}
 		studentRepository.saveAll(entityList);
+		return entityList.size();
 	}
 
 	@Override

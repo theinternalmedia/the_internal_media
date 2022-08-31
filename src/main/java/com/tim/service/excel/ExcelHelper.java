@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DateUtil;
@@ -134,17 +135,24 @@ public class ExcelHelper {
 						}
 						break;
 					case TimConstants.FieldType.DOUBLE:
+					case TimConstants.FieldType.FLOAT:
 					case TimConstants.FieldType.INTEGER:
 						excelField.setExcelValue(String.valueOf(cell.getNumericCellValue()));
 						break;
 					case TimConstants.FieldType.BOOLEAN:
-						if (cell.getStringCellValue().equalsIgnoreCase(TimConstants.Gender.MALE_STR)) {
+						if (StringUtils.containsAnyIgnoreCase(cell.getStringCellValue(), 
+								TimConstants.Gender.MALE_STR, TimConstants.YES)) {
 							excelField.setExcelValue(TimConstants.TRUE_STR);
-						} else if (cell.getStringCellValue().equalsIgnoreCase(TimConstants.Gender.FEMALE_STR)) {
+						} else if (StringUtils.containsAnyIgnoreCase(cell.getStringCellValue(), 
+								TimConstants.Gender.FEMALE_STR, TimConstants.NO)) {
 							excelField.setExcelValue(TimConstants.FALSE_STR);
 						} else {
-							// Throw Validation Exception
-							cellErrs.add(cell.getAddress().toString());
+							try {
+								excelField.setExcelValue(String.valueOf(cell.getBooleanCellValue()));
+							} catch (IllegalStateException e) {
+								// Throw Validation Exception
+								cellErrs.add(cell.getAddress().toString());
+							}
 						}
 						break;
 					case TimConstants.FieldType.LOCAL_DATE:
@@ -158,7 +166,6 @@ public class ExcelHelper {
 				} catch (IllegalStateException e) {
 					logger.error(e.getMessage(), e);
 					cellErrs.add(MessageUtils.get(ETimMessages.INVALID_CELL_VALUE, cell.getAddress().toString()));
-					e.printStackTrace();
 					continue;
 				}
 				excelFieldArr[index++] = excelField;

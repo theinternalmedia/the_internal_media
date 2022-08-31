@@ -4,14 +4,14 @@ public enum ETimMessages {
 	
 	/** Thông tin tài khoản không chính xác. */
 	USER_NOT_FOUND("msg.000", "Thông tin tài khoản không chính xác."),
-	/** Không tìm thấy {0} với {1} = {2}. */
-	ENTITY_NOT_FOUND("msg.001", "Không tìm thấy thực thể."),
-	/** Expired Token: {0}. */
+	/** Không tìm thấy {0} với {1} = {2}. | Không tìm thấy đối tượng.*/
+	ENTITY_NOT_FOUND("msg.001", "Không tìm thấy đối tượng."),
+	/** Expired Token: {0}. | expired token.*/
 	EXPIRED_TOKEN("msg.002", "expired token."),
-	/** Invalid Token: {0}. */
+	/** Invalid Token: {0}. | invalid token.*/
 	INVALID_TOKEN("msg.003", "invalid token."),
-	/** {0} đã tồn tại: {1}. */
-	ALREADY_EXISTS("msg.004", "Thực thể đã tồn tại."),
+	/** {0} đã tồn tại: {1}. | Đối tượng đã tồn tại.*/
+	ALREADY_EXISTS("msg.004", "Đối tượng đã tồn tại."),
 	
 //	INVALID_SHEET_NAME("msg.004", "invalid sheet name"),
 //	USER_NAME_ALREADY_EXISTS("msg.002", "Tài khoản đã tồn tại"),
@@ -39,17 +39,17 @@ public enum ETimMessages {
 	VALIDATION_ERR_MESSAGE("msg.400", "Dữ liệu không hợp lệ."),
 	/** Định dạng tệp tin phải là Excel. */
 	INVALID_EXCEL_FILE("msg.401", "Định dạng tệp tin phải là Excel."),
-	/** Danh sách {0} vừa nhập vào không đúng tại các ô. */
+	/** Danh sách {0} vừa nhập vào không đúng tại các ô. | Danh sách vừa nhập vào không đúng tại các ô.*/
 	INVALID_EXCEL_VALUE("msg.402", "Danh sách vừa nhập vào không đúng tại các ô."),
-	/** {0} vừa nhập vào không hợp lệ. */
-	INVALID_OBJECT_VALUE("msg.403", "Dữ liệu vừa nhập vào không hợp lệ"),
-	/** {0}: Kiểu dữ liệu không đúng định dạng. */
+	/** {0} vừa nhập vào không hợp lệ. | Dữ liệu vừa nhập vào không hợp lệ. */
+	INVALID_OBJECT_VALUE("msg.403", "Dữ liệu nhập vào không hợp lệ"),
+	/** {0}: Kiểu dữ liệu không đúng định dạng. | Kiểu dữ liệu không đúng định dạng.*/
 	INVALID_CELL_VALUE("msg.404", "Kiểu dữ liệu không đúng định dạng."),
-	/** {0}: Dữ liệu trống. */
+	/** {0}: Dữ liệu trống. | Dữ liệu trống.*/
 	NULL_CELL_VALUE("msg.405", "Dữ liệu trống."),
-	/** File hình ảnh không hợp lệ: {0}. */
+	/** File hình ảnh không hợp lệ: {0}. | File hình ảnh không hợp lệ.*/
 	INVALID_IMAGE_FILE("msg.406", "File hình ảnh không hợp lệ."),
-	/** {0} vừa nhập vào không hợp lệ: {1}. */
+	/** {0} vừa nhập vào không hợp lệ: {1}. | Dữ liệu vừa nhập vào không hợp lệ.*/
 	INVALID_OBJECT_VALUE_2("msg.407", "Dữ liệu vừa nhập vào không hợp lệ."),
 //	INVALID_JSON_OBJECT("msg.408", "invalid string json object"),
 	

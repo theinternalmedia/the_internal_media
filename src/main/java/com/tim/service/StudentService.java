@@ -18,7 +18,7 @@ public interface StudentService {
 	 * @param file excel file
 	 * @return ResponseDto include status ok if success, else not ok. message and data if have return data
 	 */
-    void create(MultipartFile file);
+    long create(MultipartFile file);
     
     StudentDto update(StudentUpdateRequestDto requestDto);
     

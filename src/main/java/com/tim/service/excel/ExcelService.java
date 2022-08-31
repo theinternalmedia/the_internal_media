@@ -82,8 +82,11 @@ public class ExcelService implements ExcelFileService {
 							case TimConstants.FieldType.DOUBLE:
 								field.set(t, Double.valueOf(exf[i].getExcelValue()));
 								break;
+							case TimConstants.FieldType.FLOAT:
+								field.set(t, Float.valueOf(exf[i].getExcelValue()));
+								break;
 							case TimConstants.FieldType.INTEGER:
-								field.set(t, Integer.valueOf(exf[i].getExcelValue()).intValue());
+								field.set(t, Double.valueOf(exf[i].getExcelValue()).intValue());
 								break;
 							case TimConstants.FieldType.BOOLEAN:
 								field.set(t, Boolean.valueOf(exf[i].getExcelValue()));
@@ -96,10 +99,8 @@ public class ExcelService implements ExcelFileService {
 							}
 						} catch (IllegalArgumentException | IllegalAccessException e) {
 							logger.error(e.getMessage(), e);
-							e.printStackTrace();
 						} catch (Exception e) {
 							logger.error(e.getMessage(), e);
-							e.printStackTrace();
 						}
 						break;
 					}

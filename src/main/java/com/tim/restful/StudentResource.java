@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tim.data.TimApiPath;
-import com.tim.data.TimConstants;
 import com.tim.dto.student.StudentDto;
 import com.tim.dto.student.StudentRequestDto;
 import com.tim.dto.student.StudentUpdateRequestDto;
@@ -30,10 +29,9 @@ public class StudentResource {
 	private StudentService studentService;
 	
 	@PostMapping(TimApiPath.Student.UPLOAD_EXCEL)
-	public String uploadExcelFile(
+	public long uploadExcelFile(
 				@RequestPart("file") MultipartFile file) {
-		studentService.create(file);
-		return TimConstants.SUCCESS;
+		return studentService.create(file);
 	}
 	
 	@PostMapping(TimApiPath.Student.CREATE)

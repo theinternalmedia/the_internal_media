@@ -28,6 +28,7 @@ public class GlobalExceptionHandler {
 	// TimException handler
 	@ExceptionHandler({TimException.class, TimNotFoundException.class, ValidateException.class})
 	public ResponseEntity<ErrorResponse> validateException(TimException e) {
+		logger.error(e.getMessage());
 		ErrorResponse errorResponse = new ErrorResponse(e.getMessage(), e.getErrMsgs());
 		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
@@ -35,6 +36,7 @@ public class GlobalExceptionHandler {
 	// User not found exception: BadCredentialsException
 	@ExceptionHandler(value = { BadCredentialsException.class })
 	public ResponseEntity<ErrorResponse> userNotFoundException(BadCredentialsException e) {
+		logger.error(e.getMessage());
 		ErrorResponse errorResponse = ErrorResponse.builder()
 				.message(MessageUtils.get(ETimMessages.USER_NOT_FOUND)).build();
 		return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
@@ -55,31 +57,9 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
 	
-	/*@ExceptionHandler(ConstraintViolationException.class)
-	public ResponseEntity<ErrorResponse> handleConstraintViolationException(ConstraintViolationException e){
-		logger.error("Data input constrain violation: {}", e.getMessage());
-		List<String> errors = new ArrayList<>();
-		e.getConstraintViolations().forEach((error) -> {
-			String fieldName = ((FieldError) error).getField();
-			String errorMessage = ((FieldError) error).getDefaultMessage();
-			errors.add((fieldName + ": " + errorMessage));
-		});
-		ETimMessages eTimMessages = ETimMessages.CONSTRAIN_VAIOLATION_MESSAGE;
-		ErrorResponse errorResponse = new ErrorResponse(MessageUtils.get(eTimMessages, e.getMessage()), errors);
-		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-	}
-
-	@ExceptionHandler(DataIntegrityViolationException.class)
-	public ResponseEntity<ErrorResponse> validateionException(DataIntegrityViolationException ex) {
-		logger.info(ex.getClass().getName());
-		ErrorResponse errorResponse = new ErrorResponse(
-				MessageUtils.get(ETimMessages.CONSTRAIN_VAIOLATION_MESSAGE), null);
-		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-	}*/
-
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ErrorResponse> validateionException(Exception ex) {
-		logger.info(ex.getMessage());
+		logger.error(ex.getMessage());
 		ErrorResponse errorResponse = new ErrorResponse(
 				MessageUtils.get(ETimMessages.INTERNAL_SYSTEM_ERROR), null);
 		return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);

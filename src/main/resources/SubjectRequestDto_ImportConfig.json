@@ -1,0 +1,37 @@
+[
+	{
+		"excelHeader": "Mã Môn Học",
+		"excelIndex": 1,
+		"excelColType": "String",
+		"excelValue": null,
+		"pojoAttribute": "code"
+	},
+	{
+		"excelHeader": "Tên Môn Học",
+		"excelIndex": 2,
+		"excelColType": "String",
+		"excelValue": null,
+		"pojoAttribute": "name"
+	},
+	{
+		"excelHeader": "Số Tín Chỉ",
+		"excelIndex": 3,
+		"excelColType": "Integer",
+		"excelValue": null,
+		"pojoAttribute": "numberOfCredits"
+	},
+	{
+		"excelHeader": "Môn Học Bắt Buộc",
+		"excelIndex": 4,
+		"excelColType": "Boolean",
+		"excelValue": null,
+		"pojoAttribute": "mandatory"
+	},
+	{
+		"excelHeader": "Điểm Tối Thiểu Cần Đạt",
+		"excelIndex": 5,
+		"excelColType": "Float",
+		"excelValue": null,
+		"pojoAttribute": "passMarks"
+	}
+]

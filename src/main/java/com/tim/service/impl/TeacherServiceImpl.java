@@ -108,7 +108,7 @@ public class TeacherServiceImpl implements TeacherService {
 
 	@Override
 	@Transactional
-	public void create(MultipartFile file) {
+	public long create(MultipartFile file) {
 		// Get dto list from excel file
 		List<TeacherDto> dtoList = excelService.getListObjectFromExcelFile(file, TeacherDto.class);
 		
@@ -154,6 +154,7 @@ public class TeacherServiceImpl implements TeacherService {
 			}
 		}
 		teacherRepository.saveAll(entityList);
+		return entityList.size();
 	}
 
 	@Override

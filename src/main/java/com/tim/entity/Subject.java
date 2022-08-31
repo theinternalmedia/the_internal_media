@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -41,7 +42,8 @@ public class Subject extends BaseEntity {
 	private boolean mandatory = true;
 
 	@Column(nullable = false)
-	@Size(min = 0, max = 10)
+	@Min(value = 0)
+	@Max (value = 10)
 	private float passMarks;
 
 	@OneToMany(mappedBy = "subject")

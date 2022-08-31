@@ -77,8 +77,18 @@
 		"code": "Mã môn học",
 		"name": "Tên môn học",
 		"numberOfCredits": "Số tín chỉ",
-		"mandatory": "Bắt buộc",
-		"passMarks": "Điểm qua môn"
+		"mandatory": "Môn học bắt buộc",
+		"passMarks": "Điểm tối thiểu cần đạt"
+	},
+	"SubjectRequestDto":{
+		"code": "Mã môn học",
+		"name": "Tên môn học",
+		"numberOfCredits": "Số tín chỉ",
+		"mandatory": "Môn học bắt buộc",
+		"passMarks": "Điểm tối thiểu cần đạt"
+	},
+	"SubjectUpdateRequestDto":{
+		"id" : "ID"
 	},
 	"NotificationRequestDto": {
 		"title": "Tiêu đề",
@@ -112,5 +122,12 @@
 		"code": "Mã lớp",
 		"facultyCode": "Mã khoa",
 		"schoolYearCode": "Mã khóa"
+	},
+	"MarkRequestDto":{
+		"finalMarks": "Điểm tổng kết",
+		"note": "Ghi chú",
+		"subjectCode": "Mã môn học",
+		"studentUserId": "Mã sinh viên",
+		"teacherUserId": "Mã giảng viên"
 	}
 }

@@ -14,6 +14,10 @@ public final class TimConstants {
 	public static final String SUCCESS = "success.";
 	public static final String UNSUCCESS = "unsuccess.";
 	
+	//
+	public static final String YES = "Có";
+	public static final String NO = "Không";
+	
 	// Regex
 	public static final String REGEX_PHONE_VN = "(0[3|5|7|8|9])+([0-9]{8})";
 	public static final String REGEX_EMAIL = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
@@ -88,7 +92,7 @@ public final class TimConstants {
 		public static final String FEMALE_STR = "Nữ";
 		public static final boolean FEMALE_BOOL = false;
 	}
-
+	
 	/**
 	 * Excel file name be exported
 	 * 
@@ -108,6 +112,7 @@ public final class TimConstants {
 	 */
 	public static final class FieldType {
 		public static final String DOUBLE = "Double";
+		public static final String FLOAT = "Float";
 		public static final String INTEGER = "Integer";
 		public static final String STRING = "String";
 		public static final String BOOLEAN = "Boolean";

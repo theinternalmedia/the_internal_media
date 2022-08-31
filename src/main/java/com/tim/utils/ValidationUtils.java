@@ -75,15 +75,15 @@ public class ValidationUtils {
 				int max = size.max();
 				int min = size.min();
 
-				if (((String) value).length() > max) {
+				if (String.valueOf(value).length() > max) {
 					return "'" + fieldName + "' không quá " + max + " kí tự.";
 				}
-				if (((String) value).length() < min) {
+				if (String.valueOf(value).length() < min) {
 					return "'" + fieldName + "' không nhỏ hơn " + min + " ký tự.";
 				}
 			}
 			if (field.isAnnotationPresent(Email.class)) {
-				if (!((String) value).matches(TimConstants.REGEX_EMAIL)) {
+				if (!String.valueOf(value).matches(TimConstants.REGEX_EMAIL)) {
 					return "'" + fieldName + "' không đúng định dạng.";
 				}
 			}
@@ -94,21 +94,21 @@ public class ValidationUtils {
 			}
 			if (field.isAnnotationPresent(Min.class)) {
 				Min min = field.getAnnotation(Min.class);
-				if ((long) value < min.value()) {
-					return "'" + fieldName + "' phải lớn hơn " + min.value() + ".";
+				if (Double.valueOf(value.toString()) < min.value()) {
+					return "'" + fieldName + "' phải lớn hơn hoặc bằng " + min.value() + ".";
 				}
 			}
 			if (field.isAnnotationPresent(Max.class)) {
 				Max max = field.getAnnotation(Max.class);
-				if ((long) value > max.value()) {
-					return "'" + fieldName + "' phải nhỏ hơn " + max.value() + ".";
+				if (Double.valueOf(value.toString()) > max.value()) {
+					return "'" + fieldName + "' phải nhỏ hơn hoặc bằng " + max.value() + ".";
 				}
 			} if (field.isAnnotationPresent(Phone.class)) {
-				if (!((String) value).matches(TimConstants.REGEX_PHONE_VN)) {
+				if (!String.valueOf(value).matches(TimConstants.REGEX_PHONE_VN)) {
 					return "'" + fieldName + "' không đúng định dạng.";
 				}
 			} if (field.isAnnotationPresent(Code.class)) {
-				if (!((String) value).matches(TimConstants.REGEX_CODE)) {
+				if (!String.valueOf(value).matches(TimConstants.REGEX_CODE)) {
 					return "'" + fieldName + "' chỉ bao gồm chữ cái không dấu, số, và các ký tự: '_', '-'.";
 				}
 			}
@@ -173,11 +173,9 @@ public class ValidationUtils {
 				}
 			} catch (IllegalArgumentException e) {
 				logger.error(e.getMessage());
-				e.printStackTrace();
 				throw new ValidateException(ETimMessages.INVALID_OBJECT_VALUE, null, actualOjectName);
 			} catch (IllegalAccessException e) {
 				logger.error(e.getMessage());
-				e.printStackTrace();
 				throw new ValidateException(ETimMessages.INVALID_OBJECT_VALUE, null, actualOjectName);
 			}
 		}
