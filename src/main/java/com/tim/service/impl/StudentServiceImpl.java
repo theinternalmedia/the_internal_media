@@ -23,6 +23,7 @@ import com.tim.converter.StudentConverter;
 import com.tim.data.ETimMessages;
 import com.tim.data.ETimRoles;
 import com.tim.data.TimConstants;
+import com.tim.dto.PasswordDto;
 import com.tim.dto.specification.TimSpecification;
 import com.tim.dto.student.StudentDto;
 import com.tim.dto.student.StudentRequestDto;
@@ -58,32 +59,30 @@ public class StudentServiceImpl implements StudentService {
 	private PasswordEncoder encoder;
 	@Autowired
 	private RoleRepository roleRepository;
-	
+
 	@Override
 	public StudentDto create(StudentRequestDto requestDto) {
 		// Validate input
 		ValidationUtils.validateObject(requestDto);
-		
+
 		// Check exists UserId
 		if (studentRepository.existsByUserId(requestDto.getUserId())) {
-			throw new TimException(
-					ETimMessages.ALREADY_EXISTS, "Mã SV", requestDto.getUserId());
+			throw new TimException(ETimMessages.ALREADY_EXISTS, "Mã SV", requestDto.getUserId());
 		}
-		
+
 		// Check exists Email
 		if (StringUtils.isNotBlank(requestDto.getEmail())) {
 			if (studentRepository.existsByEmail(requestDto.getEmail())) {
-				throw new TimException(
-						ETimMessages.ALREADY_EXISTS, "Email", requestDto.getEmail());
+				throw new TimException(ETimMessages.ALREADY_EXISTS, "Email", requestDto.getEmail());
 			}
 		}
-		
+
 		Student entity = studentConverter.toEntity(requestDto);
 		// Set Class
-		Classz classz = classRepository.getByCode(requestDto.getClassCode()).orElseThrow(
-				() -> new TimNotFoundException("Lớp Học", "Mã Lớp", requestDto.getClassCode()));
+		Classz classz = classRepository.getByCode(requestDto.getClassCode())
+				.orElseThrow(() -> new TimNotFoundException("Lớp Học", "Mã Lớp", requestDto.getClassCode()));
 		entity.setClassz(classz);
-		
+
 		// Set Role
 		Role role = roleRepository.findByCode(ETimRoles.ROLE_STUDENT.toString());
 		entity.setRoles(Set.of(role));
@@ -101,16 +100,16 @@ public class StudentServiceImpl implements StudentService {
 		Set<String> userIdSet = new HashSet<String>();
 		// Email Set
 		Set<String> emailSet = new HashSet<String>();
-		for(StudentDto dto : dtoList){
+		for (StudentDto dto : dtoList) {
 			Student entity = studentConverter.toEntity(dto);
 			Classz classz = classRepository.getByCode(dto.getClassCode()).orElse(null);
-			if(classz == null) {
+			if (classz == null) {
 				throw new TimNotFoundException("Lớp học", "Mã Lớp", dto.getClassCode());
 			}
 			entity.setClassz(classz);
 			entity.setPassword(encoder.encode(entity.getPassword()));
 			Role role = roleRepository.findByCode(ETimRoles.ROLE_STUDENT.toString());
-			
+
 			entity.setRoles(Set.of(role));
 			entityList.add(entity);
 			userIdSet.add(entity.getUserId());
@@ -125,8 +124,7 @@ public class StudentServiceImpl implements StudentService {
 			studentLst.forEach(item -> {
 				userIdSet.add(item.getUserId());
 			});
-			throw new TimException(List.of(userIdSet.toString()), 
-					ETimMessages.ALREADY_EXISTS, "Mã SV", "[Chi tiết]");
+			throw new TimException(List.of(userIdSet.toString()), ETimMessages.ALREADY_EXISTS, "Mã SV", "[Chi tiết]");
 		}
 		// Check exists Email
 		if (emailSet.size() > 0) {
@@ -135,8 +133,8 @@ public class StudentServiceImpl implements StudentService {
 				studentLst.forEach(item -> {
 					emailSet.add(item.getEmail());
 				});
-				throw new TimException(List.of(emailSet.toString()), 
-						ETimMessages.ALREADY_EXISTS, "Email", "[Chi tiết]");
+				throw new TimException(List.of(emailSet.toString()), ETimMessages.ALREADY_EXISTS, "Email",
+						"[Chi tiết]");
 			}
 		}
 		studentRepository.saveAll(entityList);
@@ -155,7 +153,7 @@ public class StudentServiceImpl implements StudentService {
 				}
 			});
 		}
-		if(ObjectUtils.isNotEmpty(facultyCodes)) {
+		if (ObjectUtils.isNotEmpty(facultyCodes)) {
 			timSpecification = timSpecification.and((root, query, builder) -> {
 				{
 					Join<Classz, Student> studentClass = root.join("classz", JoinType.INNER);
@@ -164,7 +162,7 @@ public class StudentServiceImpl implements StudentService {
 				}
 			});
 		}
-		if(ObjectUtils.isNotEmpty(classCodes)) {
+		if (ObjectUtils.isNotEmpty(classCodes)) {
 			timSpecification = timSpecification.and((root, query, builder) -> {
 				return builder.in(root.join("classz").get("code")).value(classCodes);
 			});
@@ -185,8 +183,8 @@ public class StudentServiceImpl implements StudentService {
 	@Transactional
 	public String updateAvatar(MultipartFile file) {
 		String usersUserId = PrincipalUtils.getAuthenticatedUsersUserId();
-		Student student = studentRepository.findByUserId(usersUserId).orElseThrow(
-				() -> new TimNotFoundException(STUDENT, "Mã SV", usersUserId));
+		Student student = studentRepository.findByUserId(usersUserId)
+				.orElseThrow(() -> new TimNotFoundException(STUDENT, "Mã SV", usersUserId));
 		final String fileName = TimConstants.Upload.STUDENT_PREFIX + student.getUserId();
 		try {
 			if (StringUtils.isNotBlank(student.getAvatar())) {
@@ -200,70 +198,83 @@ public class StudentServiceImpl implements StudentService {
 			throw new TimException(ETimMessages.INTERNAL_SYSTEM_ERROR);
 		}
 	}
+
 	@Override
-    public StudentDto update(StudentUpdateRequestDto requestDto) {
-    	// Validate input
-    	ValidationUtils.validateObject(requestDto);
-    	
-    	// Get Student Entity
-		Student student = studentRepository.findById(requestDto.getId()).orElseThrow(
-				() -> new TimNotFoundException(STUDENT, "ID", requestDto.getId().toString()));
-		
+	public StudentDto update(StudentUpdateRequestDto requestDto) {
+		// Validate input
+		ValidationUtils.validateObject(requestDto);
+
+		// Get Student Entity
+		Student student = studentRepository.findById(requestDto.getId())
+				.orElseThrow(() -> new TimNotFoundException(STUDENT, "ID", requestDto.getId().toString()));
+
 		// Check exists UserId and not equals old entity
 		if (!student.getUserId().equals(requestDto.getUserId())) {
-			if(studentRepository.existsByUserId(requestDto.getUserId())) {
-				throw new TimException(
-						ETimMessages.ALREADY_EXISTS, "Mã SV", requestDto.getUserId());
+			if (studentRepository.existsByUserId(requestDto.getUserId())) {
+				throw new TimException(ETimMessages.ALREADY_EXISTS, "Mã SV", requestDto.getUserId());
 			}
 		}
-		
+
 		// Check exists Email
-		if (StringUtils.isNotBlank(requestDto.getEmail())
-				&& !student.getEmail().equals(requestDto.getEmail())) {
+		if (StringUtils.isNotBlank(requestDto.getEmail()) && !student.getEmail().equals(requestDto.getEmail())) {
 			if (studentRepository.existsByEmail(requestDto.getUserId())) {
-				throw new TimException(
-						ETimMessages.ALREADY_EXISTS, "Email", requestDto.getEmail());
+				throw new TimException(ETimMessages.ALREADY_EXISTS, "Email", requestDto.getEmail());
 			}
 		}
-		
+
 		// Convert to entity from dto and old entity
 		student = studentConverter.toEntity(requestDto, student);
-		
+
 		// Mapping Class
-		Classz classz = classRepository.getByCode(requestDto.getClassCode()).orElseThrow(
-				() -> new TimNotFoundException("Lớp Học", "Mã", requestDto.getClassCode()));
+		Classz classz = classRepository.getByCode(requestDto.getClassCode())
+				.orElseThrow(() -> new TimNotFoundException("Lớp Học", "Mã", requestDto.getClassCode()));
 		student.setClassz(classz);
-		
+
 		// If password has changed
 		if (StringUtils.isNotBlank(requestDto.getPassword())) {
 			student.setPassword(encoder.encode(requestDto.getPassword()));
 		}
 		student = studentRepository.save(student);
 		return studentConverter.toDto(student);
-    }
-
-    @Override
-    public StudentDto getOne(Long id) {
-        Optional<Student> student = studentRepository.findById(id);
-		return student.map(student1 -> studentConverter.toDto(student1))
-							.orElseThrow(() -> new TimNotFoundException(
-									STUDENT, "ID", id.toString()));
 	}
 
-    @Override
-    public StudentDto getByUserId(String userId){
-        Student student = studentRepository.findByUserId(userId).orElseThrow(
-        		() -> new TimNotFoundException(STUDENT, "Mã SV", userId));
-        return studentConverter.toDto(student);
-    }
+	@Override
+	public StudentDto getOne(Long id) {
+		Optional<Student> student = studentRepository.findById(id);
+		return student.map(student1 -> studentConverter.toDto(student1))
+				.orElseThrow(() -> new TimNotFoundException(STUDENT, "ID", id.toString()));
+	}
 
-    @Override
-    public Long toggleStatus(Long id) {
-        Student student = studentRepository.findById(id).orElseThrow(
-        		() -> new TimNotFoundException(STUDENT, "ID", id.toString()));
-        student.setStatus(!student.getStatus());
-        studentRepository.save(student);
-        return id;
-    }
+	@Override
+	public StudentDto getByUserId(String userId) {
+		Student student = studentRepository.findByUserId(userId)
+				.orElseThrow(() -> new TimNotFoundException(STUDENT, "Mã SV", userId));
+		return studentConverter.toDto(student);
+	}
+
+	@Override
+	public Long toggleStatus(Long id) {
+		Student student = studentRepository.findById(id)
+				.orElseThrow(() -> new TimNotFoundException(STUDENT, "ID", id.toString()));
+		student.setStatus(!student.getStatus());
+		studentRepository.save(student);
+		return id;
+	}
+
+	@Override
+	@Transactional
+	public void updatePassword(PasswordDto passwordDto) {
+		ValidationUtils.validateObject(passwordDto);
+		
+		String userId = PrincipalUtils.getAuthenticatedUsersUserId();
+		Student student = studentRepository.findByUserId(userId)
+				.orElseThrow(() -> new TimNotFoundException(STUDENT, "Mã Sv", userId));
+
+		if (!encoder.matches(passwordDto.getOldPassword(), student.getPassword())) {
+			throw new TimException(ETimMessages.PASSWORD_NOT_MATCH);
+		}
+		student.setPassword(encoder.encode(passwordDto.getNewPassword()));
+		studentRepository.save(student);
+	}
 
 }

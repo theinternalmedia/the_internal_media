@@ -54,4 +54,6 @@ public class StudentResource {
 	public Long toggleStatus(@PathParam("id") Long id) {
 		return studentService.toggleStatus(id);
 	}
+	
+	
 }

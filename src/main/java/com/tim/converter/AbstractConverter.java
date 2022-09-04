@@ -65,4 +65,5 @@ public abstract class AbstractConverter<T1 extends BaseDto, T2 extends BaseEntit
 	public T2 toEntity(T1 dto, T2 oldEntity) {
 		return null;
 	};
+	
 }

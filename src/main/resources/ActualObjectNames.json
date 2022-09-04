@@ -16,5 +16,6 @@
 	"NewsDto": "Tin tức",
 	"NewsUpdateDto": "Tin tức",
 	"ClassDto" : "Lớp học",
-	"ClassRequestDto" : "Lớp học"
+	"ClassRequestDto" : "Lớp học",
+	"PasswordDto": "Mật khẩu"
 }

@@ -39,7 +39,7 @@ public class UserDto extends BaseDto {
 	private String email;
 
 	@NotBlank
-	@Size(max = 100, min = 6)
+	@Size(max = 20, min = 6)
 	private String password;
 
 	private boolean gender = true;

@@ -54,28 +54,6 @@ public class GlobalExceptionHandler {
 		ErrorResponse errorResponse = new ErrorResponse(MessageUtils.get(eTimMessages, e.getObjectName()), errors);
 		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
-	
-	/*@ExceptionHandler(ConstraintViolationException.class)
-	public ResponseEntity<ErrorResponse> handleConstraintViolationException(ConstraintViolationException e){
-		logger.error("Data input constrain violation: {}", e.getMessage());
-		List<String> errors = new ArrayList<>();
-		e.getConstraintViolations().forEach((error) -> {
-			String fieldName = ((FieldError) error).getField();
-			String errorMessage = ((FieldError) error).getDefaultMessage();
-			errors.add((fieldName + ": " + errorMessage));
-		});
-		ETimMessages eTimMessages = ETimMessages.CONSTRAIN_VAIOLATION_MESSAGE;
-		ErrorResponse errorResponse = new ErrorResponse(MessageUtils.get(eTimMessages, e.getMessage()), errors);
-		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-	}
-
-	@ExceptionHandler(DataIntegrityViolationException.class)
-	public ResponseEntity<ErrorResponse> validateionException(DataIntegrityViolationException ex) {
-		logger.info(ex.getClass().getName());
-		ErrorResponse errorResponse = new ErrorResponse(
-				MessageUtils.get(ETimMessages.CONSTRAIN_VAIOLATION_MESSAGE), null);
-		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-	}*/
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ErrorResponse> validateionException(Exception ex) {

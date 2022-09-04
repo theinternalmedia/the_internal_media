@@ -112,5 +112,9 @@
 		"code": "Mã lớp",
 		"facultyCode": "Mã khoa",
 		"schoolYearCode": "Mã khóa"
+	},
+	"PasswordDto":{
+		"oldPassword":"Mật khẩu cũ",
+		"newPassword":"Mật khẩu mới"
 	}
 }

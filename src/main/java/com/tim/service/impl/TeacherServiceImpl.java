@@ -24,6 +24,7 @@ import com.tim.data.ETimRoles;
 import com.tim.data.SearchOperation;
 import com.tim.data.TimConstants;
 import com.tim.dto.PagingResponseDto;
+import com.tim.dto.PasswordDto;
 import com.tim.dto.specification.SearchCriteria;
 import com.tim.dto.specification.TimSpecification;
 import com.tim.dto.teacher.TeacherDto;
@@ -210,9 +211,10 @@ public class TeacherServiceImpl implements TeacherService {
 	}
 
 	@Override
-	public TeacherDto findByUserId(String userId) {
-		// TODO Auto-generated method stub
-		return null;
+	public TeacherDto getByUserId(String userId) {
+		Teacher teacher = teacherRepository.findByUserId(userId).orElseThrow(
+				() -> new TimNotFoundException(TEACHER, "Mã GV", userId));
+		return teacherConverter.toDto(teacher);
 	}
 
 	@Override
@@ -272,6 +274,22 @@ public class TeacherServiceImpl implements TeacherService {
 		teacher.setStatus(!teacher.getStatus());
 		teacherRepository.save(teacher);
 		return id;
+	}
+
+	@Override
+	@Transactional
+	public void updatePassword(PasswordDto passwordDto) {
+		ValidationUtils.validateObject(passwordDto);
+		
+		String userId = PrincipalUtils.getAuthenticatedUsersUserId();
+		Teacher teacher = teacherRepository.getByUserId(userId).orElseThrow(
+				() -> new TimNotFoundException(TEACHER, "Mã GV", "userId"));
+		
+		if (!encoder.matches(passwordDto.getOldPassword(), teacher.getPassword())) {
+			throw new TimException(ETimMessages.PASSWORD_NOT_MATCH);
+		}
+		teacher.setPassword(encoder.encode( passwordDto.getNewPassword()));
+		teacherRepository.save(teacher);
 	}
 
 }

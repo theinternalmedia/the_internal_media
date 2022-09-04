@@ -10,15 +10,12 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 
 @Documented
-@Constraint(validatedBy = PhoneValidator.class)
-@Target({ ElementType.FIELD })
+@Constraint(validatedBy = PasswordValidator.class)
+@Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Phone {
-
-	String message() default "Invalid phone number";
-
-	Class<?>[] groups() default {};
-
-	Class<? extends Payload>[] payload() default {};
-
+public @interface Password {
+	
+	String message() default "Invalid password";
+    Class<?>[] groups() default {};
+    Class<? extends Payload>[] payload() default {};
 }
