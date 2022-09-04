@@ -31,4 +31,5 @@ public class EducationProgramDto extends BaseDto {
 	@Size(max = 50)
 	@NotBlank
 	private String name;
+	
 }
