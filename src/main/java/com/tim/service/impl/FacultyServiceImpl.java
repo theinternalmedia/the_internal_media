@@ -1,5 +1,9 @@
 package com.tim.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +19,7 @@ import com.tim.service.FacultyService;
 
 @Service
 public class FacultyServiceImpl implements FacultyService {
+	private static final String FACULTY = "Khoa";
 	@Autowired
 	private FacultyRepository facultyRepository;
 	@Autowired
@@ -31,5 +36,19 @@ public class FacultyServiceImpl implements FacultyService {
 			entity.setHeadOfFaculty(teacher);
 		}
 		return facultyConverter.toDto(facultyRepository.save(entity));
+	}
+
+	@Override
+	public long toggleStatus(Set<Long> ids) {
+		List<Faculty> faculties = new ArrayList<>();
+		Faculty faculty;
+		for (Long id : ids) {
+			faculty = facultyRepository.findById(id).orElseThrow(
+					() -> new TimNotFoundException(FACULTY, "ID", id.toString()));
+			faculty.setStatus(!faculty.getStatus());
+			faculties.add(faculty);
+		}
+		facultyRepository.saveAll(faculties);
+		return ids.size();
 	}
 }

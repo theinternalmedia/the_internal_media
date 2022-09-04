@@ -1,5 +1,7 @@
 package com.tim.service;
 
+import java.util.Set;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tim.dto.PagingResponseDto;
@@ -38,10 +40,10 @@ public interface NewsService {
      * Toogle status.
      * 
      * @author thinh
-     * @param id
+     * @param ids
      * @return ResponseDto
      */
-    Long toogleStatus(Long id);
+	long toggleStatus(Set<Long> ids);
     
     /**
      * Get news page.

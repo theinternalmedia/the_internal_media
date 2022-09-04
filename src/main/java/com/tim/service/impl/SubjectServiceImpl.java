@@ -106,4 +106,18 @@ public class SubjectServiceImpl implements SubjectService{
 		return subjectList.size();
 	}
 
+	@Override
+	public long toggleStatus(Set<Long> ids) {
+		List<Subject> subjects = new ArrayList<>();
+		Subject subject;
+		for (Long id : ids) {
+			subject = subjectRepository.findById(id).orElseThrow(
+					() -> new TimNotFoundException(SUBJECT, "ID", id.toString()));
+			subject.setStatus(!subject.getStatus());
+			subjects.add(subject);
+		}
+		subjectRepository.saveAll(subjects);
+		return ids.size();
+	}
+
 }

@@ -1,11 +1,13 @@
 package com.tim.restful;
 
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,7 +18,6 @@ import com.tim.dto.subject.SubjectRequestDto;
 import com.tim.dto.subject.SubjectUpdateRequestDto;
 import com.tim.service.SubjectService;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping(value = TimApiPath.TIM_API)
 public class SubjectResource {
@@ -38,4 +39,9 @@ public class SubjectResource {
 	public SubjectDto update(@RequestBody SubjectUpdateRequestDto requestDto) {
 		return subjectService.update(requestDto);
 	} 
+	
+	@PutMapping(TimApiPath.Subject.TOGGLE_STATUS)
+	public Long toggleStatus(@RequestParam Set<Long> ids) {
+		return subjectService.toggleStatus(ids);
+	}
 }

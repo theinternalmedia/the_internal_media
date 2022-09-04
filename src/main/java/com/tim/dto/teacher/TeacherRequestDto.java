@@ -28,10 +28,6 @@ public class TeacherRequestDto extends UserRequestDto {
 	@Size(max = 20, min = 5)
 	private String userId;
 	
-	@NotBlank
-	@Size(max = 100, min = 6)
-	private String password;
-	
 	@NotEmpty
 	private Set<ETimRoles> roleCodes = new HashSet<>();
 }

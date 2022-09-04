@@ -9,9 +9,7 @@ import com.tim.entity.NotificationGroup;
 
 public interface NotificationGroupRepository extends JpaRepository<NotificationGroup, Long> {
 
-	Optional<NotificationGroup> findByCode(String code);
-
-	List<NotificationGroup> findAllByStatusTrue();
+	Optional<NotificationGroup> findByCodeAndStatusTrue(String code);
 
 	List<NotificationGroup> findAllByStatus(boolean status);
 

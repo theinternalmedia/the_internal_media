@@ -17,7 +17,7 @@
 		"userId": "Mã SV",
 		"classCode": "Mã Lớp"
 	},
-	"UserRequestDto":{
+	"UserRequestDto": {
 		"name": "Họ tên",
 		"email": "Email",
 		"gender": "Giới  tính",
@@ -33,7 +33,7 @@
 		"facultyCode": "Mã Khoa",
 		"roleCodes": "Vai trò"
 	},
-	"TeacherUpdateRequestDto":{
+	"TeacherUpdateRequestDto": {
 		"id": "ID",
 		"userId": "Mã GV",
 		"facultyCode": "Mã Khoa",
@@ -43,7 +43,7 @@
 		"userId": "Mã SV",
 		"classCode": "Mã Lớp"
 	},
-	"StudentUpdateRequestDto":{
+	"StudentUpdateRequestDto": {
 		"id": "ID",
 		"userId": "Mã SV",
 		"classCode": "Mã Lớp"
@@ -65,12 +65,12 @@
 		"content": "Nội dung",
 		"thumbnail": "Hình ảnh"
 	},
-	"NewsRequestDto":{
+	"NewsRequestDto": {
 		"title": "Tiêu đề",
 		"shortDescription": "Mô tả ngắn",
 		"content": "Nội dung"
 	},
-	"NewsUpdateDto":{
+	"NewsUpdateDto": {
 		"id": "ID"
 	},
 	"SubjectDto": {
@@ -80,15 +80,15 @@
 		"mandatory": "Môn học bắt buộc",
 		"passMarks": "Điểm tối thiểu cần đạt"
 	},
-	"SubjectRequestDto":{
+	"SubjectRequestDto": {
 		"code": "Mã môn học",
 		"name": "Tên môn học",
 		"numberOfCredits": "Số tín chỉ",
 		"mandatory": "Môn học bắt buộc",
 		"passMarks": "Điểm tối thiểu cần đạt"
 	},
-	"SubjectUpdateRequestDto":{
-		"id" : "ID"
+	"SubjectUpdateRequestDto": {
+		"id": "ID"
 	},
 	"NotificationRequestDto": {
 		"title": "Tiêu đề",
@@ -110,7 +110,7 @@
 		"name": "Nhóm thông báo",
 		"code": "Mã nhóm"
 	},
-	"NotificationUpdateRequestDto":{
+	"NotificationUpdateRequestDto": {
 		"id": "ID"
 	},
 	"ClassDto": {
@@ -123,11 +123,17 @@
 		"facultyCode": "Mã khoa",
 		"schoolYearCode": "Mã khóa"
 	},
-	"MarkRequestDto":{
+	"MarkRequestDto": {
 		"finalMarks": "Điểm tổng kết",
 		"note": "Ghi chú",
 		"subjectCode": "Mã môn học",
 		"studentUserId": "Mã sinh viên",
-		"teacherUserId": "Mã giảng viên"
+		"teacherUserId": "Mã giảng viên",
+		"date": "Ngày thi",
+		"time": "Giờ thi"
+	},
+	"PasswordDto": {
+		"oldPassword": "Mật khẩu cũ",
+		"newPassword": "Mật khẩu mới"
 	}
 }

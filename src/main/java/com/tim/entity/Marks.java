@@ -1,5 +1,7 @@
 package com.tim.entity;
 
+import java.time.LocalDate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -28,6 +30,15 @@ public class Marks extends BaseEntity {
 	@Column(nullable = false, columnDefinition = "boolean default false")
 	private boolean pass = false;
 	
+	@Column
+	private String note;
+	
+	@Column
+	private LocalDate date;
+	
+	@Column
+	private String time;
+	
 	@OneToOne
 	private Student student;
 	
@@ -52,8 +63,6 @@ public class Marks extends BaseEntity {
 	public void setSubject(Subject subject) {
 		this.subject = subject;
 	}
-
-	private String note;
 
 	public float getFinalMarks() {
 		return finalMarks;
@@ -93,5 +102,21 @@ public class Marks extends BaseEntity {
 
 	public void setTeacher(Teacher teacher) {
 		this.teacher = teacher;
+	}
+
+	public LocalDate getDate() {
+		return date;
+	}
+
+	public void setDate(LocalDate date) {
+		this.date = date;
+	}
+
+	public String getTime() {
+		return time;
+	}
+
+	public void setTime(String time) {
+		this.time = time;
 	}
 }

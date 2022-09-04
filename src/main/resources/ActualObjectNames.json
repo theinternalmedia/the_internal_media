@@ -19,5 +19,6 @@
 	"ClassRequestDto": "Lớp Học",
 	"SubjectRequestDto": "Môn Học",
 	"SubjectUpdateRequestDto": "Môn Học",
-	"MarksRequestDto": "Điểm Tổng Kết"
+	"MarksRequestDto": "Điểm Tổng Kết",
+	"PasswordDto": "Mật khẩu"
 }

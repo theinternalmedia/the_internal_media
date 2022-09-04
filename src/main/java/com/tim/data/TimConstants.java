@@ -22,6 +22,7 @@ public final class TimConstants {
 	public static final String REGEX_PHONE_VN = "(0[3|5|7|8|9])+([0-9]{8})";
 	public static final String REGEX_EMAIL = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
 	public static final String REGEX_CODE = "^[a-zA-Z0-9_-]*$";
+	public static final String REGEX_PASSWORD = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{6,20}$";
 
 	public static final String USER_DOB_FORMAT = "dd-MM-yyyy";
 	public static final String LOCAL_DATE_TIME_FORMAT = "dd-MM-yyyy HH:mm:ss";
@@ -151,6 +152,8 @@ public final class TimConstants {
 					"{\"title\":\"String\", "
 					+ "\"content\":\"String\", "
 					+ "\"shortDescription\":\"String\", "
+					+ "\"type\":\"0\", "
+					+ "\"notificationGroupCode\":\"String\", "
 					+ "\"facultyCodes\":[\"String\"], "
 					+ "\"schoolYearCodes\":[\"String\"], "
 					+ "\"classCodes\":[\"String\"]}";
@@ -159,6 +162,8 @@ public final class TimConstants {
 					+ "{\"title\":\"String\", "
 					+ "\"content\":\"String\", "
 					+ "\"shortDescription\":\"String\", "
+					+ "\"type\":\"0\", "
+					+ "\"notificationGroupCode\":\"String\", "
 					+ "\"facultyCodes\":[\"String\"], "
 					+ "\"schoolYearCodes\":[\"String\"], "
 					+ "\"classCodes\":[\"String\"]}";

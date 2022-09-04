@@ -1,13 +1,13 @@
 package com.tim.restful;
 
-import javax.websocket.server.PathParam;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,7 +20,6 @@ import com.tim.service.StudentService;
 
 import io.swagger.annotations.ApiParam;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping(TimApiPath.TIM_API)
 public class StudentResource {
@@ -49,7 +48,7 @@ public class StudentResource {
 	}
 	
 	@PutMapping(TimApiPath.Student.TOGGLE_STATUS)
-	public Long toggleStatus(@PathParam("id") Long id) {
-		return studentService.toggleStatus(id);
+	public Long toggleStatus(@RequestParam Set<Long> ids) {
+		return studentService.toggleStatus(ids);
 	}
 }

@@ -11,10 +11,10 @@ public interface SchoolYearRepository extends JpaRepository<SchoolYear, Long>{
 
 	Set<SchoolYear> findByCodeIn(Set<String> schoolYearCodes);
 
-	Optional<SchoolYear> getByCode(String schoolYearCode);
+	Optional<SchoolYear> findByCode(String schoolYearCode);
 
 	boolean existsByCode(String code);
 
-	Optional<SchoolYear> findByCode(String code);
+	Optional<SchoolYear> findByCodeAndStatusTrue(String code);
 
 }

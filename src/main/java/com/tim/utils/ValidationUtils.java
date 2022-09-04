@@ -25,6 +25,7 @@ import org.springframework.util.CollectionUtils;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.tim.annotation.Code;
+import com.tim.annotation.Password;
 import com.tim.annotation.Phone;
 import com.tim.data.ETimMessages;
 import com.tim.data.TimConstants;
@@ -80,6 +81,11 @@ public class ValidationUtils {
 				}
 				if (String.valueOf(value).length() < min) {
 					return "'" + fieldName + "' không nhỏ hơn " + min + " ký tự.";
+				}
+			}
+			if(field.isAnnotationPresent(Password.class)) {
+				if (!String.valueOf(value).matches(TimConstants.REGEX_PASSWORD)) {
+					return "'" + fieldName + "' không đúng định dạng.";
 				}
 			}
 			if (field.isAnnotationPresent(Email.class)) {
@@ -138,14 +144,17 @@ public class ValidationUtils {
 		Field[] fields = objectClass.getDeclaredFields();
 		Map<String, String> actualFieldNames = new HashMap<String, String>();
 		Map<String, String> actFieldNames = null;
+		
+		objectClass = objectClass.getSuperclass();
 		while (objectClass != null && !objectClass.getSimpleName().equals(onjectClassName)) {
 			actFieldNames = Utility.getObjectFromJsonFile(TimConstants.ACTUAL_FIELDNAME_DTO_NAME_FILE,
 					new TypeReference<Map<String, Map<String, String>>>() {
 					}).get(objectClass.getSimpleName());
+			
 			if (actFieldNames != null) {
 				actualFieldNames.putAll(actFieldNames);
 			}
-			fields = ArrayUtils.addAll(objectClass.getDeclaredFields());
+			fields = ArrayUtils.addAll(fields, objectClass.getDeclaredFields());
 			objectClass = objectClass.getSuperclass();
 		}
 

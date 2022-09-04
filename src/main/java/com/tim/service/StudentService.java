@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.tim.dto.PasswordDto;
 import com.tim.dto.student.StudentDto;
 import com.tim.dto.student.StudentRequestDto;
 import com.tim.dto.student.StudentUpdateRequestDto;
@@ -16,7 +17,6 @@ public interface StudentService {
     /**
 	 * @author minhtuanitk43
 	 * @param file excel file
-	 * @return ResponseDto include status ok if success, else not ok. message and data if have return data
 	 */
     long create(MultipartFile file);
     
@@ -38,8 +38,16 @@ public interface StudentService {
 
 	StudentDto getOne(Long id);
 
-	Long toggleStatus(Long id);
+	long toggleStatus(Set<Long> ids);
 	
+	/**
+	 * 
+	 * @author thinh
+	 * @param userId
+	 * @return StudentDto
+	 */
 	StudentDto getByUserId(String userId);
+	
+	void updatePassword(PasswordDto passwordDto);
 
 }

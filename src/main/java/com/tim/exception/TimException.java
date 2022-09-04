@@ -41,6 +41,11 @@ public class TimException extends RuntimeException {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param eTimMessages ETimMessages
+	 * @param values values
+	 */
 	public TimException(ETimMessages eTimMessages, String...values) {
 		this.message = MessageUtils.get(eTimMessages, values);
 	}

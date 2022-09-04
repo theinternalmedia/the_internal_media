@@ -39,6 +39,7 @@ import com.tim.repository.StudentRepository;
 import com.tim.repository.TeacherRepository;
 import com.tim.service.NotificationService;
 import com.tim.service.StudentService;
+import com.tim.utils.PrincipalUtils;
 import com.tim.utils.UploadUtils;
 import com.tim.utils.Utility;
 import com.tim.utils.ValidationUtils;
@@ -75,9 +76,9 @@ public class NotificationServiceImpl implements NotificationService {
 		
 		// Set Notification Group
 		NotificationGroup notificationGroup = notificationGroupRepository
-				.findByCode(requestDto.getNotificationGroupCode()).orElseThrow(() -> 
-					new TimNotFoundException(
-							"Nhóm Thông Báo", "Mã", requestDto.getNotificationGroupCode()));
+				.findByCodeAndStatusTrue(requestDto.getNotificationGroupCode())
+				.orElseThrow(() -> new TimNotFoundException(
+						"Nhóm Thông Báo", "Mã", requestDto.getNotificationGroupCode()));
 		entity.setNotificationGroup(notificationGroup);
 		
 		// Save thumbnail 
@@ -118,8 +119,8 @@ public class NotificationServiceImpl implements NotificationService {
 		
 		// Set Notification Group
 		NotificationGroup notificationGroup = notificationGroupRepository
-				.findByCode(requestDto.getNotificationGroupCode()).orElseThrow(() -> 
-				new TimNotFoundException(
+				.findByCodeAndStatusTrue(requestDto.getNotificationGroupCode())
+				.orElseThrow(() -> new TimNotFoundException(
 						"Nhóm Thông Báo", "Mã", requestDto.getNotificationGroupCode()));
 		entity.setNotificationGroup(notificationGroup);
 		
@@ -213,15 +214,19 @@ public class NotificationServiceImpl implements NotificationService {
 	}
 
 	@Override
-	public PagingResponseDto getPage(int page, int size, String usersUserId, boolean isTeacher) {
+	public PagingResponseDto getPage(int page, int size) {
+		String usersUserId = PrincipalUtils.getAuthenticatedUsersUserId();
+		boolean isTeacher = PrincipalUtils.authenticatedUserIsTeacher();
 		Page<Notification> pageNotification;
 		Pageable pageable = PageRequest.of(page - 1, size, Sort.by("createdDate"));
 		if (isTeacher) {
-			pageNotification = notificationRepository.findByTypeOrNotificationTeachers_Teacher_UserId(
-					TimConstants.NotificationType.TO_ALL, usersUserId, pageable);
+			pageNotification = notificationRepository
+					.findByStatusTrueAndTypeOrStatusTrueAndNotificationTeachers_Teacher_UserId(
+							TimConstants.NotificationType.TO_ALL, usersUserId, pageable);
 		} else {
-			pageNotification = notificationRepository.findByTypeOrNotificationStudents_Student_UserId(
-					TimConstants.NotificationType.TO_ALL, usersUserId, pageable);
+			pageNotification = notificationRepository
+					.findByStatusTrueAndTypeOrStatusTrueAndNotificationStudents_Student_UserId(
+							TimConstants.NotificationType.TO_ALL, usersUserId, pageable);
 		}
 		
 		List<NotificationDto> data = notificationConverter.toDtoList(pageNotification.getContent());
@@ -238,5 +243,19 @@ public class NotificationServiceImpl implements NotificationService {
 		Notification notification = notificationRepository.findBySlug(slug).orElseThrow(
 				() -> new TimNotFoundException(NOTIFICATION, "Slug", slug));
 		return notificationConverter.toDto(notification);
+	}
+
+	@Override
+	public long toggleStatus(Set<Long> ids) {
+		List<Notification> notifications = new ArrayList<>();
+		Notification notification;
+		for (Long id : ids) {
+			notification = notificationRepository.findById(id).orElseThrow(
+					() -> new TimNotFoundException(NOTIFICATION, "ID", id.toString()));
+			notification.setStatus(!notification.getStatus());
+			notifications.add(notification);
+		}
+		notificationRepository.saveAll(notifications);
+		return ids.size();
 	}
 }

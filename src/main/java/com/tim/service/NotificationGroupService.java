@@ -1,6 +1,7 @@
 package com.tim.service;
 
 import java.util.List;
+import java.util.Set;
 
 import com.tim.dto.notification.NotificationGroupDto;
 import com.tim.dto.notification.NotificationGroupRequestDto;
@@ -14,7 +15,7 @@ public interface NotificationGroupService {
 
 	NotificationGroupDto getOne(String code);
 
-    Long toggleStatus(Long id);
+	long toggleStatus(Set<Long> ids);
 
     List<NotificationGroupDto> getAll(boolean status);
 }

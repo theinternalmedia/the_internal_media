@@ -1,5 +1,7 @@
 package com.tim.dto.marks;
 
+import java.time.LocalDate;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
@@ -32,5 +34,9 @@ public class MarksDto extends BaseDto {
 
 	@Size(max = 50)
 	private String note;
+	
+	private LocalDate date;
+	
+	private String time;
 
 }

@@ -6,6 +6,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import com.tim.annotation.Password;
 import com.tim.annotation.Phone;
 
 import lombok.AccessLevel;
@@ -37,6 +38,11 @@ public class UserRequestDto {
 	
 	@Size(max = 100)
 	private String remark;
+	
+	@NotBlank
+	@Size(max = 20, min = 6)
+	@Password
+	private String password;
 
 	public boolean getGender() {
 		return gender;

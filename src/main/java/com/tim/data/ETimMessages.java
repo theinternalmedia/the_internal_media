@@ -12,7 +12,8 @@ public enum ETimMessages {
 	INVALID_TOKEN("msg.003", "invalid token."),
 	/** {0} đã tồn tại: {1}. | Đối tượng đã tồn tại.*/
 	ALREADY_EXISTS("msg.004", "Đối tượng đã tồn tại."),
-	
+	/** Mật khẩu không chính xác*/
+	PASSWORD_NOT_MATCH("msg.005", "Mật khẩu không đúng"),
 //	INVALID_SHEET_NAME("msg.004", "invalid sheet name"),
 //	USER_NAME_ALREADY_EXISTS("msg.002", "Tài khoản đã tồn tại"),
 //	EMAIL_ALREADY_EXISTS("msg.003", "Email đã tồn tại"),

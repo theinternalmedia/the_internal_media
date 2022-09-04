@@ -1,5 +1,7 @@
 package com.tim.service;
 
+import java.util.Set;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tim.dto.subject.SubjectDto;
@@ -13,5 +15,7 @@ public interface SubjectService {
 	SubjectDto update(SubjectUpdateRequestDto requestDto);
 
 	long create(MultipartFile file);
+	
+	long toggleStatus(Set<Long> ids);
 
 }

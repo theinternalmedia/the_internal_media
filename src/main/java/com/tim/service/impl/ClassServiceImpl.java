@@ -1,5 +1,9 @@
 package com.tim.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +26,8 @@ import com.tim.service.ClassService;
 
 @Service
 public class ClassServiceImpl implements ClassService {
+	
+	private static final String CLASSZ = "Lớp Học";
 	@Autowired
 	private ClassRepository classRepository;
 	@Autowired
@@ -36,19 +42,17 @@ public class ClassServiceImpl implements ClassService {
 	public ClassDto create(ClassRequestDto requestDto) {
 		Classz entity = classConverter.toEntity(requestDto);
 		if(StringUtils.isNotBlank(requestDto.getFacultyCode())) {
-			Faculty faculty = facultyRepository.getByCode(requestDto.getFacultyCode()).orElse(null);
-			if(faculty == null) {
-				throw new TimNotFoundException("Khoa", "Mã Khoa", requestDto.getFacultyCode());
-			}
+			Faculty faculty = facultyRepository.findByCodeAndStatusTrue(requestDto.getFacultyCode())
+					.orElseThrow(() -> new TimNotFoundException(
+							"Khoa", "Mã Khoa", requestDto.getFacultyCode()));
 			entity.setFaculty(faculty);
 		}
 		if(StringUtils.isNotBlank(requestDto.getSchoolYearCode())) {
-			SchoolYear schoolYear = schoolYearRepository.getByCode(
-					requestDto.getSchoolYearCode()).orElse(null);
-			if(schoolYear == null) {
-				throw new TimException(ETimMessages.ENTITY_NOT_FOUND,
-						"Khóa", "Mã Khóa", requestDto.getSchoolYearCode());
-			}
+			SchoolYear schoolYear = schoolYearRepository.findByCodeAndStatusTrue(
+					requestDto.getSchoolYearCode())
+					.orElseThrow(() -> new TimException(
+							ETimMessages.ENTITY_NOT_FOUND,"Khóa", "Mã Khóa", 
+							requestDto.getSchoolYearCode()));
 			entity.setSchoolYear(schoolYear);
 		}
 		if(StringUtils.isNotBlank(requestDto.getAdvisorId())) {
@@ -60,5 +64,19 @@ public class ClassServiceImpl implements ClassService {
 		}
 		entity = classRepository.save(entity);
 		return classConverter.toDto(entity);
+	}
+	
+	@Override
+	public long toggleStatus(Set<Long> ids) {
+		List<Classz> classzs = new ArrayList<>();
+		Classz classz;
+		for (Long id : ids) {
+			classz = classRepository.findById(id).orElseThrow(
+					() -> new TimNotFoundException(CLASSZ, "ID", id.toString()));
+			classz.setStatus(!classz.getStatus());
+			classzs.add(classz);
+		}
+		classRepository.saveAll(classzs);
+		return ids.size();
 	}
 }

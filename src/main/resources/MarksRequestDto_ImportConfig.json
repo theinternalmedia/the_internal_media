@@ -28,8 +28,22 @@
 		"pojoAttribute": "teacherUserId"
 	},
 	{
-		"excelHeader": "Ghi Chú",
+		"excelHeader": "Ngày Thi",
 		"excelIndex": 8,
+		"excelColType": "LocalDate",
+		"excelValue": null,
+		"pojoAttribute": "date"
+	},
+	{
+		"excelHeader": "Thời Gian Thi",
+		"excelIndex": 9,
+		"excelColType": "String",
+		"excelValue": null,
+		"pojoAttribute": "time"
+	},
+	{
+		"excelHeader": "Ghi Chú",
+		"excelIndex": 10,
 		"excelColType": "String",
 		"excelValue": null,
 		"pojoAttribute": "note"

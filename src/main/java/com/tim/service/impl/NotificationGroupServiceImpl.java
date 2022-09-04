@@ -1,6 +1,8 @@
 package com.tim.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,18 +50,24 @@ public class NotificationGroupServiceImpl implements NotificationGroupService {
 
     @Override
     public NotificationGroupDto getOne(String code) {
-    	NotificationGroup entity = notificationGroupRepository.findByCode(code).orElseThrow(
-    			() -> new TimNotFoundException(NOTIFICATION_GROUP, "Mã Nhóm Thông Báo", code));
+    	NotificationGroup entity = notificationGroupRepository.findByCodeAndStatusTrue(code)
+    			.orElseThrow(() -> new TimNotFoundException(
+    					NOTIFICATION_GROUP, "Mã Nhóm Thông Báo", code));
         return notificationGroupConverter.toDto(entity);
     }
 
     @Override
-    public Long toggleStatus(Long id) {
-    	NotificationGroup entity = notificationGroupRepository.findById(id).orElseThrow(
-    			() -> new TimNotFoundException(NOTIFICATION_GROUP, "ID", id.toString()));
-    	entity.setStatus(!entity.getStatus());
-    	notificationGroupRepository.save(entity);
-        return id;
+    public long toggleStatus(Set<Long> ids) {
+    	List<NotificationGroup> notificationGroups = new ArrayList<NotificationGroup>();
+    	NotificationGroup entity;
+    	for (Long id : ids) {
+    		entity = notificationGroupRepository.findById(id).orElseThrow(
+        			() -> new TimNotFoundException(NOTIFICATION_GROUP, "ID", id.toString()));
+    		entity.setStatus(!entity.getStatus());
+        	notificationGroups.add(entity);
+    	}
+    	notificationGroupRepository.saveAll(notificationGroups);
+        return ids.size();
     }
 
 	@Override

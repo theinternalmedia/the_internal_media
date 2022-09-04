@@ -1,6 +1,7 @@
 package com.tim.service.impl;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -49,7 +50,7 @@ public class NewsServiceImpl implements NewsService {
     private FacultyRepository facultyRepository;
 
     @Override
-    @Transactional
+    @Transactional(noRollbackFor = {TimException.class, TimNotFoundException.class})
     public NewsDto create(NewsRequestDto requestDto, MultipartFile image) {
         // Validate Object
         ValidationUtils.validateObject(requestDto);
@@ -60,8 +61,8 @@ public class NewsServiceImpl implements NewsService {
         // Map Faculties
         Set<Faculty> faculties = new HashSet<>();
         for (String facultyCode : facultyCodes) {
-        	Faculty faculty = facultyRepository.getByCode(facultyCode).orElseThrow(() -> 
-        			new TimNotFoundException(NEWS, "Mã", facultyCode));
+        	Faculty faculty = facultyRepository.findByCodeAndStatusTrue(facultyCode).orElseThrow(() -> 
+        			new TimNotFoundException("Khoa", "Mã", facultyCode));
         	faculties.add(faculty);
         }
         entity.setFaculties(faculties);
@@ -83,7 +84,7 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    @Transactional
+    @Transactional(noRollbackFor = {TimException.class, TimNotFoundException.class})
     public NewsDto update(NewsUpdateDto requestDto, MultipartFile image) {
         // Validate Object
         ValidationUtils.validateObject(requestDto);
@@ -113,7 +114,7 @@ public class NewsServiceImpl implements NewsService {
         // Map Faculties
         Set<Faculty> faculties = new HashSet<>();
         for (String facultyCode : facultyCodes) {
-        	Faculty faculty = facultyRepository.getByCode(facultyCode).orElseThrow(() -> 
+        	Faculty faculty = facultyRepository.findByCodeAndStatusTrue(facultyCode).orElseThrow(() -> 
         			new TimNotFoundException(NEWS, "Mã", facultyCode));
         	faculties.add(faculty);
         }
@@ -134,12 +135,17 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public Long toogleStatus(Long id) {
-        News news = newsRepository.findById(id).orElseThrow(() -> 
-        	new TimNotFoundException(NEWS, "ID", String.valueOf(id)));
-        news.setStatus(!news.getStatus());
-        newsRepository.save(news);
-        return id;
+    public long toggleStatus(Set<Long> ids) {
+    	List<News> newsList = new ArrayList<News>();
+        News news;
+        for (Long id : ids) {
+        	news = newsRepository.findById(id).orElseThrow(() -> 
+        		new TimNotFoundException(NEWS, "ID", String.valueOf(id)));
+	        news.setStatus(!news.getStatus());
+	        newsList.add(news);
+        }
+        newsRepository.saveAll(newsList);
+        return ids.size();
     }
 
     @Override

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import com.tim.dto.UserUpdateRequestDto;
 import com.tim.dto.teacher.TeacherDto;
 import com.tim.dto.teacher.TeacherRequestDto;
 import com.tim.dto.teacher.TeacherUpdateRequestDto;
@@ -49,6 +50,10 @@ public class TeacherConverter extends AbstractConverter<TeacherDto, Teacher> {
 	public Teacher toEntity(TeacherRequestDto requestDto) {
 		return this.modelMapper.map(requestDto, Teacher.class);
 	}
+	
+	public TeacherUpdateRequestDto toDto(UserUpdateRequestDto userUpdateRequestDto) {
+		return this.modelMapper.map(userUpdateRequestDto, TeacherUpdateRequestDto.class);
+	}
 
 	public Teacher toEntity(TeacherUpdateRequestDto requestDto, Teacher entity) {
 		entity.setAddress(requestDto.getAddress());
@@ -62,4 +67,6 @@ public class TeacherConverter extends AbstractConverter<TeacherDto, Teacher> {
 		entity.setUserId(requestDto.getUserId());
 		return entity;
 	}
+	
+	
 }

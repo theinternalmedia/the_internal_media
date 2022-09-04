@@ -1,7 +1,6 @@
 package com.tim.restful;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,7 +14,6 @@ import com.tim.dto.marks.MarksDto;
 import com.tim.dto.marks.MarksRequestDto;
 import com.tim.service.MarksService;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping(value = TimApiPath.TIM_API)
 public class MarksResource {

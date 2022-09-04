@@ -1,9 +1,10 @@
 package com.tim.restful;
 
+import java.util.Set;
+
 import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,12 +23,10 @@ import com.tim.dto.notification.NotificationDto;
 import com.tim.dto.notification.NotificationRequestDto;
 import com.tim.dto.notification.NotificationUpdateRequestDto;
 import com.tim.service.NotificationService;
-import com.tim.utils.PrincipalUtils;
 import com.tim.utils.Utility;
 
 import io.swagger.annotations.ApiParam;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping(TimApiPath.TIM_API)
 public class NotificationResource {
@@ -76,8 +75,11 @@ public class NotificationResource {
 	@GetMapping(TimApiPath.Notification.GET_PAGE)
 	public PagingResponseDto getPage(@RequestParam("page") int page, 
 			@RequestParam("size") int size) {
-		return notificationService.getPage(page, size, 
-				PrincipalUtils.getAuthenticatedUsersUserId(),
-				PrincipalUtils.authenticatedUserIsTeacher());
+		return notificationService.getPage(page, size);
+	}
+	
+	@PutMapping(TimApiPath.Notification.TOGGLE_STATUS)
+	public Long toggleStatus(@RequestParam Set<Long> ids) {
+		return notificationService.toggleStatus(ids);
 	}
 }

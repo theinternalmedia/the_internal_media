@@ -10,4 +10,5 @@ public interface MarksService {
 	MarksDto create(MarksRequestDto requestDto);
 
 	long create(MultipartFile file);
+	
 }

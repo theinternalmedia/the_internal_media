@@ -1,5 +1,9 @@
 package com.tim.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -58,11 +62,16 @@ public class SchoolYearServiceImpl implements SchoolYearService {
 	}
 
     @Override
-	public Long toggleStatus(Long id) {
-		SchoolYear schoolYear = schoolYearRepository.findById(id).orElseThrow(
-				() -> new TimNotFoundException(SCHOOL_YEAR, "Mã Khóa Học", id.toString()));
-		schoolYear.setStatus(!schoolYear.getStatus());
-		schoolYearRepository.save(schoolYear);
-		return id;
+	public long toggleStatus(Set<Long> ids) {
+    	List<SchoolYear> schoolYears = new ArrayList<>();
+		SchoolYear schoolYear;
+		for (Long id : ids) {
+			schoolYear = schoolYearRepository.findById(id).orElseThrow(
+					() -> new TimNotFoundException(SCHOOL_YEAR, "Mã Khóa Học", id.toString()));
+			schoolYear.setStatus(!schoolYear.getStatus());
+			schoolYears.add(schoolYear);
+		}
+		schoolYearRepository.saveAll(schoolYears);
+		return ids.size();
 	}
 }

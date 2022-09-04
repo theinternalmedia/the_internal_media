@@ -8,6 +8,6 @@ import com.tim.entity.Faculty;
 
 public interface FacultyRepository extends JpaRepository<Faculty, Long>{
 
-	Optional<Faculty> getByCode(String facultyCode);
+	Optional<Faculty> findByCodeAndStatusTrue(String facultyCode);
 
 }

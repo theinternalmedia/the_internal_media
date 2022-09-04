@@ -70,7 +70,7 @@ public class MarksServiceImpl implements MarksService {
 		marks.setTeacher(teacher);
 		
 		// Mapping subject
-		Subject subject = subjectRepository.findByCode(requestDto.getSubjectCode())
+		Subject subject = subjectRepository.findByCodeAndStatusTrue(requestDto.getSubjectCode())
 				.orElseThrow(() -> new TimNotFoundException(
 						"Môn Học", "Mã Môn Học", requestDto.getSubjectCode()));
 		marks.setSubject(subject);
@@ -110,7 +110,7 @@ public class MarksServiceImpl implements MarksService {
 		for (MarksRequestDto dto : requestDtos) {
 			check = true;
 			// Get entity
-			subject = subjectRepository.findByCode(dto.getSubjectCode()).orElse(null);
+			subject = subjectRepository.findByCodeAndStatusTrue(dto.getSubjectCode()).orElse(null);
 			if (subject == null) {
 				subjectCodes.add(dto.getSubjectCode());
 				check = false;
@@ -134,7 +134,7 @@ public class MarksServiceImpl implements MarksService {
 				marks.setTeacher(teacher);
 				marks.setStudent(student);
 				// Set pass
-				if(marks.getFinalMarks() >= subject.getPassMarks()) {
+				if (marks.getFinalMarks() >= subject.getPassMarks()) {
 					marks.setPass(true);
 				}
 				// Set exam times
@@ -162,6 +162,4 @@ public class MarksServiceImpl implements MarksService {
 		marksRepository.saveAll(marksList);
 		return marksList.size();
 	}
-
-
 }

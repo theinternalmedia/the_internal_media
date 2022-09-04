@@ -8,6 +8,6 @@ import com.tim.entity.Classz;
 
 public interface ClassRepository extends JpaRepository<com.tim.entity.Classz, Long> {
 
-	Optional<Classz> getByCode(String classCode);
+	Optional<Classz> getByCodeAndStatusTrue(String classCode);
 
 }

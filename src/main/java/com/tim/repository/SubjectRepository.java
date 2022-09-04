@@ -11,6 +11,6 @@ public interface SubjectRepository extends JpaRepository<Subject, Long>, JpaSpec
 
 	boolean existsByCode(String code);
 
-	Optional<Subject> findByCode(String subjectCode);
+	Optional<Subject> findByCodeAndStatusTrue(String subjectCode);
 
 }

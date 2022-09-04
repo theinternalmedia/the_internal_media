@@ -24,6 +24,7 @@ import com.tim.data.ETimRoles;
 import com.tim.data.SearchOperation;
 import com.tim.data.TimConstants;
 import com.tim.dto.PagingResponseDto;
+import com.tim.dto.PasswordDto;
 import com.tim.dto.specification.SearchCriteria;
 import com.tim.dto.specification.TimSpecification;
 import com.tim.dto.teacher.TeacherDto;
@@ -82,7 +83,7 @@ public class TeacherServiceImpl implements TeacherService {
 		Teacher entity = teacherConverter.toEntity(requestDto);
 		
 		// Mapping Faculty
-		Faculty faculty = facultyRepository.getByCode(requestDto.getFacultyCode()).orElseThrow(
+		Faculty faculty = facultyRepository.findByCodeAndStatusTrue(requestDto.getFacultyCode()).orElseThrow(
 				() -> new TimNotFoundException("Khoa", "Mã Khoa", requestDto.getFacultyCode()));
 		entity.setFaculty(faculty);
 		
@@ -119,7 +120,7 @@ public class TeacherServiceImpl implements TeacherService {
 		Set<String> emailSet = new HashSet<String>();
 		dtoList.forEach(item -> {
 			Teacher entity = teacherConverter.toEntity(item);
-			Faculty faculty = facultyRepository.getByCode(item.getFacultyCode()).orElseThrow(
+			Faculty faculty = facultyRepository.findByCodeAndStatusTrue(item.getFacultyCode()).orElseThrow(
 					() -> new TimNotFoundException("Khoa", "Mã Khoa", item.getFacultyCode()));
 			entity.setFaculty(faculty);
 			entity.setPassword(encoder.encode(entity.getPassword()));
@@ -211,9 +212,10 @@ public class TeacherServiceImpl implements TeacherService {
 	}
 
 	@Override
-	public TeacherDto findByUserId(String userId) {
-		// TODO Auto-generated method stub
-		return null;
+	public TeacherDto getByUserId(String userId) {
+		Teacher teacher = teacherRepository.findByUserId(userId).orElseThrow(
+				() -> new TimNotFoundException(TEACHER, "Mã GV", userId));
+		return teacherConverter.toDto(teacher);
 	}
 
 	@Override
@@ -246,7 +248,7 @@ public class TeacherServiceImpl implements TeacherService {
 		entity = teacherConverter.toEntity(requestDto, entity);		
 		
 		// Mapping Faculty
-		Faculty faculty = facultyRepository.getByCode(requestDto.getFacultyCode()).orElseThrow(
+		Faculty faculty = facultyRepository.findByCodeAndStatusTrue(requestDto.getFacultyCode()).orElseThrow(
 				() -> new TimNotFoundException("Khoa", "Mã Khoa", requestDto.getFacultyCode()));
 		entity.setFaculty(faculty);
 		
@@ -267,12 +269,34 @@ public class TeacherServiceImpl implements TeacherService {
 	}
 
 	@Override
-	public Long toggleStatus(Long id) {
-		Teacher teacher = teacherRepository.findById(id).orElseThrow(
-				() -> new TimNotFoundException(TEACHER, "ID", id.toString()));
-		teacher.setStatus(!teacher.getStatus());
+	public long toggleStatus(Set<Long> ids) {
+    	List<Teacher> teachers = new ArrayList<>();
+    	Teacher teacher;
+		for (Long id : ids) {
+			teacher = teacherRepository.findById(id).orElseThrow(
+					() -> new TimNotFoundException(TEACHER, "ID", id.toString()));
+			teacher.setStatus(!teacher.getStatus());
+			teachers.add(teacher);
+		}
+		teacherRepository.saveAll(teachers);
+		return ids.size();
+	}
+
+	@Override
+	@Transactional
+	public void updatePassword(PasswordDto passwordDto) {
+		// Validate input
+		ValidationUtils.validateObject(passwordDto);
+		
+		String userId = PrincipalUtils.getAuthenticatedUsersUserId();
+		Teacher teacher = teacherRepository.getByUserId(userId).orElseThrow(
+				() -> new TimNotFoundException(TEACHER, "Mã GV", "userId"));
+		
+		if (!encoder.matches(passwordDto.getOldPassword(), teacher.getPassword())) {
+			throw new TimException(ETimMessages.PASSWORD_NOT_MATCH);
+		}
+		teacher.setPassword(encoder.encode( passwordDto.getNewPassword()));
 		teacherRepository.save(teacher);
-		return id;
 	}
 
 }
