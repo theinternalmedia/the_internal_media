@@ -32,16 +32,6 @@ public class EducationProgramRequestDto implements Serializable{
 	@NotBlank
 	private String name;
 	
-	/*
-	 * @NotBlank private String semester;
-	 * 
-	 * private String note;
-	 */
-	
-	/*
-	 * @NotEmpty private List<String> subjectCodes = new ArrayList<>();
-	 */
-	
 	@NotNull
 	private String schoolYearCode;
 	

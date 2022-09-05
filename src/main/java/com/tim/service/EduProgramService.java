@@ -30,7 +30,13 @@ public interface EduProgramService {
 	 */
 	EducationProgramDto update(EducationProgramUpdateDto education, MultipartFile file);
 	
-	EducationProgramDto getByCode(String code);
+	/**
+	 * 
+	 * @author thinh
+	 * @param id
+	 * @return EducationProgramDto
+	 */
+	EducationProgramDto getOne(Long id);
 	
 	Long toggleStatus(Long id);
 	

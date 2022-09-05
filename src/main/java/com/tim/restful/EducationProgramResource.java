@@ -1,6 +1,7 @@
 package com.tim.restful;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -39,6 +40,11 @@ public class EducationProgramResource {
 		EducationProgramUpdateDto updateDto = Utility.convertStringJsonToObject(eduProgramUpdateJson, 
 				new TypeReference<EducationProgramUpdateDto>() {});
 		return eduProgramService.update(updateDto, file);
+	}
+	
+	@GetMapping(value = TimApiPath.EducationProgram.GET)
+	public EducationProgramDto getById(@PathVariable("id") Long id) {
+		return eduProgramService.getOne(id);
 	}
 	
 	@PutMapping(value = TimApiPath.EducationProgram.TOGGLE_STATUS)

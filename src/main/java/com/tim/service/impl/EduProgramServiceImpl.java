@@ -79,7 +79,7 @@ public class EduProgramServiceImpl implements EduProgramService {
 		Set<EducationProgramSubject> eduProgramSubjects = getEduProgramSubjects(
 															eduProgramSubjectDtos, eduProgram);
 		
-		eduProgram.setEducationProgramSubjects(eduProgramSubjects);
+//		eduProgram.setEducationProgramSubjects(eduProgramSubjects);
 		
 		EducationProgramDto dto = eduProgramConverter.toDto(eduProgramRepository.save(eduProgram));
 		eduProgramSubjectRepository.saveAll(eduProgramSubjects);
@@ -100,17 +100,18 @@ public class EduProgramServiceImpl implements EduProgramService {
 		//update new Subject of eduProgram(update middle table)
 		Set<EducationProgramSubject> eduProgramSubjects = new HashSet<>();
 		if (file != null) {
-			List<EducationProgramSubjectDto> eduProgramSubjectDtos = excelService.getListObjectFromExcelFile(
-					file,EducationProgramSubjectDto.class);
+			List<EducationProgramSubjectDto> eduProgramSubjectDtos = 
+					excelService.getListObjectFromExcelFile(file,EducationProgramSubjectDto.class);
 			ValidationUtils.validateObject(eduProgramSubjectDtos);
 			
 			//delete all old eduProgramSubjects relevant to new update
-			List<EducationProgramSubject> oldEduProgramSubjects = eduProgramSubjectRepository
-					.findBySemesterAndEducationProgram_Id(updateDto.getSemester(), eduProgramId);			
+			List<EducationProgramSubject> oldEduProgramSubjects = 
+					eduProgramSubjectRepository.findByEducationProgram_Id(eduProgramId);			
 			eduProgramSubjectRepository.deleteAll(oldEduProgramSubjects);
+			eduProgramSubjectRepository.flush();
 			
 			eduProgramSubjects = getEduProgramSubjects(eduProgramSubjectDtos, newEduProgram);
-			newEduProgram.setEducationProgramSubjects(eduProgramSubjects);
+//			newEduProgram.setEducationProgramSubjects(eduProgramSubjects);
 		}
 		EducationProgramDto dto = eduProgramConverter.toDto(eduProgramRepository.save(newEduProgram));
 		if (file != null) {
@@ -121,9 +122,10 @@ public class EduProgramServiceImpl implements EduProgramService {
 
 
 	@Override
-	public EducationProgramDto getByCode(String code) {
-		// TODO Auto-generated method stub
-		return null;
+	public EducationProgramDto getOne(Long id) {
+		EducationProgram eduProgram = eduProgramRepository.findByIdAndStatusTrue(id).orElseThrow(
+				() -> new TimNotFoundException(EDUCATION_PROGRAM, "ID", String.valueOf(id)));
+		return eduProgramConverter.toDto(eduProgram);
 	}
 
 	@Override
@@ -155,16 +157,18 @@ public class EduProgramServiceImpl implements EduProgramService {
 	}
 	
 	private Set<EducationProgramSubject> getEduProgramSubjects(
-					List<EducationProgramSubjectDto> eduProgramSubjectDtos,EducationProgram eduProgram) {
+											List<EducationProgramSubjectDto> eduProgramSubjectDtos,
+											EducationProgram eduProgram) {
 		Set<EducationProgramSubject> eduProgramSubjects = new HashSet<>();
-		for(EducationProgramSubjectDto dto : eduProgramSubjectDtos) {
-			Subject subject = subjectRepository.getByCode(dto.getSubjectCode()).orElseThrow(
-					() -> new TimNotFoundException(SUBJECT, "Mã môn học", dto.getSubjectCode()));
-			
+		for (EducationProgramSubjectDto dto : eduProgramSubjectDtos) {
+			Subject subject = subjectRepository.getByCode(dto.getSubjectCode())
+					.orElseThrow(() -> new TimNotFoundException(SUBJECT, "Mã môn học", dto.getSubjectCode()));
+
 			EducationProgramSubject eduProgramSubject = eduProgramSubjectConverter.toEntity(dto);
+			System.out.println(eduProgramSubject.getSemester());
 			eduProgramSubject.setSubject(subject);
 			eduProgramSubject.setEducationProgram(eduProgram);
-			
+
 			eduProgramSubjects.add(eduProgramSubject);
 		}
 		return eduProgramSubjects;

@@ -1,10 +1,6 @@
 package com.tim.dto.educationprogram;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import lombok.AccessLevel;
@@ -28,9 +24,4 @@ public class EducationProgramUpdateDto extends EducationProgramRequestDto{
 	@Min(value = 1)
 	private Long id;
 	
-	@NotNull
-	private String semester;
-	
-	@NotEmpty
-	List<String> subjectCode = new ArrayList<>();
 }

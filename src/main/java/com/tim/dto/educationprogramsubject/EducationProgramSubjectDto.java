@@ -17,7 +17,7 @@ public class EducationProgramSubjectDto extends BaseDto{
 	 * 
 	 */
 	@Getter(value = AccessLevel.NONE)
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -6023941757152340157L;
 	
 
 	private String note;

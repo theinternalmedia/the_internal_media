@@ -3,6 +3,7 @@ package com.tim.converter;
 import org.springframework.stereotype.Component;
 
 import com.tim.dto.educationprogramsubject.EducationProgramSubjectDto;
+import com.tim.dto.educationprogramsubject.EducationProgramSubjectUpdateDto;
 import com.tim.entity.EducationProgramSubject;
 
 
@@ -18,5 +19,11 @@ public class EducationProgramSubjectConverter
 	@Override
 	public EducationProgramSubjectDto toDto(EducationProgramSubject entity) {
 		return this.modelMapper.map(entity, EducationProgramSubjectDto.class);
+	}
+	
+	public EducationProgramSubject toEntity(EducationProgramSubjectUpdateDto updateDto, EducationProgramSubject entity) {
+		entity.setNote(updateDto.getNote());
+		entity.setSemester(updateDto.getSemester());
+		return entity;
 	}
 }

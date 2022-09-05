@@ -55,5 +55,4 @@ public class StudentResource {
 		return studentService.toggleStatus(id);
 	}
 	
-	
 }

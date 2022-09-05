@@ -9,6 +9,7 @@ import com.tim.dto.PasswordDto;
 import com.tim.dto.student.StudentDto;
 import com.tim.dto.student.StudentRequestDto;
 import com.tim.dto.student.StudentUpdateRequestDto;
+import com.tim.dto.student.StudentUpdateStudentDto;
 import com.tim.entity.Student;
 
 public interface StudentService {
@@ -21,6 +22,8 @@ public interface StudentService {
     void create(MultipartFile file);
     
     StudentDto update(StudentUpdateRequestDto requestDto);
+    
+    StudentDto studentUpdateHisSelf(StudentUpdateStudentDto updateDto);
     
     /**
 	 * @author minhtuanitk43

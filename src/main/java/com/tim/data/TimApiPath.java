@@ -112,10 +112,17 @@ public final class TimApiPath {
 	
 	public static class EducationProgram{
 		private static final String PREFIX_V1 = VER_V1 + "/education-program";
+		public static final String GET = PREFIX_V1;
 		public static final String CREATE = PREFIX_V1;
 		public static final String UPDATE = PREFIX_V1;
 		public static final String TOGGLE_STATUS = PREFIX_V1 + TOGGLE_STATUS_ + PATH_VARIABLE_ID;
 		public static final String UPLOAD_EXCEL = PREFIX_V1 + UPLOAD_EXCEL_;
 		
+	}
+	
+	public static class EducationProgramSubject{
+		private static final String PREFIX_V1 = VER_V1 + "/education-program-subject";
+		public static final String GET = PREFIX_V1;
+		public static final String UPDATE = PREFIX_V1;
 	}
 }

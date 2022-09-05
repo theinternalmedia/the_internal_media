@@ -30,6 +30,7 @@ import com.tim.dto.specification.TimSpecification;
 import com.tim.dto.teacher.TeacherDto;
 import com.tim.dto.teacher.TeacherRequestDto;
 import com.tim.dto.teacher.TeacherUpdateRequestDto;
+import com.tim.dto.teacher.TeacherUpdateTeacherDto;
 import com.tim.entity.Faculty;
 import com.tim.entity.Role;
 import com.tim.entity.Teacher;
@@ -230,14 +231,14 @@ public class TeacherServiceImpl implements TeacherService {
 		if (!entity.getUserId().equals(requestDto.getUserId())) {
 			if(teacherRepository.existsByUserId(requestDto.getUserId())) {
 				throw new TimException(
-						ETimMessages.ALREADY_EXISTS, "Mã SV", requestDto.getUserId());
+						ETimMessages.ALREADY_EXISTS, "Mã GV", requestDto.getUserId());
 			}
 		}
 		
-		// Check exists Email
+		// Check exists Email if change email
 		if (StringUtils.isNotBlank(requestDto.getEmail())
 				&& !entity.getEmail().equals(requestDto.getEmail())) {
-			if (teacherRepository.existsByEmail(requestDto.getUserId())) {
+			if (teacherRepository.existsByEmail(requestDto.getEmail())) {
 				throw new TimException(
 						ETimMessages.ALREADY_EXISTS, "Email", requestDto.getEmail());
 			}
@@ -290,6 +291,28 @@ public class TeacherServiceImpl implements TeacherService {
 		}
 		teacher.setPassword(encoder.encode( passwordDto.getNewPassword()));
 		teacherRepository.save(teacher);
+	}
+
+	@Override
+	@Transactional
+	public TeacherDto teacherUpdateProfileHisSelf(TeacherUpdateTeacherDto updateDto) {
+		ValidationUtils.validateObject(updateDto);
+		
+		Long id = updateDto.getId();
+		Teacher teacher = teacherRepository.findById(id).orElseThrow(
+				() -> new TimNotFoundException(TEACHER, "ID", String.valueOf(id)));
+
+		// Check exists Email if change email
+		String newEmail = updateDto.getEmail();
+		if (StringUtils.isNotBlank(newEmail)
+				&& !teacher.getEmail().equals(newEmail)) {
+			if (teacherRepository.existsByEmail(newEmail)) {
+				throw new TimException(
+						ETimMessages.ALREADY_EXISTS, "Email", newEmail);
+			}
+		}
+		teacher = teacherConverter.toEntity(updateDto, teacher);
+		return teacherConverter.toDto(teacherRepository.save(teacher));
 	}
 
 }
