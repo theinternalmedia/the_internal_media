@@ -1,28 +1,27 @@
 package com.tim.dto.educationprogram;
 
+import java.io.Serializable;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import com.tim.annotation.Code;
-import com.tim.dto.BaseDto;
 
 import lombok.AccessLevel;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
-/**
- * 
- * @appName the_internal_media
- *
- */
+
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class EducationProgramDto extends BaseDto {
+public class EducationProgramRequestDto implements Serializable{
 
+	/**
+	 * 
+	 */
 	@Getter(value = AccessLevel.NONE)
-	private static final long serialVersionUID = -2167333247842473644L;
+	private static final long serialVersionUID = 1L;
 
+	
 	@Size(max = 20, min = 5)
 	@NotBlank
 	@Code
@@ -32,4 +31,9 @@ public class EducationProgramDto extends BaseDto {
 	@NotBlank
 	private String name;
 	
+	@NotBlank
+	private String schoolYearCode;
+	
+	@NotBlank
+	private String facultyCode;
 }

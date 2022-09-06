@@ -134,6 +134,8 @@ public final class TimApiPath {
 
 	public static class EducationProgram {
 		private static final String PREFIX_V1 = VER_V1 + "/education-program";
+		public static final String GET_BY_CODE = PREFIX_V1;
+		public static final String GET_SUBJECT_LIST = PREFIX_V1 + "/subjects";
 		public static final String CREATE = PREFIX_V1;
 		public static final String UPDATE = PREFIX_V1;
 		public static final String TOGGLE_STATUS = PREFIX_V1 + TOGGLE_STATUS_;

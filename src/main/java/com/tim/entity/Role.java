@@ -21,7 +21,7 @@ import lombok.EqualsAndHashCode;
  * @appName the_internal_media
  *
  */
-@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(callSuper = true, of = "code")
 @Entity
 @Table(name = "roles")
 public class Role extends BaseEntity {

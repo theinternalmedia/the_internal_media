@@ -6,9 +6,11 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.tim.dto.UserUpdateRequestDto;
+import com.tim.dto.UserUpdateProfileDto;
 import com.tim.dto.student.StudentDto;
 import com.tim.dto.student.StudentRequestDto;
 import com.tim.dto.student.StudentUpdateRequestDto;
+import com.tim.dto.student.StudentUpdateProfileDto;
 import com.tim.entity.Student;
 
 /**
@@ -56,6 +58,20 @@ public class StudentConverter extends AbstractConverter<StudentDto, Student> {
 		student.setPhone(requestDto.getPhone());
 		student.setUserId(requestDto.getUserId());
 		return student;
+	}
+	
+	public StudentUpdateProfileDto toDto(UserUpdateProfileDto userDto) {
+		return this.modelMapper.map(userDto, StudentUpdateProfileDto.class);
+	}
+	
+	public Student toEntity(StudentUpdateProfileDto dto, Student entity) {
+		entity.setEmail(dto.getEmail());
+		entity.setAddress(dto.getAddress());
+		entity.setPhone(dto.getPhone());
+		entity.setDob(dto.getDob());
+		entity.setGender(dto.setGender());
+		
+		return entity;
 	}
 
 }

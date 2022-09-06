@@ -1,34 +1,36 @@
 package com.tim.entity;
 
-import java.io.Serializable;
-
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
 
+import lombok.AccessLevel;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 /**
  * 
  * @appName the_internal_media
  *
  */
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true, of = {"educationProgram", "subject"})
 @Entity
 @Table(name = "educationProgram_subject", uniqueConstraints = 
 	@UniqueConstraint(columnNames = {"educationProgram_id", "subject_id"}))
-public class EducationProgramSubject implements Serializable{
+@Data
+public class EducationProgramSubject extends BaseEntity{
 
+	@Getter	(value = AccessLevel.NONE)
 	private static final long serialVersionUID = 6632393641477103818L;
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	
+	@NotNull
+	private String semester;
+	
+	private String note;
 	
 	@ManyToOne
 	@JoinColumn(name = "educationProgram_id")

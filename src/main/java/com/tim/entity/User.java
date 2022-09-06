@@ -17,7 +17,7 @@ import lombok.EqualsAndHashCode;
  * @appName the_internal_media
  *
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, of = {"userId", "email"})
 @MappedSuperclass
 public abstract class User extends BaseEntity {
 

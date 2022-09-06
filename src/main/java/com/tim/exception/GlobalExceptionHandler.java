@@ -60,6 +60,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ErrorResponse> validateionException(Exception ex) {
 		logger.error(ex.getMessage());
+		ex.printStackTrace();
 		ErrorResponse errorResponse = new ErrorResponse(
 				MessageUtils.get(ETimMessages.INTERNAL_SYSTEM_ERROR), null);
 		return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);

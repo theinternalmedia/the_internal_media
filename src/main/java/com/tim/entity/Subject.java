@@ -16,7 +16,7 @@ import com.tim.annotation.Code;
 
 import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(callSuper = true, of = "code")
 @Entity
 @Table(name = "subject")
 public class Subject extends BaseEntity {

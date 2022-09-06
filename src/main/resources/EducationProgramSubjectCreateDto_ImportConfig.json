@@ -1,0 +1,23 @@
+[
+	{
+		"excelHeader": "Mã môn học",
+		"excelIndex": 1,
+		"excelColType": "String",
+		"excelValue": null,
+		"pojoAttribute": "subjectCode"
+	},
+	{
+		"excelHeader": "Học kỳ",
+		"excelIndex": 3,
+		"excelColType": "String",
+		"excelValue": null,
+		"pojoAttribute": "semester"
+	},
+	{
+		"excelHeader": "Ghi chú",
+		"excelIndex": 4,
+		"excelColType": "String",
+		"excelValue": null,
+		"pojoAttribute": "note"
+	}
+]

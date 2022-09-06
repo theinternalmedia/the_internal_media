@@ -20,5 +20,10 @@
 	"SubjectRequestDto": "Môn Học",
 	"SubjectUpdateRequestDto": "Môn Học",
 	"MarksRequestDto": "Điểm Tổng Kết",
-	"PasswordDto": "Mật khẩu"
+	"PasswordDto": "Mật khẩu",
+	"EducationProgramRequestDto": "Chương trình giảng dạy",
+	"EducationProgramUpdateDto": "Chương trình giảng dạy",
+	"UserUpdateProfileDto" : "Thông tin",
+	"StudentUpdateProfileDto": "Thông tin",
+	"TeacherUpdateProfileDto": "Thông tin"
 }

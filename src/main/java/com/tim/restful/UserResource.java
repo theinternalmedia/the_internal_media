@@ -15,7 +15,7 @@ import com.tim.converter.TeacherConverter;
 import com.tim.data.TimApiPath;
 import com.tim.data.TimConstants;
 import com.tim.dto.PasswordDto;
-import com.tim.dto.UserUpdateRequestDto;
+import com.tim.dto.UserUpdateProfileDto;
 import com.tim.service.StudentService;
 import com.tim.service.TeacherService;
 import com.tim.utils.PrincipalUtils;
@@ -46,15 +46,14 @@ public class UserResource {
 	}
 
 	@PutMapping(TimApiPath.User.UPDATE_USER)
-	public ResponseEntity<?> updateProfile(@RequestBody UserUpdateRequestDto userDto) {
-		// Guaranteed student, teacher can't change UserId
-		String UserId = PrincipalUtils.getAuthenticatedUsersUserId();
-		userDto.setUserId(UserId);
 
-		if (PrincipalUtils.authenticatedUserIsTeacher()) {
-			return ResponseEntity.ok(teacherService.update(teacherConverter.toDto(userDto)));
-		} else {
-			return ResponseEntity.ok(studentService.update(studentConverter.toDto(userDto)));
+	public ResponseEntity<?> updateProfile(@RequestBody UserUpdateProfileDto userDto) {
+		if(PrincipalUtils.authenticatedUserIsTeacher()) {
+			return ResponseEntity.ok(teacherService
+						.updateProfile(teacherConverter.toDto(userDto)));
+		}else {
+			return ResponseEntity.ok(studentService
+						.updateProfile(studentConverter.toDto(userDto)));
 		}
 	}
 

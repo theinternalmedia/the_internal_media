@@ -30,6 +30,7 @@ import com.tim.dto.specification.TimSpecification;
 import com.tim.dto.teacher.TeacherDto;
 import com.tim.dto.teacher.TeacherRequestDto;
 import com.tim.dto.teacher.TeacherUpdateRequestDto;
+import com.tim.dto.teacher.TeacherUpdateProfileDto;
 import com.tim.entity.Faculty;
 import com.tim.entity.Role;
 import com.tim.entity.Teacher;
@@ -228,19 +229,21 @@ public class TeacherServiceImpl implements TeacherService {
 				() -> new TimNotFoundException(TEACHER, "ID", requestDto.getId().toString()));
 		
 		// Check exists UserId and not equals old entity
-		if (!entity.getUserId().equals(requestDto.getUserId())) {
-			if(teacherRepository.existsByUserId(requestDto.getUserId())) {
+		String newUserId = requestDto.getUserId();
+		if (!entity.getUserId().equals(newUserId)) {
+			if(teacherRepository.existsByUserId(newUserId)) {
 				throw new TimException(
-						ETimMessages.ALREADY_EXISTS, "Mã SV", requestDto.getUserId());
+						ETimMessages.ALREADY_EXISTS, "Mã GV", newUserId);
 			}
 		}
 		
-		// Check exists Email
-		if (StringUtils.isNotBlank(requestDto.getEmail())
-				&& !entity.getEmail().equals(requestDto.getEmail())) {
-			if (teacherRepository.existsByEmail(requestDto.getUserId())) {
+		// Check exists Email if change email
+		String newEmail = requestDto.getEmail();
+		if (StringUtils.isNotBlank(newEmail)
+				&& !entity.getEmail().equals(newEmail)) {
+			if (teacherRepository.existsByEmail(newEmail)) {
 				throw new TimException(
-						ETimMessages.ALREADY_EXISTS, "Email", requestDto.getEmail());
+						ETimMessages.ALREADY_EXISTS, "Email", newEmail);
 			}
 		}
 		
@@ -292,11 +295,35 @@ public class TeacherServiceImpl implements TeacherService {
 		Teacher teacher = teacherRepository.getByUserId(userId).orElseThrow(
 				() -> new TimNotFoundException(TEACHER, "Mã GV", "userId"));
 		
+		// Confirm password is matches
 		if (!encoder.matches(passwordDto.getOldPassword(), teacher.getPassword())) {
 			throw new TimException(ETimMessages.PASSWORD_NOT_MATCH);
 		}
-		teacher.setPassword(encoder.encode( passwordDto.getNewPassword()));
+		teacher.setPassword(encoder.encode(passwordDto.getNewPassword()));
 		teacherRepository.save(teacher);
+	}
+
+	@Override
+	@Transactional
+	public TeacherDto updateProfile(TeacherUpdateProfileDto updateDto) {
+		// Validate input
+		ValidationUtils.validateObject(updateDto);
+		
+		Long id = updateDto.getId();
+		Teacher teacher = teacherRepository.findById(id).orElseThrow(
+				() -> new TimNotFoundException(TEACHER, "ID", String.valueOf(id)));
+
+		// Check exists Email if change email
+		String newEmail = updateDto.getEmail();
+		if (StringUtils.isNotBlank(newEmail)
+				&& !teacher.getEmail().equals(newEmail)) {
+			if (teacherRepository.existsByEmail(newEmail)) {
+				throw new TimException(
+						ETimMessages.ALREADY_EXISTS, "Email", newEmail);
+			}
+		}
+		teacher = teacherConverter.toEntity(updateDto, teacher);
+		return teacherConverter.toDto(teacherRepository.save(teacher));
 	}
 
 }

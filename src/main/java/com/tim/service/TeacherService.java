@@ -9,6 +9,7 @@ import com.tim.dto.PasswordDto;
 import com.tim.dto.teacher.TeacherDto;
 import com.tim.dto.teacher.TeacherRequestDto;
 import com.tim.dto.teacher.TeacherUpdateRequestDto;
+import com.tim.dto.teacher.TeacherUpdateProfileDto;
 
 public interface TeacherService {
 	/**
@@ -59,6 +60,8 @@ public interface TeacherService {
 	 * @return TeacherDto
 	 */
 	TeacherDto update(TeacherUpdateRequestDto requestDto);
+	
+	TeacherDto updateProfile(TeacherUpdateProfileDto updateDto);
 
 	long toggleStatus(Set<Long> ids);
 

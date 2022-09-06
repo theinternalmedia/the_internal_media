@@ -3,8 +3,6 @@ package com.tim.restful;
 import java.util.List;
 import java.util.Set;
 
-import javax.websocket.server.PathParam;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,7 +38,7 @@ public class NotificationGroupResource {
 	}
 
 	@GetMapping(TimApiPath.NotificationGroup.GET_BY_CODE)
-	public NotificationGroupDto getOne(@PathParam("code") String code) {
+	public NotificationGroupDto getOne(@RequestParam("code") String code) {
 		return notificationGroupService.getOne(code);
 	}
 

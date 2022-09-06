@@ -135,5 +135,27 @@
 	"PasswordDto": {
 		"oldPassword": "Mật khẩu cũ",
 		"newPassword": "Mật khẩu mới"
+	},
+	"EducationProgramSubjectCreateDto": {
+		"note": "Ghi chú",
+		"semester": "Học kỳ",
+		"subjectCode": "Mã môn học"
+	},
+	"UserUpdateProfileDto": {
+		"name": "Họ tên",
+		"email": "Email",
+		"gender": "Giới  tính",
+		"address": "Địa chỉ",
+		"phone": "Điện thoại",
+		"dob": "Ngày sinh",
+		"id": "ID"
+	},
+	"StudentUpdateProfileDto": {},
+	"TeacherUpdateProfileDto": {},
+	"EducationProgramRequestDto": {
+		"code": "Mã chương trình giảng dạy",
+		"name": "Tên chương trình giảng dạy",
+		"schoolYearCode": "Mã khóa học",
+		"facultyCode": "Mã Khoa"
 	}
 }
