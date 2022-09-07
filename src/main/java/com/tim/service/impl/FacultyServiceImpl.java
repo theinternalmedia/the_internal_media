@@ -10,12 +10,14 @@ import org.springframework.stereotype.Service;
 
 import com.tim.converter.FacultyConverter;
 import com.tim.dto.faculty.FacultyDto;
+import com.tim.dto.faculty.FacultyRequestDto;
 import com.tim.entity.Faculty;
 import com.tim.entity.Teacher;
 import com.tim.exception.TimNotFoundException;
 import com.tim.repository.FacultyRepository;
 import com.tim.repository.TeacherRepository;
 import com.tim.service.FacultyService;
+import com.tim.utils.ValidationUtils;
 
 @Service
 public class FacultyServiceImpl implements FacultyService {
@@ -28,7 +30,10 @@ public class FacultyServiceImpl implements FacultyService {
 	private TeacherRepository teacherRepository;
 
 	@Override
-	public FacultyDto create(FacultyDto dto) {
+	public FacultyDto create(FacultyRequestDto dto) {
+		// Validate input
+		ValidationUtils.validateObject(dto);
+		
 		Faculty entity = facultyConverter.toEntity(dto);
 		if (StringUtils.isNotBlank(dto.getHeadOfFacultyUserId())) {
 			Teacher teacher = teacherRepository.getByUserId(dto.getHeadOfFacultyUserId()).orElseThrow(

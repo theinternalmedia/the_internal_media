@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tim.data.TimApiPath;
 import com.tim.dto.faculty.FacultyDto;
+import com.tim.dto.faculty.FacultyRequestDto;
 import com.tim.service.FacultyService;
 
 
@@ -22,7 +23,7 @@ public class FacultyResource {
 	private FacultyService facultyService;
 	
 	@PostMapping(TimApiPath.Faculty.CREATE)
-	public FacultyDto create(@RequestBody FacultyDto facultyDto) {
+	public FacultyDto create(@RequestBody FacultyRequestDto facultyDto) {
 		return facultyService.create(facultyDto);
 	}
 	

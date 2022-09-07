@@ -157,5 +157,10 @@
 		"name": "Tên chương trình giảng dạy",
 		"schoolYearCode": "Mã khóa học",
 		"facultyCode": "Mã Khoa"
+	},
+	"FacultyRequestDto": {
+		"code": "Mã khoa",
+		"name": "Tên khoa",
+		"headOfFacultyUserId": "Mã GV Trưởng Khoa"
 	}
 }
