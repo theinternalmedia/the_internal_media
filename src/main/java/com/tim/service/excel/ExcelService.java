@@ -55,7 +55,7 @@ public class ExcelService implements ExcelFileService {
 				t = clazz.getConstructor().newInstance();
 			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
 					| InvocationTargetException | NoSuchMethodException | SecurityException e1) {
-				e1.printStackTrace();
+				logger.error(e1.getMessage(), e1);
 				throw new TimException(ETimMessages.INTERNAL_SYSTEM_ERROR);
 			}
 			Class<? extends Object> classz = t.getClass();
@@ -97,10 +97,22 @@ public class ExcelService implements ExcelFileService {
 							default:
 								break;
 							}
+						} catch (NullPointerException e) {
+							try {
+								field.set(t, null);
+							} catch (IllegalArgumentException e1) {
+								logger.error(e1.getMessage(), e1);
+								throw e;
+							} catch (IllegalAccessException e1) {
+								logger.error(e1.getMessage(), e1);
+								throw e;
+							}
 						} catch (IllegalArgumentException | IllegalAccessException e) {
 							logger.error(e.getMessage(), e);
+							errs.add(exf[i].getCellAddress() + ": " + validateMsg);
 						} catch (Exception e) {
 							logger.error(e.getMessage(), e);
+							throw new TimException(ETimMessages.INTERNAL_SYSTEM_ERROR);
 						}
 						break;
 					}

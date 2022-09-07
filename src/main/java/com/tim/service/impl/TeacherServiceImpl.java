@@ -1,6 +1,7 @@
 package com.tim.service.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -41,6 +42,7 @@ import com.tim.repository.RoleRepository;
 import com.tim.repository.TeacherRepository;
 import com.tim.service.TeacherService;
 import com.tim.service.excel.ExcelService;
+import com.tim.utils.MessageUtils;
 import com.tim.utils.PrincipalUtils;
 import com.tim.utils.UploadUtils;
 import com.tim.utils.ValidationUtils;
@@ -112,14 +114,15 @@ public class TeacherServiceImpl implements TeacherService {
 	@Transactional
 	public long create(MultipartFile file) {
 		// Get dto list from excel file
-		List<TeacherDto> dtoList = excelService.getListObjectFromExcelFile(file, TeacherDto.class);
+		List<TeacherRequestDto> dtoList = excelService.getListObjectFromExcelFile(
+				file, TeacherRequestDto.class);
 		
 		List<Teacher> entityList = new ArrayList<Teacher>();
 		// UserID Set
 		Set<String> userIdSet = new HashSet<String>();
 		// Email Set
 		Set<String> emailSet = new HashSet<String>();
-		dtoList.forEach(item -> {
+		for (TeacherRequestDto item : dtoList) {
 			Teacher entity = teacherConverter.toEntity(item);
 			Faculty faculty = facultyRepository.findByCodeAndStatusTrue(item.getFacultyCode()).orElseThrow(
 					() -> new TimNotFoundException("Khoa", "Mã Khoa", item.getFacultyCode()));
@@ -133,7 +136,7 @@ public class TeacherServiceImpl implements TeacherService {
 			if (StringUtils.isNotBlank(entity.getEmail())) {
 				emailSet.add(entity.getEmail());
 			}
-		});
+		}
 		// Check exists UserId
 		List<Teacher> teacherLst = teacherRepository.findByUserIdIn(userIdSet);
 		userIdSet.clear();
@@ -141,8 +144,9 @@ public class TeacherServiceImpl implements TeacherService {
 			teacherLst.forEach(item -> {
 				userIdSet.add(item.getUserId());
 			});
-			throw new TimException(List.of(userIdSet.toString()), 
-					ETimMessages.ALREADY_EXISTS, "Mã GV", "[Chi tiết]");
+			throw new TimException(Arrays.asList(
+					MessageUtils.get(ETimMessages.ALREADY_EXISTS, "Mã GV", userIdSet.toString())), 
+					ETimMessages.INVALID_OBJECT_VALUE, "Danh Sách GV");
 		}
 		// Check exists Email
 		if (emailSet.size() > 0) {
@@ -151,8 +155,9 @@ public class TeacherServiceImpl implements TeacherService {
 				teacherLst.forEach(item -> {
 					emailSet.add(item.getEmail());
 				});
-				throw new TimException(List.of(emailSet.toString()), 
-						ETimMessages.ALREADY_EXISTS, "Email", "[Chi tiết]");
+				throw new TimException(Arrays.asList(
+						MessageUtils.get(ETimMessages.ALREADY_EXISTS, "Email", emailSet.toString())), 
+						ETimMessages.INVALID_OBJECT_VALUE, "Danh Sách Giảng Viên");
 			}
 		}
 		teacherRepository.saveAll(entityList);

@@ -1,6 +1,7 @@
 package com.tim.service.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -41,6 +42,7 @@ import com.tim.repository.RoleRepository;
 import com.tim.repository.StudentRepository;
 import com.tim.service.StudentService;
 import com.tim.service.excel.ExcelService;
+import com.tim.utils.MessageUtils;
 import com.tim.utils.PrincipalUtils;
 import com.tim.utils.UploadUtils;
 import com.tim.utils.ValidationUtils;
@@ -96,13 +98,14 @@ public class StudentServiceImpl implements StudentService {
 	@Transactional
 	@Override
 	public long create(MultipartFile file) {
-		List<StudentDto> dtoList = excelService.getListObjectFromExcelFile(file, StudentDto.class);
+		List<StudentRequestDto> dtoList = excelService.getListObjectFromExcelFile(
+				file, StudentRequestDto.class);
 		List<Student> entityList = new ArrayList<>();
 		// UserID Set
 		Set<String> userIdSet = new HashSet<String>();
 		// Email Set
 		Set<String> emailSet = new HashSet<String>();
-		for (StudentDto dto : dtoList) {
+		for (StudentRequestDto dto : dtoList) {
 			Student entity = studentConverter.toEntity(dto);
 			Classz classz = classRepository.getByCodeAndStatusTrue(dto.getClassCode())
 					.orElseThrow(() -> new TimNotFoundException(
@@ -125,8 +128,9 @@ public class StudentServiceImpl implements StudentService {
 			studentLst.forEach(item -> {
 				userIdSet.add(item.getUserId());
 			});
-			throw new TimException(List.of(userIdSet.toString()), 
-					ETimMessages.ALREADY_EXISTS, "Mã SV", "[Chi tiết]");
+			throw new TimException(Arrays.asList(
+					MessageUtils.get(ETimMessages.ALREADY_EXISTS, "Mã SV", userIdSet.toString())), 
+					ETimMessages.INVALID_OBJECT_VALUE, "Danh Sách Sinh Viên");
 		}
 		// Check exists Email
 		if (emailSet.size() > 0) {
@@ -135,8 +139,9 @@ public class StudentServiceImpl implements StudentService {
 				studentLst.forEach(item -> {
 					emailSet.add(item.getEmail());
 				});
-				throw new TimException(List.of(emailSet.toString()), 
-						ETimMessages.ALREADY_EXISTS, "Email", "[Chi tiết]");
+				throw new TimException(Arrays.asList(
+						MessageUtils.get(ETimMessages.ALREADY_EXISTS, "Email", emailSet.toString())), 
+						ETimMessages.INVALID_OBJECT_VALUE, "Danh Sách Sinh Viên");
 			}
 		}
 		studentRepository.saveAll(entityList);

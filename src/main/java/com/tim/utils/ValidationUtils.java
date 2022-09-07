@@ -85,7 +85,7 @@ public class ValidationUtils {
 			}
 			if(field.isAnnotationPresent(Password.class)) {
 				if (!String.valueOf(value).matches(TimConstants.REGEX_PASSWORD)) {
-					return "'" + fieldName + "' không đúng định dạng.";
+					return "'" + fieldName + "' chỉ bao gồm các chữ cái, số và các ký tự: !@#$%^&*.";
 				}
 			}
 			if (field.isAnnotationPresent(Email.class)) {

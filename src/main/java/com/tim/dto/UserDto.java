@@ -34,7 +34,6 @@ public class UserDto extends BaseDto {
 	@Size(max = 50, min = 4)
 	private String name;
 
-	@NotBlank
 	@Email
 	private String email;
 

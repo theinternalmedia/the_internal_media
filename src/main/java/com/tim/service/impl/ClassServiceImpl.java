@@ -41,20 +41,21 @@ public class ClassServiceImpl implements ClassService {
 	@Override
 	public ClassDto create(ClassRequestDto requestDto) {
 		Classz entity = classConverter.toEntity(requestDto);
-		if(StringUtils.isNotBlank(requestDto.getFacultyCode())) {
-			Faculty faculty = facultyRepository.findByCodeAndStatusTrue(requestDto.getFacultyCode())
-					.orElseThrow(() -> new TimNotFoundException(
-							"Khoa", "Mã Khoa", requestDto.getFacultyCode()));
-			entity.setFaculty(faculty);
-		}
-		if(StringUtils.isNotBlank(requestDto.getSchoolYearCode())) {
-			SchoolYear schoolYear = schoolYearRepository.findByCodeAndStatusTrue(
-					requestDto.getSchoolYearCode())
-					.orElseThrow(() -> new TimException(
-							ETimMessages.ENTITY_NOT_FOUND,"Khóa", "Mã Khóa", 
-							requestDto.getSchoolYearCode()));
-			entity.setSchoolYear(schoolYear);
-		}
+
+		// Mapping Faculty
+		Faculty faculty = facultyRepository.findByCodeAndStatusTrue(requestDto.getFacultyCode())
+				.orElseThrow(() -> new TimNotFoundException(
+						"Khoa", "Mã Khoa", requestDto.getFacultyCode()));
+		entity.setFaculty(faculty);
+		
+		// Mapping School Year
+		SchoolYear schoolYear = schoolYearRepository.findByCodeAndStatusTrue(
+				requestDto.getSchoolYearCode())
+				.orElseThrow(() -> new TimException(
+						ETimMessages.ENTITY_NOT_FOUND,"Khóa", "Mã Khóa", 
+						requestDto.getSchoolYearCode()));
+		entity.setSchoolYear(schoolYear);
+		
 		if(StringUtils.isNotBlank(requestDto.getAdvisorId())) {
 			Teacher teacher = teacherRepository.getByUserId(requestDto.getAdvisorId()).orElse(null);
 			if(teacher == null) {

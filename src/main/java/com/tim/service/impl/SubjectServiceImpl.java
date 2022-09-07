@@ -1,6 +1,7 @@
 package com.tim.service.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -20,6 +21,7 @@ import com.tim.exception.TimNotFoundException;
 import com.tim.repository.SubjectRepository;
 import com.tim.service.SubjectService;
 import com.tim.service.excel.ExcelService;
+import com.tim.utils.MessageUtils;
 import com.tim.utils.ValidationUtils;
 
 @Service
@@ -80,10 +82,10 @@ public class SubjectServiceImpl implements SubjectService{
 	public long create(MultipartFile file) {
 		List<SubjectRequestDto> requestDtos = excelService
 				.getListObjectFromExcelFile(file, SubjectRequestDto.class);
-		return create(requestDtos);
+		return saveListSubject(requestDtos);
 	}
 
-	private long create(List<SubjectRequestDto> requestDtos) {
+	private long saveListSubject(List<SubjectRequestDto> requestDtos) {
 		List<Subject> subjectList = new ArrayList<>();
 		Subject subject;
 		Set<String> subjectCodes = new HashSet<String>();
@@ -99,8 +101,10 @@ public class SubjectServiceImpl implements SubjectService{
 			}
 		}
 		if (subjectCodes.size() > 0) {
-			throw new TimException(List.of(subjectCodes.toString()), 
-					ETimMessages.ALREADY_EXISTS, "Mã Môn Học", "[Chi tiết]");
+			throw new TimException(Arrays.asList(
+					MessageUtils.get(ETimMessages.ALREADY_EXISTS, "Mã Môn Học", 
+							subjectCodes.toString())), 
+					ETimMessages.INVALID_OBJECT_VALUE, "Danh Sách Môn Học");
 		}
 		subjectRepository.saveAll(subjectList);
 		return subjectList.size();

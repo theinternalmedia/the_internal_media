@@ -2,12 +2,10 @@ package com.tim.service.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -80,7 +78,6 @@ public class EduProgramServiceImpl implements EduProgramService {
 			throw new TimException(ETimMessages.ALREADY_EXISTS, 
 					"Mã Chương Trình Giảng Dạy", education.getCode());
 		}
-		
 		// Check exists exists By SchoolYear And Faculty 
 		boolean check = eduProgramRepository.existsBySchoolYear_CodeAndFaculty_Code(
 				education.getSchoolYearCode(), education.getFacultyCode());
@@ -89,7 +86,6 @@ public class EduProgramServiceImpl implements EduProgramService {
 					EDUCATION_PROGRAM, FACULTY + "(" + education.getFacultyCode() + ") & " 
 							+ SCHOOL_YEAR + "(" + education.getSchoolYearCode() + ")");
 		}
-				
 		// Create eduProgram
 		EducationProgram eduProgram = eduProgramConverter.toEntity(education);
 		setReferenceEntity(eduProgram, education.getSchoolYearCode(), education.getFacultyCode());
@@ -113,7 +109,6 @@ public class EduProgramServiceImpl implements EduProgramService {
 		EducationProgram oldEduProgram = eduProgramRepository.findById(eduProgramId)
 				.orElseThrow(() -> new TimNotFoundException(EDUCATION_PROGRAM, 
 						"ID", eduProgramId.toString()));
-		
 		// Check unique code
 		if (!oldEduProgram.getCode().equals(updateDto.getCode())) {
 			if (eduProgramRepository.existsByCode(updateDto.getCode())) {
@@ -121,7 +116,6 @@ public class EduProgramServiceImpl implements EduProgramService {
 						"Mã Chương Trình Giảng Dạy", updateDto.getCode());
 			}
 		}
-		
 		// Check exists exists By SchoolYear And Faculty 
 		if (!oldEduProgram.getFaculty().getCode().equals(updateDto.getFacultyCode())
 				&& !oldEduProgram.getSchoolYear().getCode().equals(updateDto.getSchoolYearCode())) {
@@ -133,7 +127,6 @@ public class EduProgramServiceImpl implements EduProgramService {
 								+ SCHOOL_YEAR + "(" + updateDto.getSchoolYearCode() + ")");
 			}
 		}
-		
 		EducationProgram newEduProgram = eduProgramConverter.toEntity(updateDto, oldEduProgram);
 		setReferenceEntity(newEduProgram, updateDto.getSchoolYearCode(), updateDto.getFacultyCode());
 		
@@ -155,7 +148,6 @@ public class EduProgramServiceImpl implements EduProgramService {
 		return dto;
 	}
 
-
 	@Override
 	public EducationProgramDto getOne(String code) {
 		EducationProgram eduProgram = eduProgramRepository.findByCodeAndStatusTrue(code)
@@ -172,7 +164,6 @@ public class EduProgramServiceImpl implements EduProgramService {
 		eduProgramRepository.save(eduProgram);
 		return id;
 	}
-
 
 	@Override
 	public EducationProgramResponseDto getSubjectList(String code) {
@@ -191,8 +182,10 @@ public class EduProgramServiceImpl implements EduProgramService {
 		for (EducationProgramSubjectResponseDto item : eduSubjectDtos) {
 			totalCredits += item.getNumberOfCredits();
 		}
-		eduSubjectDtos.sort(Comparator.comparing(EducationProgramSubjectResponseDto::getSemester)
-				.thenComparing(Comparator.comparing(EducationProgramSubjectResponseDto::getNumberOfCredits)));
+		eduSubjectDtos.sort(Comparator.comparing(
+				EducationProgramSubjectResponseDto::getSemester)
+				.thenComparing(Comparator.comparing(
+						EducationProgramSubjectResponseDto::getNumberOfCredits)));
 		result.setEducationProgramSubjectDtos(eduSubjectDtos);
 		result.setTotalCredits(totalCredits);
 		return result;
@@ -207,14 +200,6 @@ public class EduProgramServiceImpl implements EduProgramService {
 		// set Faculty to entity
 		Faculty faculty = facultyRepository.findByCodeAndStatusTrue(facultyCode)
 				.orElseThrow(() -> new TimNotFoundException(FACULTY, "Mã khoa", facultyCode));
-		
-		// Check exists exists By SchoolYear And Faculty 
-//		boolean check = eduProgramRepository.existsBySchoolYear_CodeAndFaculty_Code(schoolYearCode, facultyCode);
-//		if (check) {
-//			throw new TimException(ETimMessages.ALREADY_EXISTS,
-//					EDUCATION_PROGRAM, FACULTY + "(" + facultyCode + ") & " 
-//							+ SCHOOL_YEAR + "(" + schoolYearCode + ")");
-//		}
 		entity.setFaculty(faculty);
 	}
 	

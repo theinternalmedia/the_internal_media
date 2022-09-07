@@ -18,7 +18,6 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -35,6 +34,7 @@ import com.tim.data.TimConstants;
 import com.tim.dto.excel.ExcelField;
 import com.tim.dto.student.StudentDto;
 import com.tim.dto.teacher.TeacherDto;
+import com.tim.exception.TimException;
 import com.tim.exception.ValidateException;
 import com.tim.utils.MessageUtils;
 import com.tim.utils.Utility;
@@ -110,11 +110,11 @@ public class ExcelHelper {
 				Cell cell = row.getCell(cellIndex);
 				
 				// If Cell's Value is null
-				if(cell == null) {
-					String colString = CellReference.convertNumToColString(cellIndex);
-					cellErrs.add(MessageUtils.get(ETimMessages.NULL_CELL_VALUE, colString + (i + 1)) );
-					continue;
-				}
+//				if(cell == null) {
+//					String colString = CellReference.convertNumToColString(cellIndex);
+//					cellErrs.add(MessageUtils.get(ETimMessages.NULL_CELL_VALUE, colString + (i + 1)) );
+//					continue;
+//				}
 
 				// 5.4 Create excelField
 				ExcelField excelField = new ExcelField();
@@ -122,7 +122,18 @@ public class ExcelHelper {
 				excelField.setExcelHeader(excelFieldTemp.getExcelHeader());
 				excelField.setExcelIndex(excelFieldTemp.getExcelIndex());
 				excelField.setPojoAttribute(excelFieldTemp.getPojoAttribute());
-				excelField.setCellAddress(cell.getAddress().toString());
+				
+				
+				// If Cell's Value is null
+				if(cell == null) {
+					String colString = CellReference.convertNumToColString(cellIndex);
+					excelField.setCellAddress(colString + (i + 1));
+					excelField.setExcelValue(null);
+					excelFieldArr[index++] = excelField;
+					continue;
+				}else {
+					excelField.setCellAddress(cell.getAddress().toString());
+				}
 
 				// 5.5 get value from Cell(5.3) and set to excelField(5.4)
 				try {
@@ -147,18 +158,11 @@ public class ExcelHelper {
 								TimConstants.Gender.FEMALE_STR, TimConstants.NO)) {
 							excelField.setExcelValue(TimConstants.FALSE_STR);
 						} else {
-							try {
-								excelField.setExcelValue(String.valueOf(cell.getBooleanCellValue()));
-							} catch (IllegalStateException e) {
-								// Throw Validation Exception
-								cellErrs.add(cell.getAddress().toString());
-							}
+							excelField.setExcelValue(String.valueOf(cell.getBooleanCellValue()));
 						}
 						break;
 					case TimConstants.FieldType.LOCAL_DATE:
-						if (DateUtil.isCellDateFormatted(cell)) {
-							excelField.setExcelValue(String.valueOf(dtf.format(cell.getDateCellValue())));
-						}
+						excelField.setExcelValue(String.valueOf(dtf.format(cell.getDateCellValue())));
 						break;
 					default:
 						break;
@@ -166,7 +170,12 @@ public class ExcelHelper {
 				} catch (IllegalStateException e) {
 					logger.error(e.getMessage(), e);
 					cellErrs.add(MessageUtils.get(ETimMessages.INVALID_CELL_VALUE, cell.getAddress().toString()));
-					continue;
+				} catch (NullPointerException e) {
+					logger.error(e.getMessage(), e);
+					excelField.setExcelValue(null);
+				} catch (Exception e) {
+					logger.error(e.getMessage(), e);
+					throw new TimException(ETimMessages.INTERNAL_SYSTEM_ERROR);
 				}
 				excelFieldArr[index++] = excelField;
 			}
