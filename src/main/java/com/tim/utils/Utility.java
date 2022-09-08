@@ -2,10 +2,12 @@ package com.tim.utils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.text.Normalizer;
 import java.util.Date;
 import java.util.Map;
 
+import org.apache.commons.compress.utils.CharsetNames;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
@@ -43,7 +45,7 @@ public class Utility {
 		try {
 			ClassLoader cl = Thread.currentThread().getContextClassLoader();
 			InputStream is = cl.getResourceAsStream(fileName);
-			String jsonConfig = IOUtils.toString(is, "UTF-8"); 
+			String jsonConfig = IOUtils.toString(is, CharsetNames.UTF_8); 
 			t = convertStringJsonToObject(jsonConfig, typeReference);
 		} catch (IOException e) {
 			logger.error("Cannot read file json: {}", fileName);
