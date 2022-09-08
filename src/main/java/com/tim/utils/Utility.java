@@ -1,14 +1,14 @@
 package com.tim.utils;
 
+import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.text.Normalizer;
 import java.util.Date;
 import java.util.Map;
 
 import org.slf4j.Logger;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -42,10 +42,11 @@ public class Utility {
 	public static <T> T getObjectFromJsonFile(final String fileName, final TypeReference<T> typeReference) {
 		T t = null;
 		try {
+			File file = new ClassPathResource(fileName).getFile();
 			String jsonConfig = new String(
-					Files.readAllBytes(Paths.get(ClassLoader.getSystemResource(fileName).toURI())));
+					Files.readAllBytes(file.toPath()));
 			t = convertStringJsonToObject(jsonConfig, typeReference);
-		} catch (IOException | URISyntaxException e) {
+		} catch (IOException e) {
 			logger.error("Cannot read file json: {}", fileName);
 			e.printStackTrace();
 			throw new TimException(ETimMessages.INTERNAL_SYSTEM_ERROR);
