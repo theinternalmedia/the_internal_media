@@ -1,14 +1,13 @@
 package com.tim.utils;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
+import java.io.InputStream;
 import java.text.Normalizer;
 import java.util.Date;
 import java.util.Map;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -42,9 +41,9 @@ public class Utility {
 	public static <T> T getObjectFromJsonFile(final String fileName, final TypeReference<T> typeReference) {
 		T t = null;
 		try {
-			File file = new ClassPathResource(fileName).getFile();
-			String jsonConfig = new String(
-					Files.readAllBytes(file.toPath()));
+			ClassLoader cl = Thread.currentThread().getContextClassLoader();
+			InputStream is = cl.getResourceAsStream(fileName);
+			String jsonConfig = IOUtils.toString(is, "UTF-8"); 
 			t = convertStringJsonToObject(jsonConfig, typeReference);
 		} catch (IOException e) {
 			logger.error("Cannot read file json: {}", fileName);
