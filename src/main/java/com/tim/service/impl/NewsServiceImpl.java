@@ -49,6 +49,7 @@ public class NewsServiceImpl implements NewsService {
     @Autowired
     private FacultyRepository facultyRepository;
 
+    
     @Override
     @Transactional(noRollbackFor = {TimException.class, TimNotFoundException.class})
     public NewsDto create(NewsRequestDto requestDto, MultipartFile image) {

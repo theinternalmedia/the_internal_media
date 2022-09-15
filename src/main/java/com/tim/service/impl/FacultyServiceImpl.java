@@ -6,16 +6,30 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.tim.converter.FacultyConverter;
+import com.tim.data.ETimMessages;
+import com.tim.data.SearchOperation;
+import com.tim.dto.PagingResponseDto;
 import com.tim.dto.faculty.FacultyDto;
+import com.tim.dto.faculty.FacultyUpdateRequestDto;
+import com.tim.dto.specification.SearchCriteria;
+import com.tim.dto.specification.TimSpecification;
 import com.tim.entity.Faculty;
 import com.tim.entity.Teacher;
+import com.tim.exception.TimException;
 import com.tim.exception.TimNotFoundException;
 import com.tim.repository.FacultyRepository;
 import com.tim.repository.TeacherRepository;
 import com.tim.service.FacultyService;
+import com.tim.utils.ValidationUtils;
 
 @Service
 public class FacultyServiceImpl implements FacultyService {
@@ -28,6 +42,7 @@ public class FacultyServiceImpl implements FacultyService {
 	private TeacherRepository teacherRepository;
 
 	@Override
+	@Transactional
 	public FacultyDto create(FacultyDto dto) {
 		Faculty entity = facultyConverter.toEntity(dto);
 		if (StringUtils.isNotBlank(dto.getHeadOfFacultyUserId())) {
@@ -50,5 +65,69 @@ public class FacultyServiceImpl implements FacultyService {
 		}
 		facultyRepository.saveAll(faculties);
 		return ids.size();
+	}
+
+	
+	@Override
+	public FacultyDto getByCode(String code) {
+		Faculty faculty = facultyRepository.findByCodeAndStatusTrue(code).orElseThrow(
+				() -> new TimNotFoundException(FACULTY, "Mã khoa", code));
+		return facultyConverter.toDto(faculty);
+	}
+
+	
+	@Override
+	@Transactional
+	public FacultyDto update(FacultyUpdateRequestDto updateDto) {
+		ValidationUtils.validateObject(updateDto);
+		
+		Faculty faculty = facultyRepository.findById(updateDto.getId()).orElseThrow(
+				() -> new TimNotFoundException(FACULTY, "ID", String.valueOf(updateDto.getId())));
+		
+		if(!faculty.getCode().equals(updateDto.getCode())) {
+			if(facultyRepository.existsByCode(updateDto.getCode())) {
+				throw new TimException(ETimMessages.ALREADY_EXISTS, "Mã khoa", updateDto.getCode());
+			}
+		}
+		faculty = facultyConverter.toEntity(updateDto, faculty);
+		
+		if(StringUtils.isNotBlank(updateDto.getHeadOfFacultyUserId())) {
+			Teacher headOfFaculty = teacherRepository.getByUserId(updateDto.getHeadOfFacultyUserId()).orElseThrow(
+					() -> new TimNotFoundException("Trưởng khoa", "Mã GV", updateDto.getHeadOfFacultyUserId()));
+			faculty.setHeadOfFaculty(headOfFaculty);
+		}
+		return facultyConverter.toDto(facultyRepository.save(faculty));
+	}
+
+	@Override
+	public List<FacultyDto> getAll(boolean status) {
+		List<Faculty> faculties = facultyRepository.findAllByStatus(status);
+		List<FacultyDto> dtos = facultyConverter.toDtoList(faculties);
+		return dtos;
+	}
+
+	@Override
+	public PagingResponseDto getPage(int page, int size, String status, String code, String name) {
+		
+		TimSpecification<Faculty> timSpecification = new TimSpecification<Faculty>();
+		timSpecification.add(new SearchCriteria("status", status, SearchOperation.EQUAL));
+		Specification<Faculty> specification = Specification.where(null);
+		
+		if(StringUtils.isNotEmpty(code)) {
+			timSpecification.add(new SearchCriteria("code", code, SearchOperation.LIKE));
+		}
+		if(StringUtils.isNotEmpty(name)) {
+			timSpecification.add(new SearchCriteria("name", name, SearchOperation.LIKE));
+		}
+		
+		Pageable pageable = PageRequest.of(page - 1, size, Sort.by("createdDate"));
+		Page<Faculty> facultyPage = facultyRepository.findAll(specification.and(timSpecification), pageable);
+		
+		List<FacultyDto> data = facultyConverter.toDtoList(facultyPage.getContent());
+		return new PagingResponseDto(facultyPage.getTotalElements(),
+								facultyPage.getTotalPages(),
+								facultyPage.getNumber() + 1,
+								facultyPage.getSize(),
+								data);
 	}
 }

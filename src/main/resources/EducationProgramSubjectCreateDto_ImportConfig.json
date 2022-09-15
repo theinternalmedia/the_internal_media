@@ -8,14 +8,14 @@
 	},
 	{
 		"excelHeader": "Học kỳ",
-		"excelIndex": 3,
+		"excelIndex": 2,
 		"excelColType": "String",
 		"excelValue": null,
 		"pojoAttribute": "semester"
 	},
 	{
 		"excelHeader": "Ghi chú",
-		"excelIndex": 4,
+		"excelIndex": 3,
 		"excelColType": "String",
 		"excelValue": null,
 		"pojoAttribute": "note"

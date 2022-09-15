@@ -1,8 +1,13 @@
 package com.tim.restful;
 
+import java.util.List;
 import java.util.Set;
 
+import javax.websocket.server.PathParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tim.data.TimApiPath;
+import com.tim.dto.PagingResponseDto;
 import com.tim.dto.schoolyear.SchoolYearDto;
 import com.tim.dto.schoolyear.SchoolYearRequestDto;
 import com.tim.dto.schoolyear.SchoolYearUpdateRequestDto;
@@ -30,6 +36,21 @@ public class SchoolYearResource {
 	@PutMapping(TimApiPath.SchoolYear.UPDATE)
 	public SchoolYearDto update(@RequestBody SchoolYearUpdateRequestDto requestDto) {
 		return schoolYearService.update(requestDto);
+	}
+	
+	@GetMapping(TimApiPath.SchoolYear.GET_ALL)
+	public List<SchoolYearDto> getAll(@PathParam("status") boolean status){
+		return schoolYearService.getAll(status);
+	}
+	
+	@GetMapping(TimApiPath.SchoolYear.GET_PAGE)
+	public ResponseEntity<PagingResponseDto> getPage(
+												@RequestParam("page") int page,
+												@RequestParam("size") int size,
+												@RequestParam("status") boolean status,
+												@PathParam("code") String code,
+												@PathParam("name") String name){
+		return ResponseEntity.ok(schoolYearService.getPage(page, size, status, code, name));
 	}
 	
 	@PutMapping(TimApiPath.SchoolYear.TOGGLE_STATUS)

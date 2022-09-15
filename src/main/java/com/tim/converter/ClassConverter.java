@@ -1,9 +1,13 @@
 package com.tim.converter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import com.tim.dto.classz.ClassDto;
 import com.tim.dto.classz.ClassRequestDto;
+import com.tim.dto.classz.ClassUpdateRequestDto;
 import com.tim.entity.Classz;
 
 /**
@@ -28,4 +32,20 @@ public class ClassConverter extends AbstractConverter<ClassDto, Classz> {
 	public Classz toEntity(ClassRequestDto requestDto) {
 		return this.modelMapper.map(requestDto, Classz.class);
 	}
+	
+	@Override
+	public List<ClassDto> toDtoList(List<Classz> entityList){
+		List<ClassDto> result = new ArrayList<>();
+		entityList.forEach(entity -> result.add(
+			toDto(entity)));
+		return result;
+	}
+	
+	public Classz toEntity(ClassUpdateRequestDto dto, Classz entity) {
+		entity.setCode(dto.getCode());
+		entity.setName(dto.getName());
+		return entity;
+	}
+	
+	
 }

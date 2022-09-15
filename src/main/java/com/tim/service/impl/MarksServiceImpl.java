@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tim.converter.MarksConverter;
@@ -49,7 +50,9 @@ public class MarksServiceImpl implements MarksService {
 	@Autowired
 	private ExcelService excelService;
 	
+	
 	@Override
+	@Transactional
 	public MarksDto create(MarksRequestDto requestDto) {
 		// Validate input 
 		ValidationUtils.validateObject(requestDto);
@@ -89,6 +92,7 @@ public class MarksServiceImpl implements MarksService {
 	}
 
 	@Override
+	@Transactional
 	public long create(MultipartFile file) {
 		List<MarksRequestDto> requestDtos = excelService
 				.getListObjectFromExcelFile(file, MarksRequestDto.class);

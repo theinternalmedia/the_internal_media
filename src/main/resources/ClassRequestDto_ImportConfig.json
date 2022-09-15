@@ -1,0 +1,37 @@
+[
+	{
+		"excelHeader": "Mã lớp học",
+		"excelIndex": 1,
+		"excelColType": "String",
+		"excelValue": null,
+		"pojoAttribute": "code"
+	},
+	{
+		"excelHeader": "Tên lớp học",
+		"excelIndex":2,
+		"excelColType": "String",
+		"excelValue": null,
+		"pojoAttribute": "name"
+	},
+	{
+		"excelHeader": "Mã khoa",
+		"excelIndex":3,
+		"excelColType": "String",
+		"excelValue": null,
+		"pojoAttribute": "facultyCode"
+	},
+	{
+		"excelHeader": "ID giáo viên",
+		"excelIndex": 4,
+		"excelColType": "String",
+		"excelValue": null,
+		"pojoAttribute": "advisorId"
+	},
+	{
+		"excelHeader": "Mã niên khóa",
+		"excelIndex": 5,
+		"excelColType": "String",
+		"excelValue": null,
+		"pojoAttribute": "schoolYearCode"
+	}
+]

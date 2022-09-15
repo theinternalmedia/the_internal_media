@@ -68,6 +68,8 @@ public final class TimApiPath {
 		public static final String UPDATE = PREFIX_V1;
 		public static final String TOGGLE_STATUS = PREFIX_V1 + TOGGLE_STATUS_ + PATH_VARIABLE_ID;
 		public static final String DELETE = PREFIX_V1;
+		public static final String GET_ALL = PREFIX_V1 + ALL_;
+		public static final String GET_PAGE = PREFIX_V1 + PAGE_;
 	}
 
 	public static class Class {
@@ -78,6 +80,7 @@ public final class TimApiPath {
 		public static final String UPDATE = PREFIX_V1;
 		public static final String TOGGLE_STATUS = PREFIX_V1 + TOGGLE_STATUS_ + PATH_VARIABLE_ID;
 		public static final String DELETE = PREFIX_V1;
+		public static final String GET_PAGE = PREFIX_V1 + PAGE_;
 	}
 
 	public static class SchoolYear {
@@ -87,6 +90,8 @@ public final class TimApiPath {
 		public static final String UPDATE = PREFIX_V1;
 		public static final String TOGGLE_STATUS = PREFIX_V1 + TOGGLE_STATUS_ + PATH_VARIABLE_ID;
 		public static final String DELETE = PREFIX_V1;
+		public static final String GET_PAGE = PREFIX_V1 + PAGE_;
+		public static final String GET_ALL = PREFIX_V1 + ALL_;
 	}
 
 	public static class NotificationGroup {
