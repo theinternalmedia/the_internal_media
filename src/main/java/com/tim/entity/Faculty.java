@@ -31,8 +31,8 @@ public class Faculty extends BaseEntity {
 	@Code
 	private String code;
 
-	@Column(unique = true, nullable = false, length = 50)
-	@Size(max = 50)
+	@Column(unique = true, nullable = false, length = 100)
+	@Size(max = 100)
 	private String name;
 
 	@OneToMany(mappedBy = "schoolYear")

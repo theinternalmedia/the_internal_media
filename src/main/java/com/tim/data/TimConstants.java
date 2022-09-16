@@ -8,7 +8,8 @@ public final class TimConstants {
 	public static final String APP_NAME = "THE_INTERNAL_MEDIA";
 
 	// Admin root
-	public static final String ADMIN_ROOT = "admin";
+	public static final String ADMIN_USERID = "admin";
+	public static final String ADMIN_PASSWORD = "admin@2022";
 
 	// Response
 	public static final String SUCCESS = "success.";

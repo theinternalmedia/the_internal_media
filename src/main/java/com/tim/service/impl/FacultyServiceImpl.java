@@ -36,8 +36,9 @@ public class FacultyServiceImpl implements FacultyService {
 		
 		Faculty entity = facultyConverter.toEntity(dto);
 		if (StringUtils.isNotBlank(dto.getHeadOfFacultyUserId())) {
-			Teacher teacher = teacherRepository.getByUserId(dto.getHeadOfFacultyUserId()).orElseThrow(
-					() -> new TimNotFoundException("Giảng Viên", "Mã GV", dto.getHeadOfFacultyUserId()));
+			Teacher teacher = teacherRepository.findByUserId(dto.getHeadOfFacultyUserId())
+					.orElseThrow(() -> new TimNotFoundException(
+							"Giảng Viên", "Mã GV", dto.getHeadOfFacultyUserId()));
 			entity.setHeadOfFaculty(teacher);
 		}
 		return facultyConverter.toDto(facultyRepository.save(entity));

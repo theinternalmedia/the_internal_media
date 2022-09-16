@@ -88,7 +88,7 @@ public class StudentServiceImpl implements StudentService {
 		entity.setClassz(classz);
 
 		// Set Role
-		Role role = roleRepository.findByCode(ETimRoles.ROLE_STUDENT.toString());
+		Role role = roleRepository.findByCode(ETimRoles.ROLE_STUDENT.code).orElse(null);
 		entity.setRoles(new HashSet<>(Arrays.asList(role)));
 		entity.setPassword(encoder.encode(entity.getPassword()));
 		entity = studentRepository.save(entity);
@@ -112,7 +112,7 @@ public class StudentServiceImpl implements StudentService {
 							"Lớp học", "Mã Lớp", dto.getClassCode()));
 			entity.setClassz(classz);
 			entity.setPassword(encoder.encode(entity.getPassword()));
-			Role role = roleRepository.findByCode(ETimRoles.ROLE_STUDENT.toString());
+			Role role = roleRepository.findByCode(ETimRoles.ROLE_STUDENT.toString()).orElse(null);
 
 			entity.setRoles(new HashSet<>(Arrays.asList(role)));
 			entityList.add(entity);

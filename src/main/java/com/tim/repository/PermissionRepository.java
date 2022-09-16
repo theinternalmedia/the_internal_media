@@ -11,4 +11,6 @@ import com.tim.entity.Permission;
  */
 public interface PermissionRepository extends JpaRepository<Permission, Long> {
 
+	boolean existsByCode(String code);
+
 }

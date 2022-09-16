@@ -19,7 +19,7 @@ public class MarksRequestDto {
 	@Max(10)
 	private float finalMarks;
 
-	@Size(max = 50)
+	@Size(max = 100)
 	private String note;
 	
 	@NotNull

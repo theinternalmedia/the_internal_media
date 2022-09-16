@@ -20,8 +20,6 @@ public interface TeacherRepository extends JpaRepository<Teacher, Long>, JpaSpec
 
 	boolean existsByUserId(String userId);
 
-	Optional<Teacher> getByUserId(String headOfFacultyUserId);
-
 	List<Teacher> getByFaculty_CodeIn(Collection<String> facultyCodes);
 
 	List<Teacher> getByStatusTrue();
@@ -31,5 +29,7 @@ public interface TeacherRepository extends JpaRepository<Teacher, Long>, JpaSpec
 	List<Teacher> findByUserIdIn(Set<String> userIdSet);
 
 	List<Teacher> findByEmailIn(Set<String> emailSet);
+
+	List<Teacher> getByUserId(String adminUserid);
 
 }

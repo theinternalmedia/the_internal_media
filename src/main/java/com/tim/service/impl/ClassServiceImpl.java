@@ -57,7 +57,7 @@ public class ClassServiceImpl implements ClassService {
 		entity.setSchoolYear(schoolYear);
 		
 		if(StringUtils.isNotBlank(requestDto.getAdvisorId())) {
-			Teacher teacher = teacherRepository.getByUserId(requestDto.getAdvisorId()).orElse(null);
+			Teacher teacher = teacherRepository.findByUserId(requestDto.getAdvisorId()).orElse(null);
 			if(teacher == null) {
 				throw new TimNotFoundException("Giảng Viên", "Mã GV", requestDto.getAdvisorId());
 			}

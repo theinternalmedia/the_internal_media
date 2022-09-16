@@ -1,6 +1,7 @@
 package com.tim.restful;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.tim.data.Permissions;
 import com.tim.data.TimApiPath;
 import com.tim.dto.educationprogram.EducationProgramDto;
 import com.tim.dto.educationprogram.EducationProgramRequestDto;
@@ -27,6 +29,7 @@ public class EducationProgramResource {
 	@Autowired
 	EduProgramService eduProgramService;
 	
+	@PreAuthorize("hasAuthority('" + Permissions.EducationProgram.CREATE + "')")
 	@PostMapping(value = TimApiPath.EducationProgram.CREATE)
 	public EducationProgramDto create(
 			@RequestParam("eduProgramRequestJson") String eduProgramRequestJson,
@@ -38,6 +41,7 @@ public class EducationProgramResource {
 		return eduProgramService.create(requestDto, file);
 	}
 	
+	@PreAuthorize("hasAuthority('" + Permissions.EducationProgram.UPDATE + "')")
 	@PutMapping(value = TimApiPath.EducationProgram.UPDATE)
 	public EducationProgramDto update(@RequestParam("eduProgramUpdateJson") String eduProgramUpdateJson,
 									@RequestPart(value = "file", required = false) MultipartFile file	) {
@@ -46,16 +50,19 @@ public class EducationProgramResource {
 		return eduProgramService.update(updateDto, file);
 	}
 	
+	@PreAuthorize("hasAuthority('" + Permissions.EducationProgram.READ + "')")
 	@GetMapping(value = TimApiPath.EducationProgram.GET_BY_CODE)
 	public EducationProgramDto getById(@RequestParam String code) {
 		return eduProgramService.getOne(code);
 	}
 	
+	@PreAuthorize("hasAuthority('" + Permissions.EducationProgram.READ + "')")
 	@GetMapping(value = TimApiPath.EducationProgram.GET_SUBJECT_LIST)
 	public EducationProgramResponseDto getSubjectList(@RequestParam String code) {
 		return eduProgramService.getSubjectList(code);
 	}
 	
+	@PreAuthorize("hasAuthority('" + Permissions.EducationProgram.TOGGLE_STATUS + "')")
 	@PutMapping(value = TimApiPath.EducationProgram.TOGGLE_STATUS)
 	public Long toggleStatus(@PathVariable("id") Long id) {
 		return eduProgramService.toggleStatus(id);

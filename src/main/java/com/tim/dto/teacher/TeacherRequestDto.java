@@ -8,7 +8,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 import com.tim.annotation.Code;
-import com.tim.data.ETimRoles;
 import com.tim.dto.UserRequestDto;
 
 import lombok.Data;
@@ -29,5 +28,5 @@ public class TeacherRequestDto extends UserRequestDto {
 	private String userId;
 	
 	@NotEmpty
-	private Set<ETimRoles> roleCodes = new HashSet<>();
+	private Set<String> roleCodes = new HashSet<>();
 }
