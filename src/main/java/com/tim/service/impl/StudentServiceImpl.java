@@ -13,6 +13,10 @@ import javax.persistence.criteria.JoinType;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,13 +27,16 @@ import org.springframework.web.multipart.MultipartFile;
 import com.tim.converter.StudentConverter;
 import com.tim.data.ETimMessages;
 import com.tim.data.ETimRoles;
+import com.tim.data.SearchOperation;
 import com.tim.data.TimConstants;
+import com.tim.dto.PagingResponseDto;
 import com.tim.dto.PasswordDto;
+import com.tim.dto.specification.SearchCriteria;
 import com.tim.dto.specification.TimSpecification;
 import com.tim.dto.student.StudentDto;
 import com.tim.dto.student.StudentRequestDto;
-import com.tim.dto.student.StudentUpdateRequestDto;
 import com.tim.dto.student.StudentUpdateProfileDto;
+import com.tim.dto.student.StudentUpdateRequestDto;
 import com.tim.entity.Classz;
 import com.tim.entity.Faculty;
 import com.tim.entity.Role;
@@ -315,6 +322,35 @@ public class StudentServiceImpl implements StudentService {
 		}
 		student = studentConverter.toEntity(updateDto, student);
 		return studentConverter.toDto(studentRepository.save(student));
+	}
+
+	@Override
+	public PagingResponseDto getPage(int page, int size, String facultyCode, 
+									String name, String userId, boolean status) {
+		TimSpecification<Student> timSpecification = new TimSpecification<>();
+		timSpecification.add(new SearchCriteria("status", status, SearchOperation.EQUAL));
+		
+		if (StringUtils.isNotEmpty(name)) {
+			timSpecification.add(new SearchCriteria("name", name, SearchOperation.LIKE));
+		}
+		if (StringUtils.isNotEmpty(userId)) {
+			timSpecification.add(new SearchCriteria("userId", userId, SearchOperation.EQUAL));
+		}
+		Specification<Student> specification = timSpecification;
+		if (StringUtils.isNotEmpty(facultyCode)) {
+			specification = specification.and((root, query, builder) -> {
+				return builder.equal(root.join("faculty").get("code"), facultyCode);
+			});
+		}
+		Pageable pageable = PageRequest.of(page - 1, size, Sort.by("name"));
+		Page<Student> pageStudents = studentRepository.findAll(specification, pageable);
+		List<StudentDto> data = studentConverter.toDtoList(pageStudents.getContent());
+		
+		return new PagingResponseDto(pageStudents.getTotalElements(),
+									pageStudents.getTotalPages(),
+									pageStudents.getNumber() - 1,
+									pageStudents.getSize(),
+									data);
 	}
 
 }

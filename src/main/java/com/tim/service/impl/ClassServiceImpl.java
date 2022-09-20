@@ -144,19 +144,19 @@ public class ClassServiceImpl implements ClassService {
 		
 		timSpecification.add(new SearchCriteria("status", status, SearchOperation.EQUAL));
 		
-		if(StringUtils.isNotEmpty(code)) {
+		if(StringUtils.isNotBlank(code)) {
 			timSpecification.add(new SearchCriteria("code", code, SearchOperation.EQUAL));
 		}
-		if(StringUtils.isNotEmpty(name)) {
+		if(StringUtils.isNotBlank(name)) {
 			timSpecification.add(new SearchCriteria("name", name, SearchOperation.LIKE));
 		}
 		
-		if(StringUtils.isNotEmpty(facultyCode)) {
+		if(StringUtils.isNotBlank(facultyCode)) {
 			specification = specification.and((root, query, builder) -> {
 				return builder.equal(root.join("faculty").get("code"), facultyCode);
 			});
 		}
-		if(StringUtils.isNotEmpty(schoolYearCode)) {
+		if(StringUtils.isNotBlank(schoolYearCode)) {
 			specification = specification.and((root, query, builder) -> {
 				return builder.equal(root.join("schoolYear").get("code"), schoolYearCode);
 			});

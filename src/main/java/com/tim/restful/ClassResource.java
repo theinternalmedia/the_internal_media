@@ -48,11 +48,11 @@ public class ClassResource {
 	public ResponseEntity<PagingResponseDto> getPage(
 									@RequestParam("page") int page,
 									@RequestParam("size") int size,
+									@RequestParam("status") boolean status,
 									@PathParam("schoolYearCode") String schoolYearCode,
 									@PathParam("facultyCode") String facultyCode,
 									@PathParam("code") String code,
-									@PathParam("name") String name,
-									@PathParam("status") boolean status){
+									@PathParam("name") String name){
 		return ResponseEntity.ok(classService.getPaging(page, size, schoolYearCode,
 								facultyCode, code, name, status));
 	}
