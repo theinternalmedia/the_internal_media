@@ -4,14 +4,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.tim.converter.SchoolYearConverter;
 import com.tim.data.ETimMessages;
+import com.tim.data.SearchOperation;
+import com.tim.dto.PagingResponseDto;
 import com.tim.dto.schoolyear.SchoolYearDto;
+import com.tim.dto.schoolyear.SchoolYearPageRequestDto;
 import com.tim.dto.schoolyear.SchoolYearRequestDto;
 import com.tim.dto.schoolyear.SchoolYearUpdateRequestDto;
+import com.tim.dto.specification.SearchCriteria;
+import com.tim.dto.specification.TimSpecification;
 import com.tim.entity.SchoolYear;
 import com.tim.exception.TimException;
 import com.tim.exception.TimNotFoundException;
@@ -26,7 +37,10 @@ public class SchoolYearServiceImpl implements SchoolYearService {
 	private SchoolYearConverter schoolYearConverter;
 	@Autowired
 	private SchoolYearRepository schoolYearRepository;
+	
+	
 	@Override
+	@Transactional
 	public SchoolYearDto create(SchoolYearRequestDto requestDto) {
 		// Validate input
 		ValidationUtils.validateObject(requestDto);
@@ -40,9 +54,11 @@ public class SchoolYearServiceImpl implements SchoolYearService {
 	}
 	
     @Override
+    @Transactional
     public SchoolYearDto update(SchoolYearUpdateRequestDto requestDto) {
     	SchoolYear schoolYear = schoolYearRepository.findById(requestDto.getId()).orElseThrow(
     			() -> new TimNotFoundException(SCHOOL_YEAR, "ID", requestDto.getId().toString()));
+    	
     	if (!schoolYear.getCode().equals(requestDto.getCode())){
     		if (schoolYearRepository.existsByCode(requestDto.getCode())) {
     			throw new TimException(ETimMessages.ALREADY_EXISTS, "Mã Khóa Học", requestDto.getCode());
@@ -73,5 +89,42 @@ public class SchoolYearServiceImpl implements SchoolYearService {
 		}
 		schoolYearRepository.saveAll(schoolYears);
 		return ids.size();
+	}
+
+	@Override
+	public List<SchoolYearDto> getAll(boolean status) {
+		List<SchoolYear> entities = schoolYearRepository.findAllByStatus(status);
+		List<SchoolYearDto> dtos = schoolYearConverter.toDtoList(entities);
+		return dtos;
+	}
+
+	@Override
+	public PagingResponseDto getPage(SchoolYearPageRequestDto pageRequestDto) {
+		ValidationUtils.validateObject(pageRequestDto);
+		
+		TimSpecification<SchoolYear> timSpecification = new TimSpecification<SchoolYear>();
+		Specification<SchoolYear> specification = Specification.where(null);
+		
+		timSpecification.add(new SearchCriteria("status", pageRequestDto.getStatus(), 
+												SearchOperation.EQUAL));
+		
+		if(StringUtils.isNotEmpty(pageRequestDto.getCode())) {
+			timSpecification.add(new SearchCriteria("code", pageRequestDto.getCode(), 
+												SearchOperation.LIKE));
+		}
+		if(StringUtils.isNotEmpty(pageRequestDto.getName())) {
+			timSpecification.add(new SearchCriteria("name", pageRequestDto.getName(), 
+												SearchOperation.LIKE));
+		}
+		
+		Pageable pageable = PageRequest.of(pageRequestDto.getPage() - 1, pageRequestDto.getSize());
+		Page<SchoolYear> schoolYearPage = schoolYearRepository
+										.findAll(specification.and(timSpecification), pageable);
+		List<SchoolYearDto> data = schoolYearConverter.toDtoList(schoolYearPage.getContent());
+		return new PagingResponseDto(schoolYearPage.getTotalElements(),
+										schoolYearPage.getTotalPages(),
+										schoolYearPage.getNumber() + 1,
+										schoolYearPage.getSize(),
+										data);
 	}
 }

@@ -30,8 +30,8 @@ import com.tim.dto.specification.SearchCriteria;
 import com.tim.dto.specification.TimSpecification;
 import com.tim.dto.teacher.TeacherDto;
 import com.tim.dto.teacher.TeacherRequestDto;
-import com.tim.dto.teacher.TeacherUpdateRequestDto;
 import com.tim.dto.teacher.TeacherUpdateProfileDto;
+import com.tim.dto.teacher.TeacherUpdateRequestDto;
 import com.tim.entity.Faculty;
 import com.tim.entity.Role;
 import com.tim.entity.Teacher;
@@ -167,8 +167,9 @@ public class TeacherServiceImpl implements TeacherService {
 
 	@Override
 	public String exportToExcelFile() {
-		List<Teacher> entityList = teacherRepository.getByUserId(
+		List<Teacher> entityList = teacherRepository.findByUserIdAndStatusTrue(
 				TimConstants.ADMIN_USERID);
+
 		List<TeacherDto> dtos = teacherConverter.toDtoList(entityList);
 		excelService.writeListObjectToExcel(TimConstants.ExcelFiledName.TEACHER, dtos);
 		return null;

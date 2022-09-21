@@ -1,5 +1,8 @@
 package com.tim.converter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import com.tim.dto.schoolyear.SchoolYearDto;
@@ -26,5 +29,14 @@ public class SchoolYearConverter extends AbstractConverter<SchoolYearDto, School
 
 	public SchoolYear toEntity(SchoolYearRequestDto requestDto) {
 		return this.modelMapper.map(requestDto, SchoolYear.class);
+	}
+	
+	@Override
+	public List<SchoolYearDto> toDtoList(List<SchoolYear> entities){
+		List<SchoolYearDto> dtos = new ArrayList<>();
+		entities.forEach(entity -> {
+			dtos.add(toDto(entity));
+		});
+		return dtos;
 	}
 }

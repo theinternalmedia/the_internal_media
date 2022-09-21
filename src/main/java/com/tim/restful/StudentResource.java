@@ -3,6 +3,8 @@ package com.tim.restful;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,7 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tim.data.TimApiPath;
+import com.tim.dto.PagingResponseDto;
 import com.tim.dto.student.StudentDto;
+import com.tim.dto.student.StudentPageRequestDto;
 import com.tim.dto.student.StudentRequestDto;
 import com.tim.dto.student.StudentUpdateRequestDto;
 import com.tim.service.StudentService;
@@ -45,6 +49,11 @@ public class StudentResource {
 			@ApiParam("StudentRequestDto to update Student")
 				@RequestBody StudentUpdateRequestDto requestDto) {
 		return studentService.update(requestDto);
+	}
+	
+	@GetMapping(TimApiPath.Student.GET_PAGE)
+	public ResponseEntity<PagingResponseDto> getPage(StudentPageRequestDto pageRequestDto) {
+		return ResponseEntity.ok(studentService.getPage(pageRequestDto));
 	}
 	
 	@PutMapping(TimApiPath.Student.TOGGLE_STATUS)

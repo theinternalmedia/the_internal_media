@@ -5,11 +5,13 @@ import java.util.Set;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.tim.dto.PagingResponseDto;
 import com.tim.dto.PasswordDto;
 import com.tim.dto.student.StudentDto;
+import com.tim.dto.student.StudentPageRequestDto;
 import com.tim.dto.student.StudentRequestDto;
-import com.tim.dto.student.StudentUpdateRequestDto;
 import com.tim.dto.student.StudentUpdateProfileDto;
+import com.tim.dto.student.StudentUpdateRequestDto;
 import com.tim.entity.Student;
 
 public interface StudentService {
@@ -50,6 +52,8 @@ public interface StudentService {
 	 * @return StudentDto
 	 */
 	StudentDto getByUserId(String userId);
+	
+	PagingResponseDto getPage(StudentPageRequestDto pageRequestDto);
 	
 	void updatePassword(PasswordDto passwordDto);
 

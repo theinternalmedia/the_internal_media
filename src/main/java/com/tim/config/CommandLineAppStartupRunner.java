@@ -40,8 +40,9 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
     	Set<Permission> permissions = new HashSet<>();
     	Permission permission;
 		for (ETimPermissions e : ETimPermissions.values()) {
-			permission = new Permission(e.code, e.name, new HashSet<>());
-			if (!permissionRepository.existsByCode(e.code)) {
+			permission = permissionRepository.findByCode(e.code).orElse(null);
+			if (permission == null) {
+				permission = new Permission(e.code, e.name, new HashSet<>());
 				permission = permissionRepository.save(permission);
 			}
 			permissions.add(permission);
@@ -49,13 +50,13 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
 		Set<Role> roles = new HashSet<>();
 		Role role;
 		for (ETimRoles e : ETimRoles.values()) {
-			if (e.code.equals(ETimRoles.ROLE_ADMIN.code)) {
-				role = new Role(e.code, e.name, new HashSet<>(),new HashSet<>(), permissions);
-			} else {
-				role = new Role(e.code, e.name, new HashSet<>(),new HashSet<>(), new HashSet<>());
-			}
-			
-			if (!roleRepository.existsByCode(e.code)) {
+			role = roleRepository.findByCode(e.code).orElse(null);
+			if (role == null) {
+				if (e.code.equals(ETimRoles.ROLE_ADMIN.code)) {
+					role = new Role(e.code, e.name, new HashSet<>(),new HashSet<>(), permissions);
+				} else {
+					role = new Role(e.code, e.name, new HashSet<>(),new HashSet<>(), new HashSet<>());
+				}
 				role = roleRepository.saveAndFlush(role);
 			}
 			roles.add(role);

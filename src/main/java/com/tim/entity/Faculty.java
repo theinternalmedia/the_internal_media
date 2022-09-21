@@ -35,7 +35,7 @@ public class Faculty extends BaseEntity {
 	@Size(max = 100)
 	private String name;
 
-	@OneToMany(mappedBy = "schoolYear")
+	@OneToMany(mappedBy = "faculty")
 	private Set<EducationProgram> educationPrograms = new HashSet<>();
 
 	@OneToMany(mappedBy = "faculty")

@@ -7,6 +7,8 @@ import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.tim.entity.Teacher;
 
@@ -30,6 +32,7 @@ public interface TeacherRepository extends JpaRepository<Teacher, Long>, JpaSpec
 
 	List<Teacher> findByEmailIn(Set<String> emailSet);
 
-	List<Teacher> getByUserId(String adminUserid);
+	@Query(value = "SELECT t FROM Teacher t WHERE t.userId <> $userId AND t.status = true")
+	List<Teacher> findByUserIdAndStatusTrue(@Param("userId") String userId);
 
 }
