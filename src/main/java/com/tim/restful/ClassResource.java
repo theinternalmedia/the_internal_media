@@ -48,17 +48,10 @@ public class ClassResource {
 		return classService.getByCode(code);
 	}
 	
+
 	@GetMapping(TimApiPath.Class.GET_PAGE)
 	public ResponseEntity<PagingResponseDto> getPage(
-			@RequestParam("page") int page, 
-			@RequestParam("size") int size,
-			@RequestParam("status") boolean status,
-			@PathParam("code") String code,
-			@PathParam("name") String name,
-			@PathParam("schoolYearCode") String schoolYearCode,
-			@PathParam("facultyCode") String facultyCode){
-		ClassPageRequestDto pageRequestDto = new ClassPageRequestDto(
-				page, size, schoolYearCode, facultyCode, code, name, status);
+			ClassPageRequestDto pageRequestDto){
 		return ResponseEntity.ok(classService.getPaging(pageRequestDto));
 	}
 	

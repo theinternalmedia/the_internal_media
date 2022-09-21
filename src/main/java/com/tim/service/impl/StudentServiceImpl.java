@@ -348,6 +348,7 @@ public class StudentServiceImpl implements StudentService {
 												pageRequestDto.getClassCode());
 			});
 		}
+		
 		Pageable pageable = PageRequest.of(pageRequestDto.getPage() - 1, 
 											pageRequestDto.getSize(), Sort.by("name"));
 		Page<Student> pageStudents = studentRepository.findAll(specification, pageable);

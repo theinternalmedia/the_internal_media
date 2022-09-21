@@ -19,7 +19,7 @@ public class StudentPageRequestDto {
 	
 	private String classCode;
 
-	private boolean status;
+	private boolean status = true;
 
 	public boolean getStatus() {
 		return status;
