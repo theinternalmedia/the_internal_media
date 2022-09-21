@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tim.data.TimApiPath;
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.schoolyear.SchoolYearDto;
+import com.tim.dto.schoolyear.SchoolYearPageRequestDto;
 import com.tim.dto.schoolyear.SchoolYearRequestDto;
 import com.tim.dto.schoolyear.SchoolYearUpdateRequestDto;
 import com.tim.service.SchoolYearService;
@@ -45,12 +46,8 @@ public class SchoolYearResource {
 	
 	@GetMapping(TimApiPath.SchoolYear.GET_PAGE)
 	public ResponseEntity<PagingResponseDto> getPage(
-												@RequestParam("page") int page,
-												@RequestParam("size") int size,
-												@RequestParam("status") boolean status,
-												@PathParam("code") String code,
-												@PathParam("name") String name){
-		return ResponseEntity.ok(schoolYearService.getPage(page, size, status, code, name));
+								@RequestBody SchoolYearPageRequestDto pageRequestDto){
+		return ResponseEntity.ok(schoolYearService.getPage(pageRequestDto));
 	}
 	
 	@PutMapping(TimApiPath.SchoolYear.TOGGLE_STATUS)

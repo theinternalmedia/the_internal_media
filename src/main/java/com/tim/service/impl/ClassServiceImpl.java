@@ -22,6 +22,7 @@ import com.tim.data.ETimMessages;
 import com.tim.data.SearchOperation;
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.classz.ClassDto;
+import com.tim.dto.classz.ClassPageRequestDto;
 import com.tim.dto.classz.ClassRequestDto;
 import com.tim.dto.classz.ClassUpdateRequestDto;
 import com.tim.dto.specification.SearchCriteria;
@@ -137,31 +138,36 @@ public class ClassServiceImpl implements ClassService {
 	}
 
 	@Override
-	public PagingResponseDto getPaging(int page, int size, String schoolYearCode, 
-						String facultyCode, String code, String name, boolean status) {
+	public PagingResponseDto getPaging(ClassPageRequestDto pageRequestDto) {
+		ValidationUtils.validateObject(pageRequestDto);
+		
 		TimSpecification<Classz> timSpecification = new TimSpecification<Classz>();
 		Specification<Classz> specification = Specification.where(null);
 		
-		timSpecification.add(new SearchCriteria("status", status, SearchOperation.EQUAL));
-		
-		if(StringUtils.isNotBlank(code)) {
-			timSpecification.add(new SearchCriteria("code", code, SearchOperation.EQUAL));
+		timSpecification.add(new SearchCriteria("status", pageRequestDto.getStatus(), 
+												SearchOperation.EQUAL));
+		if(StringUtils.isNotBlank(pageRequestDto.getCode())) {
+			timSpecification.add(new SearchCriteria("code", pageRequestDto.getCode(), 
+												SearchOperation.EQUAL));
 		}
-		if(StringUtils.isNotBlank(name)) {
-			timSpecification.add(new SearchCriteria("name", name, SearchOperation.LIKE));
+		if(StringUtils.isNotBlank(pageRequestDto.getName())) {
+			timSpecification.add(new SearchCriteria("name", pageRequestDto.getName(), 
+												SearchOperation.LIKE));
 		}
-		
-		if(StringUtils.isNotBlank(facultyCode)) {
+		if(StringUtils.isNotBlank(pageRequestDto.getFacultyCode())) {
 			specification = specification.and((root, query, builder) -> {
-				return builder.equal(root.join("faculty").get("code"), facultyCode);
+				return builder.equal(root.join("faculty").get("code"), 
+										pageRequestDto.getFacultyCode());
 			});
 		}
-		if(StringUtils.isNotBlank(schoolYearCode)) {
+		if(StringUtils.isNotBlank(pageRequestDto.getSchoolYearCode())) {
 			specification = specification.and((root, query, builder) -> {
-				return builder.equal(root.join("schoolYear").get("code"), schoolYearCode);
+				return builder.equal(root.join("schoolYear").get("code"), 
+										pageRequestDto.getSchoolYearCode());
 			});
 		}
-		Pageable pageable = PageRequest.of(page - 1, size, Sort.by("createdDate"));
+		Pageable pageable = PageRequest.of(pageRequestDto.getPage() - 1,
+										pageRequestDto.getSize(), Sort.by("createdDate"));
 		specification = specification.and(timSpecification);
 		Page<Classz> classPage = classRepository.findAll(specification, pageable);
 		List<ClassDto> data = classConverter.toDtoList(classPage.getContent());

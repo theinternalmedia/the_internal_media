@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.tim.data.TimApiPath;
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.classz.ClassDto;
+import com.tim.dto.classz.ClassPageRequestDto;
 import com.tim.dto.classz.ClassRequestDto;
 import com.tim.dto.classz.ClassUpdateRequestDto;
 import com.tim.service.ClassService;
@@ -46,15 +47,8 @@ public class ClassResource {
 	
 	@GetMapping(TimApiPath.Class.GET_PAGE)
 	public ResponseEntity<PagingResponseDto> getPage(
-									@RequestParam("page") int page,
-									@RequestParam("size") int size,
-									@RequestParam("status") boolean status,
-									@PathParam("schoolYearCode") String schoolYearCode,
-									@PathParam("facultyCode") String facultyCode,
-									@PathParam("code") String code,
-									@PathParam("name") String name){
-		return ResponseEntity.ok(classService.getPaging(page, size, schoolYearCode,
-								facultyCode, code, name, status));
+						@RequestBody ClassPageRequestDto pageRequestDto){
+		return ResponseEntity.ok(classService.getPaging(pageRequestDto));
 	}
 	
 	@PutMapping(TimApiPath.Class.UPDATE)

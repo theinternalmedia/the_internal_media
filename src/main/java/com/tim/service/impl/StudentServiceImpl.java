@@ -34,6 +34,7 @@ import com.tim.dto.PasswordDto;
 import com.tim.dto.specification.SearchCriteria;
 import com.tim.dto.specification.TimSpecification;
 import com.tim.dto.student.StudentDto;
+import com.tim.dto.student.StudentPageRequestDto;
 import com.tim.dto.student.StudentRequestDto;
 import com.tim.dto.student.StudentUpdateProfileDto;
 import com.tim.dto.student.StudentUpdateRequestDto;
@@ -325,24 +326,30 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public PagingResponseDto getPage(int page, int size, String facultyCode, 
-									String name, String userId, boolean status) {
-		TimSpecification<Student> timSpecification = new TimSpecification<>();
-		timSpecification.add(new SearchCriteria("status", status, SearchOperation.EQUAL));
+	public PagingResponseDto getPage(StudentPageRequestDto pageRequestDto) {
+		ValidationUtils.validateObject(pageRequestDto);
 		
-		if (StringUtils.isNotEmpty(name)) {
-			timSpecification.add(new SearchCriteria("name", name, SearchOperation.LIKE));
+		TimSpecification<Student> timSpecification = new TimSpecification<>();
+		timSpecification.add(new SearchCriteria("status", pageRequestDto.getStatus(), 
+												SearchOperation.EQUAL));
+		
+		if (StringUtils.isNotEmpty(pageRequestDto.getName())) {
+			timSpecification.add(new SearchCriteria("name", pageRequestDto.getName(), 
+												SearchOperation.LIKE));
 		}
-		if (StringUtils.isNotEmpty(userId)) {
-			timSpecification.add(new SearchCriteria("userId", userId, SearchOperation.EQUAL));
+		if (StringUtils.isNotEmpty(pageRequestDto.getUserId())) {
+			timSpecification.add(new SearchCriteria("userId", pageRequestDto.getUserId(), 
+												SearchOperation.EQUAL));
 		}
 		Specification<Student> specification = timSpecification;
-		if (StringUtils.isNotEmpty(facultyCode)) {
+		if (StringUtils.isNotEmpty(pageRequestDto.getClassCode())) {
 			specification = specification.and((root, query, builder) -> {
-				return builder.equal(root.join("faculty").get("code"), facultyCode);
+				return builder.equal(root.join("classz").get("code"), 
+												pageRequestDto.getClassCode());
 			});
 		}
-		Pageable pageable = PageRequest.of(page - 1, size, Sort.by("name"));
+		Pageable pageable = PageRequest.of(pageRequestDto.getPage() - 1, 
+											pageRequestDto.getSize(), Sort.by("name"));
 		Page<Student> pageStudents = studentRepository.findAll(specification, pageable);
 		List<StudentDto> data = studentConverter.toDtoList(pageStudents.getContent());
 		

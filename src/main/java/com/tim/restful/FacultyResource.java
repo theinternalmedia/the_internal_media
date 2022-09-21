@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tim.data.TimApiPath;
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.faculty.FacultyDto;
+import com.tim.dto.faculty.FacultyPageRequestDto;
 import com.tim.dto.faculty.FacultyUpdateRequestDto;
 import com.tim.service.FacultyService;
 
@@ -46,12 +47,8 @@ public class FacultyResource {
 	
 	@GetMapping(TimApiPath.Faculty.GET_PAGE)
 	public ResponseEntity<PagingResponseDto> getPage(
-											@RequestParam("page") int page,
-											@RequestParam("size") int size,
-											@PathParam("status") String status,
-											@PathParam("code") String code,
-											@PathParam("name") String name){
-		return ResponseEntity.ok(facultyService.getPage(page, size, status, code, name));
+							@RequestBody FacultyPageRequestDto pageRequestDto){
+		return ResponseEntity.ok(facultyService.getPage(pageRequestDto));
 	}
 	
 	@PutMapping(TimApiPath.Faculty.UPDATE)

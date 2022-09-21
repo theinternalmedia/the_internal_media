@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.classz.ClassDto;
+import com.tim.dto.classz.ClassPageRequestDto;
 import com.tim.dto.classz.ClassRequestDto;
 import com.tim.dto.classz.ClassUpdateRequestDto;
 
@@ -31,17 +32,10 @@ public interface ClassService {
 	/**
 	 * 
 	 * @author thinh
-	 * @param schoolYearCode
-	 * @param facultyCode
-	 * @param code
-	 * @param name
-	 * @param status
-	 * @param page
-	 * @param size
+	 * @param pageRequestDto
 	 * @return PagingResponseDto
 	 */
-	PagingResponseDto getPaging(int page, int size, String schoolYearCode, String facultyCode,
-					String code, String name, boolean status);
+	PagingResponseDto getPaging(ClassPageRequestDto pageRequestDto);
 	
 	/**
 	 * 

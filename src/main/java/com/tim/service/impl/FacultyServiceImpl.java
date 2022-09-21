@@ -19,6 +19,7 @@ import com.tim.data.ETimMessages;
 import com.tim.data.SearchOperation;
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.faculty.FacultyDto;
+import com.tim.dto.faculty.FacultyPageRequestDto;
 import com.tim.dto.faculty.FacultyUpdateRequestDto;
 import com.tim.dto.specification.SearchCriteria;
 import com.tim.dto.specification.TimSpecification;
@@ -107,21 +108,27 @@ public class FacultyServiceImpl implements FacultyService {
 	}
 
 	@Override
-	public PagingResponseDto getPage(int page, int size, String status, String code, String name) {
+	public PagingResponseDto getPage(FacultyPageRequestDto pageRequestDto) {
+		ValidationUtils.validateObject(pageRequestDto);
 		
 		TimSpecification<Faculty> timSpecification = new TimSpecification<Faculty>();
-		timSpecification.add(new SearchCriteria("status", status, SearchOperation.EQUAL));
+		timSpecification.add(new SearchCriteria("status", pageRequestDto.getStatus(), 
+												SearchOperation.EQUAL));
 		Specification<Faculty> specification = Specification.where(null);
 		
-		if(StringUtils.isNotEmpty(code)) {
-			timSpecification.add(new SearchCriteria("code", code, SearchOperation.LIKE));
+		if(StringUtils.isNotEmpty(pageRequestDto.getCode())) {
+			timSpecification.add(new SearchCriteria("code", pageRequestDto.getCode(), 
+												SearchOperation.LIKE));
 		}
-		if(StringUtils.isNotEmpty(name)) {
-			timSpecification.add(new SearchCriteria("name", name, SearchOperation.LIKE));
+		if(StringUtils.isNotEmpty(pageRequestDto.getName())) {
+			timSpecification.add(new SearchCriteria("name", pageRequestDto.getName(), 
+												SearchOperation.LIKE));
 		}
 		
-		Pageable pageable = PageRequest.of(page - 1, size, Sort.by("createdDate"));
-		Page<Faculty> facultyPage = facultyRepository.findAll(specification.and(timSpecification), pageable);
+		Pageable pageable = PageRequest.of(pageRequestDto.getPage() - 1, 
+											pageRequestDto.getSize(), Sort.by("createdDate"));
+		Page<Faculty> facultyPage = facultyRepository.findAll(specification
+													.and(timSpecification), pageable);
 		
 		List<FacultyDto> data = facultyConverter.toDtoList(facultyPage.getContent());
 		return new PagingResponseDto(facultyPage.getTotalElements(),

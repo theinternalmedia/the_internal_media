@@ -18,6 +18,7 @@ import com.tim.data.ETimMessages;
 import com.tim.data.SearchOperation;
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.schoolyear.SchoolYearDto;
+import com.tim.dto.schoolyear.SchoolYearPageRequestDto;
 import com.tim.dto.schoolyear.SchoolYearRequestDto;
 import com.tim.dto.schoolyear.SchoolYearUpdateRequestDto;
 import com.tim.dto.specification.SearchCriteria;
@@ -98,20 +99,25 @@ public class SchoolYearServiceImpl implements SchoolYearService {
 	}
 
 	@Override
-	public PagingResponseDto getPage(int page, int size, boolean status, String code, String name) {
+	public PagingResponseDto getPage(SchoolYearPageRequestDto pageRequestDto) {
+		ValidationUtils.validateObject(pageRequestDto);
+		
 		TimSpecification<SchoolYear> timSpecification = new TimSpecification<SchoolYear>();
 		Specification<SchoolYear> specification = Specification.where(null);
 		
-		timSpecification.add(new SearchCriteria("status", status, SearchOperation.EQUAL));
+		timSpecification.add(new SearchCriteria("status", pageRequestDto.getStatus(), 
+												SearchOperation.EQUAL));
 		
-		if(StringUtils.isNotEmpty(code)) {
-			timSpecification.add(new SearchCriteria("code", code, SearchOperation.LIKE));
+		if(StringUtils.isNotEmpty(pageRequestDto.getCode())) {
+			timSpecification.add(new SearchCriteria("code", pageRequestDto.getCode(), 
+												SearchOperation.LIKE));
 		}
-		if(StringUtils.isNotEmpty(name)) {
-			timSpecification.add(new SearchCriteria("name", name, SearchOperation.LIKE));
+		if(StringUtils.isNotEmpty(pageRequestDto.getName())) {
+			timSpecification.add(new SearchCriteria("name", pageRequestDto.getName(), 
+												SearchOperation.LIKE));
 		}
 		
-		Pageable pageable = PageRequest.of(page - 1, size);
+		Pageable pageable = PageRequest.of(pageRequestDto.getPage() - 1, pageRequestDto.getSize());
 		Page<SchoolYear> schoolYearPage = schoolYearRepository
 										.findAll(specification.and(timSpecification), pageable);
 		List<SchoolYearDto> data = schoolYearConverter.toDtoList(schoolYearPage.getContent());
