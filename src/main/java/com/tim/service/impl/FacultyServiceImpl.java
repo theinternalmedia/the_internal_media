@@ -10,7 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -114,7 +113,6 @@ public class FacultyServiceImpl implements FacultyService {
 		TimSpecification<Faculty> timSpecification = new TimSpecification<Faculty>();
 		timSpecification.add(new SearchCriteria("status", pageRequestDto.getStatus(), 
 												SearchOperation.EQUAL));
-		Specification<Faculty> specification = Specification.where(null);
 		
 		if(StringUtils.isNotEmpty(pageRequestDto.getCode())) {
 			timSpecification.add(new SearchCriteria("code", pageRequestDto.getCode(), 
@@ -127,8 +125,7 @@ public class FacultyServiceImpl implements FacultyService {
 		
 		Pageable pageable = PageRequest.of(pageRequestDto.getPage() - 1, 
 											pageRequestDto.getSize(), Sort.by("createdDate"));
-		Page<Faculty> facultyPage = facultyRepository.findAll(specification
-													.and(timSpecification), pageable);
+		Page<Faculty> facultyPage = facultyRepository.findAll(timSpecification, pageable);
 		
 		List<FacultyDto> data = facultyConverter.toDtoList(facultyPage.getContent());
 		return new PagingResponseDto(facultyPage.getTotalElements(),

@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -103,7 +102,6 @@ public class SchoolYearServiceImpl implements SchoolYearService {
 		ValidationUtils.validateObject(pageRequestDto);
 		
 		TimSpecification<SchoolYear> timSpecification = new TimSpecification<SchoolYear>();
-		Specification<SchoolYear> specification = Specification.where(null);
 		
 		timSpecification.add(new SearchCriteria("status", pageRequestDto.getStatus(), 
 												SearchOperation.EQUAL));
@@ -119,7 +117,7 @@ public class SchoolYearServiceImpl implements SchoolYearService {
 		
 		Pageable pageable = PageRequest.of(pageRequestDto.getPage() - 1, pageRequestDto.getSize());
 		Page<SchoolYear> schoolYearPage = schoolYearRepository
-										.findAll(specification.and(timSpecification), pageable);
+										.findAll(timSpecification, pageable);
 		List<SchoolYearDto> data = schoolYearConverter.toDtoList(schoolYearPage.getContent());
 		return new PagingResponseDto(schoolYearPage.getTotalElements(),
 										schoolYearPage.getTotalPages(),

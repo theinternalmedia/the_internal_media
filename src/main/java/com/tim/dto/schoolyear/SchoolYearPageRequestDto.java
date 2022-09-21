@@ -8,11 +8,9 @@ import lombok.Data;
 @Data
 public class SchoolYearPageRequestDto {
 
-	@NotBlank
 	@Min(value = 1)
 	private int page;
 
-	@NotBlank
 	@Min(value = 1)
 	private int size;
 
