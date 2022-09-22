@@ -2,7 +2,9 @@ package com.tim.service;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.tim.dto.PagingResponseDto;
 import com.tim.dto.educationprogram.EducationProgramDto;
+import com.tim.dto.educationprogram.EducationProgramPageRequestDto;
 import com.tim.dto.educationprogram.EducationProgramRequestDto;
 import com.tim.dto.educationprogram.EducationProgramResponseDto;
 import com.tim.dto.educationprogram.EducationProgramUpdateDto;
@@ -35,6 +37,12 @@ public interface EduProgramService {
 	 * @return EducationProgramDto
 	 */
 	EducationProgramDto getOne(String code);
+	
+	PagingResponseDto getPage(/*
+								 * int page, int size, boolean status, String code, String name, String
+								 * facultyCode, String schoolYearCode
+								 */
+			EducationProgramPageRequestDto pageRequestDto);
 	
 	Long toggleStatus(Long id);
 	

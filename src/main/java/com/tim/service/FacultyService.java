@@ -5,9 +5,10 @@ import java.util.Set;
 
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.faculty.FacultyDto;
+
 import com.tim.dto.faculty.FacultyPageRequestDto;
-import com.tim.dto.faculty.FacultyRequestDto;
 import com.tim.dto.faculty.FacultyUpdateRequestDto;
+import com.tim.dto.faculty.FacultyRequestDto;
 
 public interface FacultyService {
 	FacultyDto create(FacultyRequestDto facultyDto);

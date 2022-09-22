@@ -14,7 +14,9 @@ import javax.validation.constraints.Size;
 
 import com.tim.annotation.Code;
 
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * 
@@ -24,6 +26,8 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true, of = "code")
 @Entity
 @Table(name = "roles")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Role extends BaseEntity {
 
 	private static final long serialVersionUID = 7850391100035043803L;
@@ -33,8 +37,8 @@ public class Role extends BaseEntity {
 	@Code
 	private String code;
 
-	@Column(unique = true, nullable = false, length = 50)
-	@Size(max = 50)
+	@Column(unique = true, nullable = false, length = 100)
+	@Size(max = 100)
 	private String name;
 
 	@ManyToMany(mappedBy = "roles")
@@ -44,7 +48,9 @@ public class Role extends BaseEntity {
 	private Set<Student> students = new HashSet<>();
 
 	@ManyToMany
-	@JoinTable(name = "role_permission", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "permission_id"))
+	@JoinTable(name = "role_permission", 
+		joinColumns = @JoinColumn(name = "role_id"), 
+		inverseJoinColumns = @JoinColumn(name = "permission_id"))
 	private Set<Permission> permissions = new HashSet<>();
 
 	public String getCode() {
@@ -77,9 +83,6 @@ public class Role extends BaseEntity {
 
 	public void setPermissions(Set<Permission> permissions) {
 		this.permissions = permissions;
-	}
-
-	public Role() {
 	}
 
 	public Role(String name) {

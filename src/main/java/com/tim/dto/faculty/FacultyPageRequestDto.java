@@ -17,5 +17,9 @@ public class FacultyPageRequestDto {
 
 	private String name;
 
-	private Boolean status;
+	private boolean status = true;
+
+	public boolean getStatus() {
+		return status;
+	}
 }

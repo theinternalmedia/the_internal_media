@@ -2,7 +2,6 @@ package com.tim.utils;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.Charset;
 import java.text.Normalizer;
 import java.util.Date;
 import java.util.Map;

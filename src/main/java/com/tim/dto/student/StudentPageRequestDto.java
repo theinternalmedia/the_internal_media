@@ -23,5 +23,9 @@ public class StudentPageRequestDto {
 
 	private String classCode;
 
-	private Boolean status;
+	private boolean status = true;
+
+	public boolean getStatus() {
+		return status;
+	}
 }

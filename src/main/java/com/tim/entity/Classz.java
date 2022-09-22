@@ -22,8 +22,8 @@ public class Classz extends BaseEntity {
 
 	private static final long serialVersionUID = 4599295413576661341L;
 
-	@Column(nullable = false, length = 50)
-	@Size(max = 50)
+	@Column(nullable = false, length = 100)
+	@Size(max = 100)
 	private String name;
 
 	@Column(unique = true, nullable = false, length = 20)

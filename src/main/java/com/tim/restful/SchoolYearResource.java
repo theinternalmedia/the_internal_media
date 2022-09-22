@@ -46,7 +46,7 @@ public class SchoolYearResource {
 	
 	@GetMapping(TimApiPath.SchoolYear.GET_PAGE)
 	public ResponseEntity<PagingResponseDto> getPage(
-								@RequestBody SchoolYearPageRequestDto pageRequestDto){
+								SchoolYearPageRequestDto pageRequestDto){
 		return ResponseEntity.ok(schoolYearService.getPage(pageRequestDto));
 	}
 	

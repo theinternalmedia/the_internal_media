@@ -27,7 +27,7 @@ public class EducationProgramRequestDto implements Serializable{
 	@Code
 	private String code;
 
-	@Size(max = 50)
+	@Size(max = 100)
 	@NotBlank
 	private String name;
 	

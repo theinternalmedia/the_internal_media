@@ -16,7 +16,7 @@ import com.tim.entity.Role;
  *
  */
 public interface RoleRepository extends JpaRepository<Role, Long> {
-	Optional<Role> findByNameAndStatusTrue(String string);
+	Optional<Role> findByCodeAndStatusTrue(String string);
 
 	Role findByName(String name);
 
@@ -28,5 +28,7 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
 
 	Set<Role> findByCodeIn(Collection<String> roleCodes);
 
-	Role findByCode(String roleTeacher);
+	Optional<Role> findByCode(String roleTeacher);
+
+	boolean existsByCode(String code);
 }

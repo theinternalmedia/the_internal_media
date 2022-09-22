@@ -5,6 +5,7 @@ import java.util.Set;
 import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.tim.data.Permissions;
 import com.tim.data.TimApiPath;
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.classz.ClassDto;
@@ -30,6 +32,7 @@ public class ClassResource {
 	@Autowired
 	private ClassService classService;
 	
+	@PreAuthorize("hasAuthority('" + Permissions.Classz.CREATE + "')")
 	@PostMapping(TimApiPath.Class.CREATE)
 	public ClassDto create(@RequestBody ClassRequestDto requestDto) {
 		return classService.create(requestDto);
@@ -45,9 +48,10 @@ public class ClassResource {
 		return classService.getByCode(code);
 	}
 	
+
 	@GetMapping(TimApiPath.Class.GET_PAGE)
 	public ResponseEntity<PagingResponseDto> getPage(
-						@RequestBody ClassPageRequestDto pageRequestDto){
+			ClassPageRequestDto pageRequestDto){
 		return ResponseEntity.ok(classService.getPaging(pageRequestDto));
 	}
 	
@@ -55,7 +59,8 @@ public class ClassResource {
 	public ClassDto update(@RequestBody ClassUpdateRequestDto updateDto) {
 		return classService.update(updateDto);
 	}
-	
+
+	@PreAuthorize("hasAuthority('" + Permissions.Classz.TOGGLE_STATUS + "')")
 	@PutMapping(TimApiPath.Class.TOGGLE_STATUS)
 	public Long toggleStatus(@RequestParam Set<Long> ids) {
 		return classService.toggleStatus(ids);

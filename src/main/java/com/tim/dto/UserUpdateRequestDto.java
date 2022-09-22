@@ -8,8 +8,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.tim.data.ETimRoles;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -31,7 +29,7 @@ public class UserUpdateRequestDto extends UserRequestDto{
 	
 	private Boolean status = true;
 	
-	private Set<ETimRoles> roleCodes = new HashSet<>();
+	private Set<String> roleCodes = new HashSet<>();
 	
 	private Set<String> classCodes = new HashSet<String>();
 	

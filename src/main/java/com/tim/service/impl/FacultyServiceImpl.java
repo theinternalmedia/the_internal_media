@@ -49,8 +49,9 @@ public class FacultyServiceImpl implements FacultyService {
 		ValidationUtils.validateObject(dto);
 		Faculty entity = facultyConverter.toEntity(dto);
 		if (StringUtils.isNotBlank(dto.getHeadOfFacultyUserId())) {
-			Teacher teacher = teacherRepository.getByUserId(dto.getHeadOfFacultyUserId()).orElseThrow(
-					() -> new TimNotFoundException("Giảng Viên", "Mã GV", dto.getHeadOfFacultyUserId()));
+			Teacher teacher = teacherRepository.findByUserId(dto.getHeadOfFacultyUserId())
+					.orElseThrow(() -> new TimNotFoundException(
+							"Giảng Viên", "Mã GV", dto.getHeadOfFacultyUserId()));
 			entity.setHeadOfFaculty(teacher);
 		}
 		return facultyConverter.toDto(facultyRepository.save(entity));
@@ -95,8 +96,9 @@ public class FacultyServiceImpl implements FacultyService {
 		faculty = facultyConverter.toEntity(updateDto, faculty);
 		
 		if(StringUtils.isNotBlank(updateDto.getHeadOfFacultyUserId())) {
-			Teacher headOfFaculty = teacherRepository.getByUserId(updateDto.getHeadOfFacultyUserId()).orElseThrow(
-					() -> new TimNotFoundException("Trưởng khoa", "Mã GV", updateDto.getHeadOfFacultyUserId()));
+			Teacher headOfFaculty = teacherRepository.findByUserId(updateDto.getHeadOfFacultyUserId())
+					.orElseThrow(() -> new TimNotFoundException(
+							"Trưởng khoa", "Mã GV", updateDto.getHeadOfFacultyUserId()));
 			faculty.setHeadOfFaculty(headOfFaculty);
 		}
 		return facultyConverter.toDto(facultyRepository.save(faculty));
@@ -131,10 +133,11 @@ public class FacultyServiceImpl implements FacultyService {
 		Page<Faculty> facultyPage = facultyRepository.findAll(timSpecification, pageable);
 		
 		List<FacultyDto> data = facultyConverter.toDtoList(facultyPage.getContent());
-		return new PagingResponseDto(facultyPage.getTotalElements(),
-								facultyPage.getTotalPages(),
-								facultyPage.getNumber() + 1,
-								facultyPage.getSize(),
-								data);
+		return new PagingResponseDto(
+				facultyPage.getTotalElements(),
+				facultyPage.getTotalPages(),
+				facultyPage.getNumber() + 1,
+				facultyPage.getSize(),
+				data);
 	}
 }

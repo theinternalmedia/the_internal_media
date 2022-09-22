@@ -2,9 +2,13 @@ package com.tim.dto.classz;
 
 import javax.validation.constraints.Min;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ClassPageRequestDto {
 	
 	@Min(value = 1)
@@ -21,5 +25,10 @@ public class ClassPageRequestDto {
 	
 	private String name;
 	
-	private Boolean status;
+	private boolean status = true;
+
+	public boolean getStatus() {
+		return status;
+	}
+
 }

@@ -31,11 +31,11 @@ public abstract class User extends BaseEntity {
 
 	@NotBlank
 	@Column(nullable = false)
-	@Size(max = 50)
+	@Size(max = 100)
 	private String name;
 
 	@Column(nullable = true, unique = true)
-	@Size(max = 50)
+	@Size(max = 100)
 	@Email
 	private String email;
 

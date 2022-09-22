@@ -25,8 +25,8 @@ public class TheInternalMediaApplication {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                .allowCredentials(true)
-                .allowedOriginPatterns("/**")
+//                .allowCredentials(true)
+//                .allowedOriginPatterns("/**")
                 .allowedMethods("*");
             }
         };

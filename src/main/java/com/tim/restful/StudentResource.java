@@ -53,7 +53,7 @@ public class StudentResource {
 	
 	@GetMapping(TimApiPath.Student.GET_PAGE)
 	public ResponseEntity<PagingResponseDto> getPage(
-				@RequestBody StudentPageRequestDto pageRequestDto) {
+				StudentPageRequestDto pageRequestDto) {
 		return ResponseEntity.ok(studentService.getPage(pageRequestDto));
 	}
 	

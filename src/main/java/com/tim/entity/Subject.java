@@ -31,7 +31,7 @@ public class Subject extends BaseEntity {
 
 	@Column(unique = true, nullable = false, length = 20)
 	@NotBlank
-	@Size(max = 50)
+	@Size(max = 100)
 	private String name;
 
 	@Column(nullable = false)

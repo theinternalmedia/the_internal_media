@@ -146,6 +146,7 @@ public final class TimApiPath {
 		public static final String UPDATE = PREFIX_V1;
 		public static final String TOGGLE_STATUS = PREFIX_V1 + TOGGLE_STATUS_;
 		public static final String UPLOAD_EXCEL = PREFIX_V1 + UPLOAD_EXCEL_;
+		public static final String GET_PAGE = PREFIX_V1 + PAGE_;
 
 	}
 }

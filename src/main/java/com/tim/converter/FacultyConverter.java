@@ -37,12 +37,6 @@ public class FacultyConverter extends AbstractConverter<FacultyDto, Faculty> {
 		return entity;
 	}
 	
-	/**
-	 * 
-	 * @author thinh
-	 * @param entities
-	 * @return
-	 */
 	@Override
 	public List<FacultyDto> toDtoList(List<Faculty> entities){
 		List<FacultyDto> dtos = new ArrayList<>();

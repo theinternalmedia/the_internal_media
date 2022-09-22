@@ -5,16 +5,15 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
 import com.tim.annotation.Code;
-import com.tim.data.ETimPermissions;
 
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * 
@@ -24,28 +23,29 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true, of = "code")
 @Entity
 @Table(name = "permissions")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Permission extends BaseEntity {
 
 	private static final long serialVersionUID = -7368618288132054132L;
 
-	@Enumerated(EnumType.STRING)
 	@Column(unique = true, nullable = false, length = 50)
 	@Size(max = 50)
 	@Code
-	private ETimPermissions code;
+	private String code;
 
-	@Column(unique = true, nullable = false, length = 50)
-	@Size(max = 50)
+	@Column(unique = true, nullable = false, length = 100)
+	@Size(max = 100)
 	private String name;
 
 	@ManyToMany(mappedBy = "permissions")
 	private Set<Role> roles = new HashSet<>();
 
-	public ETimPermissions getCode() {
+	public String getCode() {
 		return code;
 	}
 
-	public void setCode(ETimPermissions code) {
+	public void setCode(String code) {
 		this.code = code;
 	}
 

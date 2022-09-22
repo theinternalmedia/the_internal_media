@@ -21,6 +21,6 @@ public class NotificationGroupDto extends BaseDto {
     @Size(max = 50)
     private String code;
 
-    @Size(max = 50)
+    @Size(max = 100)
     private String name;
 }

@@ -32,7 +32,7 @@ public class MarksDto extends BaseDto {
 
 	private boolean pass = false;
 
-	@Size(max = 50)
+	@Size(max = 100)
 	private String note;
 	
 	private LocalDate date;

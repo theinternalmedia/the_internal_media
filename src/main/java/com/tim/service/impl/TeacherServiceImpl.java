@@ -30,8 +30,8 @@ import com.tim.dto.specification.SearchCriteria;
 import com.tim.dto.specification.TimSpecification;
 import com.tim.dto.teacher.TeacherDto;
 import com.tim.dto.teacher.TeacherRequestDto;
-import com.tim.dto.teacher.TeacherUpdateRequestDto;
 import com.tim.dto.teacher.TeacherUpdateProfileDto;
+import com.tim.dto.teacher.TeacherUpdateRequestDto;
 import com.tim.entity.Faculty;
 import com.tim.entity.Role;
 import com.tim.entity.Teacher;
@@ -92,9 +92,10 @@ public class TeacherServiceImpl implements TeacherService {
 		
 		// Mapping Roles
 		Set<Role> roles = new HashSet<Role>();
-		requestDto.getRoleCodes().add(ETimRoles.ROLE_TEACHER);
-		for(ETimRoles code : requestDto.getRoleCodes()) {
-			Role role = roleRepository.findByCode(code.toString());
+		requestDto.getRoleCodes().add(ETimRoles.ROLE_TEACHER.code);
+		for(String code : requestDto.getRoleCodes()) {
+			Role role = roleRepository.findByCodeAndStatusTrue(code.toString())
+					.orElseThrow(() -> new TimNotFoundException("Vai Trò", "Mã", code));
 			roles.add(role);
 		}
 		entity.setRoles(roles);
@@ -128,7 +129,7 @@ public class TeacherServiceImpl implements TeacherService {
 					() -> new TimNotFoundException("Khoa", "Mã Khoa", item.getFacultyCode()));
 			entity.setFaculty(faculty);
 			entity.setPassword(encoder.encode(entity.getPassword()));
-			Role role = roleRepository.findByCode(ETimRoles.ROLE_TEACHER.toString());
+			Role role = roleRepository.findByCode(ETimRoles.ROLE_TEACHER.code).orElse(null);
 			entity.setRoles(new HashSet<>(Arrays.asList(role)));
 			entityList.add(entity);
 			
@@ -166,7 +167,9 @@ public class TeacherServiceImpl implements TeacherService {
 
 	@Override
 	public String exportToExcelFile() {
-		List<Teacher> entityList = teacherRepository.findAll();
+		List<Teacher> entityList = teacherRepository.findByUserIdAndStatusTrue(
+				TimConstants.ADMIN_USERID);
+
 		List<TeacherDto> dtos = teacherConverter.toDtoList(entityList);
 		excelService.writeListObjectToExcel(TimConstants.ExcelFiledName.TEACHER, dtos);
 		return null;
@@ -200,6 +203,9 @@ public class TeacherServiceImpl implements TeacherService {
 		}
 		if (StringUtils.isNotEmpty(userId)) {
 			timSpecification.add(new SearchCriteria("userId", userId, SearchOperation.EQUAL));
+		} else {
+			timSpecification.add(new SearchCriteria("userId", 
+					TimConstants.ADMIN_USERID, SearchOperation.NOT_EQUAL));
 		}
 		Specification<Teacher> specification = timSpecification;
 		if (StringUtils.isNotEmpty(facultyCode)) {
@@ -262,9 +268,10 @@ public class TeacherServiceImpl implements TeacherService {
 		
 		// Reset - Mapping Roles
 		Set<Role> roles = new HashSet<Role>();
-		requestDto.getRoleCodes().add(ETimRoles.ROLE_TEACHER);
-		for(ETimRoles code : requestDto.getRoleCodes()) {
-			Role role = roleRepository.findByCode(code.toString());
+		requestDto.getRoleCodes().add(ETimRoles.ROLE_TEACHER.code);
+		for(String code : requestDto.getRoleCodes()) {
+			Role role = roleRepository.findByCodeAndStatusTrue(code.toString())
+					.orElseThrow(() -> new TimNotFoundException("Vai Trò", "Mã", code));
 			roles.add(role);
 		}
 		entity.setRoles(roles);
@@ -283,8 +290,10 @@ public class TeacherServiceImpl implements TeacherService {
 		for (Long id : ids) {
 			teacher = teacherRepository.findById(id).orElseThrow(
 					() -> new TimNotFoundException(TEACHER, "ID", id.toString()));
-			teacher.setStatus(!teacher.getStatus());
-			teachers.add(teacher);
+			if (!teacher.getUserId().equals(TimConstants.ADMIN_USERID)) {
+				teacher.setStatus(!teacher.getStatus());
+				teachers.add(teacher);
+			}
 		}
 		teacherRepository.saveAll(teachers);
 		return ids.size();
@@ -297,7 +306,7 @@ public class TeacherServiceImpl implements TeacherService {
 		ValidationUtils.validateObject(passwordDto);
 		
 		String userId = PrincipalUtils.getAuthenticatedUsersUserId();
-		Teacher teacher = teacherRepository.getByUserId(userId).orElseThrow(
+		Teacher teacher = teacherRepository.findByUserId(userId).orElseThrow(
 				() -> new TimNotFoundException(TEACHER, "Mã GV", "userId"));
 		
 		// Confirm password is matches

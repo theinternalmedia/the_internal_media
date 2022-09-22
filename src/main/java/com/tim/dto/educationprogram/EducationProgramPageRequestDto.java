@@ -1,11 +1,11 @@
-package com.tim.dto.schoolyear;
+package com.tim.dto.educationprogram;
 
 import javax.validation.constraints.Min;
 
 import lombok.Data;
 
 @Data
-public class SchoolYearPageRequestDto {
+public class EducationProgramPageRequestDto {
 
 	@Min(value = 1)
 	private int page;
@@ -16,6 +16,10 @@ public class SchoolYearPageRequestDto {
 	private String code;
 
 	private String name;
+	
+	private String schoolYearCode;
+
+	private String facultyCode;
 
 	private boolean status = true;
 
