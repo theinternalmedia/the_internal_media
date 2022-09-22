@@ -5,11 +5,15 @@ import java.util.Set;
 
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.faculty.FacultyDto;
+<<<<<<< HEAD
 import com.tim.dto.faculty.FacultyPageRequestDto;
 import com.tim.dto.faculty.FacultyUpdateRequestDto;
+=======
+import com.tim.dto.faculty.FacultyRequestDto;
+>>>>>>> remotes/origin/minhtuanitk43
 
 public interface FacultyService {
-	FacultyDto create(FacultyDto dto);
+	FacultyDto create(FacultyRequestDto facultyDto);
 	
 	long toggleStatus(Set<Long> ids);
 	/**

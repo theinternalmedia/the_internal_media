@@ -18,8 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tim.data.TimApiPath;
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.faculty.FacultyDto;
+<<<<<<< HEAD
 import com.tim.dto.faculty.FacultyPageRequestDto;
 import com.tim.dto.faculty.FacultyUpdateRequestDto;
+=======
+import com.tim.dto.faculty.FacultyRequestDto;
+>>>>>>> remotes/origin/minhtuanitk43
 import com.tim.service.FacultyService;
 
 
@@ -31,7 +35,7 @@ public class FacultyResource {
 	
 	
 	@PostMapping(TimApiPath.Faculty.CREATE)
-	public FacultyDto create(@RequestBody FacultyDto facultyDto) {
+	public FacultyDto create(@RequestBody FacultyRequestDto facultyDto) {
 		return facultyService.create(facultyDto);
 	}
 	

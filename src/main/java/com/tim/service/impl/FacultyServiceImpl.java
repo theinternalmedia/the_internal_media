@@ -18,10 +18,14 @@ import com.tim.data.ETimMessages;
 import com.tim.data.SearchOperation;
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.faculty.FacultyDto;
+<<<<<<< HEAD
 import com.tim.dto.faculty.FacultyPageRequestDto;
 import com.tim.dto.faculty.FacultyUpdateRequestDto;
 import com.tim.dto.specification.SearchCriteria;
 import com.tim.dto.specification.TimSpecification;
+=======
+import com.tim.dto.faculty.FacultyRequestDto;
+>>>>>>> remotes/origin/minhtuanitk43
 import com.tim.entity.Faculty;
 import com.tim.entity.Teacher;
 import com.tim.exception.TimException;
@@ -42,8 +46,15 @@ public class FacultyServiceImpl implements FacultyService {
 	private TeacherRepository teacherRepository;
 
 	@Override
+<<<<<<< HEAD
 	@Transactional
 	public FacultyDto create(FacultyDto dto) {
+=======
+	public FacultyDto create(FacultyRequestDto dto) {
+		// Validate input
+		ValidationUtils.validateObject(dto);
+		
+>>>>>>> remotes/origin/minhtuanitk43
 		Faculty entity = facultyConverter.toEntity(dto);
 		if (StringUtils.isNotBlank(dto.getHeadOfFacultyUserId())) {
 			Teacher teacher = teacherRepository.getByUserId(dto.getHeadOfFacultyUserId()).orElseThrow(

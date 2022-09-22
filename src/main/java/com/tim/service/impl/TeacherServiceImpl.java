@@ -129,7 +129,7 @@ public class TeacherServiceImpl implements TeacherService {
 			entity.setFaculty(faculty);
 			entity.setPassword(encoder.encode(entity.getPassword()));
 			Role role = roleRepository.findByCode(ETimRoles.ROLE_TEACHER.toString());
-			entity.setRoles(Set.of(role));
+			entity.setRoles(new HashSet<>(Arrays.asList(role)));
 			entityList.add(entity);
 			
 			userIdSet.add(entity.getUserId());

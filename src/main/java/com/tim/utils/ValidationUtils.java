@@ -160,7 +160,8 @@ public class ValidationUtils {
 
 		// Get actual object name response to Client from file json config
 		String actualOjectName = Utility
-				.getObjectFromJsonFile(TimConstants.ACTUAL_OBJECT_NAME_FILE, new TypeReference<Map<String, String>>() {
+				.getObjectFromJsonFile(TimConstants.ACTUAL_OBJECT_NAME_FILE, 
+						new TypeReference<Map<String, String>>() {
 				}).get(simpleName);
 		if (actualOjectName == null) {
 			actualOjectName = simpleName;

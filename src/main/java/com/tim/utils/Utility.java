@@ -1,13 +1,14 @@
 package com.tim.utils;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.text.Normalizer;
 import java.util.Date;
 import java.util.Map;
 
+import org.apache.commons.compress.utils.CharsetNames;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
@@ -42,10 +43,11 @@ public class Utility {
 	public static <T> T getObjectFromJsonFile(final String fileName, final TypeReference<T> typeReference) {
 		T t = null;
 		try {
-			String jsonConfig = new String(
-					Files.readAllBytes(Paths.get(ClassLoader.getSystemResource(fileName).toURI())));
+			ClassLoader cl = Thread.currentThread().getContextClassLoader();
+			InputStream is = cl.getResourceAsStream(fileName);
+			String jsonConfig = IOUtils.toString(is, CharsetNames.UTF_8); 
 			t = convertStringJsonToObject(jsonConfig, typeReference);
-		} catch (IOException | URISyntaxException e) {
+		} catch (IOException e) {
 			logger.error("Cannot read file json: {}", fileName);
 			e.printStackTrace();
 			throw new TimException(ETimMessages.INTERNAL_SYSTEM_ERROR);

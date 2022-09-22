@@ -25,5 +25,6 @@
 	"EducationProgramUpdateDto": "Chương trình giảng dạy",
 	"UserUpdateProfileDto" : "Thông tin",
 	"StudentUpdateProfileDto": "Thông tin",
-	"TeacherUpdateProfileDto": "Thông tin"
+	"TeacherUpdateProfileDto": "Thông tin",
+	"FacultyRequestDto": "Khoa"
 }
