@@ -6,11 +6,8 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.tim.dto.faculty.FacultyDto;
-<<<<<<< HEAD
-import com.tim.dto.faculty.FacultyUpdateRequestDto;
-=======
 import com.tim.dto.faculty.FacultyRequestDto;
->>>>>>> remotes/origin/minhtuanitk43
+import com.tim.dto.faculty.FacultyUpdateRequestDto;
 import com.tim.entity.Faculty;
 
 /**
@@ -32,7 +29,6 @@ public class FacultyConverter extends AbstractConverter<FacultyDto, Faculty> {
 		// TODO Auto-generated method stub
 		return this.modelMapper.map(dto, Faculty.class);
 	}
-<<<<<<< HEAD
 	
 	public Faculty toEntity(FacultyUpdateRequestDto updateDto, Faculty entity) {
 		entity.setCode(updateDto.getCode());
@@ -54,10 +50,9 @@ public class FacultyConverter extends AbstractConverter<FacultyDto, Faculty> {
 			dtos.add(toDto(entity));
 		});
 		return dtos;
-=======
+	}
 
 	public Faculty toEntity(FacultyRequestDto dto) {
 		return this.modelMapper.map(dto, Faculty.class);
->>>>>>> remotes/origin/minhtuanitk43
 	}
 }
