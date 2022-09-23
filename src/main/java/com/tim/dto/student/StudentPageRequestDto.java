@@ -25,11 +25,11 @@ public class StudentPageRequestDto {
 
 	private boolean status = true;
 	
-//	@Code
-//	private String facultyCode;
-//	
-//	@Code
-//	private String schoolYearCode;
+	@Code
+	private String facultyCode;
+	
+	@Code
+	private String schoolYearCode;
 
 	public boolean getStatus() {
 		return status;
