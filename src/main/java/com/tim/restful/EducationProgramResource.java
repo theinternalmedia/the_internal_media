@@ -1,6 +1,7 @@
 package com.tim.restful;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,7 +16,9 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.tim.data.Permissions;
 import com.tim.data.TimApiPath;
+import com.tim.dto.PagingResponseDto;
 import com.tim.dto.educationprogram.EducationProgramDto;
+import com.tim.dto.educationprogram.EducationProgramPageRequestDto;
 import com.tim.dto.educationprogram.EducationProgramRequestDto;
 import com.tim.dto.educationprogram.EducationProgramResponseDto;
 import com.tim.dto.educationprogram.EducationProgramUpdateDto;
@@ -66,5 +69,11 @@ public class EducationProgramResource {
 	@PutMapping(value = TimApiPath.EducationProgram.TOGGLE_STATUS)
 	public Long toggleStatus(@PathVariable("id") Long id) {
 		return eduProgramService.toggleStatus(id);
+	}
+	
+	@GetMapping(value = TimApiPath.EducationProgram.GET_PAGE)
+	public ResponseEntity<PagingResponseDto> getPaging(
+			EducationProgramPageRequestDto pageRequestDto){
+		return ResponseEntity.ok(eduProgramService.getPage(pageRequestDto));
 	}
 }

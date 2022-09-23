@@ -341,13 +341,29 @@ public class StudentServiceImpl implements StudentService {
 			timSpecification.add(new SearchCriteria("userId", pageRequestDto.getUserId(), 
 												SearchOperation.EQUAL));
 		}
+		
 		Specification<Student> specification = timSpecification;
+		
 		if (StringUtils.isNotEmpty(pageRequestDto.getClassCode())) {
 			specification = specification.and((root, query, builder) -> {
 				return builder.equal(root.join("classz").get("code"), 
 												pageRequestDto.getClassCode());
 			});
 		}
+		
+		//faculty, schoolyear filter
+//		if (StringUtils.isNotEmpty(pageRequestDto.getClassCode())) {
+//			specification = specification.and((root, query, builder) -> {
+//				return builder.equal(root.join("classz").get("faculty").get("code"), 
+//												pageRequestDto.getFacultyCode());
+//			});
+//		}
+//		if (StringUtils.isNotEmpty(pageRequestDto.getClassCode())) {
+//			specification = specification.and((root, query, builder) -> {
+//				return builder.equal(root.join("classz").get("schoolYear").get("code"), 
+//												pageRequestDto.getSchoolYearCode());
+//			});
+//		}
 		
 		Pageable pageable = PageRequest.of(pageRequestDto.getPage() - 1, 
 											pageRequestDto.getSize(), Sort.by("name"));
@@ -356,7 +372,7 @@ public class StudentServiceImpl implements StudentService {
 		
 		return new PagingResponseDto(pageStudents.getTotalElements(),
 									pageStudents.getTotalPages(),
-									pageStudents.getNumber() - 1,
+									pageStudents.getNumber() + 1,
 									pageStudents.getSize(),
 									data);
 	}

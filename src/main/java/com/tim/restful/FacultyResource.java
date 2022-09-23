@@ -48,7 +48,7 @@ public class FacultyResource {
 	
 	@GetMapping(TimApiPath.Faculty.GET_PAGE)
 	public ResponseEntity<PagingResponseDto> getPage(
-							@RequestBody FacultyPageRequestDto pageRequestDto){
+							FacultyPageRequestDto pageRequestDto){
 		return ResponseEntity.ok(facultyService.getPage(pageRequestDto));
 	}
 	

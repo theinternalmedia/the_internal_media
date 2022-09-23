@@ -43,10 +43,10 @@ public class FacultyServiceImpl implements FacultyService {
 	private TeacherRepository teacherRepository;
 
 	@Override
+	@Transactional
 	public FacultyDto create(FacultyRequestDto dto) {
 		// Validate input
 		ValidationUtils.validateObject(dto);
-		
 		Faculty entity = facultyConverter.toEntity(dto);
 		if (StringUtils.isNotBlank(dto.getHeadOfFacultyUserId())) {
 			Teacher teacher = teacherRepository.findByUserId(dto.getHeadOfFacultyUserId())
@@ -118,6 +118,7 @@ public class FacultyServiceImpl implements FacultyService {
 		TimSpecification<Faculty> timSpecification = new TimSpecification<Faculty>();
 		timSpecification.add(new SearchCriteria("status", pageRequestDto.getStatus(), 
 												SearchOperation.EQUAL));
+		
 		if(StringUtils.isNotEmpty(pageRequestDto.getCode())) {
 			timSpecification.add(new SearchCriteria("code", pageRequestDto.getCode(), 
 												SearchOperation.LIKE));

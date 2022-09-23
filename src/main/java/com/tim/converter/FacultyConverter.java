@@ -6,8 +6,8 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.tim.dto.faculty.FacultyDto;
-import com.tim.dto.faculty.FacultyUpdateRequestDto;
 import com.tim.dto.faculty.FacultyRequestDto;
+import com.tim.dto.faculty.FacultyUpdateRequestDto;
 import com.tim.entity.Faculty;
 
 /**

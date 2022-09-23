@@ -9,19 +9,30 @@ import java.util.Set;
 
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tim.converter.EducationProgramConverter;
 import com.tim.converter.EducationProgramSubjectConverter;
 import com.tim.data.ETimMessages;
+import com.tim.data.SearchOperation;
+import com.tim.dto.PagingResponseDto;
 import com.tim.dto.educationprogram.EducationProgramDto;
+import com.tim.dto.educationprogram.EducationProgramPageRequestDto;
 import com.tim.dto.educationprogram.EducationProgramRequestDto;
 import com.tim.dto.educationprogram.EducationProgramResponseDto;
 import com.tim.dto.educationprogram.EducationProgramUpdateDto;
 import com.tim.dto.educationprogramsubject.EducationProgramSubjectCreateDto;
 import com.tim.dto.educationprogramsubject.EducationProgramSubjectResponseDto;
+import com.tim.dto.specification.SearchCriteria;
+import com.tim.dto.specification.TimSpecification;
 import com.tim.entity.EducationProgram;
 import com.tim.entity.EducationProgramSubject;
 import com.tim.entity.Faculty;
@@ -234,5 +245,46 @@ public class EduProgramServiceImpl implements EduProgramService {
 					ETimMessages.INVALID_OBJECT_VALUE);
 		}
 		return eduProgramSubjects;
+	}
+
+	@Override
+	public PagingResponseDto getPage(EducationProgramPageRequestDto pageRequestDto) {
+		ValidationUtils.validateObject(pageRequestDto);
+		
+		TimSpecification<EducationProgram> timSpecification = new TimSpecification<EducationProgram>();
+        timSpecification.add(new SearchCriteria("status", pageRequestDto.getStatus(), SearchOperation.EQUAL));
+        
+        if(StringUtils.isNotBlank(pageRequestDto.getCode())) {
+			timSpecification.add(new SearchCriteria("code", pageRequestDto.getCode(), SearchOperation.EQUAL));
+		}
+        if(StringUtils.isNotBlank(pageRequestDto.getName())) {
+			timSpecification.add(new SearchCriteria("name", pageRequestDto.getName(), SearchOperation.LIKE));
+		}
+        
+        Specification<EducationProgram> specification = Specification.where(null);
+        if (StringUtils.isNotBlank(pageRequestDto.getFacultyCode())) {
+            specification = specification.and((root, query, builder) -> {
+                return builder.equal(root.join("faculty").get("code"), 
+                							pageRequestDto.getFacultyCode());
+            });
+        }
+        if(StringUtils.isNotBlank(pageRequestDto.getSchoolYearCode())) {
+			specification = specification.and((root, query, builder) -> {
+				return builder.equal(root.join("schoolYear").get("code"), 
+										pageRequestDto.getSchoolYearCode());
+			});
+		}
+        
+        Pageable pageable = PageRequest.of(pageRequestDto.getPage() - 1, 
+        								pageRequestDto.getSize(), Sort.by("createdDate"));
+        Page<EducationProgram> pageEduPrograms = eduProgramRepository
+        									.findAll(specification.and(timSpecification), pageable);
+        List<EducationProgramDto> data = eduProgramConverter.toDtoList(pageEduPrograms.getContent());
+        
+		return new PagingResponseDto(pageEduPrograms.getTotalElements(),
+                pageEduPrograms.getTotalPages(),
+                pageEduPrograms.getNumber() + 1,
+                pageEduPrograms.getSize(),
+                data);
 	}
 }

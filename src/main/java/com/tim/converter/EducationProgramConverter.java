@@ -1,5 +1,8 @@
 package com.tim.converter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import com.tim.dto.educationprogram.EducationProgramDto;
@@ -45,5 +48,13 @@ public class EducationProgramConverter extends AbstractConverter<EducationProgra
 
 	public EducationProgramResponseDto toResponseDto(EducationProgram entity) {
 		return this.modelMapper.map(entity, EducationProgramResponseDto.class);
+	}
+	
+	@Override
+	public List<EducationProgramDto> toDtoList(List<EducationProgram> entityList){
+		List<EducationProgramDto> result = new ArrayList<>();
+		entityList.forEach(entity -> result.add(
+			toDto(entity)));
+		return result;
 	}
 }
