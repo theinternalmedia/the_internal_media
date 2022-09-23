@@ -24,6 +24,7 @@ public class StudentConverter extends AbstractConverter<StudentDto, Student> {
 	@Override
 	public StudentDto toDto(Student entity) {
 		StudentDto model = this.modelMapper.map(entity, StudentDto.class);
+		model.setClassCode(entity.getClassz().getCode());
 		return model;
 	}
 
