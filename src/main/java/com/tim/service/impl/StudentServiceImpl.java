@@ -9,6 +9,7 @@ import java.util.Set;
 
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Predicate;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -27,11 +28,9 @@ import org.springframework.web.multipart.MultipartFile;
 import com.tim.converter.StudentConverter;
 import com.tim.data.ETimMessages;
 import com.tim.data.ETimRoles;
-import com.tim.data.SearchOperation;
 import com.tim.data.TimConstants;
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.PasswordDto;
-import com.tim.dto.specification.SearchCriteria;
 import com.tim.dto.specification.TimSpecification;
 import com.tim.dto.student.StudentDto;
 import com.tim.dto.student.StudentPageRequestDto;
@@ -327,49 +326,44 @@ public class StudentServiceImpl implements StudentService {
 
 	@Override
 	public PagingResponseDto getPage(StudentPageRequestDto pageRequestDto) {
+		
+		// Validate input
 		ValidationUtils.validateObject(pageRequestDto);
 		
-		TimSpecification<Student> timSpecification = new TimSpecification<>();
-		timSpecification.add(new SearchCriteria("status", pageRequestDto.getStatus(), 
-												SearchOperation.EQUAL));
-		
-		if (StringUtils.isNotEmpty(pageRequestDto.getName())) {
-			timSpecification.add(new SearchCriteria("name", pageRequestDto.getName(), 
-												SearchOperation.LIKE));
-		}
-		if (StringUtils.isNotEmpty(pageRequestDto.getUserId())) {
-			timSpecification.add(new SearchCriteria("userId", pageRequestDto.getUserId(), 
-												SearchOperation.EQUAL));
-		}
-		
-		Specification<Student> specification = timSpecification;
-		
-		if (StringUtils.isNotEmpty(pageRequestDto.getClassCode())) {
-			specification = specification.and((root, query, builder) -> {
-				return builder.equal(root.join("classz").get("code"), 
-												pageRequestDto.getClassCode());
-			});
-		}
-		
-		//faculty, schoolyear filter
-//		if (StringUtils.isNotEmpty(pageRequestDto.getClassCode())) {
-//			specification = specification.and((root, query, builder) -> {
-//				return builder.equal(root.join("classz").get("faculty").get("code"), 
-//												pageRequestDto.getFacultyCode());
-//			});
-//		}
-//		if (StringUtils.isNotEmpty(pageRequestDto.getClassCode())) {
-//			specification = specification.and((root, query, builder) -> {
-//				return builder.equal(root.join("classz").get("schoolYear").get("code"), 
-//												pageRequestDto.getSchoolYearCode());
-//			});
-//		}
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		Specification<Student> specification = Specification.where((root, query, cb) -> {
+			predicates.add(cb.equal(root.get("status"), pageRequestDto.getStatus()));
+			if (StringUtils.isNotBlank(pageRequestDto.getName())) {
+				predicates.add(cb.like(root.get("name"), pageRequestDto.getName()));
+			}
+			if (StringUtils.isNotBlank(pageRequestDto.getUserId())) {
+				
+				predicates.add(cb.equal(root.get("userId"), pageRequestDto.getUserId()));
+			}
+			
+			if (StringUtils.isNotBlank(pageRequestDto.getClassCode())) {
+				predicates.add(cb.equal(root.join("classz").get("code"), 
+						pageRequestDto.getClassCode()));
+			}
+			
+			if (StringUtils.isNotBlank(pageRequestDto.getFacultyCode())) {
+			
+				predicates.add(cb.equal(root.join("classz").get("faculty").get("code"), 
+						pageRequestDto.getFacultyCode()));
+			}
+			if (StringUtils.isNotBlank(pageRequestDto.getSchoolYearCode())) {
+
+				predicates.add(cb.equal(root.join("classz").get("schoolYear").get("code"), 
+						pageRequestDto.getSchoolYearCode()));
+			}
+			return cb.and(predicates.toArray(new Predicate[0])) ;
+		});
 		
 		Pageable pageable = PageRequest.of(pageRequestDto.getPage() - 1, 
 											pageRequestDto.getSize(), Sort.by("name"));
 		Page<Student> pageStudents = studentRepository.findAll(specification, pageable);
 		List<StudentDto> data = studentConverter.toDtoList(pageStudents.getContent());
-		
 		return new PagingResponseDto(pageStudents.getTotalElements(),
 									pageStudents.getTotalPages(),
 									pageStudents.getNumber() + 1,
