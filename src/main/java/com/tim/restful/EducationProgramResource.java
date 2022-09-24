@@ -73,8 +73,7 @@ public class EducationProgramResource {
 	
 	@GetMapping(value = TimApiPath.EducationProgram.GET_PAGE)
 	public ResponseEntity<PagingResponseDto> getPaging(
-							EducationProgramPageRequestDto pageRequestDto
-							){
+			EducationProgramPageRequestDto pageRequestDto){
 		return ResponseEntity.ok(eduProgramService.getPage(pageRequestDto));
 	}
 }

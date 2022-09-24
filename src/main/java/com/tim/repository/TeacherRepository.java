@@ -32,7 +32,7 @@ public interface TeacherRepository extends JpaRepository<Teacher, Long>, JpaSpec
 
 	List<Teacher> findByEmailIn(Set<String> emailSet);
 
-	@Query(value = "SELECT t FROM Teacher t WHERE t.userId <> $userId AND t.status = true")
+	@Query(value = "SELECT t FROM Teacher t WHERE t.userId <> :userId AND t.status = true")
 	List<Teacher> findByUserIdAndStatusTrue(@Param("userId") String userId);
 
 }

@@ -7,7 +7,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import com.tim.entity.EducationProgram;
 
-public interface EducationProgramRepository extends JpaRepository<EducationProgram, Long>, JpaSpecificationExecutor<EducationProgram>{
+public interface EducationProgramRepository extends JpaRepository<EducationProgram, Long>, 
+		JpaSpecificationExecutor<EducationProgram>{
 	boolean existsByCode(String code);
 	
 	Optional<EducationProgram> getByCode(String code);

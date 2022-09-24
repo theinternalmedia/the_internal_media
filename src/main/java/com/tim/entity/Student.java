@@ -35,7 +35,7 @@ public class Student extends User {
 	@OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
 	private Set<NotificationStudent> notificationStudents = new HashSet<NotificationStudent>();
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "class_id")
 	private Classz classz;
 
