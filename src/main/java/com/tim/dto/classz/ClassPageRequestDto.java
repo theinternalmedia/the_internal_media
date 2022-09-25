@@ -1,34 +1,24 @@
 package com.tim.dto.classz;
 
-import javax.validation.constraints.Min;
+import com.tim.annotation.Code;
+import com.tim.dto.PageRequestDto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class ClassPageRequestDto {
+@Getter
+@Setter
+public class ClassPageRequestDto extends PageRequestDto{
 	
-	@Min(value = 1)
-	private int page;
-	
-	@Min(value = 1)
-	private int size;
-	
+	@Code
 	private String schoolYearCode;
 	
+	@Code
 	private String facultyCode;
 	
+	@Code
 	private String code;
 	
 	private String name;
-	
-	private boolean status = true;
-
-	public boolean getStatus() {
-		return status;
-	}
 
 }

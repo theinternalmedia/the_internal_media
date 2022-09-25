@@ -7,6 +7,7 @@ import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,8 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.tim.data.Permissions;
 import com.tim.data.TimApiPath;
 import com.tim.data.TimConstants;
+import com.tim.data.TimConstants.ApiParamExample.News;
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.news.NewsDto;
 import com.tim.dto.news.NewsRequestDto;
@@ -36,12 +39,12 @@ public class NewsResource {
 	@Autowired
 	private NewsService newsService;
 
-
+	@PreAuthorize("hasAuthority('" + Permissions.News.CREATE + "')")
 	@PostMapping(value = TimApiPath.News.CREATE)
 	public NewsDto create(@RequestPart(
 			value = "file", required = false) MultipartFile file,
 			@ApiParam(value = "NewsRequestDto in String Json, FacultyCodes can be empty", 
-			example = TimConstants.ApiParamExample.News.CREATE_newsRequestDtoJson) 
+				example = News.CREATE_newsRequestDtoJson) 
 			@RequestParam("newsRequestDtoJson") String newsRequestDtoJson) {
 		
 		NewsRequestDto requestDto = Utility.convertStringJsonToObject(newsRequestDtoJson,
@@ -50,6 +53,7 @@ public class NewsResource {
 		return newsService.create(requestDto, file);
 	}
 	
+	@PreAuthorize("hasAuthority('" + Permissions.News.UPDATE + "')")
 	@PutMapping(value = TimApiPath.News.UPDATE)
 	public NewsDto update(
 			@RequestPart(value = "file", required = false) MultipartFile file,
@@ -78,12 +82,12 @@ public class NewsResource {
 			@RequestParam("page") int page, 
 			@RequestParam("size") int size,
 			@RequestParam("status") boolean status,
-			@PathParam("id") Long id,
 			@PathParam("search") String search,
 			@PathParam("facultyCode") String facultyCode) {
-		return ResponseEntity.ok(newsService.getPage(page, size, status, id, search, facultyCode));
+		return ResponseEntity.ok(newsService.getPage(page, size, status, search, facultyCode));
 	}
 
+	@PreAuthorize("hasAuthority('" + Permissions.News.TOGGLE_STATUS + "')")
 	@PutMapping(value = TimApiPath.News.TOGGLE_STATUS)
 	public long toggleStatus(@RequestParam Set<Long> ids) {
 		return newsService.toggleStatus(ids);

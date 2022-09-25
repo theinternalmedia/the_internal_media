@@ -43,7 +43,6 @@ public class SwaggerConfig{
 	        .securitySchemes(Arrays.asList(apiKey()))
 	        .select()
 	        .apis(RequestHandlerSelectors.basePackage("com.tim.restful"))
-//	        .apis(RequestHandlerSelectors.any())
 	        .paths(PathSelectors.any())
 	        .build();
 	  }

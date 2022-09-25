@@ -58,7 +58,7 @@ public interface NewsService {
      * @return
      */
 	PagingResponseDto getPage(int page, int size, boolean status, 
-			Long id, String search, String facultyCode);
+			String search, String facultyCode);
 
 	/**
 	 * @author minhtuanitk43

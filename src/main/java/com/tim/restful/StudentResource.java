@@ -40,7 +40,7 @@ public class StudentResource {
 	@PostMapping(TimApiPath.Student.CREATE)
 	public StudentDto create(
 			@ApiParam("StudentRequestDto to create new Student")
-				@RequestBody StudentRequestDto requestDto) {
+			@RequestBody StudentRequestDto requestDto) {
 		return studentService.create(requestDto);
 	}
 	

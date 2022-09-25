@@ -213,7 +213,7 @@ public class TeacherServiceImpl implements TeacherService {
 				return builder.equal(root.join("faculty").get("code"), facultyCode);
 			});
 		}
-		Pageable pageable = PageRequest.of(page - 1, size, Sort.by("name"));
+		Pageable pageable = PageRequest.of(page - 1, size, Sort.by("name", "userId"));
 		Page<Teacher> pageTeachers = teacherRepository.findAll(specification, pageable);
 		List<TeacherDto> data = teacherConverter.toDtoList(pageTeachers.getContent());
 		return new PagingResponseDto(pageTeachers.getTotalElements(), 
@@ -295,8 +295,7 @@ public class TeacherServiceImpl implements TeacherService {
 				teachers.add(teacher);
 			}
 		}
-		teacherRepository.saveAll(teachers);
-		return ids.size();
+		return teacherRepository.saveAll(teachers).size();
 	}
 
 	@Override

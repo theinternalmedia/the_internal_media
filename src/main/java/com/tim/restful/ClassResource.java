@@ -38,23 +38,26 @@ public class ClassResource {
 		return classService.create(requestDto);
 	}
 	
+	@PreAuthorize("hasAuthority('" + Permissions.Classz.CREATE + "')")
 	@PostMapping(TimApiPath.Class.UPLOAD_EXCEL)
 	public long uploadExcelFile(@RequestPart("file") MultipartFile file) {
 		return classService.create(file);
 	}
 	
+	@PreAuthorize("hasAuthority('" + Permissions.Classz.READ + "')")
 	@GetMapping(TimApiPath.Class.GET_BY_CODE)
 	public ClassDto getByCode(@PathParam("code") String code) {
 		return classService.getByCode(code);
 	}
 	
-
+	@PreAuthorize("hasAuthority('" + Permissions.Classz.READ + "')")
 	@GetMapping(TimApiPath.Class.GET_PAGE)
 	public ResponseEntity<PagingResponseDto> getPage(
 			ClassPageRequestDto pageRequestDto){
 		return ResponseEntity.ok(classService.getPaging(pageRequestDto));
 	}
 	
+	@PreAuthorize("hasAuthority('" + Permissions.Classz.UPDATE + "')")
 	@PutMapping(TimApiPath.Class.UPDATE)
 	public ClassDto update(@RequestBody ClassUpdateRequestDto updateDto) {
 		return classService.update(updateDto);

@@ -335,33 +335,30 @@ public class StudentServiceImpl implements StudentService {
 		Specification<Student> specification = Specification.where((root, query, cb) -> {
 			predicates.add(cb.equal(root.get("status"), pageRequestDto.getStatus()));
 			if (StringUtils.isNotBlank(pageRequestDto.getName())) {
-				predicates.add(cb.like(root.get("name"), pageRequestDto.getName()));
+				predicates.add(cb.like(cb.lower(root.get("name")), 
+						"%" + pageRequestDto.getName().toLowerCase() + "%"));
 			}
 			if (StringUtils.isNotBlank(pageRequestDto.getUserId())) {
-				
-				predicates.add(cb.equal(root.get("userId"), pageRequestDto.getUserId()));
+				predicates.add(cb.equal(root.get("userId"), 
+						pageRequestDto.getUserId()));
 			}
-			
 			if (StringUtils.isNotBlank(pageRequestDto.getClassCode())) {
 				predicates.add(cb.equal(root.join("classz").get("code"), 
 						pageRequestDto.getClassCode()));
 			}
-			
 			if (StringUtils.isNotBlank(pageRequestDto.getFacultyCode())) {
-			
 				predicates.add(cb.equal(root.join("classz").get("faculty").get("code"), 
 						pageRequestDto.getFacultyCode()));
 			}
 			if (StringUtils.isNotBlank(pageRequestDto.getSchoolYearCode())) {
-
 				predicates.add(cb.equal(root.join("classz").get("schoolYear").get("code"), 
 						pageRequestDto.getSchoolYearCode()));
 			}
-			return cb.and(predicates.toArray(new Predicate[0])) ;
+			return cb.and(predicates.toArray(new Predicate[0]));
 		});
 		
 		Pageable pageable = PageRequest.of(pageRequestDto.getPage() - 1, 
-											pageRequestDto.getSize(), Sort.by("name"));
+				pageRequestDto.getSize(), Sort.by("name", "userId"));
 		Page<Student> pageStudents = studentRepository.findAll(specification, pageable);
 		List<StudentDto> data = studentConverter.toDtoList(pageStudents.getContent());
 		return new PagingResponseDto(pageStudents.getTotalElements(),

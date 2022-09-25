@@ -1,19 +1,14 @@
 package com.tim.dto.student;
 
-import javax.validation.constraints.Min;
-
 import com.tim.annotation.Code;
+import com.tim.dto.PageRequestDto;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-public class StudentPageRequestDto {
-
-	@Min(value = 1)
-	private int page;
-
-	@Min(value = 1)
-	private int size;
+@Getter
+@Setter
+public class StudentPageRequestDto extends PageRequestDto{
 
 	@Code
 	private String userId;
@@ -22,8 +17,6 @@ public class StudentPageRequestDto {
 	
 	@Code
 	private String classCode;
-
-	private boolean status = true;
 	
 	@Code
 	private String facultyCode;
@@ -31,7 +24,4 @@ public class StudentPageRequestDto {
 	@Code
 	private String schoolYearCode;
 
-	public boolean getStatus() {
-		return status;
-	}
 }

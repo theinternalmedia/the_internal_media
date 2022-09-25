@@ -10,6 +10,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import lombok.EqualsAndHashCode;
@@ -26,7 +27,7 @@ public class Student extends User {
 
 	private static final long serialVersionUID = 3541331733217756229L;
 
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany
 	@JoinTable(name = "role_student", 
 		joinColumns = @JoinColumn(name = "student_id"), 
 		inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -37,6 +38,7 @@ public class Student extends User {
 
 	@ManyToOne
 	@JoinColumn(name = "class_id")
+	@OrderBy("name ASC")
 	private Classz classz;
 
 	public Classz getClassz() {

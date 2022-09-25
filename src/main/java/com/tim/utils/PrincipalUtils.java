@@ -10,7 +10,7 @@ public final class PrincipalUtils {
 
 	/**
 	 * @author minhtuanitk43
-	 * @return authenticated user's userId (String)
+	 * @return null | authenticated user's userId (String)
 	 */
 	public static String getAuthenticatedUsersUserId() {
 		UserDetailsImpl userDetailsImpl = getAuthenticatedUserDetail();

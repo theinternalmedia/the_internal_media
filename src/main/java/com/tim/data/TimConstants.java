@@ -169,5 +169,21 @@ public final class TimConstants {
 					+ "\"schoolYearCodes\":[\"String\"], "
 					+ "\"classCodes\":[\"String\"]}";
 		}
+		
+		public static final class EducationProgram {
+			public static final String CREATE_eduProgramRequestJson = 
+					"{\"code\":\"String\", "
+					+ "\"name\":\"String\", "
+					+ "\"facultyCode\":\"String\", "
+					+ "\"schoolYearCode\":\"String\""
+					+ "}";
+			public static final String UPDATE_eduProgramRequestJson = 
+					"{\"id\":\"Long\", "
+					+ "\"code\":\"String\", "
+					+ "\"name\":\"String\", "
+					+ "\"facultyCode\":\"String\", "
+					+ "\"schoolYearCode\":\"String\""
+					+ "}";
+		}
 	}
 }

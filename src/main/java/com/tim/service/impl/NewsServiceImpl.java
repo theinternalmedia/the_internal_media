@@ -151,14 +151,9 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public PagingResponseDto getPage(int page, int size, boolean status,
-                                     Long id, String search, String facultyCode) {
+                                     String search, String facultyCode) {
         TimSpecification<News> timSpecification = new TimSpecification<News>();
         timSpecification.add(new SearchCriteria("status", status, SearchOperation.EQUAL));
-
-        // Id not null
-        if (id != null) {
-            timSpecification.add(new SearchCriteria("id", id, SearchOperation.EQUAL));
-        }
 
         Specification<News> specification = Specification.where(null);
 
@@ -182,7 +177,7 @@ public class NewsServiceImpl implements NewsService {
                 return builder.equal(root.join("faculties").get("code"), facultyCode);
             });
         }
-        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("createdDate"));
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("createdDate", "title"));
         Page<News> pageTeachers = newsRepository.findAll(specification.and(timSpecification), pageable);
         List<NewsDto> data = newsConverter.toDtoList(pageTeachers.getContent());
         return new PagingResponseDto(pageTeachers.getTotalElements(),
