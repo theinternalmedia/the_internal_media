@@ -1,7 +1,4 @@
-package com.tim.dto.notification;
-
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
+package com.tim.dto.news;
 
 import com.tim.annotation.Code;
 import com.tim.data.TimConstants;
@@ -13,16 +10,12 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class NotificationPageRequestDto extends PageRequestDto{
-	
+public class NewsPageRequestDto extends PageRequestDto{
+
 	@ApiModelProperty(value = "search in title, content and shortDescription")
 	private String searchKey;
 	
-	@Min(0)
-	@Max(2)
-	private Integer type;
-	
 	@Code
 	@ApiModelProperty(value = "Regex: " + TimConstants.REGEX_CODE)
-	private String notificationGroupCode;
+	private String facultyCode;
 }

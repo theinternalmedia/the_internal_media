@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.PasswordDto;
 import com.tim.dto.teacher.TeacherDto;
+import com.tim.dto.teacher.TeacherPageRequestDto;
 import com.tim.dto.teacher.TeacherRequestDto;
 import com.tim.dto.teacher.TeacherUpdateRequestDto;
 import com.tim.dto.teacher.TeacherUpdateProfileDto;
@@ -50,7 +51,7 @@ public interface TeacherService {
 	 * @param size
 	 * @return PagingResponseDto include totalItem, totalPage, page, size and content(data)
 	 */
-	PagingResponseDto getPage(String facultyCode, String name, String userId, int page, int size);
+	PagingResponseDto getPage(TeacherPageRequestDto pageRequestDto);
 	
 	TeacherDto getOne(String userId);
 

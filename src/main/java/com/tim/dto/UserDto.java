@@ -1,8 +1,6 @@
 package com.tim.dto;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -10,7 +8,6 @@ import javax.validation.constraints.Size;
 
 import com.tim.annotation.Code;
 import com.tim.annotation.Phone;
-import com.tim.dto.role.RoleDto;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -55,5 +52,4 @@ public class UserDto extends BaseDto {
 
 	private String remark;
 
-	private Set<RoleDto> roles = new HashSet<>();
 }

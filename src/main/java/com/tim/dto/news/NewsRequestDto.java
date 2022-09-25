@@ -7,6 +7,9 @@ import java.util.List;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import com.tim.data.TimConstants;
+
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
@@ -19,14 +22,17 @@ public class NewsRequestDto implements Serializable{
 
 	@NotBlank
 	@Size(max = 150)
+	@ApiModelProperty(value = "Max length: 150", required = true)
 	private String title;
 
 	@NotBlank
 	@Size(max = 255)
+	@ApiModelProperty(value = "Max length: 255", required = true)
 	private String shortDescription;
 
 	@NotBlank
 	private String content;
 
+	@ApiModelProperty(value = "Regex: " + TimConstants.REGEX_CODE)
 	private List<String> facultyCodes = new ArrayList<>();
 }

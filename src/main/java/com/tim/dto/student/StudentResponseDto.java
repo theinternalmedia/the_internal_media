@@ -1,12 +1,8 @@
 package com.tim.dto.student;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.validation.constraints.NotBlank;
 
 import com.tim.dto.UserDto;
-import com.tim.dto.role.RoleDto;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -20,7 +16,7 @@ import lombok.Getter;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class StudentDto extends UserDto {
+public class StudentResponseDto extends UserDto {
 
 	@Getter(value = AccessLevel.NONE)
 	private static final long serialVersionUID = 6750034714277068245L;
@@ -28,5 +24,5 @@ public class StudentDto extends UserDto {
 	@NotBlank
 	private String classCode;
 	
-	private Set<RoleDto> roles = new HashSet<>();
+	private String className;
 }

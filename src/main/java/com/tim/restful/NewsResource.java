@@ -3,10 +3,7 @@ package com.tim.restful;
 
 import java.util.Set;
 
-import javax.websocket.server.PathParam;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,17 +15,14 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.tim.data.Permissions;
 import com.tim.data.TimApiPath;
-import com.tim.data.TimConstants;
-import com.tim.data.TimConstants.ApiParamExample.News;
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.news.NewsDto;
+import com.tim.dto.news.NewsPageRequestDto;
 import com.tim.dto.news.NewsRequestDto;
 import com.tim.dto.news.NewsUpdateDto;
 import com.tim.service.NewsService;
-import com.tim.utils.Utility;
 
 import io.swagger.annotations.ApiParam;
 
@@ -41,30 +35,22 @@ public class NewsResource {
 
 	@PreAuthorize("hasAuthority('" + Permissions.News.CREATE + "')")
 	@PostMapping(value = TimApiPath.News.CREATE)
-	public NewsDto create(@RequestPart(
-			value = "file", required = false) MultipartFile file,
-			@ApiParam(value = "NewsRequestDto in String Json, FacultyCodes can be empty", 
-				example = News.CREATE_newsRequestDtoJson) 
-			@RequestParam("newsRequestDtoJson") String newsRequestDtoJson) {
+	public NewsDto create(
+			@ApiParam(value = "Thumbnail of the News") 
+			@RequestPart(value = "file", required = false) MultipartFile file,
+			NewsRequestDto requestDto) {
 		
-		NewsRequestDto requestDto = Utility.convertStringJsonToObject(newsRequestDtoJson,
-				new TypeReference<NewsRequestDto>() {
-				});
 		return newsService.create(requestDto, file);
 	}
 	
 	@PreAuthorize("hasAuthority('" + Permissions.News.UPDATE + "')")
 	@PutMapping(value = TimApiPath.News.UPDATE)
 	public NewsDto update(
+			@ApiParam(value = "Thumbnail of the News") 
 			@RequestPart(value = "file", required = false) MultipartFile file,
-			@ApiParam(value = "NewsRequestDto in String Json, FacultyCodes can be empty", 
-			example = TimConstants.ApiParamExample.News.UPDATE_newsRequestDtoJson) 
-			@RequestParam("newsRequestDtoJson") String newsRequestDtoJson) {
+			NewsUpdateDto updateDto) {
 		
-		NewsUpdateDto requestDto = Utility.convertStringJsonToObject(newsRequestDtoJson,
-				new TypeReference<NewsUpdateDto>() {
-				});
-		return newsService.update(requestDto, file);
+		return newsService.update(updateDto, file);
 	}
 
 	@GetMapping(value = TimApiPath.News.GET_BY_ID)
@@ -73,18 +59,13 @@ public class NewsResource {
 	}
 	
 	@GetMapping(value = TimApiPath.News.GET_BY_SLUG)
-	public NewsDto getBySlug(@PathParam("slug") String slug) {
+	public NewsDto getBySlug(@RequestParam("slug") String slug) {
 		return newsService.getOne(slug);
 	}
 	
 	@GetMapping(value = TimApiPath.News.GET_PAGE)
-	public ResponseEntity<PagingResponseDto> getPage(
-			@RequestParam("page") int page, 
-			@RequestParam("size") int size,
-			@RequestParam("status") boolean status,
-			@PathParam("search") String search,
-			@PathParam("facultyCode") String facultyCode) {
-		return ResponseEntity.ok(newsService.getPage(page, size, status, search, facultyCode));
+	public PagingResponseDto getPage(NewsPageRequestDto pageRequestDto) {
+		return newsService.getPage(pageRequestDto);
 	}
 
 	@PreAuthorize("hasAuthority('" + Permissions.News.TOGGLE_STATUS + "')")

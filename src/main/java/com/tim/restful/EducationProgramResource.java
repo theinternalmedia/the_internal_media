@@ -14,10 +14,8 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.tim.data.Permissions;
 import com.tim.data.TimApiPath;
-import com.tim.data.TimConstants.ApiParamExample.EducationProgram;
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.educationprogram.EducationProgramDto;
 import com.tim.dto.educationprogram.EducationProgramPageRequestDto;
@@ -25,7 +23,6 @@ import com.tim.dto.educationprogram.EducationProgramRequestDto;
 import com.tim.dto.educationprogram.EducationProgramResponseDto;
 import com.tim.dto.educationprogram.EducationProgramUpdateDto;
 import com.tim.service.EduProgramService;
-import com.tim.utils.Utility;
 
 import io.swagger.annotations.ApiParam;
 
@@ -39,24 +36,20 @@ public class EducationProgramResource {
 	@PreAuthorize("hasAuthority('" + Permissions.EducationProgram.CREATE + "')")
 	@PostMapping(value = TimApiPath.EducationProgram.CREATE)
 	public EducationProgramDto create(
-			@ApiParam(value = "EducationProgramRequestDto in String Json", 
-				example = EducationProgram.CREATE_eduProgramRequestJson) 
-			@RequestParam("eduProgramRequestJson") String eduProgramRequestJson,
-			@RequestPart("file") MultipartFile file) {
-		EducationProgramRequestDto requestDto = Utility.convertStringJsonToObject(
-				eduProgramRequestJson, new TypeReference<EducationProgramRequestDto>() {});
+			@ApiParam(value = "List Subject of the Education Program in excel file.") 
+			@RequestPart("file") MultipartFile file,
+			EducationProgramRequestDto requestDto) {
+
 		return eduProgramService.create(requestDto, file);
 	}
 	
 	@PreAuthorize("hasAuthority('" + Permissions.EducationProgram.UPDATE + "')")
 	@PutMapping(value = TimApiPath.EducationProgram.UPDATE)
 	public EducationProgramDto update(
-			@ApiParam(value = "EducationProgramRequestDto in String Json", 
-				example = EducationProgram.UPDATE_eduProgramRequestJson)
-			@RequestParam("eduProgramUpdateJson") String eduProgramUpdateJson,
-			@RequestPart(value = "file", required = false) MultipartFile file) {
-		EducationProgramUpdateDto updateDto = Utility.convertStringJsonToObject(
-				eduProgramUpdateJson, new TypeReference<EducationProgramUpdateDto>() {});
+			@ApiParam(value = "List Subject of the Education Program in excel file.") 
+			@RequestPart("file") MultipartFile file,
+			EducationProgramUpdateDto updateDto) {
+		
 		return eduProgramService.update(updateDto, file);
 	}
 	

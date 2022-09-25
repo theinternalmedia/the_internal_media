@@ -3,8 +3,6 @@ package com.tim.restful;
 import java.util.List;
 import java.util.Set;
 
-import javax.websocket.server.PathParam;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -39,12 +37,12 @@ public class FacultyResource {
 	}
 	
 	@GetMapping(TimApiPath.Faculty.GET_BY_CODE)
-	public FacultyDto getByCode(@PathParam("code") String code) {
+	public FacultyDto getByCode(@RequestParam("code") String code) {
 		return facultyService.getByCode(code);
 	}
 	
 	@GetMapping(TimApiPath.Faculty.GET_ALL)
-	public List<FacultyDto> getAll(@PathParam("status") boolean status){
+	public List<FacultyDto> getAll(@RequestParam("status") boolean status){
 		return facultyService.getAll(status);
 	}
 	

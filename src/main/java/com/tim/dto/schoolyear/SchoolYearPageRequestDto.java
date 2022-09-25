@@ -1,25 +1,19 @@
 package com.tim.dto.schoolyear;
 
-import javax.validation.constraints.Min;
+import com.tim.data.TimConstants;
+import com.tim.dto.PageRequestDto;
 
-import lombok.Data;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-public class SchoolYearPageRequestDto {
+@Getter
+@Setter
+public class SchoolYearPageRequestDto extends PageRequestDto{
 
-	@Min(value = 1)
-	private int page;
-
-	@Min(value = 1)
-	private int size;
-
+	@ApiModelProperty(value = "Regex: " + TimConstants.REGEX_CODE)
 	private String code;
 
 	private String name;
 
-	private boolean status = true;
-
-	public boolean getStatus() {
-		return status;
-	}
 }

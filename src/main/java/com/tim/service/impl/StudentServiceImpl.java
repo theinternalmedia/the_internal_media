@@ -35,6 +35,7 @@ import com.tim.dto.specification.TimSpecification;
 import com.tim.dto.student.StudentDto;
 import com.tim.dto.student.StudentPageRequestDto;
 import com.tim.dto.student.StudentRequestDto;
+import com.tim.dto.student.StudentResponseDto;
 import com.tim.dto.student.StudentUpdateProfileDto;
 import com.tim.dto.student.StudentUpdateRequestDto;
 import com.tim.entity.Classz;
@@ -330,13 +331,26 @@ public class StudentServiceImpl implements StudentService {
 		// Validate input
 		ValidationUtils.validateObject(pageRequestDto);
 		
-		List<Predicate> predicates = new ArrayList<Predicate>();
-
+		// Specification
 		Specification<Student> specification = Specification.where((root, query, cb) -> {
+			List<Predicate> predicates = new ArrayList<Predicate>();
 			predicates.add(cb.equal(root.get("status"), pageRequestDto.getStatus()));
-			if (StringUtils.isNotBlank(pageRequestDto.getName())) {
-				predicates.add(cb.like(cb.lower(root.get("name")), 
-						"%" + pageRequestDto.getName().toLowerCase() + "%"));
+			if (StringUtils.isNotBlank(pageRequestDto.getSearchKey())) {
+				predicates.add(cb.or(
+						cb.like(cb.lower(root.get("name")), 
+								"%" + pageRequestDto.getSearchKey().toLowerCase() + "%"),
+						cb.like(cb.lower(root.get("address")), 
+								"%" + pageRequestDto.getSearchKey().toLowerCase() + "%"),
+						cb.like(cb.lower(root.get("phone")), 
+								"%" + pageRequestDto.getSearchKey().toLowerCase() + "%"),
+						cb.like(cb.lower(root.get("email")), 
+								"%" + pageRequestDto.getSearchKey().toLowerCase() + "%"),
+						cb.like(cb.lower(root.get("remark")), 
+								"%" + pageRequestDto.getSearchKey().toLowerCase() + "%")));
+			}
+			if (pageRequestDto.getGender() != null) {
+				predicates.add(cb.equal(root.get("gender"), 
+						pageRequestDto.getGender()));
 			}
 			if (StringUtils.isNotBlank(pageRequestDto.getUserId())) {
 				predicates.add(cb.equal(root.get("userId"), 
@@ -357,10 +371,12 @@ public class StudentServiceImpl implements StudentService {
 			return cb.and(predicates.toArray(new Predicate[0]));
 		});
 		
-		Pageable pageable = PageRequest.of(pageRequestDto.getPage() - 1, 
-				pageRequestDto.getSize(), Sort.by("name", "userId"));
+		Pageable pageable = PageRequest.of(
+				pageRequestDto.getPage() - 1, 
+				pageRequestDto.getSize(), 
+				Sort.by("name", "userId"));
 		Page<Student> pageStudents = studentRepository.findAll(specification, pageable);
-		List<StudentDto> data = studentConverter.toDtoList(pageStudents.getContent());
+		List<StudentResponseDto> data = studentConverter.toResponseDtoList(pageStudents.getContent());
 		return new PagingResponseDto(pageStudents.getTotalElements(),
 									pageStudents.getTotalPages(),
 									pageStudents.getNumber() + 1,

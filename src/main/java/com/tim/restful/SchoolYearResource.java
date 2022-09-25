@@ -3,8 +3,6 @@ package com.tim.restful;
 import java.util.List;
 import java.util.Set;
 
-import javax.websocket.server.PathParam;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,7 +38,7 @@ public class SchoolYearResource {
 	}
 	
 	@GetMapping(TimApiPath.SchoolYear.GET_ALL)
-	public List<SchoolYearDto> getAll(@PathParam("status") boolean status){
+	public List<SchoolYearDto> getAll(@RequestParam("status") boolean status){
 		return schoolYearService.getAll(status);
 	}
 	

@@ -2,11 +2,9 @@ package com.tim.restful;
 
 import java.util.Set;
 
-import javax.websocket.server.PathParam;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -46,7 +44,7 @@ public class ClassResource {
 	
 	@PreAuthorize("hasAuthority('" + Permissions.Classz.READ + "')")
 	@GetMapping(TimApiPath.Class.GET_BY_CODE)
-	public ClassDto getByCode(@PathParam("code") String code) {
+	public ClassDto getByCode(@RequestParam("code") String code) {
 		return classService.getByCode(code);
 	}
 	

@@ -2,8 +2,6 @@ package com.tim.restful;
 
 import java.util.Set;
 
-import javax.websocket.server.PathParam;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.tim.data.TimApiPath;
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.teacher.TeacherDto;
+import com.tim.dto.teacher.TeacherPageRequestDto;
 import com.tim.dto.teacher.TeacherRequestDto;
 import com.tim.dto.teacher.TeacherUpdateRequestDto;
 import com.tim.service.TeacherService;
@@ -51,13 +50,8 @@ public class TeacherResource {
 	}
 
 	@GetMapping(TimApiPath.Teacher.GET_PAGE)
-	public ResponseEntity<PagingResponseDto> getPage(
-			@PathParam("facultyCode") String facultyCode,
-			@PathParam("name") String name, 
-			@PathParam("userId") String userId,
-			@RequestParam("page") int page,
-			@RequestParam("size") int size){
-		return ResponseEntity.ok(teacherService.getPage(facultyCode, name, userId, page, size));
+	public ResponseEntity<PagingResponseDto> getPage(TeacherPageRequestDto pageRequestDto){
+		return ResponseEntity.ok(teacherService.getPage(pageRequestDto));
 	}
 	
 	@PutMapping(TimApiPath.Teacher.TOGGLE_STATUS)
