@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.tim.converter.NotificationGroupConverter;
 import com.tim.dto.notification.NotificationGroupDto;
-import com.tim.dto.notification.NotificationGroupRequestDto;
-import com.tim.dto.notification.NotificationGroupUpdateRequestDto;
+import com.tim.dto.notification.NotificationGroupCreateDto;
+import com.tim.dto.notification.NotificationGroupUpdateDto;
 import com.tim.entity.NotificationGroup;
 import com.tim.exception.TimNotFoundException;
 import com.tim.repository.NotificationGroupRepository;
@@ -27,7 +27,7 @@ public class NotificationGroupServiceImpl implements NotificationGroupService {
     private NotificationGroupConverter notificationGroupConverter;
 
     @Override
-    public NotificationGroupDto create(NotificationGroupRequestDto requestDto) {
+    public NotificationGroupDto create(NotificationGroupCreateDto requestDto) {
     	// Validate input
     	ValidationUtils.validateObject(requestDto);
     	
@@ -37,7 +37,7 @@ public class NotificationGroupServiceImpl implements NotificationGroupService {
     }
 
     @Override
-    public NotificationGroupDto update(NotificationGroupUpdateRequestDto requestDto) {
+    public NotificationGroupDto update(NotificationGroupUpdateDto requestDto) {
     	// Validate input
     	ValidationUtils.validateObject(requestDto);
     	NotificationGroup oldEntity = notificationGroupRepository.findById(requestDto.getId())

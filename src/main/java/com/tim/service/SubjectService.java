@@ -5,14 +5,14 @@ import java.util.Set;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tim.dto.subject.SubjectDto;
-import com.tim.dto.subject.SubjectRequestDto;
-import com.tim.dto.subject.SubjectUpdateRequestDto;
+import com.tim.dto.subject.SubjectCreateDto;
+import com.tim.dto.subject.SubjectUpdateDto;
 
 public interface SubjectService {
 
-    SubjectDto create(SubjectRequestDto requestDto);
+    SubjectDto create(SubjectCreateDto requestDto);
 
-	SubjectDto update(SubjectUpdateRequestDto requestDto);
+	SubjectDto update(SubjectUpdateDto requestDto);
 
 	long create(MultipartFile file);
 	

@@ -34,9 +34,10 @@ import com.tim.dto.PasswordDto;
 import com.tim.dto.specification.TimSpecification;
 import com.tim.dto.student.StudentDto;
 import com.tim.dto.student.StudentPageRequestDto;
-import com.tim.dto.student.StudentRequestDto;
+import com.tim.dto.student.StudentCreateDto;
+import com.tim.dto.student.StudentResponseDto;
 import com.tim.dto.student.StudentUpdateProfileDto;
-import com.tim.dto.student.StudentUpdateRequestDto;
+import com.tim.dto.student.StudentUpdateDto;
 import com.tim.entity.Classz;
 import com.tim.entity.Faculty;
 import com.tim.entity.Role;
@@ -71,7 +72,7 @@ public class StudentServiceImpl implements StudentService {
 	private RoleRepository roleRepository;
 
 	@Override
-	public StudentDto create(StudentRequestDto requestDto) {
+	public StudentDto create(StudentCreateDto requestDto) {
 		// Validate input
 		ValidationUtils.validateObject(requestDto);
 
@@ -105,14 +106,14 @@ public class StudentServiceImpl implements StudentService {
 	@Transactional
 	@Override
 	public long create(MultipartFile file) {
-		List<StudentRequestDto> dtoList = excelService.getListObjectFromExcelFile(
-				file, StudentRequestDto.class);
+		List<StudentCreateDto> dtoList = excelService.getListObjectFromExcelFile(
+				file, StudentCreateDto.class);
 		List<Student> entityList = new ArrayList<>();
 		// UserID Set
 		Set<String> userIdSet = new HashSet<String>();
 		// Email Set
 		Set<String> emailSet = new HashSet<String>();
-		for (StudentRequestDto dto : dtoList) {
+		for (StudentCreateDto dto : dtoList) {
 			Student entity = studentConverter.toEntity(dto);
 			Classz classz = classRepository.getByCodeAndStatusTrue(dto.getClassCode())
 					.orElseThrow(() -> new TimNotFoundException(
@@ -215,7 +216,7 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public StudentDto update(StudentUpdateRequestDto requestDto) {
+	public StudentDto update(StudentUpdateDto requestDto) {
 		// Validate input
 		ValidationUtils.validateObject(requestDto);
 
@@ -330,40 +331,52 @@ public class StudentServiceImpl implements StudentService {
 		// Validate input
 		ValidationUtils.validateObject(pageRequestDto);
 		
-		List<Predicate> predicates = new ArrayList<Predicate>();
-
+		// Specification
 		Specification<Student> specification = Specification.where((root, query, cb) -> {
+			List<Predicate> predicates = new ArrayList<Predicate>();
 			predicates.add(cb.equal(root.get("status"), pageRequestDto.getStatus()));
-			if (StringUtils.isNotBlank(pageRequestDto.getName())) {
-				predicates.add(cb.like(root.get("name"), pageRequestDto.getName()));
+			if (StringUtils.isNotBlank(pageRequestDto.getSearchKey())) {
+				predicates.add(cb.or(
+						cb.like(cb.lower(root.get("name")), 
+								"%" + pageRequestDto.getSearchKey().toLowerCase() + "%"),
+						cb.like(cb.lower(root.get("address")), 
+								"%" + pageRequestDto.getSearchKey().toLowerCase() + "%"),
+						cb.like(cb.lower(root.get("phone")), 
+								"%" + pageRequestDto.getSearchKey().toLowerCase() + "%"),
+						cb.like(cb.lower(root.get("email")), 
+								"%" + pageRequestDto.getSearchKey().toLowerCase() + "%"),
+						cb.like(cb.lower(root.get("remark")), 
+								"%" + pageRequestDto.getSearchKey().toLowerCase() + "%")));
+			}
+			if (pageRequestDto.getGender() != null) {
+				predicates.add(cb.equal(root.get("gender"), 
+						pageRequestDto.getGender()));
 			}
 			if (StringUtils.isNotBlank(pageRequestDto.getUserId())) {
-				
-				predicates.add(cb.equal(root.get("userId"), pageRequestDto.getUserId()));
+				predicates.add(cb.equal(root.get("userId"), 
+						pageRequestDto.getUserId()));
 			}
-			
 			if (StringUtils.isNotBlank(pageRequestDto.getClassCode())) {
 				predicates.add(cb.equal(root.join("classz").get("code"), 
 						pageRequestDto.getClassCode()));
 			}
-			
 			if (StringUtils.isNotBlank(pageRequestDto.getFacultyCode())) {
-			
 				predicates.add(cb.equal(root.join("classz").get("faculty").get("code"), 
 						pageRequestDto.getFacultyCode()));
 			}
 			if (StringUtils.isNotBlank(pageRequestDto.getSchoolYearCode())) {
-
 				predicates.add(cb.equal(root.join("classz").get("schoolYear").get("code"), 
 						pageRequestDto.getSchoolYearCode()));
 			}
-			return cb.and(predicates.toArray(new Predicate[0])) ;
+			return cb.and(predicates.toArray(new Predicate[0]));
 		});
 		
-		Pageable pageable = PageRequest.of(pageRequestDto.getPage() - 1, 
-											pageRequestDto.getSize(), Sort.by("name"));
+		Pageable pageable = PageRequest.of(
+				pageRequestDto.getPage() - 1, 
+				pageRequestDto.getSize(), 
+				Sort.by("name", "userId"));
 		Page<Student> pageStudents = studentRepository.findAll(specification, pageable);
-		List<StudentDto> data = studentConverter.toDtoList(pageStudents.getContent());
+		List<StudentResponseDto> data = studentConverter.toResponseDtoList(pageStudents.getContent());
 		return new PagingResponseDto(pageStudents.getTotalElements(),
 									pageStudents.getTotalPages(),
 									pageStudents.getNumber() + 1,

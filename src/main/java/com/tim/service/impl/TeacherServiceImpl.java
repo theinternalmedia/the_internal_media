@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.criteria.Predicate;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,16 +24,15 @@ import org.springframework.web.multipart.MultipartFile;
 import com.tim.converter.TeacherConverter;
 import com.tim.data.ETimMessages;
 import com.tim.data.ETimRoles;
-import com.tim.data.SearchOperation;
 import com.tim.data.TimConstants;
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.PasswordDto;
-import com.tim.dto.specification.SearchCriteria;
-import com.tim.dto.specification.TimSpecification;
 import com.tim.dto.teacher.TeacherDto;
-import com.tim.dto.teacher.TeacherRequestDto;
+import com.tim.dto.teacher.TeacherPageRequestDto;
+import com.tim.dto.teacher.TeacherCreateDto;
+import com.tim.dto.teacher.TeacherResponseDto;
 import com.tim.dto.teacher.TeacherUpdateProfileDto;
-import com.tim.dto.teacher.TeacherUpdateRequestDto;
+import com.tim.dto.teacher.TeacherUpdateDto;
 import com.tim.entity.Faculty;
 import com.tim.entity.Role;
 import com.tim.entity.Teacher;
@@ -65,7 +66,7 @@ public class TeacherServiceImpl implements TeacherService {
 
 	@Override
 	@Transactional
-	public TeacherDto create(TeacherRequestDto requestDto) {
+	public TeacherDto create(TeacherCreateDto requestDto) {
 		// Validate input
 		ValidationUtils.validateObject(requestDto);
 		
@@ -115,15 +116,15 @@ public class TeacherServiceImpl implements TeacherService {
 	@Transactional
 	public long create(MultipartFile file) {
 		// Get dto list from excel file
-		List<TeacherRequestDto> dtoList = excelService.getListObjectFromExcelFile(
-				file, TeacherRequestDto.class);
+		List<TeacherCreateDto> dtoList = excelService.getListObjectFromExcelFile(
+				file, TeacherCreateDto.class);
 		
 		List<Teacher> entityList = new ArrayList<Teacher>();
 		// UserID Set
 		Set<String> userIdSet = new HashSet<String>();
 		// Email Set
 		Set<String> emailSet = new HashSet<String>();
-		for (TeacherRequestDto item : dtoList) {
+		for (TeacherCreateDto item : dtoList) {
 			Teacher entity = teacherConverter.toEntity(item);
 			Faculty faculty = facultyRepository.findByCodeAndStatusTrue(item.getFacultyCode()).orElseThrow(
 					() -> new TimNotFoundException("Khoa", "Mã Khoa", item.getFacultyCode()));
@@ -196,26 +197,52 @@ public class TeacherServiceImpl implements TeacherService {
 	}
 
 	@Override
-	public PagingResponseDto getPage(String facultyCode, String name, String userId, int page, int size) {
-		TimSpecification<Teacher> timSpecification = new TimSpecification<>();
-		if (StringUtils.isNotEmpty(name)) {
-			timSpecification.add(new SearchCriteria("name", name, SearchOperation.LIKE));
-		}
-		if (StringUtils.isNotEmpty(userId)) {
-			timSpecification.add(new SearchCriteria("userId", userId, SearchOperation.EQUAL));
-		} else {
-			timSpecification.add(new SearchCriteria("userId", 
-					TimConstants.ADMIN_USERID, SearchOperation.NOT_EQUAL));
-		}
-		Specification<Teacher> specification = timSpecification;
-		if (StringUtils.isNotEmpty(facultyCode)) {
-			specification = specification.and((root, query, builder) -> {
-				return builder.equal(root.join("faculty").get("code"), facultyCode);
-			});
-		}
-		Pageable pageable = PageRequest.of(page - 1, size, Sort.by("name"));
+	public PagingResponseDto getPage(TeacherPageRequestDto pageRequestDto) {
+		// Validate input
+		ValidationUtils.validateObject(pageRequestDto);
+		
+		// Specification
+		Specification<Teacher> specification = Specification.where((root, query, cb) -> {
+			List<Predicate> predicates = new ArrayList<Predicate>();
+			predicates.add(cb.equal(root.get("status"), pageRequestDto.getStatus()));
+			if (StringUtils.isNotBlank(pageRequestDto.getSearchKey())) {
+				predicates.add(cb.or(
+						cb.like(cb.lower(root.get("name")), 
+								"%" + pageRequestDto.getSearchKey().toLowerCase() + "%"),
+						cb.like(cb.lower(root.get("address")), 
+								"%" + pageRequestDto.getSearchKey().toLowerCase() + "%"),
+						cb.like(cb.lower(root.get("phone")), 
+								"%" + pageRequestDto.getSearchKey().toLowerCase() + "%"),
+						cb.like(cb.lower(root.get("email")), 
+								"%" + pageRequestDto.getSearchKey().toLowerCase() + "%"),
+						cb.like(cb.lower(root.get("remark")), 
+								"%" + pageRequestDto.getSearchKey().toLowerCase() + "%")));
+			}
+			if (pageRequestDto.getGender() != null) {
+				predicates.add(cb.equal(root.get("gender"), 
+						pageRequestDto.getGender()));
+			}
+			if (StringUtils.isNotBlank(pageRequestDto.getUserId())) {
+				predicates.add(cb.equal(root.get("userId"), 
+						pageRequestDto.getUserId()));
+			} else {
+				predicates.add(cb.notEqual(root.get("userId"), 
+						TimConstants.ADMIN_USERID));
+			}
+			if (StringUtils.isNotBlank(pageRequestDto.getFacultyCode())) {
+				predicates.add(cb.equal(root.get("faculty").get("code"), 
+						pageRequestDto.getFacultyCode()));
+			}
+			return cb.and(predicates.toArray(new Predicate[0]));
+		});
+		
+		Pageable pageable = PageRequest.of(
+				pageRequestDto.getPage() - 1, 
+				pageRequestDto.getSize(), 
+				Sort.by("name", "userId"));
 		Page<Teacher> pageTeachers = teacherRepository.findAll(specification, pageable);
-		List<TeacherDto> data = teacherConverter.toDtoList(pageTeachers.getContent());
+		List<TeacherResponseDto> data = teacherConverter.toResponseDtoList(pageTeachers.getContent());
+		
 		return new PagingResponseDto(pageTeachers.getTotalElements(), 
 				pageTeachers.getTotalPages(),
 				pageTeachers.getNumber() + 1, 
@@ -231,7 +258,7 @@ public class TeacherServiceImpl implements TeacherService {
 	}
 
 	@Override
-	public TeacherDto update(TeacherUpdateRequestDto requestDto) {
+	public TeacherDto update(TeacherUpdateDto requestDto) {
 		// Validate input
 		ValidationUtils.validateObject(requestDto);
 		
@@ -295,8 +322,7 @@ public class TeacherServiceImpl implements TeacherService {
 				teachers.add(teacher);
 			}
 		}
-		teacherRepository.saveAll(teachers);
-		return ids.size();
+		return teacherRepository.saveAll(teachers).size();
 	}
 
 	@Override

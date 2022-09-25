@@ -30,7 +30,7 @@ public class EducationProgram extends BaseEntity {
 	private static final long serialVersionUID = -3739672079388550708L;
 
 	@Column(unique = true, nullable = false, length = 50)
-	@Size(min = 3, max = 50)
+	@Size(min = 3,max = 50)
 	@Code
 	private String code;
 

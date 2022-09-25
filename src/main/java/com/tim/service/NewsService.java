@@ -6,7 +6,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.news.NewsDto;
-import com.tim.dto.news.NewsRequestDto;
+import com.tim.dto.news.NewsPageRequestDto;
+import com.tim.dto.news.NewsCreateDto;
 import com.tim.dto.news.NewsUpdateDto;
 
 public interface NewsService {
@@ -18,7 +19,7 @@ public interface NewsService {
 	 * @param requestDto
 	 * @return ResponseDto
 	 */
-	NewsDto create(NewsRequestDto requestDto, MultipartFile image);
+	NewsDto create(NewsCreateDto requestDto, MultipartFile image);
 
     /**
      * Update News.
@@ -57,8 +58,7 @@ public interface NewsService {
      * @param facultyCode2 
      * @return
      */
-	PagingResponseDto getPage(int page, int size, boolean status, 
-			Long id, String search, String facultyCode);
+	PagingResponseDto getPage(NewsPageRequestDto pageRequestDto);
 
 	/**
 	 * @author minhtuanitk43

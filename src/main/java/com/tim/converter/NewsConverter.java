@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.tim.dto.news.NewsDto;
-import com.tim.dto.news.NewsRequestDto;
+import com.tim.dto.news.NewsCreateDto;
 import com.tim.entity.News;
 
 @Component
@@ -27,7 +27,7 @@ public class NewsConverter extends AbstractConverter<NewsDto, News> {
      * @param requestDto
      * @return News Entity
      */
-	public News toEntity(NewsRequestDto requestDto) {
+	public News toEntity(NewsCreateDto requestDto) {
 		return this.modelMapper.map(requestDto, News.class);
 	}
 	
@@ -40,7 +40,7 @@ public class NewsConverter extends AbstractConverter<NewsDto, News> {
 		return result;
 	}
 	
-	public News toEntity(NewsRequestDto dto, News oldNews) {
+	public News toEntity(NewsCreateDto dto, News oldNews) {
 		oldNews.setContent(dto.getContent());
 		oldNews.setTitle(dto.getTitle());
 		oldNews.setShortDescription(dto.getShortDescription());

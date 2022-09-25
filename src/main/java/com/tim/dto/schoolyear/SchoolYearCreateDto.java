@@ -4,7 +4,9 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import com.tim.annotation.Code;
+import com.tim.data.TimConstants.ApiModelPropertyValue;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -15,11 +17,12 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode
-public class SchoolYearRequestDto {
+public class SchoolYearCreateDto {
 
-	@Size(max = 20, min = 3)
+	@Size(min =3, max = 50)
 	@NotBlank
 	@Code
+	@ApiModelProperty(value = ApiModelPropertyValue.CODE)
 	private String code;
 
 	@Size(max = 50)

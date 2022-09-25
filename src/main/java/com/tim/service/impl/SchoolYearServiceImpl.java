@@ -18,8 +18,8 @@ import com.tim.data.SearchOperation;
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.schoolyear.SchoolYearDto;
 import com.tim.dto.schoolyear.SchoolYearPageRequestDto;
-import com.tim.dto.schoolyear.SchoolYearRequestDto;
-import com.tim.dto.schoolyear.SchoolYearUpdateRequestDto;
+import com.tim.dto.schoolyear.SchoolYearCreateDto;
+import com.tim.dto.schoolyear.SchoolYearUpdateDto;
 import com.tim.dto.specification.SearchCriteria;
 import com.tim.dto.specification.TimSpecification;
 import com.tim.entity.SchoolYear;
@@ -40,7 +40,7 @@ public class SchoolYearServiceImpl implements SchoolYearService {
 	
 	@Override
 	@Transactional
-	public SchoolYearDto create(SchoolYearRequestDto requestDto) {
+	public SchoolYearDto create(SchoolYearCreateDto requestDto) {
 		// Validate input
 		ValidationUtils.validateObject(requestDto);
 		
@@ -54,7 +54,7 @@ public class SchoolYearServiceImpl implements SchoolYearService {
 	
     @Override
     @Transactional
-    public SchoolYearDto update(SchoolYearUpdateRequestDto requestDto) {
+    public SchoolYearDto update(SchoolYearUpdateDto requestDto) {
     	SchoolYear schoolYear = schoolYearRepository.findById(requestDto.getId()).orElseThrow(
     			() -> new TimNotFoundException(SCHOOL_YEAR, "ID", requestDto.getId().toString()));
     	

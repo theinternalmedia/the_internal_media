@@ -1,13 +1,14 @@
 package com.tim.dto.student;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 
 import com.tim.annotation.Code;
-import com.tim.dto.UserRequestDto;
+import com.tim.dto.UserDto;
 
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 /**
  * 
@@ -16,14 +17,14 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class StudentRequestDto extends UserRequestDto {
+public class StudentResponseDto extends UserDto {
 
+	@Getter(value = AccessLevel.NONE)
+	private static final long serialVersionUID = 6750034714277068245L;
+	
 	@NotBlank
 	@Code
 	private String classCode;
 	
-	@NotBlank
-	@Size(max = 20, min = 5)
-	private String userId;
-	
+	private String className;
 }

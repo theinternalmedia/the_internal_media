@@ -14,8 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.tim.data.TimApiPath;
 import com.tim.dto.subject.SubjectDto;
-import com.tim.dto.subject.SubjectRequestDto;
-import com.tim.dto.subject.SubjectUpdateRequestDto;
+import com.tim.dto.subject.SubjectCreateDto;
+import com.tim.dto.subject.SubjectUpdateDto;
 import com.tim.service.SubjectService;
 
 @RestController
@@ -26,7 +26,7 @@ public class SubjectResource {
 	private SubjectService subjectService;
 
 	@PostMapping(TimApiPath.Subject.CREATE)
-	public SubjectDto create(@RequestBody SubjectRequestDto requestDto) {
+	public SubjectDto create(@RequestBody SubjectCreateDto requestDto) {
 		return subjectService.create(requestDto);
 	}
 	
@@ -36,7 +36,7 @@ public class SubjectResource {
 	}
 	
 	@PutMapping(TimApiPath.Subject.UPDATE)
-	public SubjectDto update(@RequestBody SubjectUpdateRequestDto requestDto) {
+	public SubjectDto update(@RequestBody SubjectUpdateDto requestDto) {
 		return subjectService.update(requestDto);
 	} 
 	

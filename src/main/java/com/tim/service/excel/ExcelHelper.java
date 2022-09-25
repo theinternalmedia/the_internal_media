@@ -380,8 +380,13 @@ public class ExcelHelper {
 	 * @return
 	 */
 	private InputStream isExcelFormat(MultipartFile file) {
+		if (file == null) {
+			throw new ValidateException(ETimMessages.VALIDATION_ERR_MESSAGE, 
+					List.of(MessageUtils.get(ETimMessages.OBJECT_IS_NULL)));
+		}
 		if (!TYPE.equals(file.getContentType())) {
-			throw new ValidateException(ETimMessages.INVALID_EXCEL_FILE, null);
+			throw new ValidateException(ETimMessages.VALIDATION_ERR_MESSAGE, 
+					List.of(MessageUtils.get(ETimMessages.INVALID_EXCEL_FILE)));
 		}
 		try {
 			return file.getInputStream();

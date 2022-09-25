@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.criteria.Predicate;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,14 +21,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.tim.converter.NewsConverter;
 import com.tim.data.ETimMessages;
-import com.tim.data.SearchOperation;
 import com.tim.data.TimConstants;
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.news.NewsDto;
-import com.tim.dto.news.NewsRequestDto;
+import com.tim.dto.news.NewsPageRequestDto;
+import com.tim.dto.news.NewsCreateDto;
 import com.tim.dto.news.NewsUpdateDto;
-import com.tim.dto.specification.SearchCriteria;
-import com.tim.dto.specification.TimSpecification;
 import com.tim.entity.Faculty;
 import com.tim.entity.News;
 import com.tim.exception.TimException;
@@ -52,7 +52,7 @@ public class NewsServiceImpl implements NewsService {
     
     @Override
     @Transactional(noRollbackFor = {TimException.class, TimNotFoundException.class})
-    public NewsDto create(NewsRequestDto requestDto, MultipartFile image) {
+    public NewsDto create(NewsCreateDto requestDto, MultipartFile image) {
         // Validate Object
         ValidationUtils.validateObject(requestDto);
 
@@ -150,41 +150,37 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public PagingResponseDto getPage(int page, int size, boolean status,
-                                     Long id, String search, String facultyCode) {
-        TimSpecification<News> timSpecification = new TimSpecification<News>();
-        timSpecification.add(new SearchCriteria("status", status, SearchOperation.EQUAL));
+    public PagingResponseDto getPage(NewsPageRequestDto pageRequestDto) {
+    	// Validate input 
+    	ValidationUtils.validateObject(pageRequestDto);
+    	
+        Specification<News> specification = Specification.where((root, query, cb) -> {
+        	List<Predicate> predicates = new ArrayList<Predicate>();
+			predicates.add(cb.equal(root.get("status"), pageRequestDto.getStatus()));
+			
+			if (StringUtils.isNotBlank(pageRequestDto.getSearchKey())) {
+				predicates.add(cb.or(
+						cb.like(cb.lower(root.get("title")), 
+								"%" + pageRequestDto.getSearchKey().toLowerCase() + "%"),
+						cb.like(cb.lower(root.get("shortDescription")), 
+								"%" + pageRequestDto.getSearchKey().toLowerCase() + "%"),
+						cb.like(cb.lower(root.get("content")), 
+								"%" + pageRequestDto.getSearchKey().toLowerCase() + "%")));
+			}
+			if (StringUtils.isNotBlank(pageRequestDto.getFacultyCode())) {
+				predicates.add(cb.equal(root.join("faculties").get("code"), 
+	                		pageRequestDto.getFacultyCode()));
+	        }
+			return cb.and(predicates.toArray(new Predicate[0]));
+        });
 
-        // Id not null
-        if (id != null) {
-            timSpecification.add(new SearchCriteria("id", id, SearchOperation.EQUAL));
-        }
-
-        Specification<News> specification = Specification.where(null);
-
-        // Search not null
-        if (StringUtils.isNotBlank(search)) {
-            specification = specification.and((root, query, builder) -> {
-                return builder.like(builder.lower(
-                        root.get("title")), "%" + search.toLowerCase() + "%");
-            }).or((root, query, builder) -> {
-                return builder.like(builder.lower(
-                        root.get("shortDescription")), "%" + search.toLowerCase() + "%");
-            }).or((root, query, builder) -> {
-                return builder.like(builder.lower(
-                        root.get("content")), "%" + search.toLowerCase() + "%");
-            });
-        }
-
-        // FacultyCode not null
-        if (StringUtils.isNotBlank(facultyCode)) {
-            specification = specification.and((root, query, builder) -> {
-                return builder.equal(root.join("faculties").get("code"), facultyCode);
-            });
-        }
-        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("createdDate"));
-        Page<News> pageTeachers = newsRepository.findAll(specification.and(timSpecification), pageable);
+        Pageable pageable = PageRequest.of(
+        		pageRequestDto.getPage() - 1, 
+        		pageRequestDto.getSize(), 
+        		Sort.by("createdDate", "title"));
+        Page<News> pageTeachers = newsRepository.findAll(specification, pageable);
         List<NewsDto> data = newsConverter.toDtoList(pageTeachers.getContent());
+        
         return new PagingResponseDto(pageTeachers.getTotalElements(),
                 pageTeachers.getTotalPages(),
                 pageTeachers.getNumber() + 1,

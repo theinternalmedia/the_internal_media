@@ -5,12 +5,13 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.tim.dto.UserUpdateRequestDto;
 import com.tim.dto.UserUpdateProfileDto;
+import com.tim.dto.UserUpdateRequestDto;
 import com.tim.dto.student.StudentDto;
-import com.tim.dto.student.StudentRequestDto;
-import com.tim.dto.student.StudentUpdateRequestDto;
+import com.tim.dto.student.StudentCreateDto;
+import com.tim.dto.student.StudentResponseDto;
 import com.tim.dto.student.StudentUpdateProfileDto;
+import com.tim.dto.student.StudentUpdateDto;
 import com.tim.entity.Student;
 
 /**
@@ -23,9 +24,9 @@ public class StudentConverter extends AbstractConverter<StudentDto, Student> {
 
 	@Override
 	public StudentDto toDto(Student entity) {
-		StudentDto model = this.modelMapper.map(entity, StudentDto.class);
-		model.setClassCode(entity.getClassz().getCode());
-		return model;
+		StudentDto dto = this.modelMapper.map(entity, StudentDto.class);
+		dto.setClassCode(entity.getClassz().getCode());
+		return dto;
 	}
 
 	@Override
@@ -42,15 +43,15 @@ public class StudentConverter extends AbstractConverter<StudentDto, Student> {
 		return result;
 	}
 
-	public Student toEntity(StudentRequestDto requestDto) {
+	public Student toEntity(StudentCreateDto requestDto) {
 		return this.modelMapper.map(requestDto, Student.class);
 	}
 	
-	public StudentUpdateRequestDto toDto(UserUpdateRequestDto updateRequestDto) {
-		return this.modelMapper.map(updateRequestDto, StudentUpdateRequestDto.class);
+	public StudentUpdateDto toDto(UserUpdateRequestDto updateRequestDto) {
+		return this.modelMapper.map(updateRequestDto, StudentUpdateDto.class);
 	}
 
-	public Student toEntity(StudentUpdateRequestDto requestDto, Student student) {
+	public Student toEntity(StudentUpdateDto requestDto, Student student) {
 		student.setAddress(requestDto.getAddress());
 		student.setDob(requestDto.getDob());
 		student.setEmail(requestDto.getEmail());
@@ -74,5 +75,20 @@ public class StudentConverter extends AbstractConverter<StudentDto, Student> {
 		
 		return entity;
 	}
+	
+	public StudentResponseDto toResponseDto(Student entity) {
+		StudentResponseDto dto = this.modelMapper.map(entity, StudentResponseDto.class);
+		dto.setClassCode(entity.getClassz().getCode());
+		dto.setClassName(entity.getClassz().getName());
+		dto.setPassword(null);
+		return dto;
+	}
 
+	public List<StudentResponseDto> toResponseDtoList(List<Student> entityList) {
+		List<StudentResponseDto> result = new ArrayList<>();
+		entityList.forEach(item -> {
+			result.add(toResponseDto(item));
+		});
+		return result;
+	}
 }

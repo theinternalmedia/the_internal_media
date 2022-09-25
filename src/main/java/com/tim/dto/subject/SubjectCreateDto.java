@@ -1,5 +1,6 @@
-package com.tim.dto.faculty;
+package com.tim.dto.subject;
 
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -9,15 +10,10 @@ import com.tim.annotation.Code;
 
 import lombok.Data;
 
-
 @Data
-public class FacultyUpdateRequestDto {
+public class SubjectCreateDto {
 
-	@NotNull
-	@Min(value = 1)
-	private Long id;
-
-	@Size(max = 20, min = 5)
+	@Size(max = 20)
 	@NotBlank
 	@Code
 	private String code;
@@ -26,5 +22,16 @@ public class FacultyUpdateRequestDto {
 	@NotBlank
 	private String name;
 
-	private String headOfFacultyUserId;
+	@NotNull
+	@Min(1)
+	@Max(10)
+	private int numberOfCredits;
+
+	@NotNull
+	private Boolean mandatory;
+
+	@Max(10)
+	@Min(0)
+	@NotNull
+	private Float passMarks;
 }

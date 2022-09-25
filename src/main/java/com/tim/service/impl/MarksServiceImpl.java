@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.tim.converter.MarksConverter;
 import com.tim.data.ETimMessages;
 import com.tim.dto.marks.MarksDto;
-import com.tim.dto.marks.MarksRequestDto;
+import com.tim.dto.marks.MarksCreateDto;
 import com.tim.entity.Marks;
 import com.tim.entity.Student;
 import com.tim.entity.Subject;
@@ -53,7 +53,7 @@ public class MarksServiceImpl implements MarksService {
 	
 	@Override
 	@Transactional
-	public MarksDto create(MarksRequestDto requestDto) {
+	public MarksDto create(MarksCreateDto requestDto) {
 		// Validate input 
 		ValidationUtils.validateObject(requestDto);
 		
@@ -94,12 +94,12 @@ public class MarksServiceImpl implements MarksService {
 	@Override
 	@Transactional
 	public long create(MultipartFile file) {
-		List<MarksRequestDto> requestDtos = excelService
-				.getListObjectFromExcelFile(file, MarksRequestDto.class);
+		List<MarksCreateDto> requestDtos = excelService
+				.getListObjectFromExcelFile(file, MarksCreateDto.class);
 		return create(requestDtos);
 	}
 
-	private long create(List<MarksRequestDto> requestDtos) {
+	private long create(List<MarksCreateDto> requestDtos) {
 		List<Marks> marksList = new ArrayList<>();
 		Marks marks;
 		Subject subject;
@@ -111,7 +111,7 @@ public class MarksServiceImpl implements MarksService {
 		Set<String> teacherCodes = new HashSet<String>();
 		
 		boolean check;
-		for (MarksRequestDto dto : requestDtos) {
+		for (MarksCreateDto dto : requestDtos) {
 			check = true;
 			// Get entity
 			subject = subjectRepository.findByCodeAndStatusTrue(dto.getSubjectCode()).orElse(null);

@@ -6,13 +6,13 @@ import java.util.Set;
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.schoolyear.SchoolYearDto;
 import com.tim.dto.schoolyear.SchoolYearPageRequestDto;
-import com.tim.dto.schoolyear.SchoolYearRequestDto;
-import com.tim.dto.schoolyear.SchoolYearUpdateRequestDto;
+import com.tim.dto.schoolyear.SchoolYearCreateDto;
+import com.tim.dto.schoolyear.SchoolYearUpdateDto;
 
 public interface SchoolYearService {
-	SchoolYearDto create(SchoolYearRequestDto requestDto);
+	SchoolYearDto create(SchoolYearCreateDto requestDto);
 
-	SchoolYearDto update(SchoolYearUpdateRequestDto requestDto);
+	SchoolYearDto update(SchoolYearUpdateDto requestDto);
 	
 	SchoolYearDto getOne(String code);
 	

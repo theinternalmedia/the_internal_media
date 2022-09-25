@@ -23,8 +23,8 @@ import com.tim.data.SearchOperation;
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.classz.ClassDto;
 import com.tim.dto.classz.ClassPageRequestDto;
-import com.tim.dto.classz.ClassRequestDto;
-import com.tim.dto.classz.ClassUpdateRequestDto;
+import com.tim.dto.classz.ClassCreateDto;
+import com.tim.dto.classz.ClassUpdateDto;
 import com.tim.dto.specification.SearchCriteria;
 import com.tim.dto.specification.TimSpecification;
 import com.tim.entity.Classz;
@@ -62,7 +62,7 @@ public class ClassServiceImpl implements ClassService {
 	
 	@Override
 	@Transactional
-	public ClassDto create(ClassRequestDto requestDto) {
+	public ClassDto create(ClassCreateDto requestDto) {
 		ValidationUtils.validateObject(requestDto);
 		
 		if(classRepository.existsByCode(requestDto.getCode())) {
@@ -101,13 +101,13 @@ public class ClassServiceImpl implements ClassService {
 	@Override
 	@Transactional
 	public long create(MultipartFile file) {
-		List<ClassRequestDto> requestDtos = excelService.
-							getListObjectFromExcelFile(file, ClassRequestDto.class);
+		List<ClassCreateDto> requestDtos = excelService.
+							getListObjectFromExcelFile(file, ClassCreateDto.class);
 		
 		List<Classz> classes = new ArrayList<>();
 		Classz classz;
 		Set<String> classCodes = new HashSet<String>();
-		for(ClassRequestDto dto: requestDtos) {
+		for(ClassCreateDto dto: requestDtos) {
 			if(classRepository.existsByCode(dto.getCode())) {
 				classCodes.add(dto.getCode());
 			}
@@ -181,7 +181,7 @@ public class ClassServiceImpl implements ClassService {
 
 	@Override
 	@Transactional
-	public ClassDto update(ClassUpdateRequestDto dto) {
+	public ClassDto update(ClassUpdateDto dto) {
 		ValidationUtils.validateObject(dto);
 		
 		Classz classz = classRepository.findById(dto.getId()).orElseThrow(
@@ -217,7 +217,7 @@ public class ClassServiceImpl implements ClassService {
 	}
 	
 	
-	private void setReferenceEntity(ClassRequestDto dto, Classz classz) {
+	private void setReferenceEntity(ClassCreateDto dto, Classz classz) {
 		Faculty faculty = facultyRepository.findByCodeAndStatusTrue(dto.getFacultyCode()).orElseThrow(
 				() -> new TimNotFoundException("Khoa", "Mã Khoa", dto.getFacultyCode()));
 		classz.setFaculty(faculty);

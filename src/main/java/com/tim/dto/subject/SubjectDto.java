@@ -24,7 +24,7 @@ public class SubjectDto extends BaseDto {
 	@Getter(value = AccessLevel.NONE)
 	private static final long serialVersionUID = 1295707391155869293L;
 
-	@Size(max = 20, min = 5)
+	@Size(max = 20)
 	@NotBlank
 	@Code
 	private String code;

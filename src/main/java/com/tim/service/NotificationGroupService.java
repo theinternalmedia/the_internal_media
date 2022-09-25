@@ -4,14 +4,14 @@ import java.util.List;
 import java.util.Set;
 
 import com.tim.dto.notification.NotificationGroupDto;
-import com.tim.dto.notification.NotificationGroupRequestDto;
-import com.tim.dto.notification.NotificationGroupUpdateRequestDto;
+import com.tim.dto.notification.NotificationGroupCreateDto;
+import com.tim.dto.notification.NotificationGroupUpdateDto;
 
 public interface NotificationGroupService {
 
-	NotificationGroupDto create(NotificationGroupRequestDto dto);
+	NotificationGroupDto create(NotificationGroupCreateDto dto);
 
-	NotificationGroupDto update(NotificationGroupUpdateRequestDto dto);
+	NotificationGroupDto update(NotificationGroupUpdateDto dto);
 
 	NotificationGroupDto getOne(String code);
 

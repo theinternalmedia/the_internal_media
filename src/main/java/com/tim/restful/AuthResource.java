@@ -78,15 +78,15 @@ public class AuthResource {
 	 * @return TokenRefreshResponse include new accessToken
 	 */
 	@PostMapping(TimApiPath.Auth.REFRESH_TOKEN)
-	  public ResponseEntity<TokenRefreshResponse> refreshtoken(TokenRefreshRequest request) {
+	public ResponseEntity<TokenRefreshResponse> refreshtoken(TokenRefreshRequest request) {
 		final String usersUserId = request.getUsersUserId();
-		RefreshToken refreshToken = refreshTokenService
-				.findByTokenAndUserId(request.getRefreshToken(), usersUserId).orElse(null);
+		RefreshToken refreshToken = refreshTokenService.findByTokenAndUserId(
+				request.getRefreshToken(), usersUserId).orElse(null);
 		if (refreshToken == null) {
 			throw new TimException(ETimMessages.INVALID_TOKEN, request.getRefreshToken());
 		}
 		refreshTokenService.verifyExpiration(refreshToken);
 		String token = jwtUtils.generateTokenFromUsername(usersUserId);
-	  	return ResponseEntity.ok(new TokenRefreshResponse(token, request.getRefreshToken()));
-	  }
+		return ResponseEntity.ok(new TokenRefreshResponse(token, request.getRefreshToken()));
+	}
 }

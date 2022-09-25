@@ -6,8 +6,8 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.tim.dto.classz.ClassDto;
-import com.tim.dto.classz.ClassRequestDto;
-import com.tim.dto.classz.ClassUpdateRequestDto;
+import com.tim.dto.classz.ClassCreateDto;
+import com.tim.dto.classz.ClassUpdateDto;
 import com.tim.entity.Classz;
 
 /**
@@ -29,7 +29,7 @@ public class ClassConverter extends AbstractConverter<ClassDto, Classz> {
         return this.modelMapper.map(dto, Classz.class);
     }
 
-	public Classz toEntity(ClassRequestDto requestDto) {
+	public Classz toEntity(ClassCreateDto requestDto) {
 		return this.modelMapper.map(requestDto, Classz.class);
 	}
 	
@@ -41,7 +41,7 @@ public class ClassConverter extends AbstractConverter<ClassDto, Classz> {
 		return result;
 	}
 	
-	public Classz toEntity(ClassUpdateRequestDto dto, Classz entity) {
+	public Classz toEntity(ClassUpdateDto dto, Classz entity) {
 		entity.setCode(dto.getCode());
 		entity.setName(dto.getName());
 		return entity;

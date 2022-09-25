@@ -7,11 +7,11 @@ import org.springframework.web.multipart.MultipartFile;
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.classz.ClassDto;
 import com.tim.dto.classz.ClassPageRequestDto;
-import com.tim.dto.classz.ClassRequestDto;
-import com.tim.dto.classz.ClassUpdateRequestDto;
+import com.tim.dto.classz.ClassCreateDto;
+import com.tim.dto.classz.ClassUpdateDto;
 
 public interface ClassService {
-	ClassDto create(ClassRequestDto requestDto);
+	ClassDto create(ClassCreateDto requestDto);
 	
 	/**
 	 * 
@@ -43,7 +43,7 @@ public interface ClassService {
 	 * @param dto
 	 * @return ClassDto
 	 */
-	ClassDto update(ClassUpdateRequestDto dto);
+	ClassDto update(ClassUpdateDto dto);
 	
 	long toggleStatus(Set<Long> ids);
 }

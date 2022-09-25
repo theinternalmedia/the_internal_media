@@ -9,13 +9,13 @@ import com.tim.dto.PagingResponseDto;
 import com.tim.dto.PasswordDto;
 import com.tim.dto.student.StudentDto;
 import com.tim.dto.student.StudentPageRequestDto;
-import com.tim.dto.student.StudentRequestDto;
+import com.tim.dto.student.StudentCreateDto;
 import com.tim.dto.student.StudentUpdateProfileDto;
-import com.tim.dto.student.StudentUpdateRequestDto;
+import com.tim.dto.student.StudentUpdateDto;
 import com.tim.entity.Student;
 
 public interface StudentService {
-    StudentDto create(StudentRequestDto requestDto);
+    StudentDto create(StudentCreateDto requestDto);
     
     /**
 	 * @author minhtuanitk43
@@ -23,7 +23,7 @@ public interface StudentService {
 	 */
     long create(MultipartFile file);
     
-    StudentDto update(StudentUpdateRequestDto requestDto);
+    StudentDto update(StudentUpdateDto requestDto);
     
     StudentDto updateProfile(StudentUpdateProfileDto updateDto);
     

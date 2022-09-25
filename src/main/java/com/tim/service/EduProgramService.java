@@ -1,17 +1,17 @@
 package com.tim.service;
 
+import java.util.Set;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.educationprogram.EducationProgramDto;
 import com.tim.dto.educationprogram.EducationProgramPageRequestDto;
-import com.tim.dto.educationprogram.EducationProgramRequestDto;
+import com.tim.dto.educationprogram.EducationProgramCreateDto;
 import com.tim.dto.educationprogram.EducationProgramResponseDto;
 import com.tim.dto.educationprogram.EducationProgramUpdateDto;
 
 public interface EduProgramService {
-	
-	
 	/**
 	 * 
 	 * @author thinh
@@ -19,7 +19,7 @@ public interface EduProgramService {
 	 * @param file
 	 * @return EducationProgramDto
 	 */
-	EducationProgramDto create(EducationProgramRequestDto eduProgramRequestDto, MultipartFile file);
+	EducationProgramDto create(EducationProgramCreateDto eduProgramRequestDto, MultipartFile file);
 	
 	/**
 	 * 
@@ -38,13 +38,9 @@ public interface EduProgramService {
 	 */
 	EducationProgramDto getOne(String code);
 	
-	PagingResponseDto getPage(/*
-								 * int page, int size, boolean status, String code, String name, String
-								 * facultyCode, String schoolYearCode
-								 */
-			EducationProgramPageRequestDto pageRequestDto);
+	PagingResponseDto getPage(EducationProgramPageRequestDto pageRequestDto);
 	
-	Long toggleStatus(Long id);
+	long toggleStatus(Set<Long> ids);
 	
 	EducationProgramResponseDto getSubjectList(String code);
 

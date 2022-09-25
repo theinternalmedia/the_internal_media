@@ -6,8 +6,8 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.tim.dto.notification.NotificationGroupDto;
-import com.tim.dto.notification.NotificationGroupRequestDto;
-import com.tim.dto.notification.NotificationGroupUpdateRequestDto;
+import com.tim.dto.notification.NotificationGroupCreateDto;
+import com.tim.dto.notification.NotificationGroupUpdateDto;
 import com.tim.entity.NotificationGroup;
 
 @Component
@@ -23,7 +23,7 @@ public class NotificationGroupConverter extends AbstractConverter<NotificationGr
 		return this.modelMapper.map(entity, NotificationGroupDto.class);
 	}
 
-	public NotificationGroup toEntity(NotificationGroupRequestDto requestDto) {
+	public NotificationGroup toEntity(NotificationGroupCreateDto requestDto) {
 		return this.modelMapper.map(requestDto, NotificationGroup.class);
 	}
 
@@ -37,7 +37,7 @@ public class NotificationGroupConverter extends AbstractConverter<NotificationGr
 	}
 
 	public NotificationGroup toEntity(
-			NotificationGroupUpdateRequestDto requestDto, NotificationGroup oldEntity) {
+			NotificationGroupUpdateDto requestDto, NotificationGroup oldEntity) {
 		oldEntity.setCode(requestDto.getCode());
 		oldEntity.setName(requestDto.getName());
 		return oldEntity;

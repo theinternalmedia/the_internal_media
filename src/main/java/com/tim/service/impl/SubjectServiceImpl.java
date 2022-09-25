@@ -13,8 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.tim.converter.SubjectConverter;
 import com.tim.data.ETimMessages;
 import com.tim.dto.subject.SubjectDto;
-import com.tim.dto.subject.SubjectRequestDto;
-import com.tim.dto.subject.SubjectUpdateRequestDto;
+import com.tim.dto.subject.SubjectCreateDto;
+import com.tim.dto.subject.SubjectUpdateDto;
 import com.tim.entity.Subject;
 import com.tim.exception.TimException;
 import com.tim.exception.TimNotFoundException;
@@ -38,7 +38,7 @@ public class SubjectServiceImpl implements SubjectService{
 	private ExcelService excelService;
 
 	@Override
-	public SubjectDto create(SubjectRequestDto requestDto) {
+	public SubjectDto create(SubjectCreateDto requestDto) {
 		// Validate input 
 		ValidationUtils.validateObject(requestDto);
 		
@@ -56,7 +56,7 @@ public class SubjectServiceImpl implements SubjectService{
 	}
 
 	@Override
-	public SubjectDto update(SubjectUpdateRequestDto requestDto) {
+	public SubjectDto update(SubjectUpdateDto requestDto) {
 		// Validate input
 		ValidationUtils.validateObject(requestDto);
 		
@@ -80,17 +80,17 @@ public class SubjectServiceImpl implements SubjectService{
 
 	@Override
 	public long create(MultipartFile file) {
-		List<SubjectRequestDto> requestDtos = excelService
-				.getListObjectFromExcelFile(file, SubjectRequestDto.class);
+		List<SubjectCreateDto> requestDtos = excelService
+				.getListObjectFromExcelFile(file, SubjectCreateDto.class);
 		return saveListSubject(requestDtos);
 	}
 
-	private long saveListSubject(List<SubjectRequestDto> requestDtos) {
+	private long saveListSubject(List<SubjectCreateDto> requestDtos) {
 		List<Subject> subjectList = new ArrayList<>();
 		Subject subject;
 		Set<String> subjectCodes = new HashSet<String>();
 		
-		for (SubjectRequestDto dto : requestDtos) {
+		for (SubjectCreateDto dto : requestDtos) {
 			// Check exists code
 			if (subjectRepository.existsByCode(dto.getCode())) {
 				subjectCodes.add(dto.getCode());

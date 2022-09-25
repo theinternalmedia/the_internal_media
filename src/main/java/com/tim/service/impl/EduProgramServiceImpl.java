@@ -26,7 +26,7 @@ import com.tim.data.SearchOperation;
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.educationprogram.EducationProgramDto;
 import com.tim.dto.educationprogram.EducationProgramPageRequestDto;
-import com.tim.dto.educationprogram.EducationProgramRequestDto;
+import com.tim.dto.educationprogram.EducationProgramCreateDto;
 import com.tim.dto.educationprogram.EducationProgramResponseDto;
 import com.tim.dto.educationprogram.EducationProgramUpdateDto;
 import com.tim.dto.educationprogramsubject.EducationProgramSubjectCreateDto;
@@ -77,7 +77,7 @@ public class EduProgramServiceImpl implements EduProgramService {
 	
 	@Override
 	@Transactional
-	public EducationProgramDto create(EducationProgramRequestDto education, MultipartFile file) {
+	public EducationProgramDto create(EducationProgramCreateDto education, MultipartFile file) {
 		// Validate input 
 		ValidationUtils.validateObject(education);
 		
@@ -169,12 +169,17 @@ public class EduProgramServiceImpl implements EduProgramService {
 	}
 
 	@Override
-	public Long toggleStatus(Long id) {
-		EducationProgram eduProgram = eduProgramRepository.findById(id).orElseThrow(
-				() -> new TimNotFoundException(EDUCATION_PROGRAM, "ID", id.toString()));
-		eduProgram.setStatus(!eduProgram.getStatus());
-		eduProgramRepository.save(eduProgram);
-		return id;
+	public long toggleStatus(Set<Long> ids) {
+		List<EducationProgram> educationPrograms = new ArrayList<>();
+		EducationProgram eduProgram;
+		for (Long id : ids) {
+			eduProgram = eduProgramRepository.findById(id).orElseThrow(
+					() -> new TimNotFoundException(EDUCATION_PROGRAM, "ID", id.toString()));
+			eduProgram.setStatus(!eduProgram.getStatus());
+			educationPrograms.add(eduProgram);
+		}
+		;
+		return eduProgramRepository.saveAll(educationPrograms).size();
 	}
 
 	@Override
@@ -194,10 +199,13 @@ public class EduProgramServiceImpl implements EduProgramService {
 		for (EducationProgramSubjectResponseDto item : eduSubjectDtos) {
 			totalCredits += item.getNumberOfCredits();
 		}
-		eduSubjectDtos.sort(Comparator.comparing(
-				EducationProgramSubjectResponseDto::getSemester)
+		eduSubjectDtos.sort(Comparator
+				.comparing(
+						EducationProgramSubjectResponseDto::getSemester)
 				.thenComparing(Comparator.comparing(
-						EducationProgramSubjectResponseDto::getNumberOfCredits)));
+						EducationProgramSubjectResponseDto::getNumberOfCredits))
+				.thenComparing(Comparator.comparing(
+						EducationProgramSubjectResponseDto::getSubjectName)));
 		result.setEducationProgramSubjectDtos(eduSubjectDtos);
 		result.setTotalCredits(totalCredits);
 		return result;
@@ -252,13 +260,16 @@ public class EduProgramServiceImpl implements EduProgramService {
 		ValidationUtils.validateObject(pageRequestDto);
 		
 		TimSpecification<EducationProgram> timSpecification = new TimSpecification<EducationProgram>();
-        timSpecification.add(new SearchCriteria("status", pageRequestDto.getStatus(), SearchOperation.EQUAL));
+        timSpecification.add(new SearchCriteria("status", 
+        		pageRequestDto.getStatus(), SearchOperation.EQUAL));
         
-        if(StringUtils.isNotBlank(pageRequestDto.getCode())) {
-			timSpecification.add(new SearchCriteria("code", pageRequestDto.getCode(), SearchOperation.EQUAL));
+        if (StringUtils.isNotBlank(pageRequestDto.getCode())) {
+			timSpecification.add(new SearchCriteria("code", 
+					pageRequestDto.getCode(), SearchOperation.EQUAL));
 		}
-        if(StringUtils.isNotBlank(pageRequestDto.getName())) {
-			timSpecification.add(new SearchCriteria("name", pageRequestDto.getName(), SearchOperation.LIKE));
+        if (StringUtils.isNotBlank(pageRequestDto.getName())) {
+			timSpecification.add(new SearchCriteria("name", 
+					pageRequestDto.getName(), SearchOperation.LIKE));
 		}
         
         Specification<EducationProgram> specification = Specification.where(null);
@@ -268,15 +279,17 @@ public class EduProgramServiceImpl implements EduProgramService {
                 							pageRequestDto.getFacultyCode());
             });
         }
-        if(StringUtils.isNotBlank(pageRequestDto.getSchoolYearCode())) {
+        if (StringUtils.isNotBlank(pageRequestDto.getSchoolYearCode())) {
 			specification = specification.and((root, query, builder) -> {
 				return builder.equal(root.join("schoolYear").get("code"), 
 										pageRequestDto.getSchoolYearCode());
 			});
 		}
         
-        Pageable pageable = PageRequest.of(pageRequestDto.getPage() - 1, 
-        								pageRequestDto.getSize(), Sort.by("createdDate"));
+        Pageable pageable = PageRequest.of(
+        		pageRequestDto.getPage() - 1, 
+        		pageRequestDto.getSize(), 
+        		Sort.by("name", "createdDate"));
         Page<EducationProgram> pageEduPrograms = eduProgramRepository
         									.findAll(specification.and(timSpecification), pageable);
         List<EducationProgramDto> data = eduProgramConverter.toDtoList(pageEduPrograms.getContent());

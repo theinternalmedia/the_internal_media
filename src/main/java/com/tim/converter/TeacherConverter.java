@@ -5,12 +5,13 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.tim.dto.UserUpdateRequestDto;
 import com.tim.dto.UserUpdateProfileDto;
+import com.tim.dto.UserUpdateRequestDto;
 import com.tim.dto.teacher.TeacherDto;
-import com.tim.dto.teacher.TeacherRequestDto;
-import com.tim.dto.teacher.TeacherUpdateRequestDto;
+import com.tim.dto.teacher.TeacherCreateDto;
+import com.tim.dto.teacher.TeacherResponseDto;
 import com.tim.dto.teacher.TeacherUpdateProfileDto;
+import com.tim.dto.teacher.TeacherUpdateDto;
 import com.tim.entity.Teacher;
 
 /**
@@ -23,7 +24,9 @@ public class TeacherConverter extends AbstractConverter<TeacherDto, Teacher> {
 
 	@Override
 	public TeacherDto toDto(Teacher entity) {
-		return this.modelMapper.map(entity, TeacherDto.class);
+		TeacherDto dto = this.modelMapper.map(entity, TeacherDto.class);
+		dto.setFacultyCode(entity.getFaculty().getCode());
+		return dto;
 	}
 
 	@Override
@@ -49,15 +52,15 @@ public class TeacherConverter extends AbstractConverter<TeacherDto, Teacher> {
 		return result;
 	}
 
-	public Teacher toEntity(TeacherRequestDto requestDto) {
+	public Teacher toEntity(TeacherCreateDto requestDto) {
 		return this.modelMapper.map(requestDto, Teacher.class);
 	}
 	
-	public TeacherUpdateRequestDto toDto(UserUpdateRequestDto userUpdateRequestDto) {
-		return this.modelMapper.map(userUpdateRequestDto, TeacherUpdateRequestDto.class);
+	public TeacherUpdateDto toDto(UserUpdateRequestDto userUpdateRequestDto) {
+		return this.modelMapper.map(userUpdateRequestDto, TeacherUpdateDto.class);
 	}
 
-	public Teacher toEntity(TeacherUpdateRequestDto requestDto, Teacher entity) {
+	public Teacher toEntity(TeacherUpdateDto requestDto, Teacher entity) {
 		entity.setAddress(requestDto.getAddress());
 		entity.setDob(requestDto.getDob());
 		entity.setEmail(requestDto.getEmail());
@@ -83,5 +86,20 @@ public class TeacherConverter extends AbstractConverter<TeacherDto, Teacher> {
 		
 		return entity;
 	}
-	
+
+	public TeacherResponseDto toResponseDto(Teacher entity) {
+		TeacherResponseDto dto = this.modelMapper.map(entity, TeacherResponseDto.class);
+		dto.setFacultyCode(entity.getFaculty().getCode());
+		dto.setFacultyName(entity.getFaculty().getName());
+		dto.setPassword(null);
+		return dto;
+	}
+
+	public List<TeacherResponseDto> toResponseDtoList(List<Teacher> entityList) {
+		List<TeacherResponseDto> result = new ArrayList<>();
+		entityList.forEach(item -> {
+			result.add(toResponseDto(item));
+		});
+		return result;
+	}
 }

@@ -9,14 +9,6 @@
 		"avatar": "Hình đại diện",
 		"remark": "Ghi Chú"
 	},
-	"TeacherDto": {
-		"userId": "Mã GV",
-		"facultyCode": "Mã Khoa"
-	},
-	"StudentDto": {
-		"userId": "Mã SV",
-		"classCode": "Mã Lớp"
-	},
 	"UserRequestDto": {
 		"name": "Họ tên",
 		"email": "Email",
@@ -28,22 +20,30 @@
 		"remark": "Ghi Chú",
 		"password": "Mật khẩu"
 	},
-	"TeacherRequestDto": {
+	"TeacherDto": {
+		"userId": "Mã GV",
+		"facultyCode": "Mã Khoa"
+	},
+	"TeacherCreateDto": {
 		"userId": "Mã GV",
 		"facultyCode": "Mã Khoa",
 		"roleCodes": "Vai trò"
 	},
-	"TeacherUpdateRequestDto": {
+	"TeacherUpdateDto": {
 		"id": "ID",
 		"userId": "Mã GV",
 		"facultyCode": "Mã Khoa",
 		"roleCodes": "Vai trò"
 	},
-	"StudentRequestDto": {
+	"StudentDto": {
 		"userId": "Mã SV",
 		"classCode": "Mã Lớp"
 	},
-	"StudentUpdateRequestDto": {
+	"StudentCreateDto": {
+		"userId": "Mã SV",
+		"classCode": "Mã Lớp"
+	},
+	"StudentUpdateDto": {
 		"id": "ID",
 		"userId": "Mã SV",
 		"classCode": "Mã Lớp"
@@ -52,11 +52,11 @@
 		"name": "Niên khóa",
 		"code": "Mã niên khóa"
 	},
-	"SchoolYearRequestDto": {
+	"SchoolYearCreateDto": {
 		"name": "Niên khóa",
 		"code": "Mã niên khóa"
 	},
-	"SchoolYearUpdateRequestDto": {
+	"SchoolYearUpdateDto": {
 		"id": "ID"
 	},
 	"NewsDto": {
@@ -65,7 +65,7 @@
 		"content": "Nội dung",
 		"thumbnail": "Hình ảnh"
 	},
-	"NewsRequestDto": {
+	"NewsCreateDto": {
 		"title": "Tiêu đề",
 		"shortDescription": "Mô tả ngắn",
 		"content": "Nội dung"
@@ -80,25 +80,15 @@
 		"mandatory": "Môn học bắt buộc",
 		"passMarks": "Điểm tối thiểu cần đạt"
 	},
-	"SubjectRequestDto": {
+	"SubjectCreateDto": {
 		"code": "Mã môn học",
 		"name": "Tên môn học",
 		"numberOfCredits": "Số tín chỉ",
 		"mandatory": "Môn học bắt buộc",
 		"passMarks": "Điểm tối thiểu cần đạt"
 	},
-	"SubjectUpdateRequestDto": {
+	"SubjectUpdateDto": {
 		"id": "ID"
-	},
-	"NotificationRequestDto": {
-		"title": "Tiêu đề",
-		"shortDescription": "Mô tả ngắn",
-		"content": "Nội dung",
-		"notificationGroupCode": "Mã nhóm thông báo"
-	},
-	"NotificationGroupRequestDto": {
-		"code": "Mã Nhóm Thông Báo",
-		"name": "Tên Nhóm Thông Báo"
 	},
 	"NotificationDto": {
 		"title": "Tiêu đề",
@@ -106,24 +96,43 @@
 		"content": "Nội dung",
 		"thumbnail": "Hình ảnh"
 	},
+	"NotificationCreateDto": {
+		"title": "Tiêu đề",
+		"shortDescription": "Mô tả ngắn",
+		"content": "Nội dung",
+		"notificationGroupCode": "Mã nhóm thông báo"
+	},
+	"NotificationUpdateDto": {
+		"id": "ID"
+	},
 	"NotificationGroupDto": {
 		"name": "Nhóm thông báo",
 		"code": "Mã nhóm"
 	},
-	"NotificationUpdateRequestDto": {
+	"NotificationGroupCreateDto": {
+		"code": "Mã Nhóm Thông Báo",
+		"name": "Tên Nhóm Thông Báo"
+	},
+	"NotificationGroupUpdateDto": {
 		"id": "ID"
 	},
 	"ClassDto": {
 		"name": "Lớp học",
 		"code": "Mã lớp"
 	},
-	"ClassRequestDto": {
+	"ClassCreateDto": {
 		"name": "Lớp học",
 		"code": "Mã lớp",
 		"facultyCode": "Mã khoa",
 		"schoolYearCode": "Mã khóa"
 	},
-	"MarkRequestDto": {
+	"ClassUpdateDto": {
+		"name": "Lớp học",
+		"code": "Mã lớp",
+		"facultyCode": "Mã khoa",
+		"schoolYearCode": "Mã khóa"
+	},
+	"MarkCreateDto": {
 		"finalMarks": "Điểm tổng kết",
 		"note": "Ghi chú",
 		"subjectCode": "Mã môn học",
@@ -132,14 +141,35 @@
 		"date": "Ngày thi",
 		"time": "Giờ thi"
 	},
-	"PasswordDto": {
-		"oldPassword": "Mật khẩu cũ",
-		"newPassword": "Mật khẩu mới"
+	"MarkUpdateDto": {
+		"id": "ID"
+	},
+	"EducationProgramCreateDto": {
+		"code": "Mã chương trình giảng dạy",
+		"name": "Tên chương trình giảng dạy",
+		"schoolYearCode": "Mã khóa học",
+		"facultyCode": "Mã Khoa"
+	},
+	"EducationProgramUpdateDto": {
+		"id": "ID"
 	},
 	"EducationProgramSubjectCreateDto": {
 		"note": "Ghi chú",
 		"semester": "Học kỳ",
 		"subjectCode": "Mã môn học"
+	},
+	"FacultyCreateDto": {
+		"code": "Mã khoa",
+		"name": "Tên khoa",
+		"headOfFacultyUserId": "Mã GV Trưởng Khoa"
+	},
+	"FacultyUpdateDto": {
+		"code": "Mã khoa",
+		"name": "Tên khoa",
+		"headOfFacultyUserId": "Mã GV Trưởng Khoa"
+	},
+	"PasswordDto": {
+		"id": "ID"
 	},
 	"UserUpdateProfileDto": {
 		"name": "Họ tên",
@@ -151,16 +181,5 @@
 		"id": "ID"
 	},
 	"StudentUpdateProfileDto": {},
-	"TeacherUpdateProfileDto": {},
-	"EducationProgramRequestDto": {
-		"code": "Mã chương trình giảng dạy",
-		"name": "Tên chương trình giảng dạy",
-		"schoolYearCode": "Mã khóa học",
-		"facultyCode": "Mã Khoa"
-	},
-	"FacultyRequestDto": {
-		"code": "Mã khoa",
-		"name": "Tên khoa",
-		"headOfFacultyUserId": "Mã GV Trưởng Khoa"
-	}
+	"TeacherUpdateProfileDto": {}
 }

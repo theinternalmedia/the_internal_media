@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.criteria.Predicate;
+
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,10 +22,12 @@ import org.springframework.web.multipart.MultipartFile;
 import com.tim.converter.NotificationConverter;
 import com.tim.data.ETimMessages;
 import com.tim.data.TimConstants;
+import com.tim.data.TimConstants.NotificationType;
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.notification.NotificationDto;
-import com.tim.dto.notification.NotificationRequestDto;
-import com.tim.dto.notification.NotificationUpdateRequestDto;
+import com.tim.dto.notification.NotificationPageRequestDto;
+import com.tim.dto.notification.NotificationCreateDto;
+import com.tim.dto.notification.NotificationUpdateDto;
 import com.tim.entity.Notification;
 import com.tim.entity.NotificationGroup;
 import com.tim.entity.NotificationStudent;
@@ -37,6 +42,7 @@ import com.tim.repository.NotificationStudentRepository;
 import com.tim.repository.NotificationTeacherRepository;
 import com.tim.repository.StudentRepository;
 import com.tim.repository.TeacherRepository;
+import com.tim.security.services.UserDetailsImpl;
 import com.tim.service.NotificationService;
 import com.tim.service.StudentService;
 import com.tim.utils.PrincipalUtils;
@@ -68,7 +74,7 @@ public class NotificationServiceImpl implements NotificationService {
 	
 	@Override
 	@Transactional
-	public NotificationDto create(NotificationRequestDto requestDto, MultipartFile thumbnail) {
+	public NotificationDto create(NotificationCreateDto requestDto, MultipartFile thumbnail) {
 		// Validate input
 		ValidationUtils.validateObject(requestDto);
 		
@@ -108,7 +114,7 @@ public class NotificationServiceImpl implements NotificationService {
 
 	@Override
 	@Transactional
-	public NotificationDto update(NotificationUpdateRequestDto requestDto, MultipartFile thumbnail) {
+	public NotificationDto update(NotificationUpdateDto requestDto, MultipartFile thumbnail) {
 		// Validate input
 		ValidationUtils.validateObject(requestDto);
 
@@ -213,22 +219,53 @@ public class NotificationServiceImpl implements NotificationService {
 		return notificationConverter.toDto(notification);
 	}
 
+	
 	@Override
-	public PagingResponseDto getPage(int page, int size) {
-		String usersUserId = PrincipalUtils.getAuthenticatedUsersUserId();
-		boolean isTeacher = PrincipalUtils.authenticatedUserIsTeacher();
-		Page<Notification> pageNotification;
-		Pageable pageable = PageRequest.of(page - 1, size, Sort.by("createdDate"));
-		if (isTeacher) {
-			pageNotification = notificationRepository
-					.findByStatusTrueAndTypeOrStatusTrueAndNotificationTeachers_Teacher_UserId(
-							TimConstants.NotificationType.TO_ALL, usersUserId, pageable);
-		} else {
-			pageNotification = notificationRepository
-					.findByStatusTrueAndTypeOrStatusTrueAndNotificationStudents_Student_UserId(
-							TimConstants.NotificationType.TO_ALL, usersUserId, pageable);
-		}
+	public PagingResponseDto getPage(NotificationPageRequestDto pageRequestDto, boolean isAdmin) {
+		// Validate input 
+		ValidationUtils.validateObject(pageRequestDto);
 		
+		// Specification builder
+		Specification<Notification> specification = Specification.where((root, query, cb) -> {
+			List<Predicate> predicates = new ArrayList<Predicate>();
+			predicates.add(cb.equal(root.get("status"), pageRequestDto.getStatus()));
+			
+			if (StringUtils.isNotBlank(pageRequestDto.getNotificationGroupCode())) {
+				predicates.add(cb.equal(root.join("notificationGroup").get("code"), 
+						pageRequestDto.getNotificationGroupCode()));
+			}
+			if (StringUtils.isNotBlank(pageRequestDto.getSearchKey())) {
+				predicates.add(cb.or(
+						cb.like(cb.lower(root.get("title")), 
+								"%" + pageRequestDto.getSearchKey().toLowerCase() + "%"),
+						cb.like(cb.lower(root.get("shortDescription")), 
+								"%" + pageRequestDto.getSearchKey().toLowerCase() + "%"),
+						cb.like(cb.lower(root.get("content")), 
+								"%" + pageRequestDto.getSearchKey().toLowerCase() + "%")));
+			}
+			if (isAdmin) {
+				if (pageRequestDto.getType() != null) {
+					predicates.add(cb.equal(root.get("type"), pageRequestDto.getType()));
+				}
+			} else {
+				UserDetailsImpl userDetails = PrincipalUtils.getAuthenticatedUserDetail();
+				if (userDetails != null && userDetails.isTeacher()) {
+					if (pageRequestDto.getType() != null) {
+						predicates.add(cb.equal(root.get("type"), pageRequestDto.getType()));
+					}
+				} else {
+					predicates.add(cb.in(root.get("type"))
+							.value(List.of(NotificationType.TO_STUDENT, NotificationType.TO_ALL)));
+				}
+			}
+			return cb.and(predicates.toArray(new Predicate[0]));
+		});
+		
+		Pageable pageable = PageRequest.of(
+				pageRequestDto.getPage() - 1, 
+				pageRequestDto.getSize(),
+				Sort.by("createdDate", "title"));
+		Page<Notification> pageNotification = notificationRepository.findAll(specification, pageable);
 		List<NotificationDto> data = notificationConverter.toDtoList(pageNotification.getContent());
 
 		return new PagingResponseDto(

@@ -8,7 +8,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class NotificationGroupUpdateRequestDto extends NotificationGroupRequestDto{
+public class NotificationGroupUpdateDto extends NotificationGroupCreateDto{
 
 	@NotNull
 	@Min(value = 1)

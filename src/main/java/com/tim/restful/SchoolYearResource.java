@@ -3,8 +3,6 @@ package com.tim.restful;
 import java.util.List;
 import java.util.Set;
 
-import javax.websocket.server.PathParam;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,8 +17,8 @@ import com.tim.data.TimApiPath;
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.schoolyear.SchoolYearDto;
 import com.tim.dto.schoolyear.SchoolYearPageRequestDto;
-import com.tim.dto.schoolyear.SchoolYearRequestDto;
-import com.tim.dto.schoolyear.SchoolYearUpdateRequestDto;
+import com.tim.dto.schoolyear.SchoolYearCreateDto;
+import com.tim.dto.schoolyear.SchoolYearUpdateDto;
 import com.tim.service.SchoolYearService;
 
 @RestController
@@ -30,17 +28,17 @@ public class SchoolYearResource {
 	private SchoolYearService schoolYearService;
 	
 	@PostMapping(TimApiPath.SchoolYear.CREATE)
-	public SchoolYearDto create(@RequestBody SchoolYearRequestDto requestDto) {
+	public SchoolYearDto create(@RequestBody SchoolYearCreateDto requestDto) {
 		return schoolYearService.create(requestDto);
 	}
 	
 	@PutMapping(TimApiPath.SchoolYear.UPDATE)
-	public SchoolYearDto update(@RequestBody SchoolYearUpdateRequestDto requestDto) {
+	public SchoolYearDto update(@RequestBody SchoolYearUpdateDto requestDto) {
 		return schoolYearService.update(requestDto);
 	}
 	
 	@GetMapping(TimApiPath.SchoolYear.GET_ALL)
-	public List<SchoolYearDto> getAll(@PathParam("status") boolean status){
+	public List<SchoolYearDto> getAll(@RequestParam("status") boolean status){
 		return schoolYearService.getAll(status);
 	}
 	

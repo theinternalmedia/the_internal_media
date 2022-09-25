@@ -1,6 +1,4 @@
-package com.tim.dto.student;
-
-import javax.validation.constraints.Size;
+package com.tim.dto.teacher;
 
 import com.tim.annotation.Code;
 import com.tim.dto.PageRequestDto;
@@ -11,10 +9,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class StudentPageRequestDto extends PageRequestDto{
+public class TeacherPageRequestDto extends PageRequestDto{
 
 	@Code
-	@Size(min = 5, max = 20)
 	private String userId;
 	
 	private Boolean gender;
@@ -23,12 +20,5 @@ public class StudentPageRequestDto extends PageRequestDto{
 	private String searchKey;
 	
 	@Code
-	private String classCode;
-	
-	@Code
 	private String facultyCode;
-	
-	@Code
-	private String schoolYearCode;
-
 }
