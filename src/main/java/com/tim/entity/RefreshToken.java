@@ -13,13 +13,17 @@ import lombok.Data;
 @Data
 @Entity(name = "refreshtoken")
 public class RefreshToken {
+	
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private long id;
+  
   @Column(unique = true)
   private String userId;
+  
   @Column(nullable = false, unique = true)
   private String token;
+  
   @Column(nullable = false)
   private Instant expiryDate;
 }
