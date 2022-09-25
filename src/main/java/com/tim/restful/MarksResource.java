@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.tim.data.TimApiPath;
 import com.tim.dto.marks.MarksDto;
-import com.tim.dto.marks.MarksRequestDto;
+import com.tim.dto.marks.MarksCreateDto;
 import com.tim.service.MarksService;
 
 @RestController
@@ -22,7 +22,7 @@ public class MarksResource {
 	private MarksService marksService;
 	
 	@PostMapping(TimApiPath.Marks.CREATE)
-	public MarksDto create(@RequestBody MarksRequestDto requestDto) {
+	public MarksDto create(@RequestBody MarksCreateDto requestDto) {
 		return marksService.create(requestDto);
 	}
 	

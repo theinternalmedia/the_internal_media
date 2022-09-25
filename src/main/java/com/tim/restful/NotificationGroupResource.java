@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tim.data.TimApiPath;
 import com.tim.dto.notification.NotificationGroupDto;
-import com.tim.dto.notification.NotificationGroupRequestDto;
-import com.tim.dto.notification.NotificationGroupUpdateRequestDto;
+import com.tim.dto.notification.NotificationGroupCreateDto;
+import com.tim.dto.notification.NotificationGroupUpdateDto;
 import com.tim.service.NotificationGroupService;
 import com.tim.utils.ValidationUtils;
 
@@ -27,13 +27,13 @@ public class NotificationGroupResource {
 	private NotificationGroupService notificationGroupService;
 
 	@PostMapping(TimApiPath.NotificationGroup.CREATE)
-	public NotificationGroupDto create(@RequestBody NotificationGroupRequestDto requestDto) {
+	public NotificationGroupDto create(@RequestBody NotificationGroupCreateDto requestDto) {
 		ValidationUtils.validateObject(requestDto);
 		return notificationGroupService.create(requestDto);
 	}
 	
 	@PutMapping(TimApiPath.NotificationGroup.UPDATE)
-	public NotificationGroupDto update(@RequestBody NotificationGroupUpdateRequestDto requestDto) {
+	public NotificationGroupDto update(@RequestBody NotificationGroupUpdateDto requestDto) {
 		return notificationGroupService.update(requestDto);
 	}
 

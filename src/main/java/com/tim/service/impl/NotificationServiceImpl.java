@@ -26,8 +26,8 @@ import com.tim.data.TimConstants.NotificationType;
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.notification.NotificationDto;
 import com.tim.dto.notification.NotificationPageRequestDto;
-import com.tim.dto.notification.NotificationRequestDto;
-import com.tim.dto.notification.NotificationUpdateRequestDto;
+import com.tim.dto.notification.NotificationCreateDto;
+import com.tim.dto.notification.NotificationUpdateDto;
 import com.tim.entity.Notification;
 import com.tim.entity.NotificationGroup;
 import com.tim.entity.NotificationStudent;
@@ -74,7 +74,7 @@ public class NotificationServiceImpl implements NotificationService {
 	
 	@Override
 	@Transactional
-	public NotificationDto create(NotificationRequestDto requestDto, MultipartFile thumbnail) {
+	public NotificationDto create(NotificationCreateDto requestDto, MultipartFile thumbnail) {
 		// Validate input
 		ValidationUtils.validateObject(requestDto);
 		
@@ -114,7 +114,7 @@ public class NotificationServiceImpl implements NotificationService {
 
 	@Override
 	@Transactional
-	public NotificationDto update(NotificationUpdateRequestDto requestDto, MultipartFile thumbnail) {
+	public NotificationDto update(NotificationUpdateDto requestDto, MultipartFile thumbnail) {
 		// Validate input
 		ValidationUtils.validateObject(requestDto);
 

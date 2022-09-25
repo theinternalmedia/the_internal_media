@@ -18,8 +18,8 @@ import com.tim.data.TimApiPath;
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.teacher.TeacherDto;
 import com.tim.dto.teacher.TeacherPageRequestDto;
-import com.tim.dto.teacher.TeacherRequestDto;
-import com.tim.dto.teacher.TeacherUpdateRequestDto;
+import com.tim.dto.teacher.TeacherCreateDto;
+import com.tim.dto.teacher.TeacherUpdateDto;
 import com.tim.service.TeacherService;
 
 @RestController
@@ -30,17 +30,17 @@ public class TeacherResource {
 	private TeacherService teacherService;
 	
 	@PostMapping(TimApiPath.Teacher.CREATE)
-	public TeacherDto create(@RequestBody TeacherRequestDto requestDto) {
+	public TeacherDto create(@RequestBody TeacherCreateDto requestDto) {
 		return teacherService.create(requestDto);
 	}
 	
 	@PutMapping(TimApiPath.Teacher.UPDATE)
-	public TeacherDto update(@RequestBody TeacherUpdateRequestDto requestDto) {
+	public TeacherDto update(@RequestBody TeacherUpdateDto requestDto) {
 		return teacherService.update(requestDto);
 	}
 	
 	@PostMapping(TimApiPath.Teacher.UPLOAD_EXCEL)
-	public long uplaodExcelFile(@RequestPart("file") MultipartFile file) {
+	public long uplaodExcelFile(@RequestPart(value = "file", required = false) MultipartFile file) {
 		return teacherService.create(file);
 	}
 	

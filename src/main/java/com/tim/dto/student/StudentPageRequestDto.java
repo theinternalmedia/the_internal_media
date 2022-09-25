@@ -1,7 +1,8 @@
 package com.tim.dto.student;
 
+import javax.validation.constraints.Size;
+
 import com.tim.annotation.Code;
-import com.tim.data.TimConstants;
 import com.tim.dto.PageRequestDto;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -13,7 +14,7 @@ import lombok.Setter;
 public class StudentPageRequestDto extends PageRequestDto{
 
 	@Code
-	@ApiModelProperty(value = "Regex: " + TimConstants.REGEX_CODE)
+	@Size(min = 5, max = 20)
 	private String userId;
 	
 	private Boolean gender;
@@ -22,15 +23,12 @@ public class StudentPageRequestDto extends PageRequestDto{
 	private String searchKey;
 	
 	@Code
-	@ApiModelProperty(value = "Regex: " + TimConstants.REGEX_CODE)
 	private String classCode;
 	
 	@Code
-	@ApiModelProperty(value = "Regex: " + TimConstants.REGEX_CODE)
 	private String facultyCode;
 	
 	@Code
-	@ApiModelProperty(value = "Regex: " + TimConstants.REGEX_CODE)
 	private String schoolYearCode;
 
 }

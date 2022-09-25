@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.tim.dto.schoolyear.SchoolYearDto;
-import com.tim.dto.schoolyear.SchoolYearRequestDto;
+import com.tim.dto.schoolyear.SchoolYearCreateDto;
 import com.tim.entity.SchoolYear;
 
 /**
@@ -27,7 +27,7 @@ public class SchoolYearConverter extends AbstractConverter<SchoolYearDto, School
 		return this.modelMapper.map(dto, SchoolYear.class);
 	}
 
-	public SchoolYear toEntity(SchoolYearRequestDto requestDto) {
+	public SchoolYear toEntity(SchoolYearCreateDto requestDto) {
 		return this.modelMapper.map(requestDto, SchoolYear.class);
 	}
 	

@@ -4,7 +4,6 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
 import com.tim.annotation.Code;
-import com.tim.data.TimConstants;
 import com.tim.dto.PageRequestDto;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -23,6 +22,5 @@ public class NotificationPageRequestDto extends PageRequestDto{
 	private Integer type;
 	
 	@Code
-	@ApiModelProperty(value = "Regex: " + TimConstants.REGEX_CODE)
 	private String notificationGroupCode;
 }

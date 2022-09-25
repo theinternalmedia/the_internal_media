@@ -1,4 +1,4 @@
-package com.tim.dto.schoolyear;
+package com.tim.dto.marks;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -6,14 +6,9 @@ import javax.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-/**
- * 
- * @appName the_internal_media
- *
- */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class SchoolYearUpdateRequestDto extends SchoolYearRequestDto {
+public class MarksUpdateDto extends MarksCreateDto{
 
 	@NotNull
 	@Min(value = 1)

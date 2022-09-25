@@ -25,9 +25,11 @@ public final class TimConstants {
 	public static final String REGEX_CODE = "^[a-zA-Z0-9_-]*$";
 	public static final String REGEX_PASSWORD = "^[a-zA-Z0-9!@#$%^&*]*$";
 
+	// Date format
 	public static final String USER_DOB_FORMAT = "dd-MM-yyyy";
 	public static final String LOCAL_DATE_TIME_FORMAT = "dd-MM-yyyy HH:mm:ss";
 	
+	// Boolean String
 	public static final String TRUE_STR = "true";
 	public static final String FALSE_STR = "false";
 	
@@ -43,7 +45,6 @@ public final class TimConstants {
 	/**
 	 * file path + prefix
 	 * @appName the_internal_media
-	 *
 	 */
 	public static class Upload{
 		public static final List<String> IMAGE_MIME_TYPE = Arrays.asList("png", "jpeg", "jpg", "PNG", "JPEG", "JPG");
@@ -71,10 +72,8 @@ public final class TimConstants {
 
 
 	/**
-	 * Notification Type
-	 * 
+	 * Notification Type.
 	 * @appName the_internal_media
-	 *
 	 */
 	public static final class NotificationType {
 		public static final int TO_ALL = 0;
@@ -84,9 +83,7 @@ public final class TimConstants {
 	
 	/**
 	 * Gender
-	 * 
 	 * @appName the_internal_media
-	 *
 	 */
 	public static final class Gender {
 		public static final String MALE_STR = "Nam";
@@ -96,10 +93,8 @@ public final class TimConstants {
 	}
 	
 	/**
-	 * Excel file name be exported
-	 * 
+	 * Excel file name be exported.
 	 * @appName the_internal_media
-	 *
 	 */
 	public static final class ExcelFiledName {
 		public static final String TEACHER = "GiaoVien";
@@ -107,10 +102,8 @@ public final class TimConstants {
 	}
 
 	/**
-	 * Type Value to get value from Excel Cell
-	 * 
+	 * Type Value to get value from Excel Cell.
 	 * @appName the_internal_media
-	 *
 	 */
 	public static final class FieldType {
 		public static final String DOUBLE = "Double";
@@ -123,6 +116,10 @@ public final class TimConstants {
 		public static final String LONG = "Long";
 	}
 	
+	/**
+	 * ActualEntityName.
+	 * @appName the_internal_media
+	 */
 	public static final class ActualEntityName {
 		public static final String TEACHER = "Giảng Viên";
 		public static final String STUDENT = "Sinh Viên";
@@ -131,5 +128,23 @@ public final class TimConstants {
 		public static final String SCHOOL_YEAR = "Khóa";
 		public static final String NEWS = "Tin tức";
 		public static final String NOTIFICATION = "Thông báo";
+	}
+	
+	/**
+	 * ApiModelProperty.
+	 * @appName the_internal_media
+	 */
+	public static final class ApiModelPropertyValue{
+	
+		/** Regex: ^[a-zA-Z0-9_-]{1,50}$ */
+		public static final String CODE = "Regex: " + TimConstants.REGEX_CODE;
+		/** Max length: 100 */
+		public static final String MAX_LENGTH_100 = "Max length: 100";
+		
+		/** Max length: 150 */
+		public static final String MAX_LENGTH_150 = "Max length: 150";
+		
+		/** Max length: 255 */
+		public static final String MAX_LENGTH_255 = "Max length: 255";
 	}
 }

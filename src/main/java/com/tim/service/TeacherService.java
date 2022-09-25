@@ -8,8 +8,8 @@ import com.tim.dto.PagingResponseDto;
 import com.tim.dto.PasswordDto;
 import com.tim.dto.teacher.TeacherDto;
 import com.tim.dto.teacher.TeacherPageRequestDto;
-import com.tim.dto.teacher.TeacherRequestDto;
-import com.tim.dto.teacher.TeacherUpdateRequestDto;
+import com.tim.dto.teacher.TeacherCreateDto;
+import com.tim.dto.teacher.TeacherUpdateDto;
 import com.tim.dto.teacher.TeacherUpdateProfileDto;
 
 public interface TeacherService {
@@ -18,7 +18,7 @@ public interface TeacherService {
 	 * @param dto
 	 * @return TeacherDto include status ok if success, else not ok. message and data if have return data
 	 */
-	TeacherDto create(TeacherRequestDto requestDto);
+	TeacherDto create(TeacherCreateDto requestDto);
 
 	/**
 	 * @author minhtuanitk43
@@ -60,7 +60,7 @@ public interface TeacherService {
 	 * @param requestDto
 	 * @return TeacherDto
 	 */
-	TeacherDto update(TeacherUpdateRequestDto requestDto);
+	TeacherDto update(TeacherUpdateDto requestDto);
 	
 	TeacherDto updateProfile(TeacherUpdateProfileDto updateDto);
 

@@ -18,8 +18,8 @@ import com.tim.data.TimApiPath;
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.student.StudentDto;
 import com.tim.dto.student.StudentPageRequestDto;
-import com.tim.dto.student.StudentRequestDto;
-import com.tim.dto.student.StudentUpdateRequestDto;
+import com.tim.dto.student.StudentCreateDto;
+import com.tim.dto.student.StudentUpdateDto;
 import com.tim.service.StudentService;
 
 import io.swagger.annotations.ApiParam;
@@ -33,21 +33,21 @@ public class StudentResource {
 	
 	@PostMapping(TimApiPath.Student.UPLOAD_EXCEL)
 	public long uploadExcelFile(
-				@RequestPart("file") MultipartFile file) {
+				@RequestPart(value = "file", required = false) MultipartFile file) {
 		return studentService.create(file);
 	}
 	
 	@PostMapping(TimApiPath.Student.CREATE)
 	public StudentDto create(
 			@ApiParam("StudentRequestDto to create new Student")
-			@RequestBody StudentRequestDto requestDto) {
+			@RequestBody StudentCreateDto requestDto) {
 		return studentService.create(requestDto);
 	}
 	
 	@PutMapping(TimApiPath.Student.UPDATE)
 	public StudentDto update(
 			@ApiParam("StudentRequestDto to update Student")
-				@RequestBody StudentUpdateRequestDto requestDto) {
+				@RequestBody StudentUpdateDto requestDto) {
 		return studentService.update(requestDto);
 	}
 	

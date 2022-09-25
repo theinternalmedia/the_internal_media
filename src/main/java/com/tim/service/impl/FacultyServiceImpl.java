@@ -18,9 +18,9 @@ import com.tim.data.ETimMessages;
 import com.tim.data.SearchOperation;
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.faculty.FacultyDto;
-import com.tim.dto.faculty.FacultyPageRequestDto;
-import com.tim.dto.faculty.FacultyRequestDto;
-import com.tim.dto.faculty.FacultyUpdateRequestDto;
+import com.tim.dto.faculty.FacultyPageCreateDto;
+import com.tim.dto.faculty.FacultyCreateDto;
+import com.tim.dto.faculty.FacultyUpdateDto;
 import com.tim.dto.specification.SearchCriteria;
 import com.tim.dto.specification.TimSpecification;
 import com.tim.entity.Faculty;
@@ -44,7 +44,7 @@ public class FacultyServiceImpl implements FacultyService {
 
 	@Override
 	@Transactional
-	public FacultyDto create(FacultyRequestDto dto) {
+	public FacultyDto create(FacultyCreateDto dto) {
 		// Validate input
 		ValidationUtils.validateObject(dto);
 		Faculty entity = facultyConverter.toEntity(dto);
@@ -82,7 +82,7 @@ public class FacultyServiceImpl implements FacultyService {
 	
 	@Override
 	@Transactional
-	public FacultyDto update(FacultyUpdateRequestDto updateDto) {
+	public FacultyDto update(FacultyUpdateDto updateDto) {
 		ValidationUtils.validateObject(updateDto);
 		
 		Faculty faculty = facultyRepository.findById(updateDto.getId()).orElseThrow(
@@ -112,7 +112,7 @@ public class FacultyServiceImpl implements FacultyService {
 	}
 
 	@Override
-	public PagingResponseDto getPage(FacultyPageRequestDto pageRequestDto) {
+	public PagingResponseDto getPage(FacultyPageCreateDto pageRequestDto) {
 		ValidationUtils.validateObject(pageRequestDto);
 		
 		TimSpecification<Faculty> timSpecification = new TimSpecification<Faculty>();

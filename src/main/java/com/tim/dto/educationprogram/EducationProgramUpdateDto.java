@@ -12,7 +12,7 @@ import lombok.Getter;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class EducationProgramUpdateDto extends EducationProgramRequestDto{
+public class EducationProgramUpdateDto extends EducationProgramCreateDto{
 
 	@Getter(value = AccessLevel.NONE)
 	private static final long serialVersionUID = 1L;

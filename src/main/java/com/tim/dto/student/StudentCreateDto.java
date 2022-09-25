@@ -4,8 +4,10 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import com.tim.annotation.Code;
+import com.tim.data.TimConstants.ApiModelPropertyValue;
 import com.tim.dto.UserRequestDto;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -16,14 +18,16 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class StudentRequestDto extends UserRequestDto {
+public class StudentCreateDto extends UserRequestDto {
 
 	@NotBlank
 	@Code
 	private String classCode;
 	
-	@NotBlank
 	@Size(max = 20, min = 5)
+	@NotBlank
+	@Code
+	@ApiModelProperty(value = ApiModelPropertyValue.CODE)
 	private String userId;
 	
 }

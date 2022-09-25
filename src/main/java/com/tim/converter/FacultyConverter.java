@@ -6,8 +6,8 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.tim.dto.faculty.FacultyDto;
-import com.tim.dto.faculty.FacultyRequestDto;
-import com.tim.dto.faculty.FacultyUpdateRequestDto;
+import com.tim.dto.faculty.FacultyCreateDto;
+import com.tim.dto.faculty.FacultyUpdateDto;
 import com.tim.entity.Faculty;
 
 /**
@@ -30,7 +30,7 @@ public class FacultyConverter extends AbstractConverter<FacultyDto, Faculty> {
 		return this.modelMapper.map(dto, Faculty.class);
 	}
 	
-	public Faculty toEntity(FacultyUpdateRequestDto updateDto, Faculty entity) {
+	public Faculty toEntity(FacultyUpdateDto updateDto, Faculty entity) {
 		entity.setCode(updateDto.getCode());
 		entity.setName(updateDto.getName());
 		entity.setId(updateDto.getId());
@@ -46,7 +46,7 @@ public class FacultyConverter extends AbstractConverter<FacultyDto, Faculty> {
 		return dtos;
 	}
 
-	public Faculty toEntity(FacultyRequestDto dto) {
+	public Faculty toEntity(FacultyCreateDto dto) {
 		return this.modelMapper.map(dto, Faculty.class);
 	}
 }

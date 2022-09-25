@@ -23,7 +23,7 @@ public class SchoolYearDto extends BaseDto {
 	@Getter(value = AccessLevel.NONE)
 	private static final long serialVersionUID = 2582106395890821136L;
 
-	@Size(max = 20, min = 5)
+	@Size(min =3, max = 50)
 	@NotBlank
 	@Code
 	private String code;

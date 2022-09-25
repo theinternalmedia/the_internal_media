@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class StudentUpdateRequestDto extends StudentRequestDto {
+public class StudentUpdateDto extends StudentCreateDto {
 	
 	@NotNull
 	@Min(value = 1)

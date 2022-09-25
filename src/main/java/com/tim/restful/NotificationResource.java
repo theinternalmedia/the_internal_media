@@ -17,14 +17,13 @@ import org.springframework.web.multipart.MultipartFile;
 import com.tim.data.Permissions;
 import com.tim.data.TimApiPath;
 import com.tim.dto.PagingResponseDto;
+import com.tim.dto.notification.NotificationCreateDto;
 import com.tim.dto.notification.NotificationDto;
 import com.tim.dto.notification.NotificationPageRequestDto;
-import com.tim.dto.notification.NotificationRequestDto;
-import com.tim.dto.notification.NotificationUpdateRequestDto;
+import com.tim.dto.notification.NotificationUpdateDto;
 import com.tim.service.NotificationService;
 
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 
 @RestController
 @RequestMapping(TimApiPath.TIM_API)
@@ -37,7 +36,7 @@ public class NotificationResource {
 	@PostMapping(value = TimApiPath.Notification.CREATE)
 	public NotificationDto create(
 			@RequestPart(value = "file", required = false) MultipartFile file,
-			NotificationRequestDto requestDto) {
+			NotificationCreateDto requestDto) {
 
 		return notificationService.create(requestDto, file);
 	}
@@ -45,9 +44,8 @@ public class NotificationResource {
 	@PreAuthorize("hasAuthority('" + Permissions.Notification.UPDATE + "')")
 	@PutMapping(value = TimApiPath.Notification.UPDATE)
 	public NotificationDto update(
-			@ApiParam(value = "Thumbnail of notification")
 			@RequestPart(value = "file", required = false) MultipartFile file,
-			NotificationUpdateRequestDto requestDto) {
+			NotificationUpdateDto requestDto) {
 		
 		return notificationService.update(requestDto, file);
 	}

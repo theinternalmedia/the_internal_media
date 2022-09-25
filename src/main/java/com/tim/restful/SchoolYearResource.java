@@ -17,8 +17,8 @@ import com.tim.data.TimApiPath;
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.schoolyear.SchoolYearDto;
 import com.tim.dto.schoolyear.SchoolYearPageRequestDto;
-import com.tim.dto.schoolyear.SchoolYearRequestDto;
-import com.tim.dto.schoolyear.SchoolYearUpdateRequestDto;
+import com.tim.dto.schoolyear.SchoolYearCreateDto;
+import com.tim.dto.schoolyear.SchoolYearUpdateDto;
 import com.tim.service.SchoolYearService;
 
 @RestController
@@ -28,12 +28,12 @@ public class SchoolYearResource {
 	private SchoolYearService schoolYearService;
 	
 	@PostMapping(TimApiPath.SchoolYear.CREATE)
-	public SchoolYearDto create(@RequestBody SchoolYearRequestDto requestDto) {
+	public SchoolYearDto create(@RequestBody SchoolYearCreateDto requestDto) {
 		return schoolYearService.create(requestDto);
 	}
 	
 	@PutMapping(TimApiPath.SchoolYear.UPDATE)
-	public SchoolYearDto update(@RequestBody SchoolYearUpdateRequestDto requestDto) {
+	public SchoolYearDto update(@RequestBody SchoolYearUpdateDto requestDto) {
 		return schoolYearService.update(requestDto);
 	}
 	

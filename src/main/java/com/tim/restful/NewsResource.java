@@ -18,13 +18,11 @@ import org.springframework.web.multipart.MultipartFile;
 import com.tim.data.Permissions;
 import com.tim.data.TimApiPath;
 import com.tim.dto.PagingResponseDto;
+import com.tim.dto.news.NewsCreateDto;
 import com.tim.dto.news.NewsDto;
 import com.tim.dto.news.NewsPageRequestDto;
-import com.tim.dto.news.NewsRequestDto;
 import com.tim.dto.news.NewsUpdateDto;
 import com.tim.service.NewsService;
-
-import io.swagger.annotations.ApiParam;
 
 @RestController
 @RequestMapping(value = TimApiPath.TIM_API)
@@ -36,9 +34,8 @@ public class NewsResource {
 	@PreAuthorize("hasAuthority('" + Permissions.News.CREATE + "')")
 	@PostMapping(value = TimApiPath.News.CREATE)
 	public NewsDto create(
-			@ApiParam(value = "Thumbnail of the News") 
 			@RequestPart(value = "file", required = false) MultipartFile file,
-			NewsRequestDto requestDto) {
+			NewsCreateDto requestDto) {
 		
 		return newsService.create(requestDto, file);
 	}
@@ -46,7 +43,6 @@ public class NewsResource {
 	@PreAuthorize("hasAuthority('" + Permissions.News.UPDATE + "')")
 	@PutMapping(value = TimApiPath.News.UPDATE)
 	public NewsDto update(
-			@ApiParam(value = "Thumbnail of the News") 
 			@RequestPart(value = "file", required = false) MultipartFile file,
 			NewsUpdateDto updateDto) {
 		

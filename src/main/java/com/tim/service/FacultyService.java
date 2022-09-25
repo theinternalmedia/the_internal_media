@@ -6,12 +6,12 @@ import java.util.Set;
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.faculty.FacultyDto;
 
-import com.tim.dto.faculty.FacultyPageRequestDto;
-import com.tim.dto.faculty.FacultyUpdateRequestDto;
-import com.tim.dto.faculty.FacultyRequestDto;
+import com.tim.dto.faculty.FacultyPageCreateDto;
+import com.tim.dto.faculty.FacultyUpdateDto;
+import com.tim.dto.faculty.FacultyCreateDto;
 
 public interface FacultyService {
-	FacultyDto create(FacultyRequestDto facultyDto);
+	FacultyDto create(FacultyCreateDto facultyDto);
 	
 	long toggleStatus(Set<Long> ids);
 	/**
@@ -28,7 +28,7 @@ public interface FacultyService {
 	 * @param updateDto
 	 * @return FacultyDto
 	 */
-	FacultyDto update(FacultyUpdateRequestDto updateDto);
+	FacultyDto update(FacultyUpdateDto updateDto);
 	
 	/**
 	 * 
@@ -48,6 +48,6 @@ public interface FacultyService {
 	 * @param size
 	 * @return PagingResponseDto
 	 */
-	PagingResponseDto getPage(FacultyPageRequestDto pageRequestDto);
+	PagingResponseDto getPage(FacultyPageCreateDto pageRequestDto);
 	
 }

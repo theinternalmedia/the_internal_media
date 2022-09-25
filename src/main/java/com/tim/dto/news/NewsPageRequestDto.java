@@ -1,7 +1,6 @@
 package com.tim.dto.news;
 
 import com.tim.annotation.Code;
-import com.tim.data.TimConstants;
 import com.tim.dto.PageRequestDto;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -16,6 +15,5 @@ public class NewsPageRequestDto extends PageRequestDto{
 	private String searchKey;
 	
 	@Code
-	@ApiModelProperty(value = "Regex: " + TimConstants.REGEX_CODE)
 	private String facultyCode;
 }

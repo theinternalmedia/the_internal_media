@@ -9,6 +9,7 @@ import javax.validation.constraints.Size;
 
 import com.tim.annotation.Code;
 import com.tim.data.TimConstants;
+import com.tim.data.TimConstants.ApiModelPropertyValue;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AccessLevel;
@@ -16,7 +17,7 @@ import lombok.Data;
 import lombok.Getter;
 
 @Data
-public class NotificationRequestDto implements Serializable{
+public class NotificationCreateDto implements Serializable{
 
 	@Getter(value = AccessLevel.NONE)
 	private static final long serialVersionUID = 7569445856618041347L;
@@ -25,12 +26,12 @@ public class NotificationRequestDto implements Serializable{
 
 	@NotBlank
 	@Size(max = 150)
-	@ApiModelProperty(value = "Max length: 150", required = true)
+	@ApiModelProperty(value = ApiModelPropertyValue.MAX_LENGTH_150, required = true)
 	private String title;
 
 	@NotBlank
 	@Size(max = 255)
-	@ApiModelProperty(value = "Max length: 255", required = true)
+	@ApiModelProperty(value = ApiModelPropertyValue.MAX_LENGTH_255, required = true)
 	private String shortDescription;
 
 	@NotBlank
@@ -38,15 +39,11 @@ public class NotificationRequestDto implements Serializable{
 
 	@NotBlank
 	@Code
-	@ApiModelProperty(value = "Regex: " + TimConstants.REGEX_CODE, required = true)
 	private String notificationGroupCode;
 
-	@ApiModelProperty(value = "Regex: " + TimConstants.REGEX_CODE)
 	private Set<String> facultyCodes = new HashSet<String>();
 
-	@ApiModelProperty(value = "Regex: " + TimConstants.REGEX_CODE)
 	private Set<String> schoolYearCodes = new HashSet<String>();
 
-	@ApiModelProperty(value = "Regex: " + TimConstants.REGEX_CODE)
 	private Set<String> classCodes = new HashSet<String>();
 }

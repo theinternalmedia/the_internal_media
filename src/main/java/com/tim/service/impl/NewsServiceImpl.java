@@ -25,7 +25,7 @@ import com.tim.data.TimConstants;
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.news.NewsDto;
 import com.tim.dto.news.NewsPageRequestDto;
-import com.tim.dto.news.NewsRequestDto;
+import com.tim.dto.news.NewsCreateDto;
 import com.tim.dto.news.NewsUpdateDto;
 import com.tim.entity.Faculty;
 import com.tim.entity.News;
@@ -52,7 +52,7 @@ public class NewsServiceImpl implements NewsService {
     
     @Override
     @Transactional(noRollbackFor = {TimException.class, TimNotFoundException.class})
-    public NewsDto create(NewsRequestDto requestDto, MultipartFile image) {
+    public NewsDto create(NewsCreateDto requestDto, MultipartFile image) {
         // Validate Object
         ValidationUtils.validateObject(requestDto);
 

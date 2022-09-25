@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.educationprogram.EducationProgramDto;
 import com.tim.dto.educationprogram.EducationProgramPageRequestDto;
-import com.tim.dto.educationprogram.EducationProgramRequestDto;
+import com.tim.dto.educationprogram.EducationProgramCreateDto;
 import com.tim.dto.educationprogram.EducationProgramResponseDto;
 import com.tim.dto.educationprogram.EducationProgramUpdateDto;
 
@@ -19,7 +19,7 @@ public interface EduProgramService {
 	 * @param file
 	 * @return EducationProgramDto
 	 */
-	EducationProgramDto create(EducationProgramRequestDto eduProgramRequestDto, MultipartFile file);
+	EducationProgramDto create(EducationProgramCreateDto eduProgramRequestDto, MultipartFile file);
 	
 	/**
 	 * 

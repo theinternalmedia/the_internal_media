@@ -26,7 +26,7 @@ import com.tim.data.SearchOperation;
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.educationprogram.EducationProgramDto;
 import com.tim.dto.educationprogram.EducationProgramPageRequestDto;
-import com.tim.dto.educationprogram.EducationProgramRequestDto;
+import com.tim.dto.educationprogram.EducationProgramCreateDto;
 import com.tim.dto.educationprogram.EducationProgramResponseDto;
 import com.tim.dto.educationprogram.EducationProgramUpdateDto;
 import com.tim.dto.educationprogramsubject.EducationProgramSubjectCreateDto;
@@ -77,7 +77,7 @@ public class EduProgramServiceImpl implements EduProgramService {
 	
 	@Override
 	@Transactional
-	public EducationProgramDto create(EducationProgramRequestDto education, MultipartFile file) {
+	public EducationProgramDto create(EducationProgramCreateDto education, MultipartFile file) {
 		// Validate input 
 		ValidationUtils.validateObject(education);
 		

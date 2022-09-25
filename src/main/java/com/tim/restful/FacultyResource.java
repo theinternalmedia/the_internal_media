@@ -18,9 +18,9 @@ import com.tim.data.Permissions;
 import com.tim.data.TimApiPath;
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.faculty.FacultyDto;
-import com.tim.dto.faculty.FacultyPageRequestDto;
-import com.tim.dto.faculty.FacultyRequestDto;
-import com.tim.dto.faculty.FacultyUpdateRequestDto;
+import com.tim.dto.faculty.FacultyPageCreateDto;
+import com.tim.dto.faculty.FacultyCreateDto;
+import com.tim.dto.faculty.FacultyUpdateDto;
 import com.tim.service.FacultyService;
 
 
@@ -32,7 +32,7 @@ public class FacultyResource {
 	
 	@PreAuthorize("hasAuthority('" + Permissions.Faculty.CREATE + "')")
 	@PostMapping(TimApiPath.Faculty.CREATE)
-	public FacultyDto create(@RequestBody FacultyRequestDto facultyDto) {
+	public FacultyDto create(@RequestBody FacultyCreateDto facultyDto) {
 		return facultyService.create(facultyDto);
 	}
 	
@@ -48,13 +48,13 @@ public class FacultyResource {
 	
 	@GetMapping(TimApiPath.Faculty.GET_PAGE)
 	public ResponseEntity<PagingResponseDto> getPage(
-							FacultyPageRequestDto pageRequestDto){
+							FacultyPageCreateDto pageRequestDto){
 		return ResponseEntity.ok(facultyService.getPage(pageRequestDto));
 	}
 	
 	@PreAuthorize("hasAuthority('" + Permissions.Faculty.UPDATE + "')")
 	@PutMapping(TimApiPath.Faculty.UPDATE)
-	public FacultyDto update(@RequestBody FacultyUpdateRequestDto updateDto) {
+	public FacultyDto update(@RequestBody FacultyUpdateDto updateDto) {
 		return facultyService.update(updateDto);
 	}
 	

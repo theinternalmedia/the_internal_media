@@ -23,7 +23,6 @@ public class EducationProgramDto extends BaseDto {
 	@Getter(value = AccessLevel.NONE)
 	private static final long serialVersionUID = -2167333247842473644L;
 
-	@Size(max = 20, min = 5)
 	@NotBlank
 	@Code
 	private String code;

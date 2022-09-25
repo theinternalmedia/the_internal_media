@@ -34,10 +34,10 @@ import com.tim.dto.PasswordDto;
 import com.tim.dto.specification.TimSpecification;
 import com.tim.dto.student.StudentDto;
 import com.tim.dto.student.StudentPageRequestDto;
-import com.tim.dto.student.StudentRequestDto;
+import com.tim.dto.student.StudentCreateDto;
 import com.tim.dto.student.StudentResponseDto;
 import com.tim.dto.student.StudentUpdateProfileDto;
-import com.tim.dto.student.StudentUpdateRequestDto;
+import com.tim.dto.student.StudentUpdateDto;
 import com.tim.entity.Classz;
 import com.tim.entity.Faculty;
 import com.tim.entity.Role;
@@ -72,7 +72,7 @@ public class StudentServiceImpl implements StudentService {
 	private RoleRepository roleRepository;
 
 	@Override
-	public StudentDto create(StudentRequestDto requestDto) {
+	public StudentDto create(StudentCreateDto requestDto) {
 		// Validate input
 		ValidationUtils.validateObject(requestDto);
 
@@ -106,14 +106,14 @@ public class StudentServiceImpl implements StudentService {
 	@Transactional
 	@Override
 	public long create(MultipartFile file) {
-		List<StudentRequestDto> dtoList = excelService.getListObjectFromExcelFile(
-				file, StudentRequestDto.class);
+		List<StudentCreateDto> dtoList = excelService.getListObjectFromExcelFile(
+				file, StudentCreateDto.class);
 		List<Student> entityList = new ArrayList<>();
 		// UserID Set
 		Set<String> userIdSet = new HashSet<String>();
 		// Email Set
 		Set<String> emailSet = new HashSet<String>();
-		for (StudentRequestDto dto : dtoList) {
+		for (StudentCreateDto dto : dtoList) {
 			Student entity = studentConverter.toEntity(dto);
 			Classz classz = classRepository.getByCodeAndStatusTrue(dto.getClassCode())
 					.orElseThrow(() -> new TimNotFoundException(
@@ -216,7 +216,7 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public StudentDto update(StudentUpdateRequestDto requestDto) {
+	public StudentDto update(StudentUpdateDto requestDto) {
 		// Validate input
 		ValidationUtils.validateObject(requestDto);
 

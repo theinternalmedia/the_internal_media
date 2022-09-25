@@ -11,7 +11,7 @@ import lombok.Getter;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class NotificationUpdateRequestDto extends NotificationRequestDto {
+public class NotificationUpdateDto extends NotificationCreateDto {
 
 	@Getter(value = AccessLevel.NONE)
 	private static final long serialVersionUID = 6782895690948466224L;

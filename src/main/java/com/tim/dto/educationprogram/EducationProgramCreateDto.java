@@ -6,14 +6,16 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import com.tim.annotation.Code;
+import com.tim.data.TimConstants.ApiModelPropertyValue;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
 
 
 @Data
-public class EducationProgramRequestDto implements Serializable{
+public class EducationProgramCreateDto implements Serializable{
 
 	/**
 	 * 
@@ -22,13 +24,15 @@ public class EducationProgramRequestDto implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	
-	@Size(max = 20, min = 5)
+	@Size(max = 50, min = 3)
 	@NotBlank
 	@Code
+	@ApiModelProperty(value = ApiModelPropertyValue.CODE + ", length: 3-50.")
 	private String code;
 
 	@Size(max = 100)
 	@NotBlank
+	@ApiModelProperty(value = ApiModelPropertyValue.MAX_LENGTH_100)
 	private String name;
 	
 	@NotBlank

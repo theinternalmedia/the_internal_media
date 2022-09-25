@@ -17,14 +17,12 @@ import org.springframework.web.multipart.MultipartFile;
 import com.tim.data.Permissions;
 import com.tim.data.TimApiPath;
 import com.tim.dto.PagingResponseDto;
+import com.tim.dto.educationprogram.EducationProgramCreateDto;
 import com.tim.dto.educationprogram.EducationProgramDto;
 import com.tim.dto.educationprogram.EducationProgramPageRequestDto;
-import com.tim.dto.educationprogram.EducationProgramRequestDto;
 import com.tim.dto.educationprogram.EducationProgramResponseDto;
 import com.tim.dto.educationprogram.EducationProgramUpdateDto;
 import com.tim.service.EduProgramService;
-
-import io.swagger.annotations.ApiParam;
 
 @RestController
 @RequestMapping(value = TimApiPath.TIM_API)
@@ -36,9 +34,8 @@ public class EducationProgramResource {
 	@PreAuthorize("hasAuthority('" + Permissions.EducationProgram.CREATE + "')")
 	@PostMapping(value = TimApiPath.EducationProgram.CREATE)
 	public EducationProgramDto create(
-			@ApiParam(value = "List Subject of the Education Program in excel file.") 
-			@RequestPart("file") MultipartFile file,
-			EducationProgramRequestDto requestDto) {
+			@RequestPart(value = "file", required = false) MultipartFile file,
+			EducationProgramCreateDto requestDto) {
 
 		return eduProgramService.create(requestDto, file);
 	}
@@ -46,8 +43,7 @@ public class EducationProgramResource {
 	@PreAuthorize("hasAuthority('" + Permissions.EducationProgram.UPDATE + "')")
 	@PutMapping(value = TimApiPath.EducationProgram.UPDATE)
 	public EducationProgramDto update(
-			@ApiParam(value = "List Subject of the Education Program in excel file.") 
-			@RequestPart("file") MultipartFile file,
+			@RequestPart(value = "file", required = false) MultipartFile file,
 			EducationProgramUpdateDto updateDto) {
 		
 		return eduProgramService.update(updateDto, file);

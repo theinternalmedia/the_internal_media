@@ -6,14 +6,14 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.tim.dto.notification.NotificationDto;
-import com.tim.dto.notification.NotificationRequestDto;
-import com.tim.dto.notification.NotificationUpdateRequestDto;
+import com.tim.dto.notification.NotificationCreateDto;
+import com.tim.dto.notification.NotificationUpdateDto;
 import com.tim.entity.Notification;
 
 @Component
 public class NotificationConverter extends AbstractConverter<NotificationDto, Notification> {
 
-	public Notification toEntity(NotificationRequestDto requestDto) {
+	public Notification toEntity(NotificationCreateDto requestDto) {
 		this.modelMapper.map(requestDto, Notification.class);
 		return this.modelMapper.map(requestDto, Notification.class);
 	}
@@ -37,7 +37,7 @@ public class NotificationConverter extends AbstractConverter<NotificationDto, No
 		return result;
 	}
 
-	public Notification toEntity(NotificationUpdateRequestDto requestDto, Notification entity) {
+	public Notification toEntity(NotificationUpdateDto requestDto, Notification entity) {
 		entity.setContent(requestDto.getContent());
 		entity.setTitle(requestDto.getTitle());
 		entity.setShortDescription(requestDto.getShortDescription());

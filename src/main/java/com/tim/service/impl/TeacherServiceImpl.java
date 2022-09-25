@@ -29,10 +29,10 @@ import com.tim.dto.PagingResponseDto;
 import com.tim.dto.PasswordDto;
 import com.tim.dto.teacher.TeacherDto;
 import com.tim.dto.teacher.TeacherPageRequestDto;
-import com.tim.dto.teacher.TeacherRequestDto;
+import com.tim.dto.teacher.TeacherCreateDto;
 import com.tim.dto.teacher.TeacherResponseDto;
 import com.tim.dto.teacher.TeacherUpdateProfileDto;
-import com.tim.dto.teacher.TeacherUpdateRequestDto;
+import com.tim.dto.teacher.TeacherUpdateDto;
 import com.tim.entity.Faculty;
 import com.tim.entity.Role;
 import com.tim.entity.Teacher;
@@ -66,7 +66,7 @@ public class TeacherServiceImpl implements TeacherService {
 
 	@Override
 	@Transactional
-	public TeacherDto create(TeacherRequestDto requestDto) {
+	public TeacherDto create(TeacherCreateDto requestDto) {
 		// Validate input
 		ValidationUtils.validateObject(requestDto);
 		
@@ -116,15 +116,15 @@ public class TeacherServiceImpl implements TeacherService {
 	@Transactional
 	public long create(MultipartFile file) {
 		// Get dto list from excel file
-		List<TeacherRequestDto> dtoList = excelService.getListObjectFromExcelFile(
-				file, TeacherRequestDto.class);
+		List<TeacherCreateDto> dtoList = excelService.getListObjectFromExcelFile(
+				file, TeacherCreateDto.class);
 		
 		List<Teacher> entityList = new ArrayList<Teacher>();
 		// UserID Set
 		Set<String> userIdSet = new HashSet<String>();
 		// Email Set
 		Set<String> emailSet = new HashSet<String>();
-		for (TeacherRequestDto item : dtoList) {
+		for (TeacherCreateDto item : dtoList) {
 			Teacher entity = teacherConverter.toEntity(item);
 			Faculty faculty = facultyRepository.findByCodeAndStatusTrue(item.getFacultyCode()).orElseThrow(
 					() -> new TimNotFoundException("Khoa", "Mã Khoa", item.getFacultyCode()));
@@ -258,7 +258,7 @@ public class TeacherServiceImpl implements TeacherService {
 	}
 
 	@Override
-	public TeacherDto update(TeacherUpdateRequestDto requestDto) {
+	public TeacherDto update(TeacherUpdateDto requestDto) {
 		// Validate input
 		ValidationUtils.validateObject(requestDto);
 		

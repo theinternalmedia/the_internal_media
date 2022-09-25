@@ -1,7 +1,6 @@
 package com.tim.dto.teacher;
 
 import com.tim.annotation.Code;
-import com.tim.data.TimConstants;
 import com.tim.dto.PageRequestDto;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -13,7 +12,6 @@ import lombok.Setter;
 public class TeacherPageRequestDto extends PageRequestDto{
 
 	@Code
-	@ApiModelProperty(value = "Regex: " + TimConstants.REGEX_CODE)
 	private String userId;
 	
 	private Boolean gender;
@@ -22,6 +20,5 @@ public class TeacherPageRequestDto extends PageRequestDto{
 	private String searchKey;
 	
 	@Code
-	@ApiModelProperty(value = "Regex: " + TimConstants.REGEX_CODE)
 	private String facultyCode;
 }

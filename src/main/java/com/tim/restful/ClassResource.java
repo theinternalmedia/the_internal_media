@@ -20,8 +20,8 @@ import com.tim.data.TimApiPath;
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.classz.ClassDto;
 import com.tim.dto.classz.ClassPageRequestDto;
-import com.tim.dto.classz.ClassRequestDto;
-import com.tim.dto.classz.ClassUpdateRequestDto;
+import com.tim.dto.classz.ClassCreateDto;
+import com.tim.dto.classz.ClassUpdateDto;
 import com.tim.service.ClassService;
 
 @RestController
@@ -32,7 +32,7 @@ public class ClassResource {
 	
 	@PreAuthorize("hasAuthority('" + Permissions.Classz.CREATE + "')")
 	@PostMapping(TimApiPath.Class.CREATE)
-	public ClassDto create(@RequestBody ClassRequestDto requestDto) {
+	public ClassDto create(@RequestBody ClassCreateDto requestDto) {
 		return classService.create(requestDto);
 	}
 	
@@ -57,7 +57,7 @@ public class ClassResource {
 	
 	@PreAuthorize("hasAuthority('" + Permissions.Classz.UPDATE + "')")
 	@PutMapping(TimApiPath.Class.UPDATE)
-	public ClassDto update(@RequestBody ClassUpdateRequestDto updateDto) {
+	public ClassDto update(@RequestBody ClassUpdateDto updateDto) {
 		return classService.update(updateDto);
 	}
 

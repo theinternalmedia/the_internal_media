@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.tim.dto.educationprogram.EducationProgramDto;
-import com.tim.dto.educationprogram.EducationProgramRequestDto;
+import com.tim.dto.educationprogram.EducationProgramCreateDto;
 import com.tim.dto.educationprogram.EducationProgramResponseDto;
 import com.tim.dto.educationprogram.EducationProgramUpdateDto;
 import com.tim.entity.EducationProgram;
@@ -36,7 +36,7 @@ public class EducationProgramConverter extends AbstractConverter<EducationProgra
 	 * @param requestDto
 	 * @return EducationProgram
 	 */
-	public EducationProgram toEntity(EducationProgramRequestDto requestDto) {
+	public EducationProgram toEntity(EducationProgramCreateDto requestDto) {
 		return this.modelMapper.map(requestDto, EducationProgram.class);
 	}
 	

@@ -36,7 +36,8 @@ public enum ETimMessages {
 	INVALID_IMAGE_FILE("msg.406", "File hình ảnh không hợp lệ."),
 	/** {0} vừa nhập vào không hợp lệ: {1}. | Dữ liệu vừa nhập vào không hợp lệ.*/
 	INVALID_OBJECT_VALUE_2("msg.407", "Dữ liệu vừa nhập vào không hợp lệ."),
-//	INVALID_JSON_OBJECT("msg.408", "invalid string json object"),
+	/** {0} vừa nhập vào rỗng(null). | File vừa nhập vào rỗng(null).*/
+	OBJECT_IS_NULL("msg.408", "File vừa nhập vào rỗng(null)."),
 	
 	ACCESS_DENIED("msg.000", "temporiry message"),
 

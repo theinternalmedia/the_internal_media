@@ -23,7 +23,7 @@ public class FacultyDto extends BaseDto {
 	@Getter(value = AccessLevel.NONE)
 	private static final long serialVersionUID = -6110396477920437947L;
 
-	@Size(max = 20, min = 5)
+	@Size(max = 50, min = 3)
 	@NotBlank
 	@Code
 	private String code;

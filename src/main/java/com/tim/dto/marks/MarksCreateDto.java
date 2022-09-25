@@ -13,7 +13,7 @@ import com.tim.annotation.Code;
 import lombok.Data;
 
 @Data
-public class MarksRequestDto {
+public class MarksCreateDto {
 
 	@Min(0)
 	@Max(10)
