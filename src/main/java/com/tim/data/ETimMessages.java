@@ -39,7 +39,7 @@ public enum ETimMessages {
 	/** {0} vừa nhập vào rỗng(null). | File vừa nhập vào rỗng(null).*/
 	OBJECT_IS_NULL("msg.408", "File vừa nhập vào rỗng(null)."),
 	
-	ACCESS_DENIED("msg.000", "temporiry message"),
+	ACCESS_DENIED("msg.409", "temporiry message"),
 
 	/* INTERNAL_SYSTEM_ERROR */
 	/** Lỗi hệ thống, vui lòng kiểm tra và thử lại. */
