@@ -289,7 +289,7 @@ public class EduProgramServiceImpl implements EduProgramService {
         Pageable pageable = PageRequest.of(
         		pageRequestDto.getPage() - 1, 
         		pageRequestDto.getSize(), 
-        		Sort.by("name", "createdDate"));
+        		Sort.by("name"));
         Page<EducationProgram> pageEduPrograms = eduProgramRepository
         									.findAll(specification.and(timSpecification), pageable);
         List<EducationProgramDto> data = eduProgramConverter.toDtoList(pageEduPrograms.getContent());

@@ -129,7 +129,7 @@ public class FacultyServiceImpl implements FacultyService {
 		}
 		
 		Pageable pageable = PageRequest.of(pageRequestDto.getPage() - 1, 
-											pageRequestDto.getSize(), Sort.by("createdDate"));
+											pageRequestDto.getSize(), Sort.by("name"));
 		Page<Faculty> facultyPage = facultyRepository.findAll(timSpecification, pageable);
 		
 		List<FacultyDto> data = facultyConverter.toDtoList(facultyPage.getContent());

@@ -177,7 +177,8 @@ public class NewsServiceImpl implements NewsService {
         Pageable pageable = PageRequest.of(
         		pageRequestDto.getPage() - 1, 
         		pageRequestDto.getSize(), 
-        		Sort.by("createdDate", "title"));
+        		Sort.by(Sort.Direction.DESC, "createdDate")
+				.and(Sort.by(Sort.Direction.ASC, "title")));
         Page<News> pageTeachers = newsRepository.findAll(specification, pageable);
         List<NewsDto> data = newsConverter.toDtoList(pageTeachers.getContent());
         

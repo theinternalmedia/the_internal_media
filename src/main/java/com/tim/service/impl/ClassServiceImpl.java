@@ -167,7 +167,7 @@ public class ClassServiceImpl implements ClassService {
 			});
 		}
 		Pageable pageable = PageRequest.of(pageRequestDto.getPage() - 1,
-										pageRequestDto.getSize(), Sort.by("createdDate"));
+										pageRequestDto.getSize(), Sort.by("name"));
 		specification = specification.and(timSpecification);
 		Page<Classz> classPage = classRepository.findAll(specification, pageable);
 		List<ClassDto> data = classConverter.toDtoList(classPage.getContent());

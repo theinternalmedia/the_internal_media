@@ -24,9 +24,9 @@ import com.tim.data.ETimMessages;
 import com.tim.data.TimConstants;
 import com.tim.data.TimConstants.NotificationType;
 import com.tim.dto.PagingResponseDto;
+import com.tim.dto.notification.NotificationCreateDto;
 import com.tim.dto.notification.NotificationDto;
 import com.tim.dto.notification.NotificationPageRequestDto;
-import com.tim.dto.notification.NotificationCreateDto;
 import com.tim.dto.notification.NotificationUpdateDto;
 import com.tim.entity.Notification;
 import com.tim.entity.NotificationGroup;
@@ -264,7 +264,8 @@ public class NotificationServiceImpl implements NotificationService {
 		Pageable pageable = PageRequest.of(
 				pageRequestDto.getPage() - 1, 
 				pageRequestDto.getSize(),
-				Sort.by("createdDate", "title"));
+				Sort.by(Sort.Direction.DESC, "createdDate")
+				.and(Sort.by(Sort.Direction.ASC, "title")));
 		Page<Notification> pageNotification = notificationRepository.findAll(specification, pageable);
 		List<NotificationDto> data = notificationConverter.toDtoList(pageNotification.getContent());
 

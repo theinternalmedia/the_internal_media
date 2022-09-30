@@ -9,17 +9,18 @@ tim:
   
 # Logging
 logging:
-  file:
-    name: app.log
+  file: 
+    name: logs/app.log
   level:
+    root: INFO
     com:
-      mkyong: DEBUG
+      tim: DEBUG
     org:
-      springframework: ERROR
+      springframework: WARN
   pattern:
-    console: '%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n'
-    file: '%d %p %c{1.} [%t] %m%n'
-
+    console: '%d{yy-MM-dd E HH:mm:ss.SSS} %clr(%-5p ${PID} --- [%8.15t]) %clr(%-40.40logger{0}){blue} %clr(:){red} %m%n'
+    file: '%d %-5p ${PID} --- [%8.15t] %-40.40logger{0} : %m%n'
+  
 #Spring Jpa
 spring:
   jpa:
