@@ -2,8 +2,8 @@ package com.tim.converter;
 
 import org.springframework.stereotype.Component;
 
-import com.tim.dto.marks.MarksDto;
 import com.tim.dto.marks.MarksCreateDto;
+import com.tim.dto.marks.MarksDto;
 import com.tim.entity.Marks;
 
 /**
@@ -28,5 +28,13 @@ public class MarksConverter extends AbstractConverter<MarksDto, Marks>{
 	public Marks toEntity(MarksCreateDto requestDto) {
 		return this.modelMapper.map(requestDto, Marks.class);
 	}
+	
+	/*
+	 * public List<ExportExcelMarksDto> toExportDtoList(List<Marks> entities){
+	 * List<ExportExcelMarksDto> exportDtos = new ArrayList<>(); ExportExcelMarksDto
+	 * dto; entities.forEach(entity -> {
+	 * 
+	 * }); return null; }
+	 */
 
 }

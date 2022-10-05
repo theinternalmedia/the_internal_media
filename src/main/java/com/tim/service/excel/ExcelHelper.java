@@ -6,10 +6,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +63,7 @@ public class ExcelHelper {
 
 	private final static String ROOT_FOLDER = "excel";
 
-	private final static String SEPARATOR = "/";
+	private final static String SEPARATOR = File.separator;
 
 	private final static String GET = "get";
 	
@@ -191,41 +193,46 @@ public class ExcelHelper {
 	/**
 	 * Write list Object to Excel file
 	 * 
-	 * @author minhtuanitk43
+	 * @author minhtuanitk43, thinh edit (2. CREATE FILE)
 	 * @param <T>      Object
 	 * @param fileName fileName of excel file
 	 * @param data     List Object
 	 */
-	public <T> void writeToExcel(String fileName, List<T> data) {
+	public <T> String writeToExcel(String fileName, List<T> data) {
 		// 1.Get Class of T
 		Class<? extends Object> clazz = data.get(0).getClass();
 		OutputStream fos = null;
 		XSSFWorkbook workbook = null;
 		Cell cell;
+		String fileDirectory = null; 
 		try {
 			// 2. CREATE FILE
 			// 2.1 Create RootFolder if not exists
-			File rootFolder = new File(ROOT_FOLDER);
-			if (!rootFolder.exists()) {
-				rootFolder.mkdir();
-			}
+			String userHomeFolder = System.getProperty("user.home");
+			File desktopFolder = new File(userHomeFolder, "Desktop");
+			//because desktopFolder always exists, so needn't make directory
 
 			// 2.3 Create Folder Excel file
-			String directoryName = ROOT_FOLDER 
-					+ SEPARATOR 
-					+ LocalDate.now().toString();
+			String directoryName = desktopFolder + SEPARATOR + ROOT_FOLDER;
 			File directory = new File(directoryName);
 			if (!directory.exists()) {
 				directory.mkdir();
 			}
 
 			// 2.4 Create File
-			File file = new File(
-					directoryName 
-					+ SEPARATOR + LocalTime.now().toString().substring(0, 8).replace(":", "-") + "_"
+			fileDirectory = directoryName
+					+ SEPARATOR
 					+ SHEET_NAME 
 					+ fileName 
-					+ EXTENSION);
+					+ EXTENSION; 
+			//delete file if already exist
+			try {
+	            Files.deleteIfExists(Paths.get(fileDirectory));
+	        }
+	        catch (NoSuchFileException e) {
+	            System.out.println("Do nothing"); // "No such file/directory exists"
+	        }
+			File file = new File(fileDirectory);
 
 			// 3.CREATE EXCEL FILE
 			// 3.1 Create Workbook, Sheet
@@ -288,6 +295,9 @@ public class ExcelHelper {
 						case TimConstants.FieldType.DOUBLE:
 							cell.setCellValue((Double) value);
 							break;
+						case TimConstants.FieldType.FLOAT:
+							cell.setCellValue((Float) value);
+							break;
 						case TimConstants.FieldType.LOCAL_DATE:
 							DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern(TimConstants.USER_DOB_FORMAT);
 							cell.setCellValue(((LocalDate) value).format(formatter1).toString());
@@ -334,6 +344,7 @@ public class ExcelHelper {
 			} catch (IOException e) {
 			}
 		}
+		return fileDirectory;
 	}
 
 	/**

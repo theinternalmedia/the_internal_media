@@ -191,8 +191,8 @@ public class StudentServiceImpl implements StudentService {
 	public String exportToExcelFile() {
 		List<Student> entityList = studentRepository.findAll();
 		List<StudentDto> dtos = studentConverter.toDtoList(entityList);
-		excelService.writeListObjectToExcel(TimConstants.ExcelFiledName.STUDENT, dtos);
-		return null;
+		String fileDirectory = excelService.writeListObjectToExcel(TimConstants.ExcelFiledName.STUDENT, dtos);
+		return fileDirectory;
 	}
 
 	@Override

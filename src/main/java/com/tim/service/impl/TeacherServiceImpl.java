@@ -172,8 +172,8 @@ public class TeacherServiceImpl implements TeacherService {
 				TimConstants.ADMIN_USERID);
 
 		List<TeacherDto> dtos = teacherConverter.toDtoList(entityList);
-		excelService.writeListObjectToExcel(TimConstants.ExcelFiledName.TEACHER, dtos);
-		return null;
+		String fileDirectory = excelService.writeListObjectToExcel(TimConstants.ExcelFiledName.TEACHER, dtos);
+		return fileDirectory;
 	}
 
 	@Override

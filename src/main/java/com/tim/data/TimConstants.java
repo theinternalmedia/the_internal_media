@@ -99,6 +99,7 @@ public final class TimConstants {
 	public static final class ExcelFiledName {
 		public static final String TEACHER = "GiaoVien";
 		public static final String STUDENT = "SinhVien";
+		public static final String STUDENT_MARKS = "DiemCuaSinhVien";
 	}
 
 	/**

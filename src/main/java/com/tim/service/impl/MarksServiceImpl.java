@@ -12,8 +12,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.tim.converter.MarksConverter;
 import com.tim.data.ETimMessages;
-import com.tim.dto.marks.MarksDto;
+import com.tim.data.TimConstants;
+import com.tim.dto.marks.CustomMarks;
 import com.tim.dto.marks.MarksCreateDto;
+import com.tim.dto.marks.MarksDto;
 import com.tim.entity.Marks;
 import com.tim.entity.Student;
 import com.tim.entity.Subject;
@@ -166,4 +168,17 @@ public class MarksServiceImpl implements MarksService {
 		marksRepository.saveAll(marksList);
 		return marksList.size();
 	}
+
+	@Override
+	public String exportToExcel(String studentId) {
+		List<CustomMarks> marks = marksRepository.findCustomMarksByStudentId(studentId); 
+		if(marks.size() > 0) {
+			String fileDirectory = excelService.writeListObjectToExcel(
+					TimConstants.ExcelFiledName.STUDENT_MARKS +"_"+ studentId, marks);
+			return fileDirectory;
+		}else {
+			throw new TimException("Không tìm thấy điểm");
+		}
+	}
+
 }

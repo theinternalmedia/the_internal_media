@@ -13,6 +13,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -38,6 +39,8 @@ public class UserDto extends BaseDto {
 	@Size(max = 100, min = 6)
 	private String password;
 
+	@Getter(value = AccessLevel.NONE)
+	@Setter(value = AccessLevel.NONE)
 	private boolean gender = true;
 
 	@Size(max = 100)
@@ -51,5 +54,15 @@ public class UserDto extends BaseDto {
 	private String avatar;
 
 	private String remark;
+
+	public boolean getGender() {
+		return gender;
+	}
+
+	public void setGender(boolean gender) {
+		this.gender = gender;
+	}
+	
+	
 
 }

@@ -54,6 +54,11 @@ public class TeacherResource {
 		return ResponseEntity.ok(teacherService.getPage(pageRequestDto));
 	}
 	
+	@GetMapping(TimApiPath.Teacher.EXPORT_EXCEL)
+	public String exportToExcel() {
+		return teacherService.exportToExcelFile();
+	}
+	
 	@PutMapping(TimApiPath.Teacher.TOGGLE_STATUS)
 	public Long toggleStatus(@RequestParam Set<Long> ids) {
 		return teacherService.toggleStatus(ids);

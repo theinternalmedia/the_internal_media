@@ -3,7 +3,7 @@
 		"userId": "Mã GV",
 		"name": "Họ tên",
 		"email": "Email",
-		"gender": "Giới  tính",
+		"gender": "Giới tính",
 		"address": "Địa chỉ",
 		"phone": "Điện thoại",
 		"dob": "Ngày sinh"
@@ -12,9 +12,15 @@
 		"userId": "Mã SV",
 		"name": "Họ tên",
 		"email": "Email",
-		"gender": "Giới  tính",
+		"gender": "Giới tính",
 		"address": "Địa chỉ",
 		"phone": "Điện thoại",
 		"dob": "Ngày sinh"
+	},
+	"CustomMarks": {
+		"finalMarks": "Điểm",
+		"pass": "Đánh giá",
+		"semester": "Học kỳ",
+		"name": "Học phần"
 	}
 }
