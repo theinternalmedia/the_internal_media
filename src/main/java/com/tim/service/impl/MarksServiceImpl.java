@@ -14,6 +14,8 @@ import com.tim.converter.MarksConverter;
 import com.tim.data.ETimMessages;
 import com.tim.data.TimConstants;
 import com.tim.dto.marks.CustomMarks;
+import com.tim.dto.marks.InterfaceBaseMarksDto;
+import com.tim.dto.marks.CustomMarksInClass;
 import com.tim.dto.marks.MarksCreateDto;
 import com.tim.dto.marks.MarksDto;
 import com.tim.entity.Marks;
@@ -170,11 +172,30 @@ public class MarksServiceImpl implements MarksService {
 	}
 
 	@Override
-	public String exportToExcel(String studentId) {
+	public String exportToExcelByStudentId(String studentId) {
 		List<CustomMarks> marks = marksRepository.findCustomMarksByStudentId(studentId); 
 		if(marks.size() > 0) {
 			String fileDirectory = excelService.writeListObjectToExcel(
 					TimConstants.ExcelFiledName.STUDENT_MARKS +"_"+ studentId, marks);
+			return fileDirectory;
+		}else {
+			throw new TimException("Không tìm thấy điểm");
+		}
+	}
+
+	@Override
+	public String exportToExcelBySubjectAndClass(String subjectCode, String classCode) {
+		List<InterfaceBaseMarksDto> marks = marksRepository.findCustomMarksBySubjectAndClass(subjectCode, classCode);
+		
+		if(marks.size() > 0) {
+			List<CustomMarksInClass> customMarks = new ArrayList<>();
+			for(InterfaceBaseMarksDto item : marks) {
+				CustomMarksInClass result = new CustomMarksInClass(
+						item.getName(), item.getUserId(), item.getDob(), item.getFinalMarks(), item.getTimes());
+				customMarks.add(result);
+			}
+			String fileDirectory = excelService.writeListObjectToExcel(
+					String.format(TimConstants.ExcelFiledName.SUBJECT_MARKS_IN_CLASS, subjectCode, classCode), customMarks);
 			return fileDirectory;
 		}else {
 			throw new TimException("Không tìm thấy điểm");

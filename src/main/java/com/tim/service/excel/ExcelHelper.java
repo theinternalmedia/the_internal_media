@@ -208,6 +208,7 @@ public class ExcelHelper {
 		try {
 			// 2. CREATE FILE
 			// 2.1 Create RootFolder if not exists
+			// RootFolder will put in computer desktop
 			String userHomeFolder = System.getProperty("user.home");
 			File desktopFolder = new File(userHomeFolder, "Desktop");
 			//because desktopFolder always exists, so needn't make directory

@@ -189,7 +189,7 @@ public class StudentServiceImpl implements StudentService {
 
 	@Override
 	public String exportToExcelFile() {
-		List<Student> entityList = studentRepository.findAll();
+		List<Student> entityList = studentRepository.findAllByOrderByClassz_NameDesc();
 		List<StudentDto> dtos = studentConverter.toDtoList(entityList);
 		String fileDirectory = excelService.writeListObjectToExcel(TimConstants.ExcelFiledName.STUDENT, dtos);
 		return fileDirectory;

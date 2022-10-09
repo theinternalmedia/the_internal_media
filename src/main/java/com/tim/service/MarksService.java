@@ -11,5 +11,7 @@ public interface MarksService {
 
 	long create(MultipartFile file);
 	
-	String exportToExcel(String userId);
+	String exportToExcelByStudentId(String userId);
+	
+	String exportToExcelBySubjectAndClass(String subject, String classCode);
 }

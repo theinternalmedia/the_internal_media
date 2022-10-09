@@ -100,6 +100,7 @@ public final class TimConstants {
 		public static final String TEACHER = "GiaoVien";
 		public static final String STUDENT = "SinhVien";
 		public static final String STUDENT_MARKS = "DiemCuaSinhVien";
+		public static final String SUBJECT_MARKS_IN_CLASS = "DiemMon%s_Lop%s";
 	}
 
 	/**

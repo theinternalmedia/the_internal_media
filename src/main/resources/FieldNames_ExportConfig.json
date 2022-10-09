@@ -22,5 +22,12 @@
 		"pass": "Đánh giá",
 		"semester": "Học kỳ",
 		"name": "Học phần"
+	},
+	"CustomMarksInClass": {
+		"name": "Họ tên",
+		"userId": "Mã SV",
+		"dob": "Ngày sinh",
+		"finalMarks": "Điểm",
+		"times": "Số lần"
 	}
 }

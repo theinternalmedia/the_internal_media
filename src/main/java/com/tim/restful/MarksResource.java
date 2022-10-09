@@ -33,8 +33,15 @@ public class MarksResource {
 		return marksService.create(file);
 	}
 	
-	@GetMapping(TimApiPath.Marks.EXPORT_EXCEL)
-	public String exportToExcel(@RequestParam("userId") String userId) {
-		return marksService.exportToExcel(userId);
+	@GetMapping(TimApiPath.Marks.EXPORT_A_STUDENT_EXCEL)
+	public String exportToExcelByStudentId(@RequestParam("userId") String userId) {
+		return marksService.exportToExcelByStudentId(userId);
+	}
+	
+	@GetMapping(TimApiPath.Marks.EXPORT_A_CLASS_EXCEL)
+	public String exportToExcelBySubjectAndClass(
+						@RequestParam("subjectCode") String subjectCode,
+						@RequestParam("classCode") String classCode) {
+		return marksService.exportToExcelBySubjectAndClass(subjectCode, classCode);
 	}
 }

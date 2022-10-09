@@ -126,6 +126,8 @@ public final class TimApiPath {
 		public static final String CREATE = PREFIX_V1;
 		public static final String UPLOAD_EXCEL = PREFIX_V1 + UPLOAD_EXCEL_;
 		public static final String EXPORT_EXCEL = PREFIX_V1 + EXPORT_EXCEL_;
+		public static final String EXPORT_A_STUDENT_EXCEL = EXPORT_EXCEL + "/student";
+		public static final String EXPORT_A_CLASS_EXCEL = EXPORT_EXCEL + "/class";
 		public static final String GET_BY_ID = PREFIX_V1 + PATH_VARIABLE_ID;
 		public static final String UPDATE = PREFIX_V1;
 		public static final String TOGGLE_STATUS = PREFIX_V1 + TOGGLE_STATUS_;
