@@ -6,7 +6,7 @@ import java.util.Set;
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.faculty.FacultyDto;
 
-import com.tim.dto.faculty.FacultyPageCreateDto;
+import com.tim.dto.faculty.FacultyPageRequestDto;
 import com.tim.dto.faculty.FacultyUpdateDto;
 import com.tim.dto.faculty.FacultyCreateDto;
 
@@ -48,6 +48,6 @@ public interface FacultyService {
 	 * @param size
 	 * @return PagingResponseDto
 	 */
-	PagingResponseDto getPage(FacultyPageCreateDto pageRequestDto);
+	PagingResponseDto getPage(FacultyPageRequestDto pageRequestDto);
 	
 }

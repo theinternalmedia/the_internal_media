@@ -18,7 +18,7 @@ import com.tim.data.ETimMessages;
 import com.tim.data.SearchOperation;
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.faculty.FacultyDto;
-import com.tim.dto.faculty.FacultyPageCreateDto;
+import com.tim.dto.faculty.FacultyPageRequestDto;
 import com.tim.dto.faculty.FacultyCreateDto;
 import com.tim.dto.faculty.FacultyUpdateDto;
 import com.tim.dto.specification.SearchCriteria;
@@ -112,7 +112,7 @@ public class FacultyServiceImpl implements FacultyService {
 	}
 
 	@Override
-	public PagingResponseDto getPage(FacultyPageCreateDto pageRequestDto) {
+	public PagingResponseDto getPage(FacultyPageRequestDto pageRequestDto) {
 		ValidationUtils.validateObject(pageRequestDto);
 		
 		TimSpecification<Faculty> timSpecification = new TimSpecification<Faculty>();

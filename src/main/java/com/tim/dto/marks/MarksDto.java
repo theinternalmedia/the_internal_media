@@ -38,5 +38,9 @@ public class MarksDto extends BaseDto {
 	private LocalDate date;
 	
 	private String time;
+	
+	private String studentName;
+	
+	private String studentUserId;
 
 }

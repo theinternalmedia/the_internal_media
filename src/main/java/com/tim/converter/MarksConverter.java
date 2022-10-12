@@ -1,5 +1,8 @@
 package com.tim.converter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import com.tim.dto.marks.MarksCreateDto;
@@ -29,12 +32,17 @@ public class MarksConverter extends AbstractConverter<MarksDto, Marks>{
 		return this.modelMapper.map(requestDto, Marks.class);
 	}
 	
-	/*
-	 * public List<ExportExcelMarksDto> toExportDtoList(List<Marks> entities){
-	 * List<ExportExcelMarksDto> exportDtos = new ArrayList<>(); ExportExcelMarksDto
-	 * dto; entities.forEach(entity -> {
-	 * 
-	 * }); return null; }
-	 */
+	@Override
+	public List<MarksDto> toDtoList(List<Marks> marks){
+		List<MarksDto> result = new ArrayList<>();
+		MarksDto dto = new MarksDto();
+		for(Marks item : marks) {
+			dto = toDto(item);
+			dto.setStudentName(item.getStudent().getName());
+			dto.setStudentUserId(item.getStudent().getUserId());
+			result.add(dto);
+		}
+		return result;
+	}
 
 }

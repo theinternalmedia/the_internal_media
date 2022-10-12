@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class FacultyPageCreateDto extends PageRequestDto{
+public class FacultyPageRequestDto extends PageRequestDto{
 
 	@Code
 	private String code;

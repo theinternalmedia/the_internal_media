@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,11 +16,13 @@ import org.springframework.web.multipart.MultipartFile;
 import com.tim.converter.MarksConverter;
 import com.tim.data.ETimMessages;
 import com.tim.data.TimConstants;
+import com.tim.dto.PagingResponseDto;
 import com.tim.dto.marks.CustomMarks;
-import com.tim.dto.marks.InterfaceBaseMarksDto;
 import com.tim.dto.marks.CustomMarksInClass;
+import com.tim.dto.marks.InterfaceBaseMarksDto;
 import com.tim.dto.marks.MarksCreateDto;
 import com.tim.dto.marks.MarksDto;
+import com.tim.dto.marks.MarksPageRequestDto;
 import com.tim.entity.Marks;
 import com.tim.entity.Student;
 import com.tim.entity.Subject;
@@ -185,21 +190,42 @@ public class MarksServiceImpl implements MarksService {
 
 	@Override
 	public String exportToExcelBySubjectAndClass(String subjectCode, String classCode) {
-		List<InterfaceBaseMarksDto> marks = marksRepository.findCustomMarksBySubjectAndClass(subjectCode, classCode);
+		List<InterfaceBaseMarksDto> marks = marksRepository
+				.findCustomMarksBySubjectAndClass(subjectCode, classCode);
 		
 		if(marks.size() > 0) {
 			List<CustomMarksInClass> customMarks = new ArrayList<>();
 			for(InterfaceBaseMarksDto item : marks) {
 				CustomMarksInClass result = new CustomMarksInClass(
-						item.getName(), item.getUserId(), item.getDob(), item.getFinalMarks(), item.getTimes());
+						item.getName(), item.getUserId(), item.getDob(), 
+						item.getFinalMarks(), item.getTimes());
 				customMarks.add(result);
 			}
 			String fileDirectory = excelService.writeListObjectToExcel(
-					String.format(TimConstants.ExcelFiledName.SUBJECT_MARKS_IN_CLASS, subjectCode, classCode), customMarks);
+					String.format(TimConstants.ExcelFiledName.SUBJECT_MARKS_IN_CLASS, 
+							subjectCode, classCode), customMarks);
 			return fileDirectory;
 		}else {
 			throw new TimException("Không tìm thấy điểm");
 		}
+	}
+
+	@Override
+	public PagingResponseDto getPaging(MarksPageRequestDto pageRequestDto) {
+		ValidationUtils.validateObject(pageRequestDto);
+		
+		Pageable pageable = PageRequest.of(pageRequestDto.getPage() -1 , pageRequestDto.getSize());
+		Page<Marks> markPage = marksRepository
+				.findBySubject_CodeAndStudent_Classz_CodeOrderByStudent_NameAsc(
+				pageRequestDto.getSubjectCode(), pageRequestDto.getClassCode(), pageable);
+		List<MarksDto> markDtos = marksConverter.toDtoList(markPage.getContent());
+		
+		return new PagingResponseDto(
+				markPage.getTotalElements(), 
+				markPage.getTotalPages(), 
+				markPage.getNumber() - 1, 
+				markPage.getSize(), 
+				markDtos);
 	}
 
 }

@@ -42,7 +42,7 @@ public interface NewsService {
      * 
      * @author thinh
      * @param ids
-     * @return ResponseDto
+     * @return long
      */
 	long toggleStatus(Set<Long> ids);
     

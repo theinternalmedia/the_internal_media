@@ -1,6 +1,7 @@
 package com.tim.restful;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -12,8 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tim.data.TimApiPath;
+import com.tim.dto.PagingResponseDto;
 import com.tim.dto.marks.MarksCreateDto;
 import com.tim.dto.marks.MarksDto;
+import com.tim.dto.marks.MarksPageRequestDto;
 import com.tim.service.MarksService;
 
 @RestController
@@ -31,6 +34,12 @@ public class MarksResource {
 	@PutMapping(TimApiPath.Marks.UPLOAD_EXCEL)
 	public long update(@RequestPart("file") MultipartFile file) {
 		return marksService.create(file);
+	}
+	
+	@GetMapping(TimApiPath.Marks.GET_PAGE)
+	public ResponseEntity<PagingResponseDto> getPaging(
+			MarksPageRequestDto pageRequestDto){
+		return ResponseEntity.ok(marksService.getPaging(pageRequestDto));
 	}
 	
 	@GetMapping(TimApiPath.Marks.EXPORT_A_STUDENT_EXCEL)

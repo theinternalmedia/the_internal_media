@@ -129,7 +129,7 @@ public class ValidationUtils {
 	 * @param object need to validate
 	 */
 	public static void validateObject(final Object object) {
-		final String onjectClassName = "Object";
+		final String objectClassName = "Object";
 
 		// Declare list Error Message
 		List<String> errMessages = new ArrayList<>();
@@ -145,8 +145,18 @@ public class ValidationUtils {
 		Map<String, String> actualFieldNames = new HashMap<String, String>();
 		Map<String, String> actFieldNames = null;
 		
+		//get actualFieldName for childClass
+		actFieldNames = Utility.getObjectFromJsonFile(TimConstants.ACTUAL_FIELDNAME_DTO_NAME_FILE,
+				new TypeReference<Map<String, Map<String, String>>>() {
+				}).get(objectClass.getSimpleName());
+		
+		if (actFieldNames != null) {
+			actualFieldNames.putAll(actFieldNames);
+		}
+		
+		//get actualFieldName for supperClass
 		objectClass = objectClass.getSuperclass();
-		while (objectClass != null && !objectClass.getSimpleName().equals(onjectClassName)) {
+		while (objectClass != null && !objectClass.getSimpleName().equals(objectClassName)) {
 			actFieldNames = Utility.getObjectFromJsonFile(TimConstants.ACTUAL_FIELDNAME_DTO_NAME_FILE,
 					new TypeReference<Map<String, Map<String, String>>>() {
 					}).get(objectClass.getSimpleName());
@@ -159,12 +169,12 @@ public class ValidationUtils {
 		}
 
 		// Get actual object name response to Client from file json config
-		String actualOjectName = Utility
+		String actualObjectName = Utility
 				.getObjectFromJsonFile(TimConstants.ACTUAL_OBJECT_NAME_FILE, 
 						new TypeReference<Map<String, String>>() {
 				}).get(simpleName);
-		if (actualOjectName == null) {
-			actualOjectName = simpleName;
+		if (actualObjectName == null) {
+			actualObjectName = simpleName;
 		}
 
 		// Loop to validate fields
@@ -183,15 +193,15 @@ public class ValidationUtils {
 				}
 			} catch (IllegalArgumentException e) {
 				logger.error(e.getMessage());
-				throw new ValidateException(ETimMessages.INVALID_OBJECT_VALUE, null, actualOjectName);
+				throw new ValidateException(ETimMessages.INVALID_OBJECT_VALUE, null, actualObjectName);
 			} catch (IllegalAccessException e) {
 				logger.error(e.getMessage());
-				throw new ValidateException(ETimMessages.INVALID_OBJECT_VALUE, null, actualOjectName);
+				throw new ValidateException(ETimMessages.INVALID_OBJECT_VALUE, null, actualObjectName);
 			}
 		}
 		// If Error Message not empty, throw ValidateException
 		if (errMessages.size() > 0) {
-			throw new ValidateException(ETimMessages.INVALID_OBJECT_VALUE, errMessages, actualOjectName);
+			throw new ValidateException(ETimMessages.INVALID_OBJECT_VALUE, errMessages, actualObjectName);
 		}
 	}
 

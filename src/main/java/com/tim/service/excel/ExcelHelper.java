@@ -328,9 +328,13 @@ public class ExcelHelper {
 			fos = new FileOutputStream(file);
 			workbook.write(fos);
 			fos.flush();
+			return fileDirectory;
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			e.printStackTrace();
+			
+			//Maybe throw export failed instead
+			return "export failed";
 		} finally {
 			try {
 				if (fos != null) {
@@ -345,7 +349,6 @@ public class ExcelHelper {
 			} catch (IOException e) {
 			}
 		}
-		return fileDirectory;
 	}
 
 	/**
