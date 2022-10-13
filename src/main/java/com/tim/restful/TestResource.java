@@ -36,6 +36,7 @@ public class TestResource {
 	public void senNotification(@RequestParam String userId) {
 //		messagingTemplate.convertAndSendToUser(userId, "/specific", "Xin chào" + userId);
 		messagingTemplate.convertAndSend("/notification/" + userId, "Xin chào" + userId);
+		messagingTemplate.convertAndSend("/notification/", "Xin chào" + userId);
 	}
 
 	@GetMapping("/findByChoolYearAndFacultyAndClass")

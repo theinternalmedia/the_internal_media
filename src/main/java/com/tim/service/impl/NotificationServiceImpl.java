@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -71,6 +72,12 @@ public class NotificationServiceImpl implements NotificationService {
 	private StudentService studentService;
 	@Autowired
 	private NotificationGroupRepository notificationGroupRepository;
+	@Autowired
+	private SimpMessagingTemplate messagingTemplate; 
+	public static final String FORMAT_MESSAGE = "{\"notificationSlug\":\"%s\","
+			+ "\"notificationtitle\":\"%s\","
+			+ "\"notificationGroupCode\":\"%s\","
+			+ "\"notificationGroupName\":\"%s\"}";
 	
 	@Override
 	@Transactional
@@ -170,8 +177,14 @@ public class NotificationServiceImpl implements NotificationService {
 	 */
 	private void saveNotification(final Notification notification, Set<String> schoolYearCodes, 
 			Set<String> facultyCodes, Set<String> classCodes) {
+		String message = String.format(FORMAT_MESSAGE, 
+				notification.getSlug(), 
+				notification.getTitle(),
+				notification.getNotificationGroup().getCode(),
+				notification.getNotificationGroup().getName());
 		switch (notification.getType()) {
 		case TimConstants.NotificationType.TO_ALL:
+			messagingTemplate.convertAndSend("/notification/", message);
 			break;
 		case TimConstants.NotificationType.TO_STUDENT:
 			List<Student> students = new ArrayList<Student>();
@@ -191,6 +204,7 @@ public class NotificationServiceImpl implements NotificationService {
 				notificationStudent.setStudent(item);
 				notificationStudent.setNotification(notification);
 				notificationStudentRepository.save(notificationStudent);
+				messagingTemplate.convertAndSend("/notification/" + item.getUserId(), message);
 			});
 			break;
 		case TimConstants.NotificationType.TO_TEACHER:
@@ -205,6 +219,7 @@ public class NotificationServiceImpl implements NotificationService {
 				notificationTeacher.setTeacher(item);
 				notificationTeacher.setNotification(notification);
 				notificationTeacherRepository.save(notificationTeacher);
+				messagingTemplate.convertAndSend("/notification/" + item.getUserId(), message);
 			});
 			break;
 		default:

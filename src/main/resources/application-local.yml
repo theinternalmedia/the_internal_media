@@ -3,3 +3,14 @@ spring:
     password: minhtuan123
     url: jdbc:postgresql://localhost:5432/t_i_m
     username: postgres
+
+#  datasource:
+#    password: minhtuan123
+#    url: jdbc:mysql://localhost:3306/t_i_m
+#    username: root
+  jpa:
+    properties: 
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+#        dialect: org.hibernate.dialect.MySQL8Dialect
+    
