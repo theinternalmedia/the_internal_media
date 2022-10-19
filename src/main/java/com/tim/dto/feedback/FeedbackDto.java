@@ -1,6 +1,8 @@
-package com.tim.dto;
+package com.tim.dto.feedback;
 
 import javax.persistence.Column;
+
+import com.tim.dto.BaseDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

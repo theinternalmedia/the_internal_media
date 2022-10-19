@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.tim.dto.FeedbackDto;
+import com.tim.dto.feedback.FeedbackDto;
 import com.tim.dto.educationprogram.EducationProgramDto;
 import com.tim.dto.faculty.FacultyDto;
 import com.tim.dto.notification.NotificationDto;

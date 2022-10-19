@@ -1,16 +1,23 @@
 package com.tim.restful;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tim.data.Permissions;
 import com.tim.data.TimApiPath;
-import com.tim.dto.FeedbackDto;
+import com.tim.dto.PageRequestDto;
+import com.tim.dto.PagingResponseDto;
+import com.tim.dto.feedback.FeedbackDto;
 import com.tim.service.FeedbackService;
 
 @RestController
@@ -23,8 +30,15 @@ public class FeedbackResource {
 	public FeedbackDto create(@RequestBody FeedbackDto feedbackDto) {
 		return feedbackService.create(feedbackDto);	
 	}
-	@GetMapping(TimApiPath.Feedback.GET_ALL)
-	public List<FeedbackDto> getAll() {
-		return feedbackService.getAll();	
+	@GetMapping(TimApiPath.Feedback.GET_PAGE)
+	public PagingResponseDto getPage(PageRequestDto pageRequestDto) {
+	
+		return feedbackService.getPage(pageRequestDto);	
+	}
+
+	@PutMapping(TimApiPath.Feedback.TOGGLE_STATUS)
+	public Long toggleStatus(@RequestParam Set<Long> ids) {
+		System.out.println(ids);
+		return feedbackService.toggleStatus(ids);
 	}
 }
