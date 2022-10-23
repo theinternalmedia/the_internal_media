@@ -16,13 +16,14 @@ import com.tim.converter.SchoolYearConverter;
 import com.tim.data.ETimMessages;
 import com.tim.data.SearchOperation;
 import com.tim.dto.PagingResponseDto;
+import com.tim.dto.schoolyear.SchoolYearCreateDto;
 import com.tim.dto.schoolyear.SchoolYearDto;
 import com.tim.dto.schoolyear.SchoolYearPageRequestDto;
-import com.tim.dto.schoolyear.SchoolYearCreateDto;
 import com.tim.dto.schoolyear.SchoolYearUpdateDto;
 import com.tim.dto.specification.SearchCriteria;
 import com.tim.dto.specification.TimSpecification;
 import com.tim.entity.SchoolYear;
+import com.tim.entity.SchoolYear_;
 import com.tim.exception.TimException;
 import com.tim.exception.TimNotFoundException;
 import com.tim.repository.SchoolYearRepository;
@@ -99,20 +100,22 @@ public class SchoolYearServiceImpl implements SchoolYearService {
 
 	@Override
 	public PagingResponseDto getPage(SchoolYearPageRequestDto pageRequestDto) {
+		//validate input
 		ValidationUtils.validateObject(pageRequestDto);
 		
+		//Specification
 		TimSpecification<SchoolYear> timSpecification = new TimSpecification<SchoolYear>();
 		
-		timSpecification.add(new SearchCriteria("status", pageRequestDto.getStatus(), 
-												SearchOperation.EQUAL));
-		
-		if(StringUtils.isNotEmpty(pageRequestDto.getCode())) {
-			timSpecification.add(new SearchCriteria("code", pageRequestDto.getCode(), 
-												SearchOperation.LIKE));
+		timSpecification.add(new SearchCriteria(SchoolYear_.STATUS, pageRequestDto.getStatus(), 
+				SearchOperation.EQUAL));
+
+		if (StringUtils.isNotEmpty(pageRequestDto.getCode())) {
+			timSpecification.add(new SearchCriteria(SchoolYear_.CODE, pageRequestDto.getCode(), 
+					SearchOperation.LIKE));
 		}
-		if(StringUtils.isNotEmpty(pageRequestDto.getName())) {
-			timSpecification.add(new SearchCriteria("name", pageRequestDto.getName(), 
-												SearchOperation.LIKE));
+		if (StringUtils.isNotEmpty(pageRequestDto.getName())) {
+			timSpecification.add(new SearchCriteria(SchoolYear_.NAME, pageRequestDto.getName(), 
+					SearchOperation.LIKE));
 		}
 		
 		Pageable pageable = PageRequest.of(pageRequestDto.getPage() - 1, pageRequestDto.getSize());

@@ -40,12 +40,12 @@ public class Classz extends BaseEntity {
 	@JoinColumn(name = "schoolYear_id")
 	@OrderBy("name ASC")
 	private SchoolYear schoolYear;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "faculty_id")
 	@OrderBy("name ASC")
 	private Faculty faculty;
-	
+
 	@OneToMany(mappedBy = "classz")
 	private Set<Student> students = new HashSet<Student>();
 
@@ -96,4 +96,5 @@ public class Classz extends BaseEntity {
 	public void setCode(String code) {
 		this.code = code;
 	}
+
 }

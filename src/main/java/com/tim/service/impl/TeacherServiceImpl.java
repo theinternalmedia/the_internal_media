@@ -34,8 +34,10 @@ import com.tim.dto.teacher.TeacherResponseDto;
 import com.tim.dto.teacher.TeacherUpdateProfileDto;
 import com.tim.dto.teacher.TeacherUpdateDto;
 import com.tim.entity.Faculty;
+import com.tim.entity.Faculty_;
 import com.tim.entity.Role;
 import com.tim.entity.Teacher;
+import com.tim.entity.Teacher_;
 import com.tim.exception.TimException;
 import com.tim.exception.TimNotFoundException;
 import com.tim.repository.FacultyRepository;
@@ -204,33 +206,33 @@ public class TeacherServiceImpl implements TeacherService {
 		// Specification
 		Specification<Teacher> specification = Specification.where((root, query, cb) -> {
 			List<Predicate> predicates = new ArrayList<Predicate>();
-			predicates.add(cb.equal(root.get("status"), pageRequestDto.getStatus()));
+			predicates.add(cb.equal(root.get(Teacher_.STATUS), pageRequestDto.getStatus()));
 			if (StringUtils.isNotBlank(pageRequestDto.getSearchKey())) {
 				predicates.add(cb.or(
-						cb.like(cb.lower(root.get("name")), 
+						cb.like(cb.lower(root.get(Teacher_.NAME)), 
 								"%" + pageRequestDto.getSearchKey().toLowerCase() + "%"),
-						cb.like(cb.lower(root.get("address")), 
+						cb.like(cb.lower(root.get(Teacher_.ADDRESS)), 
 								"%" + pageRequestDto.getSearchKey().toLowerCase() + "%"),
-						cb.like(cb.lower(root.get("phone")), 
+						cb.like(cb.lower(root.get(Teacher_.PHONE)), 
 								"%" + pageRequestDto.getSearchKey().toLowerCase() + "%"),
-						cb.like(cb.lower(root.get("email")), 
+						cb.like(cb.lower(root.get(Teacher_.EMAIL)), 
 								"%" + pageRequestDto.getSearchKey().toLowerCase() + "%"),
-						cb.like(cb.lower(root.get("remark")), 
+						cb.like(cb.lower(root.get(Teacher_.REMARK)), 
 								"%" + pageRequestDto.getSearchKey().toLowerCase() + "%")));
 			}
 			if (pageRequestDto.getGender() != null) {
-				predicates.add(cb.equal(root.get("gender"), 
+				predicates.add(cb.equal(root.get(Teacher_.GENDER), 
 						pageRequestDto.getGender()));
 			}
 			if (StringUtils.isNotBlank(pageRequestDto.getUserId())) {
-				predicates.add(cb.equal(root.get("userId"), 
+				predicates.add(cb.equal(root.get(Teacher_.USER_ID), 
 						pageRequestDto.getUserId()));
 			} else {
-				predicates.add(cb.notEqual(root.get("userId"), 
+				predicates.add(cb.notEqual(root.get(Teacher_.USER_ID), 
 						TimConstants.ADMIN_USERID));
 			}
 			if (StringUtils.isNotBlank(pageRequestDto.getFacultyCode())) {
-				predicates.add(cb.equal(root.get("faculty").get("code"), 
+				predicates.add(cb.equal(root.get(Teacher_.FACULTY).get(Faculty_.CODE), 
 						pageRequestDto.getFacultyCode()));
 			}
 			return cb.and(predicates.toArray(new Predicate[0]));
@@ -239,7 +241,7 @@ public class TeacherServiceImpl implements TeacherService {
 		Pageable pageable = PageRequest.of(
 				pageRequestDto.getPage() - 1, 
 				pageRequestDto.getSize(), 
-				Sort.by("name", "userId"));
+				Sort.by(Teacher_.NAME, Teacher_.USER_ID));
 		Page<Teacher> pageTeachers = teacherRepository.findAll(specification, pageable);
 		List<TeacherResponseDto> data = teacherConverter.toResponseDtoList(pageTeachers.getContent());
 		
