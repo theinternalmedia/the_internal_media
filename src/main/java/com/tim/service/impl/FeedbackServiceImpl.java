@@ -1,7 +1,6 @@
 package com.tim.service.impl;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -21,6 +20,7 @@ import com.tim.exception.TimNotFoundException;
 import com.tim.repository.FeedbackRepository;
 import com.tim.service.FeedbackService;
 import com.tim.utils.ValidationUtils;
+
 @Service
 public class FeedbackServiceImpl implements FeedbackService {
 	private static final String FEEDBACK = "Phản hồi";
@@ -31,34 +31,35 @@ public class FeedbackServiceImpl implements FeedbackService {
 
 	@Override
 	public FeedbackDto create(FeedbackDto dto) {
-		// TODO Auto-generated method stub
+		// Validate input
 		ValidationUtils.validateObject(dto);
 		Feedback feedback = feedbackConverter.toEntity(dto);
 		return feedbackConverter.toDto(feedbackRepository.save(feedback));
 	}
-
 
 	@Override
 	public long toggleStatus(Set<Long> ids) {
 		List<Feedback> feedbacks = new ArrayList<>();
 		Feedback feedback;
 		for(Long id: ids) {
-		feedback = feedbackRepository.findById(id).orElseThrow(
-				() -> new TimNotFoundException(FEEDBACK, "ID", id.toString()));
+			feedback = feedbackRepository.findById(id)
+					.orElseThrow(() -> new TimNotFoundException(FEEDBACK, "ID", id.toString()));
 
-		feedback.setStatus(!feedback.getStatus());
-		feedbacks.add(feedback);
+			feedback.setStatus(!feedback.getStatus());
+			feedbacks.add(feedback);
 		}
 		feedbackRepository.saveAll(feedbacks);
 		return ids.size();
 	}
 
-
 	@Override
 	public PagingResponseDto getPage(PageRequestDto pageRequestDto) {
 		ValidationUtils.validateObject(pageRequestDto);
-		Pageable pageable = PageRequest.of(pageRequestDto.getPage()-1, pageRequestDto.getSize(),Sort.by("createdDate"));
-		Page feedbackPage = feedbackRepository.findAll(pageable);
+		Pageable pageable = PageRequest.of(
+				pageRequestDto.getPage()-1, 
+				pageRequestDto.getSize(),
+				Sort.by("createdDate"));
+		Page<Feedback> feedbackPage = feedbackRepository.findAll(pageable);
 		List<Feedback> dataFeedbacks = feedbackPage.getContent();
 		return new PagingResponseDto(
 				feedbackPage.getTotalElements(),

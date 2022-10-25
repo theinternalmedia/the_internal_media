@@ -1,10 +1,8 @@
 package com.tim.restful;
 
-import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tim.data.Permissions;
 import com.tim.data.TimApiPath;
 import com.tim.dto.PageRequestDto;
 import com.tim.dto.PagingResponseDto;
@@ -30,9 +27,9 @@ public class FeedbackResource {
 	public FeedbackDto create(@RequestBody FeedbackDto feedbackDto) {
 		return feedbackService.create(feedbackDto);	
 	}
+	
 	@GetMapping(TimApiPath.Feedback.GET_PAGE)
 	public PagingResponseDto getPage(PageRequestDto pageRequestDto) {
-	
 		return feedbackService.getPage(pageRequestDto);	
 	}
 

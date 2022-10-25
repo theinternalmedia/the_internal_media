@@ -6,13 +6,8 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.tim.dto.feedback.FeedbackDto;
-import com.tim.dto.educationprogram.EducationProgramDto;
-import com.tim.dto.faculty.FacultyDto;
-import com.tim.dto.notification.NotificationDto;
-import com.tim.entity.EducationProgram;
-import com.tim.entity.Faculty;
 import com.tim.entity.Feedback;
-import com.tim.entity.Notification;
+
 @Component
 public class FeedbackConverter extends AbstractConverter<FeedbackDto, Feedback> {
 
