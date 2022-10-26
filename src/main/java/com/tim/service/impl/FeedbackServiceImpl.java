@@ -69,5 +69,19 @@ public class FeedbackServiceImpl implements FeedbackService {
 				dataFeedbacks);
 	}
 
+	@Override
+	public long toggleSeen(Set<Long> ids) {
+		List<Feedback> feedbacks = new ArrayList<>();
+		Feedback feedback;
+		for (Long id : ids) {
+			feedback = feedbackRepository.findById(id)
+					.orElseThrow(() -> new TimNotFoundException(FEEDBACK, "ID", id.toString()));
+			feedback.setSeen(!feedback.getStatus());
+			feedbacks.add(feedback);
+		}
+		feedbackRepository.saveAll(feedbacks);
+		return ids.size();
+	}
+
 
 }

@@ -20,4 +20,6 @@ public class Feedback extends BaseEntity {
 	@Column(length = 20)
 	private String contactNumber;
 	private String email;
+	@Column(nullable = false, columnDefinition = "boolean default false")
+	private boolean seen = false;
 }

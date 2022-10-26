@@ -157,6 +157,7 @@ public final class TimApiPath {
 		public static final String TOGGLE_STATUS = PREFIX_V1 + TOGGLE_STATUS_;
 		public static final String GET_PAGE = PREFIX_V1 + PAGE_;
 		public static final String GET_BY_ID = PREFIX_V1 + PATH_VARIABLE_ID;
+		public static final String TOGGLE_SEEN= PREFIX_V1 + "/toggle-seen";
 
 	}
 }
