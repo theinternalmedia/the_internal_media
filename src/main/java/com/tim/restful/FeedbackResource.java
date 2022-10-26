@@ -39,7 +39,6 @@ public class FeedbackResource {
 	}
 	@PutMapping(TimApiPath.Feedback.TOGGLE_SEEN)
 	public Long toggleSeen(@RequestParam Set<Long> ids) {
-		System.out.println(ids);
 		return feedbackService.toggleSeen(ids);
 	}
 }
