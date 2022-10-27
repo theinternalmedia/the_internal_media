@@ -75,7 +75,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 		for (Long id : ids) {
 			feedback = feedbackRepository.findById(id)
 					.orElseThrow(() -> new TimNotFoundException(FEEDBACK, "ID", id.toString()));
-			feedback.setSeen(!feedback.getStatus());
+			feedback.setSeen(!feedback.isSeen());
 			feedbacks.add(feedback);
 		}
 		feedbackRepository.saveAll(feedbacks);
