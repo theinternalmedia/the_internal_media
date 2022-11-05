@@ -59,7 +59,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 				pageRequestDto.getSize(),
 				Sort.by("createdDate"));
 		Page<Feedback> feedbackPage = feedbackRepository.findAll(pageable);
-		List<Feedback> dataFeedbacks = feedbackPage.getContent();
+		List<FeedbackDto> dataFeedbacks = feedbackConverter.toDtoList(feedbackPage.getContent());
 		return new PagingResponseDto(
 				feedbackPage.getTotalElements(),
 				feedbackPage.getTotalPages(),
