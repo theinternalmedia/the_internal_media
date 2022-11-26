@@ -4,6 +4,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import com.tim.annotation.Code;
+import com.tim.annotation.Password;
 import com.tim.data.TimConstants.ApiModelPropertyValue;
 import com.tim.dto.UserRequestDto;
 
@@ -29,5 +30,10 @@ public class StudentCreateDto extends UserRequestDto {
 	@Code
 	@ApiModelProperty(value = ApiModelPropertyValue.CODE)
 	private String userId;
+	
+	@NotBlank
+	@Size(max = 20, min = 6)
+	@Password
+	private String password;
 	
 }
