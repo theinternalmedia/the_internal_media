@@ -1,8 +1,10 @@
 package com.tim.exception;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -97,7 +99,7 @@ public class GlobalExceptionHandler {
 		logger.error(e.getMessage(), e);
 		e.printStackTrace();
 		ErrorResponse errorResponse = new ErrorResponse(
-				MessageUtils.get(ETimMessages.INTERNAL_SYSTEM_ERROR), null);
+				MessageUtils.get(ETimMessages.INTERNAL_SYSTEM_ERROR), Arrays.asList(e.getMessage()));
 		return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
