@@ -27,7 +27,7 @@ public class MarksResource {
 	}
 	
 	@PutMapping(TimApiPath.Marks.UPLOAD_EXCEL)
-	public long update(@RequestPart("file") MultipartFile file) {
+	public long upload(@RequestPart("file") MultipartFile file) {
 		return marksService.create(file);
 	} 
 }
