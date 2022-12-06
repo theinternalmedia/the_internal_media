@@ -61,4 +61,9 @@ public class StudentResource {
 	public Long toggleStatus(@RequestParam Set<Long> ids) {
 		return studentService.toggleStatus(ids);
 	}
+	
+	@GetMapping(TimApiPath.Student.GET_BY_USERID)
+	public ResponseEntity<StudentDto> getByUserId(@RequestParam("userId") String userId) {
+		return ResponseEntity.ok(studentService.getByUserId(userId));
+	}
 }
