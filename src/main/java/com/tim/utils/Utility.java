@@ -3,6 +3,7 @@ package com.tim.utils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.Normalizer;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 
@@ -49,7 +50,11 @@ public class Utility {
 		} catch (IOException e) {
 			logger.error("Cannot read file json: {}", fileName);
 			e.printStackTrace();
-			throw new TimException(ETimMessages.INTERNAL_SYSTEM_ERROR);
+			throw new TimException(Arrays.asList(e.getMessage()), ETimMessages.INTERNAL_SYSTEM_ERROR);
+		} catch (NullPointerException e) {
+			logger.error("File not found: {}", fileName);
+			e.printStackTrace();
+			throw new TimException(Arrays.asList(e.getMessage()), ETimMessages.FILE_NOT_FOUND, fileName);
 		}
 		return t;
 	}

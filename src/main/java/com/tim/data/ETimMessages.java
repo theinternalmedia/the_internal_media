@@ -17,6 +17,8 @@ public enum ETimMessages {
 	PASSWORD_NOT_MATCH("msg.005", "Mật khẩu không đúng"),
 	/** Truy cập thất bại. */
 	FORBIDDEN("msg.006", "Truy cập thất bại."),
+	/** Không tìm thấy file: {0}. | Không tìm thấy file.*/
+	FILE_NOT_FOUND("msg.007", "Không tìm thấy file."),
 	
 	
 	/* ========== VALIDATION MESSAGE =================*/
