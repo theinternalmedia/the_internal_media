@@ -26,8 +26,9 @@ import com.tim.data.SearchOperation;
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.educationprogram.EducationProgramDto;
 import com.tim.dto.educationprogram.EducationProgramPageRequestDto;
-import com.tim.dto.educationprogram.EducationProgramCreateDto;
 import com.tim.dto.educationprogram.EducationProgramResponseDto;
+import com.tim.dto.educationprogram.EducationProgramCreateDto;
+import com.tim.dto.educationprogram.EduProgramAndSubjectResponseDto;
 import com.tim.dto.educationprogram.EducationProgramUpdateDto;
 import com.tim.dto.educationprogramsubject.EducationProgramSubjectCreateDto;
 import com.tim.dto.educationprogramsubject.EducationProgramSubjectResponseDto;
@@ -113,7 +114,7 @@ public class EduProgramServiceImpl implements EduProgramService {
 
 	@Override
 	@Transactional
-	public EducationProgramDto update(EducationProgramUpdateDto updateDto, MultipartFile file) {
+	public EducationProgramResponseDto update(EducationProgramUpdateDto updateDto, MultipartFile file) {
 		// Validate input 
 		ValidationUtils.validateObject(updateDto);
 		
@@ -150,7 +151,8 @@ public class EduProgramServiceImpl implements EduProgramService {
 					file, EducationProgramSubjectCreateDto.class);
 			eduProgramSubjects = getEduProgramSubjects(eduProgramSubjectDtos, newEduProgram);
 		}
-		EducationProgramDto dto = eduProgramConverter.toDto(eduProgramRepository.save(newEduProgram));
+		EducationProgramResponseDto dto = eduProgramConverter
+				.toResponseDto(eduProgramRepository.save(newEduProgram));
 		if (!eduProgramSubjectDtos.isEmpty()) {
 			// Delete all old eduProgramSubjects relevant to new update
 			eduProgramSubjectRepository.deleteByEducationProgram_Id(eduProgramId);
@@ -161,11 +163,11 @@ public class EduProgramServiceImpl implements EduProgramService {
 	}
 
 	@Override
-	public EducationProgramDto getOne(String code) {
+	public EducationProgramResponseDto getOne(String code) {
 		EducationProgram eduProgram = eduProgramRepository.findByCodeAndStatusTrue(code)
 				.orElseThrow(() -> new TimNotFoundException(
 						EDUCATION_PROGRAM, "Mã", code));
-		return eduProgramConverter.toDto(eduProgram);
+		return eduProgramConverter.toResponseDto(eduProgram);
 	}
 
 	@Override
@@ -183,7 +185,7 @@ public class EduProgramServiceImpl implements EduProgramService {
 	}
 
 	@Override
-	public EducationProgramResponseDto getSubjectList(String code) {
+	public EduProgramAndSubjectResponseDto getSubjectList(String code) {
 		EducationProgram educationProgram = eduProgramRepository.getByCode(code)
 				.orElseThrow(() -> new TimNotFoundException(
 						EDUCATION_PROGRAM, "Mã Chương Trình Giảng Dạy", code));
@@ -193,7 +195,7 @@ public class EduProgramServiceImpl implements EduProgramService {
 			dto = eduProgramSubjectConverter.toResponseDto(entity);
 			eduSubjectDtos.add(dto);
 		}
-		EducationProgramResponseDto result = eduProgramConverter.toResponseDto(educationProgram);
+		EduProgramAndSubjectResponseDto result = eduProgramConverter.toResponseDtoAndSubject(educationProgram);
 		int totalCredits = 0;
 		
 		for (EducationProgramSubjectResponseDto item : eduSubjectDtos) {

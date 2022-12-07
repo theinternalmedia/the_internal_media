@@ -6,8 +6,9 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.tim.dto.educationprogram.EducationProgramDto;
-import com.tim.dto.educationprogram.EducationProgramCreateDto;
 import com.tim.dto.educationprogram.EducationProgramResponseDto;
+import com.tim.dto.educationprogram.EducationProgramCreateDto;
+import com.tim.dto.educationprogram.EduProgramAndSubjectResponseDto;
 import com.tim.dto.educationprogram.EducationProgramUpdateDto;
 import com.tim.entity.EducationProgram;
 
@@ -22,6 +23,11 @@ public class EducationProgramConverter extends AbstractConverter<EducationProgra
 	@Override
 	public EducationProgramDto toDto(EducationProgram entity) {
 		EducationProgramDto dto = this.modelMapper.map(entity, EducationProgramDto.class);
+		return dto;
+	}
+	
+	public EducationProgramResponseDto toResponseDto(EducationProgram entity) {
+		EducationProgramResponseDto dto = this.modelMapper.map(entity, EducationProgramResponseDto.class);
 		return dto;
 	}
 	
@@ -46,8 +52,8 @@ public class EducationProgramConverter extends AbstractConverter<EducationProgra
 		return entity;	
 	}
 
-	public EducationProgramResponseDto toResponseDto(EducationProgram entity) {
-		return this.modelMapper.map(entity, EducationProgramResponseDto.class);
+	public EduProgramAndSubjectResponseDto toResponseDtoAndSubject(EducationProgram entity) {
+		return this.modelMapper.map(entity, EduProgramAndSubjectResponseDto.class);
 	}
 	
 	@Override

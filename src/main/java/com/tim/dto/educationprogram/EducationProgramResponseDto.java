@@ -1,9 +1,7 @@
 package com.tim.dto.educationprogram;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.tim.dto.educationprogramsubject.EducationProgramSubjectResponseDto;
+import com.tim.dto.faculty.FacultyDto;
+import com.tim.dto.schoolyear.SchoolYearDto;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -17,8 +15,8 @@ public class EducationProgramResponseDto extends EducationProgramDto {
 	@Getter(value = AccessLevel.NONE)
 	private static final long serialVersionUID = -6023941757152340157L;
 	
-	private List<EducationProgramSubjectResponseDto> educationProgramSubjectDtos = new ArrayList<>(); 
+	private FacultyDto faculty;
 	
-	private int totalCredits;
+	private SchoolYearDto schoolYear;
 
 }

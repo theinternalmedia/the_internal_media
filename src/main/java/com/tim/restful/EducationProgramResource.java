@@ -21,6 +21,7 @@ import com.tim.dto.educationprogram.EducationProgramCreateDto;
 import com.tim.dto.educationprogram.EducationProgramDto;
 import com.tim.dto.educationprogram.EducationProgramPageRequestDto;
 import com.tim.dto.educationprogram.EducationProgramResponseDto;
+import com.tim.dto.educationprogram.EduProgramAndSubjectResponseDto;
 import com.tim.dto.educationprogram.EducationProgramUpdateDto;
 import com.tim.service.EduProgramService;
 
@@ -42,7 +43,7 @@ public class EducationProgramResource {
 	
 	@PreAuthorize("hasAuthority('" + Permissions.EducationProgram.UPDATE + "')")
 	@PutMapping(value = TimApiPath.EducationProgram.UPDATE)
-	public EducationProgramDto update(
+	public EducationProgramResponseDto update(
 			@RequestPart(value = "file", required = false) MultipartFile file,
 			EducationProgramUpdateDto updateDto) {
 		
@@ -50,12 +51,12 @@ public class EducationProgramResource {
 	}
 	
 	@GetMapping(value = TimApiPath.EducationProgram.GET_BY_CODE)
-	public EducationProgramDto getById(@RequestParam String code) {
+	public EducationProgramResponseDto getByCode(@RequestParam String code) {
 		return eduProgramService.getOne(code);
 	}
 	
 	@GetMapping(value = TimApiPath.EducationProgram.GET_SUBJECT_LIST)
-	public EducationProgramResponseDto getSubjectList(@RequestParam String code) {
+	public EduProgramAndSubjectResponseDto getSubjectList(@RequestParam String code) {
 		return eduProgramService.getSubjectList(code);
 	}
 	

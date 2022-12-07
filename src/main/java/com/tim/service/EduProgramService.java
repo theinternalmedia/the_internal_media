@@ -7,8 +7,9 @@ import org.springframework.web.multipart.MultipartFile;
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.educationprogram.EducationProgramDto;
 import com.tim.dto.educationprogram.EducationProgramPageRequestDto;
-import com.tim.dto.educationprogram.EducationProgramCreateDto;
 import com.tim.dto.educationprogram.EducationProgramResponseDto;
+import com.tim.dto.educationprogram.EducationProgramCreateDto;
+import com.tim.dto.educationprogram.EduProgramAndSubjectResponseDto;
 import com.tim.dto.educationprogram.EducationProgramUpdateDto;
 
 public interface EduProgramService {
@@ -28,7 +29,7 @@ public interface EduProgramService {
 	 * @param file
 	 * @return EducationProgramDto
 	 */
-	EducationProgramDto update(EducationProgramUpdateDto education, MultipartFile file);
+	EducationProgramResponseDto update(EducationProgramUpdateDto education, MultipartFile file);
 	
 	/**
 	 * 
@@ -36,12 +37,12 @@ public interface EduProgramService {
 	 * @param code
 	 * @return EducationProgramDto
 	 */
-	EducationProgramDto getOne(String code);
+	EducationProgramResponseDto getOne(String code);
 	
 	PagingResponseDto getPage(EducationProgramPageRequestDto pageRequestDto);
 	
 	long toggleStatus(Set<Long> ids);
 	
-	EducationProgramResponseDto getSubjectList(String code);
+	EduProgramAndSubjectResponseDto getSubjectList(String code);
 
 }
