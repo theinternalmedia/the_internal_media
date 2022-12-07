@@ -5,6 +5,8 @@ import java.util.Set;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tim.dto.subject.SubjectDto;
+import com.tim.dto.subject.SubjectPageRequestDto;
+import com.tim.dto.PagingResponseDto;
 import com.tim.dto.subject.SubjectCreateDto;
 import com.tim.dto.subject.SubjectUpdateDto;
 
@@ -17,5 +19,7 @@ public interface SubjectService {
 	long create(MultipartFile file);
 	
 	long toggleStatus(Set<Long> ids);
+
+	PagingResponseDto getPage(SubjectPageRequestDto pageRequestDto);
 
 }

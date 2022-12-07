@@ -2,8 +2,8 @@ package com.tim.converter;
 
 import org.springframework.stereotype.Component;
 
-import com.tim.dto.subject.SubjectDto;
 import com.tim.dto.subject.SubjectCreateDto;
+import com.tim.dto.subject.SubjectDto;
 import com.tim.dto.subject.SubjectUpdateDto;
 import com.tim.entity.Subject;
 

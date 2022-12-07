@@ -1,5 +1,6 @@
 package com.tim.converter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
@@ -25,9 +26,7 @@ public abstract class AbstractConverter<T1 extends BaseDto, T2 extends BaseEntit
 	 * @param entity an Entity
 	 * @return an Dto after convert from an Entity
 	 */
-	public T1 toDto(T2 entity) {
-		return null;
-	};
+	abstract public T1 toDto(T2 entity);
 	
 	/**
 	 * convert from EntityList to DtoList
@@ -35,7 +34,11 @@ public abstract class AbstractConverter<T1 extends BaseDto, T2 extends BaseEntit
 	 * @return an DtoList after convert from an EntityList
 	 */
 	public List<T1> toDtoList(List<T2> entityList) {
-		return null;
+		List<T1> result = new ArrayList<>();
+		entityList.forEach(item ->{
+			result.add(toDto(item));
+		});
+		return result;
 	};
 	
 	/**

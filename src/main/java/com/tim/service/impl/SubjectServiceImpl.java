@@ -6,13 +6,23 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tim.converter.SubjectConverter;
 import com.tim.data.ETimMessages;
+import com.tim.data.SearchOperation;
 import com.tim.dto.subject.SubjectDto;
+import com.tim.dto.subject.SubjectPageRequestDto;
+import com.tim.dto.PagingResponseDto;
+import com.tim.dto.specification.SearchCriteria;
+import com.tim.dto.specification.TimSpecification;
 import com.tim.dto.subject.SubjectCreateDto;
 import com.tim.dto.subject.SubjectUpdateDto;
 import com.tim.entity.Subject;
@@ -122,6 +132,37 @@ public class SubjectServiceImpl implements SubjectService{
 		}
 		subjectRepository.saveAll(subjects);
 		return ids.size();
+	}
+
+	@Override
+	public PagingResponseDto getPage(SubjectPageRequestDto pageRequestDto) {
+		// Validate input
+		ValidationUtils.validateObject(pageRequestDto);
+		
+		// Specification
+		TimSpecification<Subject> timSpecification = new TimSpecification<>();
+		timSpecification.add(new SearchCriteria("status", pageRequestDto.getStatus(), 
+				SearchOperation.EQUAL));
+		if (StringUtils.isNotBlank(pageRequestDto.getCode())) {
+			timSpecification.add(new SearchCriteria("code", pageRequestDto.getCode(), 
+					SearchOperation.LIKE));
+		}
+		if (StringUtils.isNotBlank(pageRequestDto.getName())) {
+			timSpecification.add(new SearchCriteria("name", pageRequestDto.getName(), 
+					SearchOperation.LIKE));
+		}
+		Pageable pageable = PageRequest.of(
+				pageRequestDto.getPage() - 1, 
+				pageRequestDto.getSize(), 
+				Sort.by("name", "createdDate"));
+		Page<Subject> pageData = subjectRepository.findAll(timSpecification, pageable);
+		List<SubjectDto> data = subjectConverter.toDtoList(pageData.getContent());
+		return new PagingResponseDto(
+				pageData.getTotalElements(), 
+				pageData.getTotalPages(), 
+				pageData.getNumber() + 1, 
+				pageData.getSize(), 
+				data);
 	}
 
 }
