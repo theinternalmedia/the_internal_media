@@ -15,7 +15,7 @@ public enum ETimMessages {
 	ALREADY_EXISTS("msg.004", "Đối tượng đã tồn tại."),
 	/** Mật khẩu không chính xác*/
 	PASSWORD_NOT_MATCH("msg.005", "Mật khẩu không đúng"),
-	/** Truy cập thất bại. */
+	/** Truy cập thất bại(UnAuthority/AccessDenied). */
 	FORBIDDEN("msg.006", "Truy cập thất bại."),
 	/** Không tìm thấy file: {0}. | Không tìm thấy file.*/
 	FILE_NOT_FOUND("msg.007", "Không tìm thấy file."),

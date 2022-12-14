@@ -91,6 +91,13 @@ public class EduProgramServiceImpl implements EduProgramService {
 			throw new TimException(ETimMessages.ALREADY_EXISTS, 
 					"Mã Chương Trình Giảng Dạy", education.getCode());
 		}
+		
+		// Check unique name
+		if (eduProgramRepository.existsByName(education.getName())) {
+			throw new TimException(ETimMessages.ALREADY_EXISTS, 
+					"Tên Chương Trình Giảng Dạy", education.getName());
+		}
+				
 		// Check exists exists By SchoolYear And Faculty 
 		boolean check = eduProgramRepository.existsBySchoolYear_CodeAndFaculty_Code(
 				education.getSchoolYearCode(), education.getFacultyCode());
@@ -129,6 +136,15 @@ public class EduProgramServiceImpl implements EduProgramService {
 						"Mã Chương Trình Giảng Dạy", updateDto.getCode());
 			}
 		}
+		
+		// Check unique name
+		if (!oldEduProgram.getName().equalsIgnoreCase(updateDto.getName().trim())) {
+			if (eduProgramRepository.existsByName(updateDto.getName())) {
+				throw new TimException(ETimMessages.ALREADY_EXISTS, 
+						"Tên Chương Trình Giảng Dạy", updateDto.getName());
+			}
+		}
+				
 		// Check exists exists By SchoolYear And Faculty 
 		if (!oldEduProgram.getFaculty().getCode().equals(updateDto.getFacultyCode())
 				&& !oldEduProgram.getSchoolYear().getCode().equals(updateDto.getSchoolYearCode())) {

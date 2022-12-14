@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -63,7 +64,7 @@ public class GlobalExceptionHandler {
 	 * @param e
 	 * @return
 	 */
-	@ExceptionHandler(value = { AccessDeniedException.class })
+	@ExceptionHandler(value = { AccessDeniedException.class, DisabledException.class })
 	public ResponseEntity<ErrorResponse> accessDeniedException(AccessDeniedException e) {
 		logger.error(e.getMessage(), e);
 		ErrorResponse errorResponse = ErrorResponse.builder()

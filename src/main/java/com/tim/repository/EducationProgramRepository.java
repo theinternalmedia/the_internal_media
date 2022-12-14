@@ -16,4 +16,6 @@ public interface EducationProgramRepository extends JpaRepository<EducationProgr
 	Optional<EducationProgram> findByCodeAndStatusTrue(String code);
 
 	boolean existsBySchoolYear_CodeAndFaculty_Code(String schoolYearCode, String facultyCode);
+
+	boolean existsByName(String name);
 }
