@@ -10,16 +10,17 @@ import com.tim.dto.UserDto;
 import com.tim.dto.role.RoleDto;
 
 import lombok.AccessLevel;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 
  * @appName the_internal_media
  *
  */
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode(callSuper = true)
 public class StudentDto extends UserDto {
 

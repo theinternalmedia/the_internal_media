@@ -11,15 +11,17 @@ import com.tim.data.TimConstants.ApiModelPropertyValue;
 import com.tim.dto.UserRequestDto;
 
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 
  * @appName the_internal_media
  *
  */
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode(callSuper = true)
 public class StudentUpdateDto extends UserRequestDto {
 	

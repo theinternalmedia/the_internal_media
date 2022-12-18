@@ -19,8 +19,8 @@ public enum ETimMessages {
 	UNAUTHORIZED("msg.006", "Truy cập thất bại(UnAuthorized)."), 
 	/** Không tìm thấy file: {0}. | Không tìm thấy file.*/
 	FILE_NOT_FOUND("msg.007", "Không tìm thấy file."),
-	/** Truy cập thất bại(Fobidden). */
-	FOBIDDEN("msg.008", "Truy cập thất bại(Fobidden)."), 
+	/** Truy cập thất bại(Forbidden). */
+	FORBIDDEN("msg.008", "Truy cập thất bại(Forbidden)."), 
 	/** Truy cập bị từ chối. */
 	ACCESS_DENIED("msg.009", "Truy cập bị từ chối."),
 	
