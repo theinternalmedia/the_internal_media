@@ -7,7 +7,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -61,9 +60,11 @@ public class ExcelHelper {
 
 	private final static String EXTENSION = ".xlsx";
 
-	private final static String ROOT_FOLDER = "excel";
+	private final static String ROOT_FOLDER = "export";
+	
+	private final static String EXCEL_FOLDER = "excel";
 
-	private final static String SEPARATOR = File.separator;
+	private final static String SEPARATOR = "/";
 
 	private final static String GET = "get";
 	
@@ -193,7 +194,7 @@ public class ExcelHelper {
 	/**
 	 * Write list Object to Excel file
 	 * 
-	 * @author minhtuanitk43, thinh edit (2. CREATE FILE)
+	 * @author minhtuanitk43
 	 * @param <T>      Object
 	 * @param fileName fileName of excel file
 	 * @param data     List Object
@@ -204,35 +205,33 @@ public class ExcelHelper {
 		OutputStream fos = null;
 		XSSFWorkbook workbook = null;
 		Cell cell;
-		String fileDirectory = null; 
 		try {
 			// 2. CREATE FILE
 			// 2.1 Create RootFolder if not exists
-			// RootFolder will put in computer desktop
-			String userHomeFolder = System.getProperty("user.home");
-			File desktopFolder = new File(userHomeFolder, "Desktop");
-			//because desktopFolder always exists, so needn't make directory
+			File rootFolder = new File(ROOT_FOLDER);
+			if (!rootFolder.exists()) {
+				rootFolder.mkdir();
+			}
 
-			// 2.3 Create Folder Excel file
-			String directoryName = desktopFolder + SEPARATOR + ROOT_FOLDER;
+			// 2.3 Create Folder Excel
+			String directoryName = ROOT_FOLDER 
+					+ SEPARATOR 
+					+ EXCEL_FOLDER;
 			File directory = new File(directoryName);
 			if (!directory.exists()) {
 				directory.mkdir();
 			}
 
 			// 2.4 Create File
-			fileDirectory = directoryName
+			String fileDirectory = directoryName 
 					+ SEPARATOR
 					+ SHEET_NAME 
 					+ fileName 
-					+ EXTENSION; 
-			//delete file if already exist
-			try {
-	            Files.deleteIfExists(Paths.get(fileDirectory));
-	        }
-	        catch (NoSuchFileException e) {
-	            System.out.println("Do nothing"); // "No such file/directory exists"
-	        }
+					+ EXTENSION;
+			
+			// Delete if exists
+			Files.deleteIfExists(Paths.get(fileDirectory));
+			
 			File file = new File(fileDirectory);
 
 			// 3.CREATE EXCEL FILE
@@ -328,13 +327,16 @@ public class ExcelHelper {
 			fos = new FileOutputStream(file);
 			workbook.write(fos);
 			fos.flush();
-			return fileDirectory;
+			// return
+			return SEPARATOR
+					+ EXCEL_FOLDER
+					+ SEPARATOR
+					+ SHEET_NAME 
+					+ fileName 
+					+ EXTENSION;
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			e.printStackTrace();
-			
-			//Maybe throw export failed instead
-			return "export failed";
 		} finally {
 			try {
 				if (fos != null) {
@@ -349,6 +351,7 @@ public class ExcelHelper {
 			} catch (IOException e) {
 			}
 		}
+		return null;
 	}
 
 	/**

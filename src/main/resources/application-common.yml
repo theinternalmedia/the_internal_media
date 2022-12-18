@@ -34,7 +34,11 @@ spring:
             non_contextual_creation: true
     show-sql: true
   web:
-    resources.static-locations: classpath:/upload/,file:excel/, file:upload/
+    resources.static-locations: 
+    - classpath:/upload/
+    - classpath:/export/
+    - file:upload/
+    - file:export/
 #config swagger
   mvc:
     pathmatch:

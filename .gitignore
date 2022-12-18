@@ -1,5 +1,6 @@
 application-local.yml
-excel/
+/export/**
+/upload/**
 *.log
 app.log.*
 HELP.md
