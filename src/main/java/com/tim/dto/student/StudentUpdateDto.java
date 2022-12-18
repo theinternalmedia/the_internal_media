@@ -11,18 +11,12 @@ import com.tim.data.TimConstants.ApiModelPropertyValue;
 import com.tim.dto.UserRequestDto;
 
 import io.swagger.annotations.ApiModelProperty;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * 
  * @appName the_internal_media
  *
  */
-@Getter
-@Setter
-@EqualsAndHashCode(callSuper = true)
 public class StudentUpdateDto extends UserRequestDto {
 	
 	@NotNull
@@ -42,4 +36,36 @@ public class StudentUpdateDto extends UserRequestDto {
 	@Code
 	@ApiModelProperty(value = ApiModelPropertyValue.CODE)
 	private String userId;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getClassCode() {
+		return classCode;
+	}
+
+	public void setClassCode(String classCode) {
+		this.classCode = classCode;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 }

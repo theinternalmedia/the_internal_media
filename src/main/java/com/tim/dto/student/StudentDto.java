@@ -12,15 +12,13 @@ import com.tim.dto.role.RoleDto;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.Setter;
 
 /**
  * 
  * @appName the_internal_media
  *
  */
-@Getter
-@Setter
+
 @EqualsAndHashCode(callSuper = true)
 public class StudentDto extends UserDto {
 
@@ -32,4 +30,22 @@ public class StudentDto extends UserDto {
 	private String classCode;
 	
 	private Set<RoleDto> roles = new HashSet<>();
+
+	public String getClassCode() {
+		return classCode;
+	}
+
+	public void setClassCode(String classCode) {
+		this.classCode = classCode;
+	}
+
+	public Set<RoleDto> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<RoleDto> roles) {
+		this.roles = roles;
+	}
+	
+	
 }
