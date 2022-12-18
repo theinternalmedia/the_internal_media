@@ -16,7 +16,6 @@
 	<description>The Internal Media Server</description>
 	<properties>
 		<java.version>11</java.version>
-		<version.hibernate-jpamodelgen>5.3.7.Final</version.hibernate-jpamodelgen>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -111,7 +110,6 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-jpamodelgen</artifactId>
-			<version>${version.hibernate-jpamodelgen}</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
