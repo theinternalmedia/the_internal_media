@@ -57,6 +57,14 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
 	}
 	
+	@ExceptionHandler(value = { DisabledException.class })
+	public ResponseEntity<ErrorResponse> disabledException(DisabledException e) {
+		logger.error(e.getMessage(), e);
+		ErrorResponse errorResponse = ErrorResponse.builder()
+				.message(MessageUtils.get(ETimMessages.UNAUTHORIZED)).build();
+		return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+	}
+	
 	/**
 	 * AccessDeniedException
 	 * 
@@ -64,7 +72,7 @@ public class GlobalExceptionHandler {
 	 * @param e
 	 * @return
 	 */
-	@ExceptionHandler(value = { AccessDeniedException.class, DisabledException.class })
+	@ExceptionHandler(value = { AccessDeniedException.class})
 	public ResponseEntity<ErrorResponse> accessDeniedException(AccessDeniedException e) {
 		logger.error(e.getMessage(), e);
 		ErrorResponse errorResponse = ErrorResponse.builder()
