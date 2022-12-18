@@ -2,6 +2,7 @@ package com.tim.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;
@@ -9,9 +10,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -38,15 +43,15 @@ public abstract class BaseEntity implements Serializable {
 	private Boolean status = true;
 
 	@Column(name = "created_date", nullable = false, updatable = false)
-	@CreationTimestamp
-	private LocalDateTime createdDate = LocalDateTime.now();
+//	@CreatedDate
+	private LocalDateTime createdDate;
 
 	@CreatedBy
 	private String createdBy;
 
 	@Column(nullable = false, updatable = true)
-	@LastModifiedDate
-	private LocalDateTime modifiedDate = LocalDateTime.now();
+//	@LastModifiedDate
+	private LocalDateTime modifiedDate;
 
 	@LastModifiedBy
 	private String modifiedBy;
@@ -98,5 +103,16 @@ public abstract class BaseEntity implements Serializable {
 
 	public void setModifiedDate(LocalDateTime modifiedDate) {
 		this.modifiedDate = modifiedDate;
+	}
+	
+	@PrePersist
+	private void setCreatedDate() {
+		this.createdDate = LocalDateTime.now(ZoneOffset.ofHours(+7));
+		this.modifiedDate = LocalDateTime.now(ZoneOffset.ofHours(+7));
+	}
+	
+	@PreUpdate
+	private void setUpdatedDate() {
+		this.modifiedDate = LocalDateTime.now(ZoneOffset.ofHours(+7));
 	}
 }
