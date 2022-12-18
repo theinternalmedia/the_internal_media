@@ -36,8 +36,11 @@ import com.tim.dto.specification.SearchCriteria;
 import com.tim.dto.specification.TimSpecification;
 import com.tim.entity.EducationProgram;
 import com.tim.entity.EducationProgramSubject;
+import com.tim.entity.EducationProgram_;
 import com.tim.entity.Faculty;
+import com.tim.entity.Faculty_;
 import com.tim.entity.SchoolYear;
+import com.tim.entity.SchoolYear_;
 import com.tim.entity.Subject;
 import com.tim.exception.TimException;
 import com.tim.exception.TimNotFoundException;
@@ -276,30 +279,32 @@ public class EduProgramServiceImpl implements EduProgramService {
 	@Override
 	public PagingResponseDto getPage(EducationProgramPageRequestDto pageRequestDto) {
 		ValidationUtils.validateObject(pageRequestDto);
-		
-		TimSpecification<EducationProgram> timSpecification = new TimSpecification<EducationProgram>();
-        timSpecification.add(new SearchCriteria("status", 
+
+		TimSpecification<EducationProgram> timSpecification = 
+				new TimSpecification<EducationProgram>();
+
+		timSpecification.add(new SearchCriteria(EducationProgram_.STATUS, 
         		pageRequestDto.getStatus(), SearchOperation.EQUAL));
-        
+
         if (StringUtils.isNotBlank(pageRequestDto.getCode())) {
-			timSpecification.add(new SearchCriteria("code", 
+			timSpecification.add(new SearchCriteria(EducationProgram_.CODE, 
 					pageRequestDto.getCode(), SearchOperation.EQUAL));
 		}
         if (StringUtils.isNotBlank(pageRequestDto.getName())) {
-			timSpecification.add(new SearchCriteria("name", 
+			timSpecification.add(new SearchCriteria(EducationProgram_.NAME, 
 					pageRequestDto.getName(), SearchOperation.LIKE));
 		}
-        
+
         Specification<EducationProgram> specification = Specification.where(null);
         if (StringUtils.isNotBlank(pageRequestDto.getFacultyCode())) {
             specification = specification.and((root, query, builder) -> {
-                return builder.equal(root.join("faculty").get("code"), 
+                return builder.equal(root.join(EducationProgram_.FACULTY).get(Faculty_.CODE), 
                 							pageRequestDto.getFacultyCode());
             });
         }
         if (StringUtils.isNotBlank(pageRequestDto.getSchoolYearCode())) {
 			specification = specification.and((root, query, builder) -> {
-				return builder.equal(root.join("schoolYear").get("code"), 
+				return builder.equal(root.join(EducationProgram_.SCHOOL_YEAR).get(SchoolYear_.CODE), 
 										pageRequestDto.getSchoolYearCode());
 			});
 		}
@@ -307,7 +312,7 @@ public class EduProgramServiceImpl implements EduProgramService {
         Pageable pageable = PageRequest.of(
         		pageRequestDto.getPage() - 1, 
         		pageRequestDto.getSize(), 
-        		Sort.by("name"));
+        		Sort.by(EducationProgram_.NAME, EducationProgram_.CREATED_DATE));
         Page<EducationProgram> pageEduPrograms = eduProgramRepository
         									.findAll(specification.and(timSpecification), pageable);
         List<EducationProgramDto> data = eduProgramConverter.toDtoList(pageEduPrograms.getContent());

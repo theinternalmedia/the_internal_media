@@ -18,7 +18,7 @@ import com.tim.data.Permissions;
 import com.tim.data.TimApiPath;
 import com.tim.dto.PagingResponseDto;
 import com.tim.dto.faculty.FacultyDto;
-import com.tim.dto.faculty.FacultyPageCreateDto;
+import com.tim.dto.faculty.FacultyPageRequestDto;
 import com.tim.dto.faculty.FacultyCreateDto;
 import com.tim.dto.faculty.FacultyUpdateDto;
 import com.tim.service.FacultyService;
@@ -48,7 +48,7 @@ public class FacultyResource {
 	
 	@GetMapping(TimApiPath.Faculty.GET_PAGE)
 	public ResponseEntity<PagingResponseDto> getPage(
-							FacultyPageCreateDto pageRequestDto){
+							FacultyPageRequestDto pageRequestDto){
 		return ResponseEntity.ok(facultyService.getPage(pageRequestDto));
 	}
 	

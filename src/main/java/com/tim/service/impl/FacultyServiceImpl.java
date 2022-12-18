@@ -17,13 +17,14 @@ import com.tim.converter.FacultyConverter;
 import com.tim.data.ETimMessages;
 import com.tim.data.SearchOperation;
 import com.tim.dto.PagingResponseDto;
-import com.tim.dto.faculty.FacultyDto;
-import com.tim.dto.faculty.FacultyPageCreateDto;
 import com.tim.dto.faculty.FacultyCreateDto;
+import com.tim.dto.faculty.FacultyDto;
+import com.tim.dto.faculty.FacultyPageRequestDto;
 import com.tim.dto.faculty.FacultyUpdateDto;
 import com.tim.dto.specification.SearchCriteria;
 import com.tim.dto.specification.TimSpecification;
 import com.tim.entity.Faculty;
+import com.tim.entity.Faculty_;
 import com.tim.entity.Teacher;
 import com.tim.exception.TimException;
 import com.tim.exception.TimNotFoundException;
@@ -112,24 +113,27 @@ public class FacultyServiceImpl implements FacultyService {
 	}
 
 	@Override
-	public PagingResponseDto getPage(FacultyPageCreateDto pageRequestDto) {
+	public PagingResponseDto getPage(FacultyPageRequestDto pageRequestDto) {
 		ValidationUtils.validateObject(pageRequestDto);
 		
 		TimSpecification<Faculty> timSpecification = new TimSpecification<Faculty>();
-		timSpecification.add(new SearchCriteria("status", pageRequestDto.getStatus(), 
+
+		timSpecification.add(new SearchCriteria(Faculty_.STATUS, pageRequestDto.getStatus(), 
 												SearchOperation.EQUAL));
-		
-		if(StringUtils.isNotEmpty(pageRequestDto.getCode())) {
-			timSpecification.add(new SearchCriteria("code", pageRequestDto.getCode(), 
+
+		if (StringUtils.isNotEmpty(pageRequestDto.getCode())) {
+			timSpecification.add(new SearchCriteria(Faculty_.CODE, pageRequestDto.getCode(), 
 												SearchOperation.LIKE));
 		}
-		if(StringUtils.isNotEmpty(pageRequestDto.getName())) {
-			timSpecification.add(new SearchCriteria("name", pageRequestDto.getName(), 
+		if (StringUtils.isNotEmpty(pageRequestDto.getName())) {
+			timSpecification.add(new SearchCriteria(Faculty_.NAME, pageRequestDto.getName(), 
 												SearchOperation.LIKE));
 		}
 		
-		Pageable pageable = PageRequest.of(pageRequestDto.getPage() - 1, 
-											pageRequestDto.getSize(), Sort.by("name"));
+		Pageable pageable = PageRequest.of(
+				pageRequestDto.getPage() - 1, 
+				pageRequestDto.getSize(), 
+				Sort.by(Faculty_.CREATED_DATE));
 		Page<Faculty> facultyPage = facultyRepository.findAll(timSpecification, pageable);
 		
 		List<FacultyDto> data = facultyConverter.toDtoList(facultyPage.getContent());

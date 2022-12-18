@@ -78,4 +78,11 @@ public final class Permissions {
 		public static final String UPDATE = "UPDATE_TEACHER";
 		public static final String TOGGLE_STATUS = "TOGGLE_STATUS_TEACHER";
 	}
+	
+	public static final class Role {
+		public static final String READ = "READ_ROLE";
+		public static final String CREATE = "CREATE_ROLE";
+		public static final String UPDATE = "UPDATE_ROLE";
+		public static final String TOGGLE_STATUS = "TOGGLE_STATUS_ROLE";
+	}
 }

@@ -57,6 +57,11 @@ public class StudentResource {
 		return ResponseEntity.ok(studentService.getPage(pageRequestDto));
 	}
 	
+	@GetMapping(TimApiPath.Student.EXPORT_EXCEL)
+	public String exportToExcel() {
+		return studentService.exportToExcelFile();
+	}
+	
 	@PutMapping(TimApiPath.Student.TOGGLE_STATUS)
 	public Long toggleStatus(@RequestParam Set<Long> ids) {
 		return studentService.toggleStatus(ids);

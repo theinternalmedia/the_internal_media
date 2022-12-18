@@ -9,6 +9,7 @@ public final class TimApiPath {
 	private static final String ADMIN_ = "-admin";
 	private static final String TOGGLE_STATUS_ = "/toggle-status";
 	private static final String UPLOAD_EXCEL_ = "/upload-excel";
+	private static final String EXPORT_EXCEL_ = "/export-excel"; 
 	private static final String UPDATE_AVATAR_ = "/avatar";
 	private static final String PATH_VARIABLE_ID = "/{id}";
 
@@ -30,6 +31,7 @@ public final class TimApiPath {
 		private static final String PREFIX_V1 = VER_V1 + "/teachers";
 		public static final String PREFIX_V2 = VER_V2 + "/teachers";
 		public static final String UPLOAD_EXCEL = PREFIX_V1 + UPLOAD_EXCEL_;
+		public static final String EXPORT_EXCEL = PREFIX_V1 + EXPORT_EXCEL_;
 		public static final String UPLOAD_EXCEL_V2 = PREFIX_V2 + UPLOAD_EXCEL_;
 		public static final String CREATE = PREFIX_V1;
 		public static final String GET_BY_USERID = PREFIX_V1;
@@ -42,6 +44,7 @@ public final class TimApiPath {
 	public static class Student {
 		private static final String PREFIX_V1 = VER_V1 + "/students";
 		public static final String UPLOAD_EXCEL = PREFIX_V1 + UPLOAD_EXCEL_;
+		public static final String EXPORT_EXCEL = PREFIX_V1 + EXPORT_EXCEL_;
 		public static final String UPLOAD_STUDENT = PREFIX_V1 + "/upload";
 		public static final String CREATE = PREFIX_V1;
 		public static final String GET_BY_USERID = PREFIX_V1;
@@ -122,6 +125,9 @@ public final class TimApiPath {
 		public static final String PREFIX_V1 = VER_V1 + "/marks";
 		public static final String CREATE = PREFIX_V1;
 		public static final String UPLOAD_EXCEL = PREFIX_V1 + UPLOAD_EXCEL_;
+		public static final String EXPORT_EXCEL = PREFIX_V1 + EXPORT_EXCEL_;
+		public static final String EXPORT_A_STUDENT_EXCEL = EXPORT_EXCEL + "/student";
+		public static final String EXPORT_A_CLASS_EXCEL = EXPORT_EXCEL + "/class";
 		public static final String GET_BY_ID = PREFIX_V1 + PATH_VARIABLE_ID;
 		public static final String UPDATE = PREFIX_V1;
 		public static final String TOGGLE_STATUS = PREFIX_V1 + TOGGLE_STATUS_;
@@ -133,6 +139,7 @@ public final class TimApiPath {
 		public static final String PREFIX_V1 = VER_V1 + "/subjects";
 		public static final String CREATE = PREFIX_V1;
 		public static final String UPLOAD_EXCEL = PREFIX_V1 + UPLOAD_EXCEL_;
+		public static final String EXPORT_EXCEL = PREFIX_V1 + EXPORT_EXCEL_;
 		public static final String GET_BY_ID = PREFIX_V1 + PATH_VARIABLE_ID;
 		public static final String UPDATE = PREFIX_V1;
 		public static final String TOGGLE_STATUS = PREFIX_V1 + TOGGLE_STATUS_;
@@ -150,5 +157,13 @@ public final class TimApiPath {
 		public static final String UPLOAD_EXCEL = PREFIX_V1 + UPLOAD_EXCEL_;
 		public static final String GET_PAGE = PREFIX_V1 + PAGE_;
 
+	}
+	
+	public static class Role {
+		private static final String PREFIX_V1 = VER_V1 + "/role";
+		public static final String CREATE = PREFIX_V1;
+		public static final String GET_BY_CODE = PREFIX_V1;
+		public static final String UPDATE = PREFIX_V1;
+		public static final String TOGGLE_STATUS = PREFIX_V1 + TOGGLE_STATUS_;
 	}
 }

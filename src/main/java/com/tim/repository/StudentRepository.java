@@ -31,4 +31,8 @@ public interface StudentRepository extends JpaRepository<Student, Long>, JpaSpec
 	List<Student> findByUserIdIn(Set<String> userIdSet);
 
 	List<Student> findByEmailIn(Set<String> emailSet);
+	
+	// Muốn sort by studentName phải tách name 
+	// thành lastName, firstName rồi sort by lastName
+	List<Student> findAllByOrderByClassz_NameDesc();
 }

@@ -127,8 +127,8 @@ public class ExcelService implements ExcelFileService {
 	}
 
 	@Override
-	public <T> void writeListObjectToExcel(String fileName, List<T> data) {
-		excelHelper.writeToExcel(fileName, data);
+	public <T> String writeListObjectToExcel(String fileName, List<T> data) {
+		return excelHelper.writeToExcel(fileName, data);
 	}
 
 }

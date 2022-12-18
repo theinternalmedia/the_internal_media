@@ -1,4 +1,4 @@
-package com.tim.dto.schoolyear;
+package com.tim.dto.marks;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -9,17 +9,18 @@ import com.tim.dto.PageRequestDto;
 import lombok.Getter;
 import lombok.Setter;
 
+
 @Getter
 @Setter
-public class SchoolYearPageRequestDto extends PageRequestDto{
+public class MarksPageRequestDto extends PageRequestDto{
 
 	@Code
-	@Size(min =3, max = 50)
 	@NotBlank
-	private String code;
-
-	@Size(max = 100)
+	@Size(max = 20)
+	private String subjectCode;
+	
+	@Code
 	@NotBlank
-	private String name;
-
+	@Size(max = 20, min = 3)
+	private String classCode;
 }

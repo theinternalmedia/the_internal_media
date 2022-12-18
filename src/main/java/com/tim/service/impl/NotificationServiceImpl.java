@@ -31,8 +31,10 @@ import com.tim.dto.notification.NotificationPageRequestDto;
 import com.tim.dto.notification.NotificationUpdateDto;
 import com.tim.entity.Notification;
 import com.tim.entity.NotificationGroup;
+import com.tim.entity.NotificationGroup_;
 import com.tim.entity.NotificationStudent;
 import com.tim.entity.NotificationTeacher;
+import com.tim.entity.Notification_;
 import com.tim.entity.Student;
 import com.tim.entity.Teacher;
 import com.tim.exception.TimException;
@@ -243,33 +245,33 @@ public class NotificationServiceImpl implements NotificationService {
 		// Specification builder
 		Specification<Notification> specification = Specification.where((root, query, cb) -> {
 			List<Predicate> predicates = new ArrayList<Predicate>();
-			predicates.add(cb.equal(root.get("status"), pageRequestDto.getStatus()));
+			predicates.add(cb.equal(root.get(Notification_.STATUS), pageRequestDto.getStatus()));
 			
 			if (StringUtils.isNotBlank(pageRequestDto.getNotificationGroupCode())) {
-				predicates.add(cb.equal(root.join("notificationGroup").get("code"), 
+				predicates.add(cb.equal(root.join(Notification_.NOTIFICATION_GROUP).get(NotificationGroup_.CODE), 
 						pageRequestDto.getNotificationGroupCode()));
 			}
 			if (StringUtils.isNotBlank(pageRequestDto.getSearchKey())) {
 				predicates.add(cb.or(
-						cb.like(cb.lower(root.get("title")), 
+						cb.like(cb.lower(root.get(Notification_.TITLE)), 
 								"%" + pageRequestDto.getSearchKey().toLowerCase() + "%"),
-						cb.like(cb.lower(root.get("shortDescription")), 
+						cb.like(cb.lower(root.get(Notification_.SHORT_DESCRIPTION)), 
 								"%" + pageRequestDto.getSearchKey().toLowerCase() + "%"),
-						cb.like(cb.lower(root.get("content")), 
+						cb.like(cb.lower(root.get(Notification_.CONTENT)), 
 								"%" + pageRequestDto.getSearchKey().toLowerCase() + "%")));
 			}
 			if (isAdmin) {
 				if (pageRequestDto.getType() != null) {
-					predicates.add(cb.equal(root.get("type"), pageRequestDto.getType()));
+					predicates.add(cb.equal(root.get(Notification_.TYPE), pageRequestDto.getType()));
 				}
 			} else {
 				UserDetailsImpl userDetails = PrincipalUtils.getAuthenticatedUserDetail();
 				if (userDetails != null && userDetails.isTeacher()) {
 					if (pageRequestDto.getType() != null) {
-						predicates.add(cb.equal(root.get("type"), pageRequestDto.getType()));
+						predicates.add(cb.equal(root.get(Notification_.TYPE), pageRequestDto.getType()));
 					}
 				} else {
-					predicates.add(cb.in(root.get("type"))
+					predicates.add(cb.in(root.get(Notification_.TYPE))
 							.value(List.of(NotificationType.TO_STUDENT, NotificationType.TO_ALL)));
 				}
 			}
@@ -279,8 +281,8 @@ public class NotificationServiceImpl implements NotificationService {
 		Pageable pageable = PageRequest.of(
 				pageRequestDto.getPage() - 1, 
 				pageRequestDto.getSize(),
-				Sort.by(Sort.Direction.DESC, "createdDate")
-				.and(Sort.by(Sort.Direction.ASC, "title")));
+				Sort.by(Sort.Direction.DESC, Notification_.CREATED_DATE)
+				.and(Sort.by(Sort.Direction.ASC, Notification_.TITLE)));
 		Page<Notification> pageNotification = notificationRepository.findAll(specification, pageable);
 		List<NotificationDto> data = notificationConverter.toDtoList(pageNotification.getContent());
 

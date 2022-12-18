@@ -46,6 +46,4 @@ public class ClassConverter extends AbstractConverter<ClassDto, Classz> {
 		entity.setName(dto.getName());
 		return entity;
 	}
-	
-	
 }

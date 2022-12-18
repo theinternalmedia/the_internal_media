@@ -51,7 +51,7 @@ public class EducationProgramResource {
 	}
 	
 	@GetMapping(value = TimApiPath.EducationProgram.GET_BY_CODE)
-	public EducationProgramResponseDto getByCode(@RequestParam String code) {
+	public EducationProgramDto getById(@RequestParam String code) {
 		return eduProgramService.getOne(code);
 	}
 	

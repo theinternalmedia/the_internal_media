@@ -28,7 +28,7 @@ public abstract class User extends BaseEntity {
 	@Size(min = 3, max = 20)
 	@Code
 	private String userId;
-
+	
 	@NotBlank
 	@Column(nullable = false)
 	@Size(max = 100)

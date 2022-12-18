@@ -6,6 +6,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,15 +24,18 @@ import com.tim.converter.ClassConverter;
 import com.tim.data.ETimMessages;
 import com.tim.data.SearchOperation;
 import com.tim.dto.PagingResponseDto;
+import com.tim.dto.classz.ClassCreateDto;
 import com.tim.dto.classz.ClassDto;
 import com.tim.dto.classz.ClassPageRequestDto;
-import com.tim.dto.classz.ClassCreateDto;
 import com.tim.dto.classz.ClassUpdateDto;
 import com.tim.dto.specification.SearchCriteria;
 import com.tim.dto.specification.TimSpecification;
 import com.tim.entity.Classz;
+import com.tim.entity.Classz_;
 import com.tim.entity.Faculty;
+import com.tim.entity.Faculty_;
 import com.tim.entity.SchoolYear;
+import com.tim.entity.SchoolYear_;
 import com.tim.entity.Teacher;
 import com.tim.exception.TimException;
 import com.tim.exception.TimNotFoundException;
@@ -59,6 +65,8 @@ public class ClassServiceImpl implements ClassService {
 	@Autowired
 	private ExcelService excelService;
 	
+	@PersistenceContext
+	private EntityManager em;
 	
 	@Override
 	@Transactional
@@ -144,25 +152,25 @@ public class ClassServiceImpl implements ClassService {
 		TimSpecification<Classz> timSpecification = new TimSpecification<Classz>();
 		Specification<Classz> specification = Specification.where(null);
 		
-		timSpecification.add(new SearchCriteria("status", pageRequestDto.getStatus(), 
-												SearchOperation.EQUAL));
+		timSpecification.add(new SearchCriteria(Classz_.STATUS, 
+				pageRequestDto.getStatus(), SearchOperation.EQUAL));
 		if(StringUtils.isNotBlank(pageRequestDto.getCode())) {
-			timSpecification.add(new SearchCriteria("code", pageRequestDto.getCode(), 
-												SearchOperation.EQUAL));
+			timSpecification.add(new SearchCriteria(Classz_.CODE, 
+					pageRequestDto.getCode(), SearchOperation.EQUAL));
 		}
 		if(StringUtils.isNotBlank(pageRequestDto.getName())) {
-			timSpecification.add(new SearchCriteria("name", pageRequestDto.getName(), 
-												SearchOperation.LIKE));
+			timSpecification.add(new SearchCriteria(Classz_.NAME,
+					pageRequestDto.getName(), SearchOperation.LIKE));
 		}
 		if(StringUtils.isNotBlank(pageRequestDto.getFacultyCode())) {
 			specification = specification.and((root, query, builder) -> {
-				return builder.equal(root.join("faculty").get("code"), 
+				return builder.equal(root.join(Classz_.FACULTY).get(Faculty_.CODE), 
 										pageRequestDto.getFacultyCode());
 			});
 		}
 		if(StringUtils.isNotBlank(pageRequestDto.getSchoolYearCode())) {
 			specification = specification.and((root, query, builder) -> {
-				return builder.equal(root.join("schoolYear").get("code"), 
+				return builder.equal(root.join(Classz_.SCHOOL_YEAR).get(SchoolYear_.CODE), 
 										pageRequestDto.getSchoolYearCode());
 			});
 		}
@@ -187,12 +195,13 @@ public class ClassServiceImpl implements ClassService {
 		Classz classz = classRepository.findById(dto.getId()).orElseThrow(
 				() -> new TimNotFoundException(CLASSZ, "ID", String.valueOf(dto.getId())));
 		
-		if(!classz.getCode().equals(dto.getCode())) {
-			if(classRepository.existsByCode(dto.getCode())) {
-				throw new TimException(ETimMessages.ALREADY_EXISTS, 
-						"Mã Lớp Học", dto.getCode());
+		if (!classz.getCode().equals(dto.getCode())) {
+			if (classRepository.existsByCode(dto.getCode())) {
+				throw new TimException(ETimMessages.ALREADY_EXISTS, "Mã Lớp Học", 
+						dto.getCode());
 			}
 		}
+
 		classz = classConverter.toEntity(dto, classz);
 		
 		//Mapping reference entity

@@ -28,7 +28,9 @@ import com.tim.dto.news.NewsPageRequestDto;
 import com.tim.dto.news.NewsCreateDto;
 import com.tim.dto.news.NewsUpdateDto;
 import com.tim.entity.Faculty;
+import com.tim.entity.Faculty_;
 import com.tim.entity.News;
+import com.tim.entity.News_;
 import com.tim.exception.TimException;
 import com.tim.exception.TimNotFoundException;
 import com.tim.repository.FacultyRepository;
@@ -156,19 +158,19 @@ public class NewsServiceImpl implements NewsService {
     	
         Specification<News> specification = Specification.where((root, query, cb) -> {
         	List<Predicate> predicates = new ArrayList<Predicate>();
-			predicates.add(cb.equal(root.get("status"), pageRequestDto.getStatus()));
+			predicates.add(cb.equal(root.get(News_.STATUS), pageRequestDto.getStatus()));
 			
 			if (StringUtils.isNotBlank(pageRequestDto.getSearchKey())) {
 				predicates.add(cb.or(
-						cb.like(cb.lower(root.get("title")), 
+						cb.like(cb.lower(root.get(News_.TITLE)), 
 								"%" + pageRequestDto.getSearchKey().toLowerCase() + "%"),
-						cb.like(cb.lower(root.get("shortDescription")), 
+						cb.like(cb.lower(root.get(News_.SHORT_DESCRIPTION)), 
 								"%" + pageRequestDto.getSearchKey().toLowerCase() + "%"),
-						cb.like(cb.lower(root.get("content")), 
+						cb.like(cb.lower(root.get(News_.CONTENT)), 
 								"%" + pageRequestDto.getSearchKey().toLowerCase() + "%")));
 			}
 			if (StringUtils.isNotBlank(pageRequestDto.getFacultyCode())) {
-				predicates.add(cb.equal(root.join("faculties").get("code"), 
+				predicates.add(cb.equal(root.join(News_.FACULTIES).get(Faculty_.CODE), 
 	                		pageRequestDto.getFacultyCode()));
 	        }
 			return cb.and(predicates.toArray(new Predicate[0]));
@@ -177,8 +179,8 @@ public class NewsServiceImpl implements NewsService {
         Pageable pageable = PageRequest.of(
         		pageRequestDto.getPage() - 1, 
         		pageRequestDto.getSize(), 
-        		Sort.by(Sort.Direction.DESC, "createdDate")
-				.and(Sort.by(Sort.Direction.ASC, "title")));
+        		Sort.by(Sort.Direction.DESC, News_.CREATED_DATE)
+        		.and(Sort.by(Sort.Direction.ASC, News_.TITLE)));
         Page<News> pageTeachers = newsRepository.findAll(specification, pageable);
         List<NewsDto> data = newsConverter.toDtoList(pageTeachers.getContent());
         

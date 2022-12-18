@@ -68,6 +68,12 @@ public enum ETimPermissions {
 	DELETE_TEACHER(Permissions.Teacher.READ, "Xem Giảng Viên."),
 	CREATE_TEACHER(Permissions.Teacher.TOGGLE_STATUS, "Cập nhật trạng thái Giảng Viên(ẩn/hiện)."),
 	
+	/* Role */
+	READ_ROLE(Permissions.Role.CREATE, "Thêm mới Role."),
+	UPDATE_ROLE(Permissions.Role.UPDATE, "Chỉnh sửa Role."),
+	DELETE_ROLE(Permissions.Role.READ, "Xem Role."),
+	CREATE_ROLE(Permissions.Role.TOGGLE_STATUS, "Cập nhật trạng thái Role(ẩn/hiện)."),
+	
 	/* ACCESS_DASHBOARD */
 	ACCESS_DASHBOARD("ACCESS_DASHBOARD", "Truy cập trang quản trị.");
 	
